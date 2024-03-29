@@ -566,8 +566,62 @@ else
 		end
 	})
 
+        local Section = Tab:AddSection({
+		Name = "Kitchen Food"
+	})
+
+	Tab:AddTextbox({
+	        Name = "Table Food Slot",
+		Default = "Max 4",
+		TextDisappear = false,
+		Callback = function(Value)
+			Poisition = Value
+		end
+	})
+
+	Tab:AddButton({
+		Name = "Spawn Pizza Box",
+		Callback = function()
+			Events:WaitForChild("OutsideFood"):FireServer(6, {
+				["item2"] = "Pizza",
+				["placement"] = Position
+			})
+		end    
+	})
+
+	Tab:AddButton({
+		Name = "Spawn Bloxy Cola",
+		Callback = function()
+			Events:WaitForChild("OutsideFood"):FireServer(6, {
+				["item2"] = "BloxyPack",
+				["placement"] = Position
+			})
+		end    
+	})
+	
 	local Section = Tab:AddSection({
 		Name = "Others"
+	})
+	Tab:AddToggle({
+		Name = "Lag/Crash The Server",
+		Default = false,
+		Callback = function(Value)
+			while Value == true do 
+				for i = 1, 10 do
+					for i = 1, 4 do
+						Events:WaitForChild("OutsideFood"):FireServer(6, {
+							["item2"] = "Pizza",
+							["placement"] = i
+						})
+						Events:WaitForChild("OutsideFood"):FireServer(6, {
+							["item2"] = "BloxyPack",
+							["placement"] = i
+						})
+					end
+				end
+				task.wait()
+			end
+		end    
 	})
 	Tab:AddButton({
 		Name = "Teleport To Private Lobby",
