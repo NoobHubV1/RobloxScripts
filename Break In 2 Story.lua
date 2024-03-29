@@ -575,7 +575,7 @@ else
 		Default = "Max 4",
 		TextDisappear = false,
 		Callback = function(Value)
-			Poisition = Value
+			Position = Value
 		end
 	})
 
@@ -619,7 +619,7 @@ else
 						})
 					end
 				end
-				task.wait()
+				task.wait(.1)
 			end
 		end    
 	})
