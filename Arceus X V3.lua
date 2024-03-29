@@ -4479,7 +4479,7 @@ task.spawn(C_43);
 local function C_4b()
 	local script = AZY["4b"];
 	script.Parent.MouseButton1Click:Connect(function()
-		loadstring(game:HttpGet("https://raw.githubusercontent.com/AZYsGithub/chillz-workshop/main/Arceus%20Aimbot.lua"))()
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/NoobHubV1/RobloxScripts/main/Arceus%20X%20V3%20Aimbot.lua"))()
 	end)
 end;
 task.spawn(C_4b);
@@ -4526,7 +4526,7 @@ task.spawn(C_54);
 local function C_57()
 	local script = AZY["57"];
 	script.Parent.MouseButton1Click:Connect(function()
-		loadstring(game:HttpGet("https://raw.githubusercontent.com/AZYsGithub/chillz-workshop/main/Arceus%20Fly.lua"))()
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/NoobHubV1/RobloxScripts/main/Arceus%20X%20V3%20Fly.lua"))()
 	end)
 end;
 task.spawn(C_57);
