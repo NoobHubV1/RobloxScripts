@@ -3,7 +3,7 @@ if game.PlaceId ~= 13864667823 then
 	if game.PlaceId == 14775231477 or game.PlaceId == 13864661000 then
 		
 	-- Free Gamepasses (LOBBY)
-	local OrionLib = loadstring(game:HttpGet(('https://github.com/NoobHubV1/NoobHubV1/raw/main/OrionLib.lua')))()
+	local OrionLib = loadstring(game:HttpGet(('https://github.com/NoobHubV1/RobloxScripts/raw/main/OrionLib.lua')))()
 	local ReplicatedStorage = game:GetService("ReplicatedStorage")
         local RemoteEvents = ReplicatedStorage:WaitForChild("RemoteEvents")
 
@@ -86,7 +86,7 @@ else
 	Part.Transparency = 1
 
 	-- Locals
-        local OrionLib = loadstring(game:HttpGet(('https://github.com/NoobHubV1/NoobHubV1/raw/main/OrionLib.lua')))()
+        local OrionLib = loadstring(game:HttpGet(('https://github.com/NoobHubV1/RobloxScripts/raw/main/OrionLib.lua')))()
 	local ReplicatedStorage = game:GetService("ReplicatedStorage")
 	local Events = ReplicatedStorage:WaitForChild("Events")
 	local SelectedItem = "Med Kit"
