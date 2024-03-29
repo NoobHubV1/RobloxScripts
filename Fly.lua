@@ -1,116 +1,334 @@
-local Library = loadstring(Game:HttpGet("https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/wizard"))()
-local OrionLib = loadstring(game:HttpGet(('https://github.com/NoobHubV1/NoobHubV1/raw/main/OrionLib.lua')))()
-local ScriptLoaded = false
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local MagnetEvents = ReplicatedStorage:WaitForChild("Events"):WaitForChild("MagnetEvents")
-local RebirthEvents = ReplicatedStorage:WaitForChild("RebirthEvents")
-local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
-local PlayerGui = LocalPlayer.PlayerGui
-local GameHUD = PlayerGui.GameHUD
-local FullBackpack = GameHUD.FullBackpack
+game:GetService("StarterGui"):SetCore("SendNotification",{
+                Title = "NoobHubV1 Hub";
+                Text = "Loaded";
+                Duration = 3.5;
+            })
+-- Gui to Lua
+-- Version: 3.2
 
-local function Coin()MagnetEvents.requestGrab:FireServer("6080000000", ReplicatedStorage.Tools["Lucky Long Tri-Magnet"])
-end
+-- Instances:
 
-local function Clover()MagnetEvents.requestGrab:FireServer("Clover1", ReplicatedStorage.Tools["Lucky Long Tri-Magnet"])
-end
+local main = Instance.new("ScreenGui")
+local Frame = Instance.new("Frame")
+local up = Instance.new("TextButton")
+local down = Instance.new("TextButton")
+local onof = Instance.new("TextButton")
+local TextLabel = Instance.new("TextLabel")
+local plus = Instance.new("TextButton")
+local speed = Instance.new("TextLabel")
+local mine = Instance.new("TextButton")
 
-local function Rebirth(Amount)RebirthEvents.requestRebirth:InvokeServer(Amount)
-end
+--Properties:
 
-local function AutoSell(Area)if Area == "X2 Coin" then
-                             LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-419.514709, 5.21380043, -849.897949) + Vector3.new(1, 1, 0)
-                             elseif Area == "Spawn" then
-                             LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(133.744507, 14.6463766, -52.6264954) + Vector3.new(1, 1, 0)
-                             end
-end
+main.Name = "main"
+main.Parent = game.CoreGui
+main.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
-local function DisabledNotifications()FullBackpack:Destroy()
-end
+Frame.Parent = main
+Frame.BackgroundColor3 = Color3.fromRGB(123, 255, 247)
+Frame.BorderColor3 = Color3.fromRGB(103, 221, 213)
+Frame.Position = UDim2.new(0.100320168, 0, 0.379746825, 0)
+Frame.Size = UDim2.new(0, 190, 0, 57)
 
-local function Notify(Name, Content, Image, Time)OrionLib:MakeNotification({
-                                                         Name = Name,
-                                                         Content = Content,
-                                                         Image = Image,
-                                                         Time = Time
-                                                 })
-end
-Notify("NoobHubV1 Hub", "Loading Script.", "rbxassetid://4483345998", 3)
+up.Name = "up"
+up.Parent = Frame
+up.BackgroundColor3 = Color3.fromRGB(123, 255, 247)
+up.Size = UDim2.new(0, 44, 0, 28)
+up.Font = Enum.Font.SourceSans
+up.Text = "Up"
+up.TextColor3 = Color3.fromRGB(0, 0, 0)
+up.TextSize = 14.000
 
-                                                 wait(3)
+down.Name = "down"
+down.Parent = Frame
+down.BackgroundColor3 = Color3.fromRGB(123, 255, 247)
+down.Position = UDim2.new(0, 0, 0.491228074, 0)
+down.Size = UDim2.new(0, 44, 0, 28)
+down.Font = Enum.Font.SourceSans
+down.Text = "Down"
+down.TextColor3 = Color3.fromRGB(0, 0, 0)
+down.TextSize = 14.000
 
-Notify("NoobHubV1 Hub", "Loading Script..", "rbxassetid://4483345998", 3)
+onof.Name = "onof"
+onof.Parent = Frame
+onof.BackgroundColor3 = Color3.fromRGB(123, 255, 247)
+onof.Position = UDim2.new(0.702823281, 0, 0.491228074, 0)
+onof.Size = UDim2.new(0, 56, 0, 28)
+onof.Font = Enum.Font.SourceSans
+onof.Text = "Fly"
+onof.TextColor3 = Color3.fromRGB(0, 0, 0)
+onof.TextSize = 14.000
 
-                                                 wait(3)
+TextLabel.Parent = Frame
+TextLabel.BackgroundColor3 = Color3.fromRGB(123, 255, 247)
+TextLabel.Position = UDim2.new(0.469327301, 0, 0, 0)
+TextLabel.Size = UDim2.new(0, 100, 0, 28)
+TextLabel.Font = Enum.Font.SourceSans
+TextLabel.Text = "NoobHubV1 Hub"
+TextLabel.TextColor3 = Color3.fromRGB(0, 0, 0)
+TextLabel.TextScaled = true
+TextLabel.TextSize = 14.000
+TextLabel.TextWrapped = true
 
-Notify("NoobHubV1 Hub", "Loading Script...", "rbxassetid://4483345998", 3)
+plus.Name = "plus"
+plus.Parent = Frame
+plus.BackgroundColor3 = Color3.fromRGB(123, 255, 247)
+plus.Position = UDim2.new(0.231578946, 0, 0, 0)
+plus.Size = UDim2.new(0, 45, 0, 28)
+plus.Font = Enum.Font.SourceSans
+plus.Text = "+"
+plus.TextColor3 = Color3.fromRGB(0, 0, 0)
+plus.TextScaled = true
+plus.TextSize = 14.000
+plus.TextWrapped = true
 
-                                                 wait(3)
+speed.Name = "speed"
+speed.Parent = Frame
+speed.BackgroundColor3 = Color3.fromRGB(123, 255, 247)
+speed.Position = UDim2.new(0.468421042, 0, 0.491228074, 0)
+speed.Size = UDim2.new(0, 44, 0, 28)
+speed.Font = Enum.Font.SourceSans
+speed.Text = "1"
+speed.TextColor3 = Color3.fromRGB(0, 0, 0)
+speed.TextScaled = true
+speed.TextSize = 14.000
+speed.TextWrapped = true
 
-local PhantomForcesWindow = Library:NewWindow("NoobHubV1 Hub")
+mine.Name = "mine"
+mine.Parent = Frame
+mine.BackgroundColor3 = Color3.fromRGB(123, 255, 247)
+mine.Position = UDim2.new(0.231578946, 0, 0.491228074, 0)
+mine.Size = UDim2.new(0, 45, 0, 29)
+mine.Font = Enum.Font.SourceSans
+mine.Text = "-"
+mine.TextColor3 = Color3.fromRGB(0, 0, 0)
+mine.TextScaled = true
+mine.TextSize = 14.000
+mine.TextWrapped = true
 
-local MagnetSimulator = PhantomForcesWindow:NewSection("Main")
+speeds = 1
 
-local PlayerTab = PhantomForcesWindow:NewSection("Player")
+local speaker = game:GetService("Players").LocalPlayer
 
-local Dropdown = PhantomForcesWindow:NewSection("Misc")
+local chr = game.Players.LocalPlayer.Character
+local hum = chr and chr:FindFirstChildWhichIsA("Humanoid")
 
-MagnetSimulator:CreateToggle("Auto Coin", function(State)getgenv().CoinLoop = State
-while CoinLoop do
-Coin()
-task.wait()
-end
+nowe = false
+
+Frame.Active = true -- main = gui
+Frame.Draggable = true
+
+onof.MouseButton1Down:connect(function()
+
+	if nowe == true then
+		nowe = false
+
+		speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Climbing,true)
+		speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.FallingDown,true)
+		speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Flying,true)
+		speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Freefall,true)
+		speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.GettingUp,true)
+		speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Jumping,true)
+		speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Landed,true)
+		speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Physics,true)
+		speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.PlatformStanding,true)
+		speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Ragdoll,true)
+		speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Running,true)
+		speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.RunningNoPhysics,true)
+		speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated,true)
+		speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.StrafingNoPhysics,true)
+		speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Swimming,true)
+		speaker.Character.Humanoid:ChangeState(Enum.HumanoidStateType.RunningNoPhysics)
+	else 
+		nowe = true
+
+
+
+		for i = 1, speeds do
+			spawn(function()
+
+				local hb = game:GetService("RunService").Heartbeat	
+
+
+				tpwalking = true
+				local chr = game.Players.LocalPlayer.Character
+				local hum = chr and chr:FindFirstChildWhichIsA("Humanoid")
+				while tpwalking and hb:Wait() and chr and hum and hum.Parent do
+					if hum.MoveDirection.Magnitude > 0 then
+						chr:TranslateBy(hum.MoveDirection)
+					end
+				end
+
+			end)
+		end
+		game.Players.LocalPlayer.Character.Animate.Disabled = true
+		local Char = game.Players.LocalPlayer.Character
+		local Hum = Char:FindFirstChildOfClass("Humanoid") or Char:FindFirstChildOfClass("AnimationController")
+
+		for i,v in next, Hum:GetPlayingAnimationTracks() do
+			v:AdjustSpeed(0)
+		end
+		speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Climbing,false)
+		speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.FallingDown,false)
+		speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Flying,false)
+		speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Freefall,false)
+		speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.GettingUp,false)
+		speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Jumping,false)
+		speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Landed,false)
+		speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Physics,false)
+		speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.PlatformStanding,false)
+		speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Ragdoll,false)
+		speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Running,false)
+		speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.RunningNoPhysics,false)
+		speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated,false)
+		speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.StrafingNoPhysics,false)
+		speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Swimming,false)
+		speaker.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Swimming)
+	end
+
+
+
+
+	
+		local plr = game.Players.LocalPlayer
+		local UpperTorso = plr.Character.LowerTorso
+		local flying = true
+		local deb = true
+		local ctrl = {f = 0, b = 0, l = 0, r = 0}
+		local lastctrl = {f = 0, b = 0, l = 0, r = 0}
+		local maxspeed = 50
+		local speed = 0
+
+
+		local bg = Instance.new("BodyGyro", UpperTorso)
+		bg.P = 9e4
+		bg.maxTorque = Vector3.new(9e9, 9e9, 9e9)
+		bg.cframe = UpperTorso.CFrame
+		local bv = Instance.new("BodyVelocity", UpperTorso)
+		bv.velocity = Vector3.new(0,0.1,0)
+		bv.maxForce = Vector3.new(9e9, 9e9, 9e9)
+		if nowe == true then
+			plr.Character.Humanoid.PlatformStand = true
+		end
+		while nowe == true or game:GetService("Players").LocalPlayer.Character.Humanoid.Health == 0 do
+			wait()
+
+			if ctrl.l + ctrl.r ~= 0 or ctrl.f + ctrl.b ~= 0 then
+				speed = speed+.5+(speed/maxspeed)
+				if speed > maxspeed then
+					speed = maxspeed
+				end
+			elseif not (ctrl.l + ctrl.r ~= 0 or ctrl.f + ctrl.b ~= 0) and speed ~= 0 then
+				speed = speed-1
+				if speed < 0 then
+					speed = 0
+				end
+			end
+			if (ctrl.l + ctrl.r) ~= 0 or (ctrl.f + ctrl.b) ~= 0 then
+				bv.velocity = ((game.Workspace.CurrentCamera.CoordinateFrame.lookVector * (ctrl.f+ctrl.b)) + ((game.Workspace.CurrentCamera.CoordinateFrame * CFrame.new(ctrl.l+ctrl.r,(ctrl.f+ctrl.b)*.2,0).p) - game.Workspace.CurrentCamera.CoordinateFrame.p))*speed
+				lastctrl = {f = ctrl.f, b = ctrl.b, l = ctrl.l, r = ctrl.r}
+			elseif (ctrl.l + ctrl.r) == 0 and (ctrl.f + ctrl.b) == 0 and speed ~= 0 then
+				bv.velocity = ((game.Workspace.CurrentCamera.CoordinateFrame.lookVector * (lastctrl.f+lastctrl.b)) + ((game.Workspace.CurrentCamera.CoordinateFrame * CFrame.new(lastctrl.l+lastctrl.r,(lastctrl.f+lastctrl.b)*.2,0).p) - game.Workspace.CurrentCamera.CoordinateFrame.p))*speed
+			else
+				bv.velocity = Vector3.new(0,0,0)
+			end
+
+			bg.cframe = game.Workspace.CurrentCamera.CoordinateFrame * CFrame.Angles(-math.rad((ctrl.f+ctrl.b)*50*speed/maxspeed),0,0)
+		end
+		ctrl = {f = 0, b = 0, l = 0, r = 0}
+		lastctrl = {f = 0, b = 0, l = 0, r = 0}
+		speed = 0
+		bg:Destroy()
+		bv:Destroy()
+		plr.Character.Humanoid.PlatformStand = false
+		game.Players.LocalPlayer.Character.Animate.Disabled = false
+		tpwalking = false
+
+
+
+	
+
+
+
+
+
 end)
 
-PlayerTab:CreateTextbox("Walk Speed Amount", function(Amount)WalkSpeed = Amount
+
+up.MouseButton1Down:connect(function()
+	game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,2,0)
+	
 end)
 
-PlayerTab:CreateToggle("Walk Speed", function(State)getgenv().WalkSpeedLoop = State
-while WalkSpeedLoop do
-LocalPlayer.Character.Humanoid.WalkSpeed = WalkSpeed
-task.wait()
-end
+
+down.MouseButton1Down:connect(function()
+
+	game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,-2,0)
+
 end)
 
-MagnetSimulator:CreateToggle("Auto Clover", function(State)getgenv().CloverLoop = State
-while CloverLoop do
-Clover()
-task.wait()
-end
+
+game:GetService("Players").LocalPlayer.CharacterAdded:Connect(function(char)
+	wait(0.7)
+	game.Players.LocalPlayer.Character.Humanoid.PlatformStand = false
+	game.Players.LocalPlayer.Character.Animate.Disabled = false
+
 end)
 
-MagnetSimulator:CreateToggle("Auto Rebirth", function(State)getgenv().RebirthLoop = State
-while RebirthLoop do
-Rebirth(RebirthAmount)
-task.wait()
-end
-end)
 
-PlayerTab:CreateTextbox("Jump Power Amount", function(Amount)JumpPower = Amount
-end)
+plus.MouseButton1Down:connect(function()
+	speeds = speeds + 1
+	speed.Text = speeds
+	if nowe == true then
+		
 
-PlayerTab:CreateToggle("Jump Power", function(State)getgenv().JumpPowerLoop = State
-while JumpPowerLoop do
-LocalPlayer.Character.Humanoid.JumpPower = JumpPower
-end
-end)
+	tpwalking = false
+	for i = 1, speeds do
+		spawn(function()
 
-Dropdown:CreateDropdown("Rebirth Amount", {"1","5","25","50","100","250","500","1000","2500","5000","10000","25000","50000","75000","100000","125000","200000"}, 2, function(Value)RebirthAmount = Value
-end)
+			local hb = game:GetService("RunService").Heartbeat	
 
-MagnetSimulator:CreateToggle("Auto Sell", function(State)getgenv().SellLoop = State
-while SellLoop do
-AutoSell(SelectedArea)
-task.wait()
-end
-end)
 
-MagnetSimulator:CreateButton("Disabled Notifications", function()DisabledNotifications()
-end)
+			tpwalking = true
+			local chr = game.Players.LocalPlayer.Character
+			local hum = chr and chr:FindFirstChildWhichIsA("Humanoid")
+			while tpwalking and hb:Wait() and chr and hum and hum.Parent do
+				if hum.MoveDirection.Magnitude > 0 then
+					chr:TranslateBy(hum.MoveDirection)
+				end
+			end
 
-Dropdown:CreateDropdown("Auto Sell Area", {"Spawn","X2 Coin"}, 2, function(Value)SelectedArea = Value
+		end)
+		end
+		end
 end)
+mine.MouseButton1Down:connect(function()
+	if speeds == 1 then
+		speed.Text = 'can not be less than 1'
+		wait(1)
+		speed.Text = speeds
+	else
+	speeds = speeds - 1
+		speed.Text = speeds
+		if nowe == true then
+	tpwalking = false
+	for i = 1, speeds do
+		spawn(function()
 
-Notify("NoobHubV1 Hub", "Loaded Script!", "rbxassetid://4483345998", 10)
-ScriptLoaded = true
+			local hb = game:GetService("RunService").Heartbeat	
+
+
+			tpwalking = true
+			local chr = game.Players.LocalPlayer.Character
+			local hum = chr and chr:FindFirstChildWhichIsA("Humanoid")
+			while tpwalking and hb:Wait() and chr and hum and hum.Parent do
+				if hum.MoveDirection.Magnitude > 0 then
+					chr:TranslateBy(hum.MoveDirection)
+				end
+			end
+
+		end)
+		end
+		end
+		end
+end)
