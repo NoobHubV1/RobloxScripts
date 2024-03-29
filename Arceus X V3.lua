@@ -5217,7 +5217,7 @@ task.spawn(C_106);
 local function C_10a()
 	local script = AZY["10a"];
 	script.Parent.MouseButton1Click:Connect(function()
-		loadstring(Game:HttpGet('https://github.com/NoobHubV1/NoobHubV1/raw/main/Arceus%20X%20V3%20Fates%20Esp.lua'))()
+		loadstring(Game:HttpGet('https://github.com/NoobHubV1/RobloxScripts/raw/main/Arceus%20X%20V3%20Fates%20Esp.lua'))()
 	end)
 end;
 task.spawn(C_10a);
@@ -5225,7 +5225,7 @@ task.spawn(C_10a);
 local function C_10e()
 	local script = AZY["10e"];
 	script.Parent.MouseButton1Click:Connect(function()
-		loadstring(game:HttpGet("https://github.com/NoobHubV1/NoobHubV1/blob/main/Arceus%20X%20V3%20Fly.lua"))()
+		loadstring(game:HttpGet("https://github.com/NoobHubV1/RobloxScripts/raw/main/Arceus%20X%20V3%20Fly.lua"))()
 	end)
 end;
 task.spawn(C_10e);
