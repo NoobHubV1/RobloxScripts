@@ -1,6 +1,6 @@
--- This User Interface Library is brought to you by Solaris Software.
+-- This User Interface Library is brought to you by NoobHubV1.
 local Solaris = Instance.new("ScreenGui")
-Solaris.Name = "dosage's solaris gui"
+Solaris.Name = "NoobHubV1"
 Solaris.Parent = game.CoreGui
 Solaris.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
