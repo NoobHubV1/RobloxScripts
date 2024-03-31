@@ -2403,7 +2403,6 @@ do
 					API:Notif("This player is already an admin!",false)
 				end
 			end
-	end)
 	end,nil,"[PLAYER]")
 	API:CreateCmd("admins", "Tells you all admins", function(args)
 			local Compiled = ""
