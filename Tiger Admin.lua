@@ -2658,6 +2658,40 @@ do
 		wait()
 		game:GetService("Workspace").Camera.CameraSubject = plr.Character.Humanoid
 	end)
+	API:CreateCmd("mkill", "Kills player by teleport", function(args)
+		local function MKILL(target,STOP,P)
+				if target == plr or target == plr.Name then
+					return
+				end
+				if typeof(target):lower() == "string" and game:GetService("Players"):FindFirstChild(target) then
+					target = game:GetService("Players"):FindFirstChild(target)
+				end
+				if not STOP then STOP =1 end
+				if not target or not target.Character or not target.Character:FindFirstChild("Humanoid") or target.Character:FindFirstChildOfClass("ForceField") or target.Character:FindFirstChild("Humanoid").Health<1 or not plr.Character or not plr.Character:FindFirstChildOfClass("Humanoid") or not plr.Character:FindFirstChild("HumanoidRootPart")  then
+					return
+				end
+				API:UnSit()
+				local saved = API:GetPosition()
+				if not P then P = saved else saved = P end
+				game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = target.Character:FindFirstChild("Head").CFrame
+				wait(.2)
+				for i =1,10 do
+					task.spawn(function()
+						game.ReplicatedStorage["meleeEvent"]:FireServer(target)
+					end)
+				end
+				wait(.1)
+				if target and target.Character and target.Character:FindFirstChild("Humanoid") and target.Character:FindFirstChild("Humanoid").Health >1 and STOP ~=3 then
+					MKILL(target,STOP+1,P)
+					return
+				end
+				API:MoveTo(saved)
+			end
+			local r = API:FindPlayer(args[2])
+			if r then
+				MKILL(r)
+			end
+		end,nil,"[PLAYER]")
 	API:CreateCmd("car", "Brings a car to you", function(args)
 		pcall(function()
 			local OldPos = game:GetService("Players").LocalPlayer.Character:GetPrimaryPartCFrame()
