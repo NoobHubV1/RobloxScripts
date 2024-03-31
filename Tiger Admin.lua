@@ -400,7 +400,7 @@ do
 	States.SilentAim = false
 	States.ArrestAura = false
 	States.OneShot = false
-	States.forcefield = false
+	States.ff = false
 	States.esp = false
 	States.earrape = false
 	--
@@ -2562,10 +2562,10 @@ do
 	API:CreateCmd("ff", "forcefield", function(args)
 		local value = ChangeState(args[2],"forcefield")
 	end,nil,"[on/off]")
-        API:CreateCmd("Anti Fling", "Remove Fling", function(args)
+        API:CreateCmd("AntiFling", "Remove Fling", function(args)
 		local value = ChangeState(args[2],"AntiFling")
 	end,nil,"[on/off]")
-	API:CreateCmd("One Shot", "Guns One Shot", function(args)
+	API:CreateCmd("OneShot", "Guns One Shot", function(args)
 		local value = ChangeState(args[2],"OneShot")
 	end,nil,"[on/off]")
 	API:CreateCmd("antipunch", "prevents anyone from punching you", function(args)
