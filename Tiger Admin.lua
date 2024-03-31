@@ -1626,31 +1626,6 @@ do
 				end)
 			end)
 		end,nil,nil,true)
-		API:CreateCmd("admin", "The selected player can use certain commands", function(args)
-			local Target = API:FindPlayer(args[2])
-			if Target then
-				if not table.find(Temp.Admins,Target.Name) then
-					table.insert(Temp.Admins, Target.Name)
-					local ohString1 = "/w "..Target.Name.." ".."ADMIN: You have been admined! if you are ready to get started using commands type [!cmds] in chat."
-					local ohString2 = "All"
-					game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(ohString1, ohString2)
-				else
-					API:Notif("This player is already an admin!",false)
-				end
-			end
-		end,nil,nil,true)
-		API:CreateCmd("admins", "Tells you all admins", function(args)
-			local Compiled = ""
-			for i,v in pairs(Temp.Admins) do
-				if v then
-					Compiled=Compiled..string.char(32)..v
-				end
-			end
-			API:Notif("Admins: "..Compiled,4)
-		end,nil,nil,true)
-		API:CreateCmd("crashserver", "Crashes the server", function(args)
-			API:CrashServer()
-		end,nil,nil,true)
 		--5
 		API:CreateCmd("anticrash", "Tries to stop simple crashes (DOESNT WORK WITH TIGER ADMIN CRASH)", function(args)
 			local Value = ChangeState(args[2],"anticrash")
@@ -1816,9 +1791,6 @@ do
 					Temp.joinning:Disconnect()
 				end)
 			end
-		end,nil,"[ON/OFF]",true)
-		API:CreateCmd("antifling", "prevents players from flinging you", function(args)
-			local Value = ChangeState(args[2],"AntiFling")
 		end,nil,"[ON/OFF]",true)
 		API:CreateCmd("mkill", "kills player by teleport", function(args)
 			local function MKILL(target,STOP,P)
@@ -2419,6 +2391,28 @@ do
 			API:MoveTo(Player.Character:GetPrimaryPartCFrame())
 		end
 	end,true,"[PLAYER]")
+	API:CreateCmd("admin", "The selected player can use certain commands", function(args)
+			local Target = API:FindPlayer(args[2])
+			if Target then
+				if not table.find(Temp.Admins,Target.Name) then
+					table.insert(Temp.Admins, Target.Name)
+					local ohString1 = "/w "..Target.Name.." ".."ADMIN: You have been admined! if you are ready to get started using commands type [!cmds] in chat."
+					local ohString2 = "All"
+					game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(ohString1, ohString2)
+				else
+					API:Notif("This player is already an admin!",false)
+				end
+			end
+	end)
+	API:CreateCmd("admins", "Tells you all admins", function(args)
+			local Compiled = ""
+			for i,v in pairs(Temp.Admins) do
+				if v then
+					Compiled=Compiled..string.char(32)..v
+				end
+			end
+			API:Notif("Admins: "..Compiled,4)
+	end)
 	API:CreateCmd("cursor ", "Changes mouse icon", function(args)
 		if args[2] and tonumber(args[2]) then
 			game:GetService("UserInputService").MouseIcon = args[2]
