@@ -2413,20 +2413,7 @@ do
 			end
 			API:Notif("Admins: "..Compiled,4)
 	end)
-	API:CreateCmd("unadmin", "The selected player can use certain commands", function(args)
-			local Target = API:FindPlayer(args[2])
-			if Target then
-				if not table.remove(New,table.find(New,Target.Name) then
-					table.remove(Temp.Admins,table.find(Temp.Admins,Target.Name)
-					local ohString1 = "/w "..Target.Name.." ".."UNADMIN: You have been Unadmined! You are no longer an admin."
-					local ohString2 = "All"
-					game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(ohString1, ohString2)
-				else
-					API:Notif("This player is already an admin!",false)
-				end
-			end
-	end)
-	API:CreateCmd("cursor ", "Changes mouse icon", function(args)
+	API:CreateCmd("cursor", "Changes mouse icon", function(args)
 		if args[2] and tonumber(args[2]) then
 			game:GetService("UserInputService").MouseIcon = args[2]
 		else
