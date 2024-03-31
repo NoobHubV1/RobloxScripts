@@ -400,7 +400,7 @@ do
 	States.SilentAim = false
 	States.ArrestAura = false
 	States.OneShot = false
-	States.ff = false
+	States.forcefield = false
 	States.esp = false
 	States.earrape = false
 	--
@@ -1652,9 +1652,6 @@ do
 			API:CrashServer()
 		end,nil,nil,true)
 		--5
-		API:CreateCmd("oneshot", "Makes a gun oneshot", function(args)
-			ChangeState(args[2],"OneShot")
-		end,nil,"[ON/OFF]",true)
 		API:CreateCmd("anticrash", "Tries to stop simple crashes (DOESNT WORK WITH TIGER ADMIN CRASH)", function(args)
 			local Value = ChangeState(args[2],"anticrash")
 			if Value then
@@ -1708,9 +1705,6 @@ do
 				workspace.Remote.TeamEvent:FireServer("Bright orange")
 			end)
 		end,nil,"",true)
-		API:CreateCmd("ff", "Forcefield", function(args)
-			local Value = ChangeState(args[2],"ff")
-		end,nil,"[ON/OFF]",true)
 		API:CreateCmd("minigun", "makes a minigun", function(args)
 			API:GetGun("AK-47")
 			wait(.7)
@@ -2566,7 +2560,13 @@ do
 		end
 	end)
 	API:CreateCmd("ff", "forcefield", function(args)
-		local value = ChangeState(args[2],"ff")
+		local value = ChangeState(args[2],"forcefield")
+	end,nil,"[on/off]")
+        API:CreateCmd("Anti Fling", "Remove Fling", function(args)
+		local value = ChangeState(args[2],"AntiFling")
+	end,nil,"[on/off]")
+	API:CreateCmd("One Shot", "Guns One Shot", function(args)
+		local value = ChangeState(args[2],"OneShot")
 	end,nil,"[on/off]")
 	API:CreateCmd("antipunch", "prevents anyone from punching you", function(args)
 		local value = ChangeState(args[2],"antipunch")
@@ -2754,6 +2754,9 @@ do
 
 	API:CreateCmd("refresh", "refreshes your character", function(args)
 		API:Refresh(true)
+	end)
+	API:CreateCmd("crashserver", "Crashes the server", function(args)
+			API:CrashServer()
 	end)
 	API:CreateCmd("roof", "", function(args)
 		if args[2] then
