@@ -122,7 +122,7 @@ do
 	Toggles.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 	Toggles.Position = UDim2.new(0.499593854, 0, 0.499376595, 0)+UDim2.new(0,0,1,0)
 	Toggles.Size = UDim2.new(0, 539, 0, 409)
-	Toggles.Visible = true
+	Toggles.Visible = false
 	Toggles.Image = "rbxassetid://4483345998"
 	Toggles.ImageTransparency = 0.260
 
@@ -217,6 +217,7 @@ CommandsList.Position = UDim2.new(0, 0, 0.077441074, 0)
 CommandsList.Size = UDim2.new(0, 455, 0, 274)
 CommandsList.ScrollBarThickness = 5
 CommandsList.AutomaticCanvasSize="Y"
+CommandsList.Image = "rbxassetid://4483345998"
 UIListLayout.Parent = CommandsList
 UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 UIListLayout.Padding = UDim.new(0, 8)
