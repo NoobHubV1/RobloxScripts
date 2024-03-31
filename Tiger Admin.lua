@@ -2828,6 +2828,38 @@ do
 	API:CreateCmd("ak", "Gets a ak-47", function(args)
 		API:GetGun("AK-47")
 	end)
+	API:CreateCmd("minigun", "makes a Minigun", function(args)
+		API:GetGun("AK-47")
+			wait(.7)
+			local Tool = plr.Backpack:FindFirstChildOfClass("Tool")
+			if not Tool:FindFirstChild("GunStates") then
+				return API:Notif("Needs to be a gun!",false)
+			end
+			local cc = require(Tool.GunStates)
+			cc["Damage"] = 9e9
+			cc["FireRate"] = 0.001
+			cc["Range"] = math.huge
+			cc["MaxAmmo"] = math.huge
+			cc["StoredAmmo"] = math.huge
+			cc["AmmoPerClip"] = math.huge
+			cc["CurrentAmmo"] = math.huge
+			if Tool.Name ~= "Remington 870" then
+				cc["Bullets"] = 1
+				cc["AutoFire"] = true
+			end
+			table.insert(Reload_Guns, Tool)
+			Player.Character:FindFirstChildOfClass("Humanoid"):UnequipTools()
+			API:GetGun("Remington 870")
+			wait(.7)
+			for i,v in pairs(plr.Backpack:GetChildren()) do
+				if v and v:FindFirstChildOfClass("ModuleScript") then
+					v.Grip = v.Grip+Vector3.new(0,1,0)
+				end
+			end
+			plr.Backpack:WaitForChild("Remington 870").Parent = plr.Character
+			wait(.4)
+			plr.Backpack:WaitForChild("AK-47").Parent = plr.Character
+	end)
 	API:CreateCmd("knife", "Gets a knife", function(args)
 		workspace.Remote.ItemHandler:InvokeServer({Position=game:GetService("Players").LocalPlayer.Character.Head.Position,Parent=workspace.Prison_ITEMS.single["Crude Knife"]})
 	end)
