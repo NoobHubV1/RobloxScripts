@@ -217,7 +217,6 @@ CommandsList.Position = UDim2.new(0, 0, 0.077441074, 0)
 CommandsList.Size = UDim2.new(0, 455, 0, 274)
 CommandsList.ScrollBarThickness = 5
 CommandsList.AutomaticCanvasSize="Y"
-CommandsList.Image = "rbxassetid://4483345998"
 UIListLayout.Parent = CommandsList
 UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 UIListLayout.Padding = UDim.new(0, 8)
@@ -1793,54 +1792,6 @@ do
 				end)
 			end
 		end,nil,"[ON/OFF]",true)
-		API:CreateCmd("mkill", "kills player by teleport", function(args)
-			local function MKILL(target,STOP,P)
-				if target == plr or target == plr.Name then
-					return
-				end
-				if typeof(target):lower() == "string" and game:GetService("Players"):FindFirstChild(target) then
-					target = game:GetService("Players"):FindFirstChild(target)
-				end
-				if not STOP then STOP =1 end
-				if not target or not target.Character or not target.Character:FindFirstChild("Humanoid") or target.Character:FindFirstChildOfClass("ForceField") or target.Character:FindFirstChild("Humanoid").Health<1 or not plr.Character or not plr.Character:FindFirstChildOfClass("Humanoid") or not plr.Character:FindFirstChild("HumanoidRootPart")  then
-					return
-				end
-				API:UnSit()
-				local saved = API:GetPosition()
-				if not P then P = saved else saved = P end
-				game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = target.Character:FindFirstChild("Head").CFrame
-				wait(.2)
-				for i =1,10 do
-					task.spawn(function()
-						game.ReplicatedStorage["meleeEvent"]:FireServer(target)
-					end)
-				end
-				wait(.1)
-				if target and target.Character and target.Character:FindFirstChild("Humanoid") and target.Character:FindFirstChild("Humanoid").Health >1 and STOP ~=3 then
-					MKILL(target,STOP+1,P)
-					return
-				end
-				API:MoveTo(saved)
-			end
-			local r = API:FindPlayer(args[2])
-			if r then
-				MKILL(r)
-			end
-		end,nil,"[PLAYER]",true)
-		API:CreateCmd("loopmkill", "kills player by teleport loopkill", function(args)
-			local r = API:FindPlayer(args[2])
-			if r and not table.find(Temp.LoopmKilling,r.Name) then
-				table.insert(Temp.LoopmKilling, r.Name)
-				API:Notif("Now loopkilling player")
-			end
-		end,nil,"[PLAYER]",true)
-		API:CreateCmd("unloopmkill", "kills player by teleport loopkill", function(args)
-			local r = API:FindPlayer(args[2])
-			if r and table.find(Temp.LoopmKilling,r.Name) then
-				table.remove(Temp.LoopmKilling,table.find(Temp.LoopmKilling,r.Name))
-				API:Notif("Now unloopkilling player")
-			end
-		end,nil,"[PLAYER]",true)
 		API:CreateCmd("godmode", "Turns on all settings that prevent you from harm", function(args)
 			local Value = ChangeState(args[2],"Godmode")
 			if Value then
@@ -3144,6 +3095,20 @@ do
 			API:Notif("AutoInfAmmo has been changed to "..tostring(States.AutoInfAmmo))
 		end
 	end)
+	API:CreateCmd("loopmkill", "kills player by teleport loopkill", function(args)
+			local r = API:FindPlayer(args[2])
+			if r and not table.find(Temp.LoopmKilling,r.Name) then
+				table.insert(Temp.LoopmKilling, r.Name)
+				API:Notif("Now loopkilling player")
+			end
+	end,nil,"[PLAYER]")
+	API:CreateCmd("unloopmkill", "kills player by teleport loopkill", function(args)
+			local r = API:FindPlayer(args[2])
+			if r and table.find(Temp.LoopmKilling,r.Name) then
+				table.remove(Temp.LoopmKilling,table.find(Temp.LoopmKilling,r.Name))
+				API:Notif("Now unloopkilling player")
+			end
+	end,nil,"[PLAYER]")
 	API:CreateCmd("unload", "Destroys the script unloading it", function(args)
 		API:Destroy(game:FindFirstChild("Tiger_revamp_loaded"))
 		Unloaded = true
