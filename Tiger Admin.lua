@@ -3103,12 +3103,29 @@ do
 			end
 	end,nil,"[PLAYER]")
 	API:CreateCmd("unloopmkill", "kills player by teleport loopkill", function(args)
-			local r = API:FindPlayer(args[2])
-			if r and table.find(Temp.LoopmKilling,r.Name) then
-				table.remove(Temp.LoopmKilling,table.find(Temp.LoopmKilling,r.Name))
-				API:Notif("Now unloopkilling player")
-			end
+		local r = API:FindPlayer(args[2])
+		if r and table.find(Temp.LoopmKilling,r.Name) then
+			table.remove(Temp.LoopmKilling,table.find(Temp.LoopmKilling,r.Name))
+			API:Notif("Now unloopkilling player")
+		end
 	end,nil,"[PLAYER]")
+	API:CreateCmd("joinlogs", "tells you who is leaving and joining", function(args)
+		local Value = ChangeState(args[2],"joinlogs")
+		if Value then
+			Temp.joinning = game:GetService("Players").PlayerAdded:Connect(function(a)
+				game.StarterGui:SetCore("ChatMakeSystemMessage",  { Text = "[JOIN LOGS]: "..a.Name.." has joined the game!", Color = Color3.fromRGB(16, 243, 255), Font = Enum.Font.SourceSansBold, FontSize = Enum.FontSize.Size24 } )
+
+			end)
+			Temp.joinning2 = game:GetService("Players").PlayerRemoving:Connect(function(a)
+					game.StarterGui:SetCore("ChatMakeSystemMessage",  { Text = "[JOIN LOGS]: "..a.Name.." has left the game!", Color = Color3.fromRGB(50, 14, 255), Font = Enum.Font.SourceSansBold, FontSize = Enum.FontSize.Size24 } )
+			end)
+		else
+			pcall(function()
+				Temp.joinning2:Disconnect()
+				Temp.joinning:Disconnect()
+			end)
+		end
+	end,nil,"[ON/OFF]")
 	API:CreateCmd("unload", "Destroys the script unloading it", function(args)
 		API:Destroy(game:FindFirstChild("Tiger_revamp_loaded"))
 		Unloaded = true
