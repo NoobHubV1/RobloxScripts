@@ -388,7 +388,7 @@ do
 	States.AntiArrest = false
 	States.OnePunch = false
 	States.killaura = false
-	States.anticrash = true
+	States.anticrash = false
 	States.AntiTouch = false
 	States.ShootBack = false
 	States.AntiFling = false
@@ -1627,32 +1627,6 @@ do
 			end)
 		end,nil,nil,true)
 		--5
-		API:CreateCmd("anticrash", "Tries to stop simple crashes (DOESNT WORK WITH TIGER ADMIN CRASH)", function(args)
-			local Value = ChangeState(args[2],"anticrash")
-			if Value then
-				pcall(function()
-					game:GetService("Players").LocalPlayer.PlayerScripts.ClientGunReplicator.Disabled = true
-				end)
-			else
-				pcall(function()
-					game:GetService("Players").LocalPlayer.PlayerScripts.ClientGunReplicator.Disabled = false
-				end)
-			end
-		end,nil,"[ON/OFF]",true)
-		API:CreateCmd("virus", "Anyone who touches the player dies", function(args)
-			local r = API:FindPlayer(args[2])
-			if r and not table.find(Temp.Viruses,r) then
-				table.insert(Temp.Viruses, r)
-				API:Notif("Player now has covid-19")
-			end
-		end,nil,"[PLAYER]",true)
-		API:CreateCmd("unvirus", "Removes virus from player", function(args)
-			local r = API:FindPlayer(args[2])
-			if r and table.find(Temp.Viruses,r) then
-				table.remove(Temp.Viruses,table.find(Temp.Viruses,r))
-				API:Notif("Removed covid-19 from player")
-			end
-		end,nil,"[PLAYER]",true)
 		API:CreateCmd("lagspike", "Freezes everyones screen for some seconds", function(args)
 			local a = game:GetService("RunService").Stepped:Connect(function()
 				pcall(function()
@@ -3041,6 +3015,32 @@ do
 			API:Notif("You need to hold the tool you want to mod!",false)
 		end
 	end)
+	API:CreateCmd("anticrash", "Tries to stop simple crashes (DOESNT WORK WITH TIGER ADMIN CRASH)", function(args)
+		local Value = ChangeState(args[2],"anticrash")
+		if Value then
+			pcall(function()
+				game:GetService("Players").LocalPlayer.PlayerScripts.ClientGunReplicator.Disabled = true
+			end)
+		else
+			pcall(function()
+				game:GetService("Players").LocalPlayer.PlayerScripts.ClientGunReplicator.Disabled = false
+			end)
+		end
+	end,nil,"[ON/OFF]")
+	API:CreateCmd("virus", "Anyone who touches the player dies", function(args)
+		local r = API:FindPlayer(args[2])
+		if r and not table.find(Temp.Viruses,r) then
+			table.insert(Temp.Viruses, r)
+			API:Notif("Player now has covid-19")
+		end
+	end,nil,"[PLAYER]")
+	API:CreateCmd("unvirus", "Removes virus from player", function(args)
+		local r = API:FindPlayer(args[2])
+		if r and table.find(Temp.Viruses,r) then
+			table.remove(Temp.Viruses,table.find(Temp.Viruses,r))
+			API:Notif("Removed covid-19 from player")
+		end
+	end,nil,"[PLAYER]")
 	API:CreateCmd("infammo", "hold a tool to mod your gun", function(args)
 		if plr.Character:FindFirstChildOfClass("Tool") then
 			local Tool = plr.Character:FindFirstChildOfClass("Tool")
