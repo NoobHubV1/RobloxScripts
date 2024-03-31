@@ -1749,48 +1749,6 @@ do
 				game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(ohString1, ohString2)
 			end
 		end,nil,"[TARGET]",true)
-		API:CreateCmd("joinlogs", "tells you who is leaving and joining", function(args)
-			local Value = ChangeState(args[2],"joinlogs")
-			if Value then
-				Temp.joinning = game:GetService("Players").PlayerAdded:Connect(function(a)
-					game.StarterGui:SetCore("ChatMakeSystemMessage",  { Text = "[JOIN LOGS]: "..a.Name.." has joined the game!", Color = Color3.fromRGB(16, 243, 255), Font = Enum.Font.SourceSansBold, FontSize = Enum.FontSize.Size24 } )
-
-				end)
-				Temp.joinning2 = game:GetService("Players").PlayerRemoving:Connect(function(a)
-					game.StarterGui:SetCore("ChatMakeSystemMessage",  { Text = "[JOIN LOGS]: "..a.Name.." has left the game!", Color = Color3.fromRGB(50, 14, 255), Font = Enum.Font.SourceSansBold, FontSize = Enum.FontSize.Size24 } )
-				end)
-			else
-				pcall(function()
-					Temp.joinning2:Disconnect()
-					Temp.joinning:Disconnect()
-				end)
-			end
-		end,nil,"[ON/OFF]",true)
-		API:CreateCmd("godmode", "Turns on all settings that prevent you from harm", function(args)
-			local Value = ChangeState(args[2],"Godmode")
-			if Value then
-				States.AntiArrest = true
-				States.AntiTase = true
-				States.AntiFling = true
-				States.antipunch = true
-				States.ShootBack = true
-				States.AutoItems = true
-				States.Antishield = true
-				States.anticrash = true
-				States.AutoRespawn = true
-				wait(.1)
-				API:Refresh(true)
-			else
-				States.AntiArrest = false
-				States.AntiTase = false
-				States.AntiFling = false
-				States.antipunch = false
-				States.ShootBack = false
-				States.AutoItems = false
-				States.Antishield = false
-				States.anticrash = false
-			end
-		end,nil,"[ON/OFF]",true)
 		API:CreateCmd("superknife", "One shot knife", function(args)
 			workspace.Remote.ItemHandler:InvokeServer({Position=game:GetService("Players").LocalPlayer.Character.Head.Position,Parent=workspace.Prison_ITEMS.single["Crude Knife"]})
 			wait(.6)
@@ -3001,6 +2959,33 @@ do
 			API:Notif("You need to hold the tool you want to mod!",false)
 		end
 	end)
+	API:CreateCmd("godmode", "Turns on all settings that prevent you from harm", function(args)
+		local Value = ChangeState(args[2],"Godmode")
+		if Value then
+			States.AntiArrest = true
+			States.AntiTase = true
+			States.AntiFling = true
+			States.antipunch = true
+			States.ShootBack = true
+			States.AutoItems = true
+			States.Antishield = true
+			States.anticrash = true
+			States.AutoRespawn = true
+			States.ff = true
+			wait(.1)
+			API:Refresh(true)
+		else
+			States.AntiArrest = false
+			States.AntiTase = false
+			States.AntiFling = false
+			States.antipunch = false
+			States.ShootBack = false
+			States.AutoItems = false
+			States.Antishield = false
+			States.anticrash = false
+			States.ff = false
+		end
+	end,nil,"[ON/OFF]")
 	API:CreateCmd("fastfire", "hold a tool to mod your gun", function(args)
 		if plr.Character:FindFirstChildOfClass("Tool") then
 			local Tool = plr.Character:FindFirstChildOfClass("Tool")
