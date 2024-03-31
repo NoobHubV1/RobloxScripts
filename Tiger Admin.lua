@@ -68,7 +68,7 @@ do
 	CmdsIcon.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 	CmdsIcon.Position = UDim2.new(-0.132423401, 0, 0.0226149559, 0)
 	CmdsIcon.Size = UDim2.new(0.121672593, 0, 0.945454538, 0)
-	CmdsIcon.Image = "rbxassetid://12661800163"
+	CmdsIcon.Image = "rbxassetid://4483345998"
 	CmdsIcon.ImageTransparency = 0.030
 
 	UICornera.CornerRadius = UDim.new(0, 6)
