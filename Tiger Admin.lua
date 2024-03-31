@@ -2565,6 +2565,9 @@ do
 			API:Notif("executor not supported.")
 		end
 	end)
+	API:CreateCmd("ff", "forcefield", function(args)
+		local value = ChangeState(args[2],"ff")
+	end,nil,"[on/off]")
 	API:CreateCmd("antipunch", "prevents anyone from punching you", function(args)
 		local value = ChangeState(args[2],"antipunch")
 		if States.antipunch then
@@ -3091,24 +3094,6 @@ do
 		ScreenGui:Destroy()
 	end)
 end
-        API:CreateCmd("Loop Teleport", "Menu Loop Teleport", function()
-		local Library = loadstring(Game:HttpGetAsync(("https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/wizard")))()
-local LocalPlayer = game.Players.LocalPlayer
-
-local function TeleportTo(CFrameArg)LocalPlayer.Character.HumanoidRootPart.CFrame = CFrameArg
-end
-
-local PhantomForcesWindow = Library:NewWindow("NoobHubV1 Hub")
-
-local PrisonLife = PhantomForcesWindow:NewSection("Main")
-
-PrisonLife:CreateToggle("Loop Teleport Prison", function(State)getgenv().TeleportLoop = State
-while TeleportLoop do
-TeleportTo(CFrame.new(918.77, 100, 2379.07))
-task.wait()
-end
-end)
-	end)
 --
 local cdv = false
 coroutine.wrap(function()
