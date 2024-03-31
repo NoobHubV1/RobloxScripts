@@ -1966,7 +1966,7 @@ do
 				PublicOutput(table.concat(PutIn))
 			end
 		end
-	end,true,"",true,true)
+	end)
 	API:CreateCmd("doors", "prevents players from flinging you", function(args)
 		local Value = ChangeState(args[2],"DoorsDestroy")
 		if Value then
@@ -2294,7 +2294,7 @@ do
 		if Player then
 			API:bring(Player,CFrame.new(2^7,5^34,4^7))
 		end
-	end,true,"[PLAYER]")
+	end,nil,"[PLAYER]")
 
 	API:CreateCmd("void", "Teleports a player to the void", function(args)
 		local Player = API:FindPlayer(args[2])
@@ -2404,6 +2404,7 @@ do
 				end
 			end
 	end)
+	end,nil,"[PLAYER]")
 	API:CreateCmd("admins", "Tells you all admins", function(args)
 			local Compiled = ""
 			for i,v in pairs(Temp.Admins) do
@@ -2412,6 +2413,19 @@ do
 				end
 			end
 			API:Notif("Admins: "..Compiled,4)
+	end)
+	API:CreateCmd("unadmin", "The selected player can use certain commands", function(args)
+			local Target = API:FindPlayer(args[2])
+			if Target then
+				if not table.remove(New,table.find(New,Target.Name) then
+					table.remove(Temp.Admins,table.find(Temp.Admins,Target.Name)
+					local ohString1 = "/w "..Target.Name.." ".."UNADMIN: You have been Unadmined! You are no longer an admin."
+					local ohString2 = "All"
+					game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(ohString1, ohString2)
+				else
+					API:Notif("This player is already an admin!",false)
+				end
+			end
 	end)
 	API:CreateCmd("cursor ", "Changes mouse icon", function(args)
 		if args[2] and tonumber(args[2]) then
@@ -2554,7 +2568,7 @@ do
 		end
 	end)
 	API:CreateCmd("ff", "forcefield", function(args)
-		local value = ChangeState(args[2],"forcefield")
+		local value = ChangeState(args[2],"ff")
 	end,nil,"[on/off]")
         API:CreateCmd("AntiFling", "Remove Fling", function(args)
 		local value = ChangeState(args[2],"AntiFling")
