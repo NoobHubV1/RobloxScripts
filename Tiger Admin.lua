@@ -68,7 +68,7 @@ do
 	CmdsIcon.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 	CmdsIcon.Position = UDim2.new(-0.132423401, 0, 0.0226149559, 0)
 	CmdsIcon.Size = UDim2.new(0.121672593, 0, 0.945454538, 0)
-	CmdsIcon.Image = "rbxassetid://12661800163"
+	CmdsIcon.Image = "rbxassetid://4483345998"
 	CmdsIcon.ImageTransparency = 0.030
 
 	UICornera.CornerRadius = UDim.new(0, 6)
@@ -82,7 +82,7 @@ do
 	CmdButton.BackgroundTransparency = 1.000
 	CmdButton.Position = UDim2.new(0.298999995, 0, 0.27700001, 0)
 	CmdButton.Size = UDim2.new(0, 27, 0, 27)
-	CmdButton.Image = "rbxassetid://11570802781"
+	CmdButton.Image = "rbxassetid://4483345998"
 	CmdButton.ImageTransparency = 0.430
 	CmdButton.MouseButton1Up:Connect(function()
 		if not Temp.CmdsC then
@@ -123,7 +123,7 @@ do
 	Toggles.Position = UDim2.new(0.499593854, 0, 0.499376595, 0)+UDim2.new(0,0,1,0)
 	Toggles.Size = UDim2.new(0, 539, 0, 409)
 	Toggles.Visible = false
-	Toggles.Image = "rbxassetid://12011977394"
+	Toggles.Image = "rbxassetid://4483345998"
 	Toggles.ImageTransparency = 0.260
 
 	Stokeee.Parent = Toggles
@@ -170,7 +170,7 @@ Out.Parent = CmdBarFrame
 Out.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 Out.Position = UDim2.new(0.0200897697, 0, 0.022615375, 0)
 Out.Size = UDim2.new(0.974358976, 0, 0.945454538, 0)
-Out.Image = "rbxassetid://11789397066"
+Out.Image = "rbxassetid://4483345998"
 Out.ImageTransparency = 0.240
 
 UICorner_2.CornerRadius = UDim.new(0, 6)
@@ -200,7 +200,7 @@ Commands.AnchorPoint = Vector2.new(0.5, 0.5)
 Commands.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 Commands.Position = UDim2.new(0.5, 0, 0.5, 0)
 Commands.Size = UDim2.new(0, 455, 0, 297)
-Commands.Image = "rbxassetid://12011977394"
+Commands.Image = "rbxassetid://4483345998"
 Commands.ImageTransparency = 0.200
 Commands.Visible = false
 
@@ -1784,6 +1784,37 @@ do
 			end
 		end
 	end,nil,"[PLAYER,ALL,TEAM]")
+	API:CreateCmd("k", "Kills a player", function(args)
+		if args[2] == "all" then
+			API:killall()
+		elseif args[2] == "everyone" then
+			API:killall()
+		elseif args[2] == "others" then
+			API:killall()
+		elseif args[2] == "guards" then
+			API:killall(game.Teams.Guards)
+		elseif args[2] == "inmates" then
+			API:killall(game.Teams.Inmates)
+		elseif args[2] == "criminals" then
+			API:killall(game.Teams.Criminals)
+		elseif args[2] == "random" then
+			local random = nil
+			while true do
+				random = game:GetService("Players"):GetPlayers()[math.random(1, #game:GetService("Players"):GetPlayers())]
+				task.wait()
+				if random.Team ~= game.Teams.Criminals and random ~= game:GetService("Players").LocalPlayer then
+					break
+				end
+			end
+			API:KillPlayer(random)
+			API:Notif("Killed "..random.Name)
+		else
+			local Player = API:FindPlayer(args[2])
+			if Player then
+				API:KillPlayer(Player)
+			end
+		end
+	end,true,"[PLAYER,ALL,TEAM]")
 	API:CreateCmd("arrest", "Arrests the targeted player", function(args)
 		if args[2] and args[2] == "all" then
 			local LastPosition = API:GetPosition()
@@ -2052,6 +2083,7 @@ do
 	end,nil,"[PLAYER]")
 	API:CreateCmd("kick", "!KICKS TIGER ADMIN USERS ONLY! SAY IN CHAT", function(args)
 	        end,nil,"[TIGER ADMIN USER]")
+        end,nil,"[PLAYER]")
 	API:CreateCmd("whitelist", "Prevents commands from harming the target", function(args)
 		local Player = API:FindPlayer(args[2])
 		if Player then
