@@ -2402,9 +2402,12 @@ do
 			API:Notif("executor not supported.")
 		end
 	end)
-	API:CreateCmd("ff", "forcefield", function(args)
+	API:CreateCmd("forcefield", "forcefield", function(args)
 		local value = ChangeState(args[2],"ff")
 	end,nil,"[on/off]")
+	API:CreateCmd("ff", "forcefield", function(args)
+		local value = ChangeState(args[2],"ff")
+	end,true,"[on/off]")
         API:CreateCmd("AntiFling", "Remove Fling", function(args)
 		local value = ChangeState(args[2],"AntiFling")
 	end,nil,"[on/off]")
