@@ -2063,7 +2063,7 @@ do
 				API:ChangeTeam(Oldt)
 			end
 		end
-	end,nil,"[PLAYER,ALL]")
+	end,nil,"[PLAYER,ALL,TEAM]")
 	API:CreateCmd("heaven", "Teleports a player to the void", function(args)
 		local Player = API:FindPlayer(args[2])
 		if Player then
@@ -2217,6 +2217,29 @@ do
 			wait(1)
 			API:ChangeTeam(LastTeam)
 	end)
+	API:CreateCmd("od", "Opens every single door", function(args)
+		if not firetouchinterest then
+			return API:Notif("Your exploit doesnt support this command!",false)
+		end
+		local LastTeam =plr.Team
+		API:ChangeTeam(game.Teams.Guards)
+		wait(.7)
+		task.spawn(function()
+			local Arg_1 = game:GetService("Workspace")["Prison_ITEMS"].buttons["Prison Gate"]["Prison Gate"]
+			local Event = game:GetService("Workspace").Remote.ItemHandler
+			Event:InvokeServer(Arg_1)
+		end)
+		for i,v in pairs(game:GetService("Workspace").Doors:GetChildren()) do
+			if v then
+				if v:FindFirstChild("block") and v:FindFirstChild("block"):FindFirstChild("hitbox") then
+					firetouchinterest(Player.Character.HumanoidRootPart,v.block.hitbox,0)
+					firetouchinterest(Player.Character.HumanoidRootPart,v.block.hitbox,1)
+				end
+			end
+		end
+			wait(1)
+			API:ChangeTeam(LastTeam)
+	end,true)
 	API:CreateCmd("admin", "The selected player can use certain commands", function(args)
 			local Target = API:FindPlayer(args[2])
 			if Target then
@@ -2627,8 +2650,8 @@ do
 	API:CreateCmd("prefix", "Sets a different prefix", function(args)
 		local New = args[2]
 		if New and tostring(New) then
-			local Prefixn = tostring(New)
-			Settings.Prefix = Prefixn
+			local Prefix = tostring(New)
+			Settings.Prefix = Prefix
 			API:Notif("prefix set to "..New)
 		else
 			API:Notif("no prefix selected?",false)
@@ -3076,7 +3099,7 @@ do
 	API:CreateCmd("loopopendoors", "Opens every single door on loop", function(args)
 		local value = ChangeState(args[2],"loopopendoors")
 		if value then
-			while wait(2.4) do
+			while wait(2) do
 				if not States.loopopendoors then
 					break
 				end
@@ -3110,6 +3133,43 @@ do
 			end
 		end
 	end,nil,"[on/off]")
+	API:CreateCmd("Lod", "Opens every single door on loop", function(args)
+		local value = ChangeState(args[2],"loopopendoors")
+		if value then
+			while wait(2) do
+				if not States.loopopendoors then
+					break
+				end
+				if not firetouchinterest then
+					return API:Notif("Your exploit doesnt support this command!",false)
+				end
+				local LastTeam =plr.Team
+				API:ChangeTeam(game.Teams.Guards)
+				wait(.7)
+				task.spawn(function()
+					local Arg_1 = game:GetService("Workspace")["Prison_ITEMS"].buttons["Prison Gate"]["Prison Gate"]
+					local Event = game:GetService("Workspace").Remote.ItemHandler
+					Event:InvokeServer(Arg_1)
+				end)
+				for i,v in pairs(game:GetService("Workspace").Doors:GetChildren()) do
+					if v then
+						if v:FindFirstChild("block") and v:FindFirstChild("block"):FindFirstChild("hitbox") then
+							if not States.loopopendoors then
+								break
+							end
+							firetouchinterest(Player.Character.HumanoidRootPart,v.block.hitbox,0)
+							firetouchinterest(Player.Character.HumanoidRootPart,v.block.hitbox,1)
+						end
+					end
+				end
+				if not States.loopopendoors then
+					break
+				end
+				wait(1)
+				API:ChangeTeam(LastTeam)
+			end
+		end
+	end,true,"[on/off]")
 	API:CreateCmd("unload", "Destroys the script unloading it", function(args)
 		API:Destroy(game:FindFirstChild("Tiger_revamp_loaded"))
 		Unloaded = true
