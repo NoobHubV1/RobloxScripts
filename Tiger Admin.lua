@@ -1332,7 +1332,36 @@ do
 					end
 				end)
 			end)
-		                end,nil,nil,true)
+		end,nil,nil,true)
+
+		API:CreateCmd("grabknife", "Cool script [REJOIN TO STOP]", function(args)
+			task.spawn(function()
+				workspace.Remote.ItemHandler:InvokeServer({Position=game:GetService("Players").LocalPlayer.Character.Head.Position,Parent=workspace.Prison_ITEMS.single["Crude Knife"]})
+				repeat task.wait() until game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("Crude Knife")
+				game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("Crude Knife").Parent = game:GetService("Players").LocalPlayer.Character
+				local Player = game:GetService("Players").LocalPlayer
+				local Character = Player.Character
+				local Crude = Player.Backpack:FindFirstChild("Crude Knife") or Player.Character:FindFirstChild("Crude Knife")
+				local OldPosition = Crude.Grip
+				local PlayingAnimations = {}
+				local Target = nil
+				Player.CharacterAdded:Connect(function(a)
+					a:WaitForChild("Humanoid")
+					Character = a
+					wait(.7)
+					workspace.Remote.ItemHandler:InvokeServer({Position=game:GetService("Players").LocalPlayer.Character.Head.Position,Parent=workspace.Prison_ITEMS.single["Crude Knife"]})
+					repeat task.wait() until game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("Crude Knife")
+					game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("Crude Knife").Parent = game:GetService("Players").LocalPlayer.Character
+					Crude= Player.Backpack:FindFirstChild("Crude Knife") or Player.Character:FindFirstChild("Crude Knife")
+					Crude.Equipped:connect(function()
+						task.wait(0.4)
+						for _,Animation in pairs(Character.Humanoid:GetPlayingAnimationTracks()) do
+							if string.find(Animation.Animation.AnimationId, "182393478") then
+								Animation:Stop()
+							end
+						end
+					end)
+				end)
 				local Mouse = Player:GetMouse()
 				local function StopAnimations()
 					for i,v in pairs(PlayingAnimations) do
@@ -1596,6 +1625,21 @@ do
 				end
 			end
 		end,nil,"[PLAYER]",true)
+                API:CreateCmd("earrape", "spams sounds", function(args)
+		        local Value = ChangeState(args[2],"earrape")
+			if Value then
+				while wait(.1) do
+					for i,v in pairs(workspace:GetDescendants()) do
+						if v:IsA("Sound") then
+							v:Play()
+						end
+					end
+					if not States.earrape or Unloaded then
+						break
+					end
+				end
+			end
+		end,nil,"[ON/OFF]",true)
 	end
 	--//end of premium
 	API:CreateCmd("drag", "Enables draggable mode for all tiger guis", function(args)
@@ -2086,50 +2130,6 @@ do
 		API:killall()
 		API:Notif("Nuke from player has been removed.")
 	end,nil,"[PLAYER]")
-        API:CreateCmd("grabknife", "Cool script [REJOIN TO STOP]", function(args)
-                task.spawn(function()
-		workspace.Remote.ItemHandler:InvokeServer({Position=game:GetService("Players").LocalPlayer.Character.Head.Position,Parent=workspace.Prison_ITEMS.single["Crude Knife"]})
-		repeat task.wait() until game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("Crude Knife")
-	        game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("Crude Knife").Parent = game:GetService("Players").LocalPlayer.Character
-		local Player = game:GetService("Players").LocalPlayer
-	        local Character = Player.Character
-		local Crude = Player.Backpack:FindFirstChild("Crude Knife") or Player.Character:FindFirstChild("Crude Knife")
-		local OldPosition = Crude.Grip
-		local PlayingAnimations = {}
-		local Target = nil
-		Player.CharacterAdded:Connect(function(a)
-		a:WaitForChild("Humanoid")
-		Character = a
-		wait(.7)
-			workspace.Remote.ItemHandler:InvokeServer({Position=game:GetService("Players").LocalPlayer.Character.Head.Position,Parent=workspace.Prison_ITEMS.single["Crude Knife"]})
-			repeat task.wait() until game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("Crude Knife")
-			game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("Crude Knife").Parent = game:GetService("Players").LocalPlayer.Character
-			Crude= Player.Backpack:FindFirstChild("Crude Knife") or Player.Character:FindFirstChild("Crude Knife")
-			Crude.Equipped:connect(function()
-				task.wait(0.4)
-				for _,Animation in pairs(Character.Humanoid:GetPlayingAnimationTracks()) do
-					if string.find(Animation.Animation.AnimationId, "182393478") then
-						Animation:Stop()
-					end
-				end
-			end)
-		end)
-        end)
-        API:CreateCmd("earrape", "spams sounds", function(args)
-		local Value = ChangeState(args[2],"earrape")
-		if Value then
-			while wait(.1) do
-				for i,v in pairs(workspace:GetDescendants()) do
-					if v:IsA("Sound") then
-						v:Play()
-					end
-				end
-				if not States.earrape or Unloaded then
-				break
-				end
-			end
-		end
-	end,nil,"[ON/OFF]")
 	API:CreateCmd("to", "Teleports to a player", function(args)
 		local Player = API:FindPlayer(args[2])
 		if Player then
