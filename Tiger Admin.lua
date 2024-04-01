@@ -1613,32 +1613,6 @@ do
 				game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(ohString1, ohString2)
 			end
 		end,nil,"[TARGET]",true)
-		API:CreateCmd("superknife", "One shot knife", function(args)
-			workspace.Remote.ItemHandler:InvokeServer({Position=game:GetService("Players").LocalPlayer.Character.Head.Position,Parent=workspace.Prison_ITEMS.single["Crude Knife"]})
-			wait(.6)
-			local tool = plr.Backpack:WaitForChild("Crude Knife")
-			tool.Name = "Super knife"
-			if tool then
-				Temp.superthingy = game:GetService("UserInputService").InputEnded:Connect(function(inp,endi)
-					if not endi then
-						if not tool then
-							Temp.superthingy = nil
-						end
-						if inp.UserInputType == Enum.UserInputType.MouseButton1 then
-							for i,v in pairs(game:GetService("Players"):GetPlayers()) do
-								if v and v~=plr and (v.Character:GetPrimaryPartCFrame().Position-API:GetPosition()*CFrame.new(0,0,.4).Position).Magnitude <3.6 then
-									for i =1,20 do
-										task.spawn(function()
-											game:GetService("ReplicatedStorage").meleeEvent:FireServer(v)
-										end)
-									end
-								end
-							end
-						end
-					end
-				end)
-			end
-		end,nil,"",true)
 		API:CreateCmd("autoadmin", "Admins someone even if you leave and rejoin", function(args)
 			local Target = API:FindPlayer(args[2])
 			if Target then
@@ -1784,37 +1758,32 @@ do
 			end
 		end
 	end,nil,"[PLAYER,ALL,TEAM]")
-	API:CreateCmd("k", "Kills a player", function(args)
-		if args[2] == "all" then
-			API:killall()
-		elseif args[2] == "everyone" then
-			API:killall()
-		elseif args[2] == "others" then
-			API:killall()
-		elseif args[2] == "guards" then
-			API:killall(game.Teams.Guards)
-		elseif args[2] == "inmates" then
-			API:killall(game.Teams.Inmates)
-		elseif args[2] == "criminals" then
-			API:killall(game.Teams.Criminals)
-		elseif args[2] == "random" then
-			local random = nil
-			while true do
-				random = game:GetService("Players"):GetPlayers()[math.random(1, #game:GetService("Players"):GetPlayers())]
-				task.wait()
-				if random.Team ~= game.Teams.Criminals and random ~= game:GetService("Players").LocalPlayer then
-					break
+	API:CreateCmd("superknife", "One shot knife", function(args)
+		workspace.Remote.ItemHandler:InvokeServer({Position=game:GetService("Players").LocalPlayer.Character.Head.Position,Parent=workspace.Prison_ITEMS.single["Crude Knife"]})
+		wait(.6)
+		local tool = plr.Backpack:WaitForChild("Crude Knife")
+		tool.Name = "Super knife"
+		if tool then
+			Temp.superthingy = game:GetService("UserInputService").InputEnded:Connect(function(inp,endi)
+				if not endi then
+					if not tool then
+						Temp.superthingy = nil
+					end
+					if inp.UserInputType == Enum.UserInputType.MouseButton1 then
+						for i,v in pairs(game:GetService("Players"):GetPlayers()) do
+							if v and v~=plr and (v.Character:GetPrimaryPartCFrame().Position-API:GetPosition()*CFrame.new(0,0,.4).Position).Magnitude <3.6 then
+								for i =1,20 do
+									task.spawn(function()
+										game:GetService("ReplicatedStorage").meleeEvent:FireServer(v)
+									end)
+								end
+							end
+						end
+					end
 				end
-			end
-			API:KillPlayer(random)
-			API:Notif("Killed "..random.Name)
-		else
-			local Player = API:FindPlayer(args[2])
-			if Player then
-				API:KillPlayer(Player)
-			end
+			end)
 		end
-	end,true,"[PLAYER,ALL,TEAM]")
+	end)
 	API:CreateCmd("arrest", "Arrests the targeted player", function(args)
 		if args[2] and args[2] == "all" then
 			local LastPosition = API:GetPosition()
