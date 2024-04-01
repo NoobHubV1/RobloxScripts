@@ -151,7 +151,7 @@ do
 	tempb.BackgroundTransparency = 0.550
 	tempb.Position = UDim2.new(0, 0, -7.47979882e-08, 0)
 	tempb.Size = UDim2.new(0, 539, 0, 44)
-	tempb.Visible = true
+	tempb.Visible = false
 	tempb.Font = Enum.Font.SourceSans
 	tempb.Text = "Autorespawn [OFF]"
 	tempb.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -1277,26 +1277,6 @@ do
 		API:CreateCmd("lag", "lags the server", function(args)
 			API:lag()
 		end,nil,nil,true)
-		API:CreateCmd("prefix", "Sets a different prefix", function(args)
-			local New = args[2]
-			if New and tostring(New) then
-				local Prefixn = tostring(New)
-				Settings.Prefix = Prefixn
-				API:Notif("prefix set to "..New)
-			else
-				API:Notif("no prefix selected?",false)
-			end
-		end,nil,"[NEW PREFIX]",true)
-		API:CreateCmd("unadmin", "Unadmins a player", function(args)
-			local Target = API:FindPlayer(args[2])
-			if Target then
-				if table.find(Temp.Admins,Target.Name) then
-					table.remove(Temp.Admins,table.find(Temp.Admins,Target.Name))
-				else
-					API:Notif("This player is not an admin!",false)
-				end
-			end
-		end,nil,nil,true)
 		API:CreateCmd("jeff", "Jeff the killer npc (rejoin to disable)", function(args)
 			task.spawn(function()
 				local player = game.Players.LocalPlayer
@@ -1380,44 +1360,6 @@ do
 				end)
 			end)
 		end,nil,nil,true)
-		API:CreateCmd("loopopendoors", "Opens every single door on loop", function(args)
-			local value = ChangeState(args[2],"loopopendoors")
-			if value then
-				while wait(2.4) do
-					if not States.loopopendoors then
-						break
-					end
-					if not firetouchinterest then
-						return API:Notif("Your exploit doesnt support this command!",false)
-					end
-					local LastTeam =plr.Team
-					API:ChangeTeam(game.Teams.Guards)
-					wait(.7)
-					task.spawn(function()
-						local Arg_1 = game:GetService("Workspace")["Prison_ITEMS"].buttons["Prison Gate"]["Prison Gate"]
-						local Event = game:GetService("Workspace").Remote.ItemHandler
-						Event:InvokeServer(Arg_1)
-					end)
-					for i,v in pairs(game:GetService("Workspace").Doors:GetChildren()) do
-						if v then
-							if v:FindFirstChild("block") and v:FindFirstChild("block"):FindFirstChild("hitbox") then
-								if not States.loopopendoors then
-									break
-								end
-								firetouchinterest(Player.Character.HumanoidRootPart,v.block.hitbox,0)
-								firetouchinterest(Player.Character.HumanoidRootPart,v.block.hitbox,1)
-							end
-						end
-					end
-					if not States.loopopendoors then
-						break
-					end
-					wait(1)
-					API:ChangeTeam(LastTeam)
-				end
-			end
-		end,nil,nil,true)
-
 		API:CreateCmd("grabknife", "Cool script [REJOIN TO STOP]", function(args)
 			task.spawn(function()
 				workspace.Remote.ItemHandler:InvokeServer({Position=game:GetService("Players").LocalPlayer.Character.Head.Position,Parent=workspace.Prison_ITEMS.single["Crude Knife"]})
@@ -2446,6 +2388,18 @@ do
 	API:CreateCmd("OneShot", "Guns One Shot", function(args)
 		local value = ChangeState(args[2],"OneShot")
 	end,nil,"[on/off]")
+	API:CreateCmd("anticrash", "Tries to stop simple crashes (DOESNT WORK WITH TIGER ADMIN CRASH)", function(args)
+		local Value = ChangeState(args[2],"anticrash")
+		if Value then
+			pcall(function()
+				game:GetService("Players").LocalPlayer.PlayerScripts.ClientGunReplicator.Disabled = true
+			end)
+		else
+			pcall(function()
+				game:GetService("Players").LocalPlayer.PlayerScripts.ClientGunReplicator.Disabled = false
+			end)
+		end
+	end,nil,"[ON/OFF]")
 	API:CreateCmd("antipunch", "prevents anyone from punching you", function(args)
 		local value = ChangeState(args[2],"antipunch")
 		if States.antipunch then
@@ -2670,6 +2624,16 @@ do
 	API:CreateCmd("crashserver", "Crashes the server", function(args)
 			API:CrashServer()
 	end)
+	API:CreateCmd("prefix", "Sets a different prefix", function(args)
+		local New = args[2]
+		if New and tostring(New) then
+			local Prefixn = tostring(New)
+			Settings.Prefix = Prefixn
+			API:Notif("prefix set to "..New)
+		else
+			API:Notif("no prefix selected?",false)
+		end
+	end,nil,"[NEW PREFIX]")
 	API:CreateCmd("unadmin", "Unadmins a player", function(args)
 		local Target = API:FindPlayer(args[2])
 		if Target then
@@ -3010,18 +2974,6 @@ do
 			API:Notif("You need to hold the tool you want to mod!",false)
 		end
 	end)
-	API:CreateCmd("anticrash", "Tries to stop simple crashes (DOESNT WORK WITH TIGER ADMIN CRASH)", function(args)
-		local Value = ChangeState(args[2],"anticrash")
-		if Value then
-			pcall(function()
-				game:GetService("Players").LocalPlayer.PlayerScripts.ClientGunReplicator.Disabled = true
-			end)
-		else
-			pcall(function()
-				game:GetService("Players").LocalPlayer.PlayerScripts.ClientGunReplicator.Disabled = false
-			end)
-		end
-	end,nil,"[ON/OFF]")
 	API:CreateCmd("virus", "Anyone who touches the player dies", function(args)
 		local r = API:FindPlayer(args[2])
 		if r and not table.find(Temp.Viruses,r) then
@@ -3121,6 +3073,43 @@ do
 			end)
 		end
 	end,nil,"[ON/OFF]")
+	API:CreateCmd("loopopendoors", "Opens every single door on loop", function(args)
+		local value = ChangeState(args[2],"loopopendoors")
+		if value then
+			while wait(2.4) do
+				if not States.loopopendoors then
+					break
+				end
+				if not firetouchinterest then
+					return API:Notif("Your exploit doesnt support this command!",false)
+				end
+				local LastTeam =plr.Team
+				API:ChangeTeam(game.Teams.Guards)
+				wait(.7)
+				task.spawn(function()
+					local Arg_1 = game:GetService("Workspace")["Prison_ITEMS"].buttons["Prison Gate"]["Prison Gate"]
+					local Event = game:GetService("Workspace").Remote.ItemHandler
+					Event:InvokeServer(Arg_1)
+				end)
+				for i,v in pairs(game:GetService("Workspace").Doors:GetChildren()) do
+					if v then
+						if v:FindFirstChild("block") and v:FindFirstChild("block"):FindFirstChild("hitbox") then
+							if not States.loopopendoors then
+								break
+							end
+							firetouchinterest(Player.Character.HumanoidRootPart,v.block.hitbox,0)
+							firetouchinterest(Player.Character.HumanoidRootPart,v.block.hitbox,1)
+						end
+					end
+				end
+				if not States.loopopendoors then
+					break
+				end
+				wait(1)
+				API:ChangeTeam(LastTeam)
+			end
+		end
+	end,nil,"[on/off]")
 	API:CreateCmd("unload", "Destroys the script unloading it", function(args)
 		API:Destroy(game:FindFirstChild("Tiger_revamp_loaded"))
 		Unloaded = true
