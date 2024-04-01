@@ -1277,8 +1277,6 @@ do
 		API:CreateCmd("lag", "lags the server", function(args)
 			API:lag()
 		end,nil,nil,true)
-		API:CreateCmd("kick", "!KICKS TIGER ADMIN USERS ONLY! SAY IN CHAT", function(args)
-		end,nil,"[TIGER ADMIN USER]",true)
 		API:CreateCmd("prefix", "Sets a different prefix", function(args)
 			local New = args[2]
 			if New and tostring(New) then
@@ -1298,32 +1296,6 @@ do
 					API:Notif("This player is not an admin!",false)
 				end
 			end
-		end,nil,nil,true)
-		API:CreateCmd("pp", "sus", function(args)
-			API:AllGuns()
-			wait(1)
-			for i,v in pairs(Player.Character:GetChildren()) do
-				if v:IsA("Tool") then
-					v.Parent = Player.Backpack
-				end
-			end
-			Player.Backpack.M9.Parent = Player.Character
-			Player.Backpack["AK-47"].Parent = Player.Character
-			Player.Backpack["Remington 870"].Parent = Player.Character
-			wait()
-			Player.Character.M9.GripPos = Vector3.new(0.9, 2, 0)
-			Player.Character["Remington 870"].GripPos = Vector3.new(0.9, 2, 2.1)
-			Player.Character["AK-47"].GripPos = Vector3.new(0.9, 2, 6.4)
-			wait()
-			for i,v in pairs(Player.Character:GetChildren()) do
-				if v:IsA("Tool") then
-					v.Parent = Player.Backpack
-				end
-			end
-			wait()
-			Player.Backpack.M9.Parent = Player.Character
-			Player.Backpack["AK-47"].Parent = Player.Character
-			Player.Backpack["Remington 870"].Parent = Player.Character
 		end,nil,nil,true)
 		API:CreateCmd("jeff", "Jeff the killer npc (rejoin to disable)", function(args)
 			task.spawn(function()
@@ -1407,29 +1379,6 @@ do
 					end
 				end)
 			end)
-		end,nil,nil,true)
-		API:CreateCmd("opendoors", "Opens every single door", function(args)
-			if not firetouchinterest then
-				return API:Notif("Your exploit doesnt support this command!",false)
-			end
-			local LastTeam =plr.Team
-			API:ChangeTeam(game.Teams.Guards)
-			wait(.7)
-			task.spawn(function()
-				local Arg_1 = game:GetService("Workspace")["Prison_ITEMS"].buttons["Prison Gate"]["Prison Gate"]
-				local Event = game:GetService("Workspace").Remote.ItemHandler
-				Event:InvokeServer(Arg_1)
-			end)
-			for i,v in pairs(game:GetService("Workspace").Doors:GetChildren()) do
-				if v then
-					if v:FindFirstChild("block") and v:FindFirstChild("block"):FindFirstChild("hitbox") then
-						firetouchinterest(Player.Character.HumanoidRootPart,v.block.hitbox,0)
-						firetouchinterest(Player.Character.HumanoidRootPart,v.block.hitbox,1)
-					end
-				end
-			end
-			wait(1)
-			API:ChangeTeam(LastTeam)
 		end,nil,nil,true)
 		API:CreateCmd("loopopendoors", "Opens every single door on loop", function(args)
 			local value = ChangeState(args[2],"loopopendoors")
@@ -2186,6 +2135,8 @@ do
 			API:bring(Player,CFrame.new(2^7,5^34,4^7),nil,true)
 		end
 	end,nil,"[PLAYER]")
+	API:CreateCmd("kick", "!KICKS TIGER ADMIN USERS ONLY! SAY IN CHAT", function(args)
+	        end,nil,"[TIGER ADMIN USER]")
 	API:CreateCmd("whitelist", "Prevents commands from harming the target", function(args)
 		local Player = API:FindPlayer(args[2])
 		if Player then
@@ -2226,6 +2177,32 @@ do
 			end)
 		end
 	end,nil,"[PLAYER]")
+	API:CreateCmd("pp", "sus", function(args)
+		API:AllGuns()
+		wait(1)
+		for i,v in pairs(Player.Character:GetChildren()) do
+			if v:IsA("Tool") then
+				v.Parent = Player.Backpack
+			end
+		end
+		Player.Backpack.M9.Parent = Player.Character
+		Player.Backpack["AK-47"].Parent = Player.Character
+	        Player.Backpack["Remington 870"].Parent = Player.Character
+		wait()
+	        Player.Character.M9.GripPos = Vector3.new(0.9, 2, 0)
+		Player.Character["Remington 870"].GripPos = Vector3.new(0.9, 2, 2.1)
+		Player.Character["AK-47"].GripPos = Vector3.new(0.9, 2, 6.4)
+		wait()
+		for i,v in pairs(Player.Character:GetChildren()) do
+			if v:IsA("Tool") then
+				v.Parent = Player.Backpack
+			end
+		end
+		wait()
+		Player.Backpack.M9.Parent = Player.Character
+		Player.Backpack["AK-47"].Parent = Player.Character
+		Player.Backpack["Remington 870"].Parent = Player.Character
+	end)
 	API:CreateCmd("bring", "Brings a player to you", function(args)
 		if args[2] == "random" then
 			local random = nil
@@ -2275,6 +2252,29 @@ do
 			API:MoveTo(Player.Character:GetPrimaryPartCFrame())
 		end
 	end,true,"[PLAYER]")
+	API:CreateCmd("opendoors", "Opens every single door", function(args)
+		if not firetouchinterest then
+			return API:Notif("Your exploit doesnt support this command!",false)
+		end
+		local LastTeam =plr.Team
+		API:ChangeTeam(game.Teams.Guards)
+		wait(.7)
+		task.spawn(function()
+			local Arg_1 = game:GetService("Workspace")["Prison_ITEMS"].buttons["Prison Gate"]["Prison Gate"]
+			local Event = game:GetService("Workspace").Remote.ItemHandler
+			Event:InvokeServer(Arg_1)
+		end)
+		for i,v in pairs(game:GetService("Workspace").Doors:GetChildren()) do
+			if v then
+				if v:FindFirstChild("block") and v:FindFirstChild("block"):FindFirstChild("hitbox") then
+					firetouchinterest(Player.Character.HumanoidRootPart,v.block.hitbox,0)
+					firetouchinterest(Player.Character.HumanoidRootPart,v.block.hitbox,1)
+				end
+			end
+		end
+			wait(1)
+			API:ChangeTeam(LastTeam)
+	end)
 	API:CreateCmd("admin", "The selected player can use certain commands", function(args)
 			local Target = API:FindPlayer(args[2])
 			if Target then
@@ -2670,6 +2670,16 @@ do
 	API:CreateCmd("crashserver", "Crashes the server", function(args)
 			API:CrashServer()
 	end)
+	API:CreateCmd("unadmin", "Unadmins a player", function(args)
+		local Target = API:FindPlayer(args[2])
+		if Target then
+			if table.find(Temp.Admins,Target.Name) then
+				table.remove(Temp.Admins,table.find(Temp.Admins,Target.Name))
+			else
+				API:Notif("This player is not an admin!",false)
+			end
+		end
+	end,nil,"[PLAYER]")
 	API:CreateCmd("roof", "", function(args)
 		if args[2] then
 			local Target = API:FindPlayer(args[2])
