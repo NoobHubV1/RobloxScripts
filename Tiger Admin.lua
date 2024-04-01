@@ -2052,7 +2052,6 @@ do
 	end,nil,"[PLAYER]")
 	API:CreateCmd("kick", "!KICKS TIGER ADMIN USERS ONLY! SAY IN CHAT", function(args)
 	        end,nil,"[TIGER ADMIN USER]")
-        end,nil,"[PLAYER]")
 	API:CreateCmd("whitelist", "Prevents commands from harming the target", function(args)
 		local Player = API:FindPlayer(args[2])
 		if Player then
