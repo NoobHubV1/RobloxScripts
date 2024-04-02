@@ -684,26 +684,6 @@ function API:Loop(Times, calling)
 		calling()
 	end
 end
-function API:OpenDoors()
-	local LastTeam =plr.Team
-	API:ChangeTeam(game.Teams.Guards)
-	wait(.7)
-	task.spawn(function()
-		local Arg_1 = game:GetService("Workspace")["Prison_ITEMS"].buttons["Prison Gate"]["Prison Gate"]
-		local Event = game:GetService("Workspace").Remote.ItemHandler
-		Event:InvokeServer(Arg_1)
-	end)
-	for i,v in pairs(game:GetService("Workspace").Doors:GetChildren()) do
-		if v then
-			if v:FindFirstChild("block") and v:FindFirstChild("block"):FindFirstChild("hitbox") then
-				firetouchinterest(Player.Character.HumanoidRootPart,v.block.hitbox,0)
-				firetouchinterest(Player.Character.HumanoidRootPart,v.block.hitbox,1)
-			end
-		end
-	end
-		wait(1)
-		API:ChangeTeam(LastTeam)
-end
 function PublicOutput(CODE)
 	local Args ={
 		{
@@ -2160,7 +2140,24 @@ do
 		if not firetouchinterest then
 			return API:Notif("Your exploit doesnt support this command!",false)
 		end
-		API:OpenDoors()
+		local LastTeam =plr.Team
+		API:ChangeTeam(game.Teams.Guards)
+		wait(.7)
+		task.spawn(function()
+			local Arg_1 = game:GetService("Workspace")["Prison_ITEMS"].buttons["Prison Gate"]["Prison Gate"]
+			local Event = game:GetService("Workspace").Remote.ItemHandler
+			Event:InvokeServer(Arg_1)
+		end)
+		for i,v in pairs(game:GetService("Workspace").Doors:GetChildren()) do
+			if v then
+				if v:FindFirstChild("block") and v:FindFirstChild("block"):FindFirstChild("hitbox") then
+					firetouchinterest(Player.Character.HumanoidRootPart,v.block.hitbox,0)
+					firetouchinterest(Player.Character.HumanoidRootPart,v.block.hitbox,1)
+				end
+			end
+		end
+			wait(1)
+			API:ChangeTeam(LastTeam)
 	end)
 	API:CreateCmd("od", "Opens every single door", function(args)
 		if not firetouchinterest then
@@ -3047,7 +3044,7 @@ do
 	API:CreateCmd("loopopendoors", "Opens every single door on loop", function(args)
 		local value = ChangeState(args[2],"loopopendoors")
 		if value then
-			while wait(2) do
+			while wait(2.4) do
 				if not States.loopopendoors then
 					break
 				end
@@ -3080,23 +3077,41 @@ do
 				API:ChangeTeam(LastTeam)
 			end
 		end
-	end,nil,"[on/off]")
-	API:CreateCmd("Lod", "Opens every single door on loop", function(args)
+	end,nil,"[ON/OFF]")
+	API:CreateCmd("lod", "Opens every single door on loop", function(args)
 		local value = ChangeState(args[2],"loopopendoors")
 		if value then
-			while wait(2) do
+			while wait(2.4) do
 				if not States.loopopendoors then
 					break
 				end
 				if not firetouchinterest then
 					return API:Notif("Your exploit doesnt support this command!",false)
 				end
+				local LastTeam =plr.Team
+				API:ChangeTeam(game.Teams.Guards)
+				wait(.7)
 				task.spawn(function()
+					local Arg_1 = game:GetService("Workspace")["Prison_ITEMS"].buttons["Prison Gate"]["Prison Gate"]
+					local Event = game:GetService("Workspace").Remote.ItemHandler
+					Event:InvokeServer(Arg_1)
+				end)
+				for i,v in pairs(game:GetService("Workspace").Doors:GetChildren()) do
+					if v then
+						if v:FindFirstChild("block") and v:FindFirstChild("block"):FindFirstChild("hitbox") then
+							if not States.loopopendoors then
+								break
+							end
+							firetouchinterest(Player.Character.HumanoidRootPart,v.block.hitbox,0)
+							firetouchinterest(Player.Character.HumanoidRootPart,v.block.hitbox,1)
+						end
+					end
+				end
 				if not States.loopopendoors then
 					break
 				end
 				wait(1)
-				API:OpenDoors()
+				API:ChangeTeam(LastTeam)
 			end
 		end
 	end,true,"[on/off]")
