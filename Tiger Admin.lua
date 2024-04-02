@@ -3652,6 +3652,7 @@ coroutine.wrap(function()
 				task.wait(.5)
 				API:killall(game.Teams.Neutrals)
 			end
+	        end)()
 		        coroutine.wrap(function()
 			for i,v in pairs(Temp.Loopkilling) do
 				if v and game:GetService("Players"):FindFirstChild(v) then
