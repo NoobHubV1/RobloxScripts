@@ -377,7 +377,6 @@ do
 	States.DraggableGuis = false
 	States.spawnguns = false
 	States.loopkillguards = false
-	States.Loopkilling = {}
 	States.Antishield = false
 	States.DoorsDestroy = false
 	States.antipunch = false
@@ -406,6 +405,7 @@ do
 	States.earrape = false
 	--
 	Temp.IsBringing = false
+	Temp.Loopkilling = {}
 	Temp.ArrestOldP = false
 	Temp.KillAuras = {}
 	API.Whitelisted = {}
@@ -898,8 +898,8 @@ function API:killall(TeamToKill)
 	if not TeamToKill then
 		local LastTeam = Player.Team
 		local BulletTable = {}
-		if Player.Team ~= game.Teams.Criminals then
-			API:ChangeTeam(game.Teams.Criminals,true)
+		if Player.Team ~= game.Teams.Inmates then
+			API:ChangeTeam(game.Teams.Inmates,true)
 		end
 		API:GetGun("AK-47")
 		local Gun = Player.Backpack:FindFirstChild("AK-47") or Player.Character:FindFirstChild("AK-47")
@@ -939,13 +939,13 @@ function API:killall(TeamToKill)
 			API:ChangeTeam(LastTeam,true)
 		end
 	elseif TeamToKill then
-		if TeamToKill == game.Teams.Inmates or TeamToKill == game.Teams.Guards then
-			if Player.Team ~= game.Teams.Criminals then
-				API:ChangeTeam(game.Teams.Criminals)
-			end
-		elseif TeamToKill == game.Teams.Criminals then
+		if TeamToKill == game.Teams.Criminals or TeamToKill == game.Teams.Guards then
 			if Player.Team ~= game.Teams.Inmates then
 				API:ChangeTeam(game.Teams.Inmates)
+			end
+		elseif TeamToKill == game.Teams.Inmates then
+			if Player.Team ~= game.Teams.Criminals then
+				API:ChangeTeam(game.Teams.Criminals)
 			end
 		end
 		local BulletTable = {}
@@ -1800,7 +1800,7 @@ do
                 return
             end
         elseif args[2] == "all" then
-	    States.loopkillall = true
+	    Temp.Loopkillall = true
             API:Notif("Loopkilling all")
         else
             local Player = API:FindPlayer(args[2])
@@ -1829,7 +1829,7 @@ do
 				return
 			end
 		elseif args[2] == "all" then
-			States.loopkillall = true
+			Temp.Loopkillall = true
 			API:Notif("Loopkilling all")
 		else
 			local Player = API:FindPlayer(args[2])
@@ -1858,7 +1858,7 @@ do
 				return
 			end
 		elseif args[2] == "all" then
-			States.loopkillall = false
+			Temp.Loopkillall = false
 			API:Notif("Unloopkilling all")
 		else
 			local Player = API:FindPlayer(args[2])
@@ -1887,7 +1887,7 @@ do
 				return
 			end
 		elseif args[2] == "all" then
-			States.loopkillall = false
+			Temp.Loopkillall = false
 			API:Notif("Unloopkilling all")
 		else
 			local Player = API:FindPlayer(args[2])
@@ -3619,15 +3619,15 @@ coroutine.wrap(function()
 				wait(.5)
 				API:killall(game.Teams.Guards)
 			end
-			if States and States.loopkillall then
+			if Temp and Temp.Loopkillall then
 				wait(2)
 				API:killall(game.Teams.Criminals)
-				task.wait(.3)
+				task.wait(.5)
 				API:killall(game.Teams.Inmates)
-			        task.wait(.3)
+				task.wait(.5)
 				API:killall(game.Teams.Guards)
 			end
-	        end)()
+		end)()
 		coroutine.wrap(function()
 			for i,v in pairs(Temp.Loopkilling) do
 				if v and game:GetService("Players"):FindFirstChild(v) then
@@ -3887,7 +3887,7 @@ function AdminChatted(Text,Speaker)
 	end
 	if PlayerCheckCommand("unloopkill") then
 		if Arg2_P == "all" then
-			States.loopkillall = false
+			Temp.Loopkillall = false
 			API:Notif("Unloopkilling all")
 		else
 			local Player = API:FindPlayer(Arg2_P)
@@ -3902,7 +3902,7 @@ function AdminChatted(Text,Speaker)
 
 	if PlayerCheckCommand("loopkill") then
 		if Arg2_P == "all" then
-			States.loopkillall = true
+			Temp.Loopkillall = true
 		else
 			local Player = API:FindPlayer(Arg2_P)
 			if not table.find(Temp.Loopkilling,Player.Name) then
@@ -4094,8 +4094,6 @@ function AdminChatted(Text,Speaker)
 			API:killall(game.Teams.Inmates)
 		elseif Arg2_P == "criminals" then
 			API:killall(game.Teams.Criminals)
-		elseif Arg2_P == "neutrals" then
-			API:killall(game.Teams.Neutrals)
 		else
 			local Player = API:FindPlayer(Arg2_P)
 			if Player then
