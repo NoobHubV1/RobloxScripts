@@ -902,9 +902,9 @@ function API:killall(TeamToKill)
 		if Player.Team ~= game.Teams.Criminals then
 			API:ChangeTeam(game.Teams.Criminals,true)
 		end
-		API:GetGun("Remington 870")
-		local Gun = Player.Backpack:FindFirstChild("Remington 870") or Player.Character:FindFirstChild("Remington 870")
-		repeat API:swait() Gun = Player.Backpack:FindFirstChild("Remington 870") or Player.Character:FindFirstChild("Remington 870") until Gun
+		API:GetGun("AK-47")
+		local Gun = Player.Backpack:FindFirstChild("AK-47") or Player.Character:FindFirstChild("AK-47")
+		repeat API:swait() Gun = Player.Backpack:FindFirstChild("AK-47") or Player.Character:FindFirstChild("AK-47") until Gun
 
 		for i,v in pairs(game:GetService("Players"):GetPlayers()) do
 			if v and v~=Player  and v.Team == game.Teams.Inmates or v.Team == game.Teams.Guards and not table.find(API.Whitelisted,v)  then
@@ -919,8 +919,8 @@ function API:killall(TeamToKill)
 		task.spawn(function()
 			game:GetService("ReplicatedStorage").ShootEvent:FireServer(BulletTable, Gun)
 		end)
-		API:ChangeTeam(game.Teams.Inmates,true)
-		API:GetGun("Remington 870")
+		API:ChangeTeam(game.Teams.Inmates)
+		API:GetGun("AK-47")
 		repeat API:swait() Gun = Player.Backpack:FindFirstChild("Remington 870") or Player.Character:FindFirstChild("Remington 870") until Gun
 		local Gun = Player.Backpack:FindFirstChild("Remington 870") or Player.Character:FindFirstChild("Remington 870")
 		for i,v in pairs(game.Teams.Criminals:GetPlayers()) do
@@ -940,11 +940,11 @@ function API:killall(TeamToKill)
 			API:ChangeTeam(LastTeam,true)
 		end
 	elseif TeamToKill then
-		if TeamToKill == game.Teams.Inmates or TeamToKill == game.Teams.Guards or TeamToKill == game.Teams.Neutrals  then
+		if TeamToKill == game.Teams.Inmates or TeamToKill == game.Teams.Guards then
 			if Player.Team ~= game.Teams.Criminals then
 				API:ChangeTeam(game.Teams.Criminals)
 			end
-		elseif TeamToKill == game.Teams.Criminals then
+		elseif TeamToKill == game.Teams.Criminals or TeamToKill == game.Teams.Neutrals then
 			if Player.Team ~= game.Teams.Inmates then
 				API:ChangeTeam(game.Teams.Inmates)
 			end
@@ -961,9 +961,9 @@ function API:killall(TeamToKill)
 			end
 		end
 		wait(.4)
-		API:GetGun("M9")
-		local Gun = Player.Backpack:FindFirstChild("M9") or Player.Character:FindFirstChild("M9")
-		repeat task.wait() Gun = Player.Backpack:FindFirstChild("M9") or Player.Character:FindFirstChild("M9") until Gun
+		API:GetGun("AK-47")
+		local Gun = Player.Backpack:FindFirstChild("AK-47") or Player.Character:FindFirstChild("AK-47")
+		repeat task.wait() Gun = Player.Backpack:FindFirstChild("AK-47") or Player.Character:FindFirstChild("AK-47") until Gun
 
 		task.spawn(function()
 			game:GetService("ReplicatedStorage").ShootEvent:FireServer(BulletTable, Gun)
@@ -3644,13 +3644,7 @@ coroutine.wrap(function()
 			end
 			if States.loopkillall then
 				wait(2)
-				API:killall(game.Teams.Inmates)
-				task.wait(.5)
-				API:killall(game.Teams.Guards)
-				task.wait(.5)
-				API:killall(game.Teams.Criminals)
-				task.wait(.5)
-				API:killall(game.Teams.Neutrals)
+				API:killall()
 			end
 	        end)()
 		coroutine.wrap(function()
