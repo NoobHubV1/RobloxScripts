@@ -2012,6 +2012,7 @@ do
 	        local Player = API:FindPlayer(args[2])
 		if Player then
 			plr:Kick(Player)
+		end
 	end,nil,"[PLAYER]")
 	API:CreateCmd("whitelist", "Prevents commands from harming the target", function(args)
 		local Player = API:FindPlayer(args[2])
