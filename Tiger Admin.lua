@@ -1140,6 +1140,9 @@ function API:Destroy(v)
 		v:Remove()
 	end)
 end
+function Loop(Time)
+	wait(Time)
+end
 function API:BadArea(Player)
 	local mod = require(game.ReplicatedStorage["Modules_client"]["RegionModule_client"])
 	local a = pcall(function()
@@ -3015,18 +3018,22 @@ do
 		end
 	end)
 	API:CreateCmd("loopmkill", "kills player by teleport loopkill", function(args)
-			local r = API:FindPlayer(args[2])
-			if r and not table.find(Temp.LoopmKilling,r.Name) then
-				table.insert(Temp.LoopmKilling, r.Name)
-				API:Notif("Now loopkilling player")
-			end
+		local Value = States.loopmkill = true
+		if Value then
+		        Loop()
+			local Player = API:FindPlayer(args[2])
+			if Player then
+				API:MKILL(Player)
+				end
 	end,nil,"[PLAYER]")
 	API:CreateCmd("unloopmkill", "kills player by teleport loopkill", function(args)
-		local r = API:FindPlayer(args[2])
-		if r and table.find(Temp.LoopmKilling,r.Name) then
-			table.remove(Temp.LoopmKilling,table.find(Temp.LoopmKilling,r.Name))
-			API:Notif("Now unloopkilling player")
-		end
+		local Value = States.loopmkill = false
+		if Value then
+		        Loop()
+			local Player = API:FindPlayer(args[2])
+			if Player then
+				API:MKILL(Player)
+				end
 	end,nil,"[PLAYER]")
 	API:CreateCmd("joinlogs", "tells you who is leaving and joining", function(args)
 		local Value = ChangeState(args[2],"joinlogs")
