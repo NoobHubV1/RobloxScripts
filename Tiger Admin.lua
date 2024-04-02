@@ -898,8 +898,8 @@ function API:killall(TeamToKill)
 	if not TeamToKill then
 		local LastTeam = Player.Team
 		local BulletTable = {}
-		if Player.Team ~= game.Teams.Inmates then
-			API:ChangeTeam(game.Teams.Inmates,true)
+		if Player.Team ~= game.Teams.Criminals then
+			API:ChangeTeam(game.Teams.Criminals,true)
 		end
 		API:GetGun("AK-47")
 		local Gun = Player.Backpack:FindFirstChild("AK-47") or Player.Character:FindFirstChild("AK-47")
@@ -939,13 +939,13 @@ function API:killall(TeamToKill)
 			API:ChangeTeam(LastTeam,true)
 		end
 	elseif TeamToKill then
-		if TeamToKill == game.Teams.Criminals or TeamToKill == game.Teams.Guards then
-			if Player.Team ~= game.Teams.Inmates then
-				API:ChangeTeam(game.Teams.Inmates)
-			end
-		elseif TeamToKill == game.Teams.Inmates then
+		if TeamToKill == game.Teams.Inmates or TeamToKill == game.Teams.Guards then
 			if Player.Team ~= game.Teams.Criminals then
 				API:ChangeTeam(game.Teams.Criminals)
+			end
+		elseif TeamToKill == game.Teams.Criminals then
+			if Player.Team ~= game.Teams.Inmates then
+				API:ChangeTeam(game.Teams.Inmates)
 			end
 		end
 		local BulletTable = {}
