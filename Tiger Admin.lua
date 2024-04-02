@@ -377,7 +377,7 @@ do
 	States.DraggableGuis = false
 	States.spawnguns = false
 	States.loopkillguards = false
-	States.loopkillall = {}
+	States.Loopkilling = {}
 	States.Antishield = false
 	States.DoorsDestroy = false
 	States.antipunch = false
@@ -3619,7 +3619,7 @@ coroutine.wrap(function()
 				wait(.5)
 				API:killall(game.Teams.Guards)
 			end
-			if States.loopkillall then
+			if States and States.loopkillall then
 				wait(2)
 				API:killall(game.Teams.Criminals)
 				task.wait(.3)
