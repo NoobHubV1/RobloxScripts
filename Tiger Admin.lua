@@ -1,7 +1,3 @@
---[[
-Script by NoobHubV1
-]]
-
 if not getconnections or not hookmetamethod or not getnamecallmethod or not ((getgenv and getgenv()) or _G) then
 	game:GetService("StarterGui"):SetCore("SendNotification", {Title = "Tiger Admin",Text = "Executor is not supported!",Duration = 10,})
 end
@@ -4272,5 +4268,5 @@ game:GetService("RunService").Heartbeat:Connect(function()
 	end
 end)
 local DefaultChatSystemChatEvents = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents
-API:Notif("!noinvite to disable discord inviter",nil,true)
+API:Notif("Script Loaded! Script made by NoobHubV1",nil,true)
 CmdBarFrame:TweenPosition(UDim2.new(0.5, 0, 0.899999998, 0)-UDim2.new(0,0,.05,0),"Out","Back",.5)
