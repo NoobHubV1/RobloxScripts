@@ -377,6 +377,8 @@ do
 	States.DraggableGuis = false
 	States.spawnguns = false
 	States.loopkillguards = false
+	States.loopkillneutrals = false
+	States.loopkillall = false
 	States.Antishield = false
 	States.DoorsDestroy = false
 	States.antipunch = false
@@ -405,7 +407,6 @@ do
 	States.earrape = false
 	--
 	Temp.IsBringing = false
-	Temp.Loopkilling = {}
 	Temp.ArrestOldP = false
 	Temp.KillAuras = {}
 	API.Whitelisted = {}
@@ -939,7 +940,7 @@ function API:killall(TeamToKill)
 			API:ChangeTeam(LastTeam,true)
 		end
 	elseif TeamToKill then
-		if TeamToKill == game.Teams.Inmates or TeamToKill == game.Teams.Guards  then
+		if TeamToKill == game.Teams.Inmates or TeamToKill == game.Teams.Guards or TeamToKill == game.Teams.Neutrals  then
 			if Player.Team ~= game.Teams.Criminals then
 				API:ChangeTeam(game.Teams.Criminals)
 			end
@@ -1667,6 +1668,8 @@ do
 			API:killall(game.Teams.Inmates)
 		elseif args[2] == "criminals" then
 			API:killall(game.Teams.Criminals)
+		elseif args[2] == "neutrals" then
+			API:killall(game.Teams.Neutrals)
 		elseif args[2] == "random" then
 			local random = nil
 			while true do
@@ -1795,12 +1798,16 @@ do
                 API:Notif("Loopkilling inmates")
                 return
             elseif Team == game.Teams.Guards then
-                API:Notif("Loopkilling guards")
                 States.loopkillguards = true
+                API:Notif("Loopkilling guards")
                 return
+	    elseif Team == game.Teams.Neutrals then
+		States.loopkillneutrals = true
+		API:Notif("Loopkilling neutrals")
+		return
             end
         elseif args[2] == "all" then
-            Temp.Loopkillall = true
+	    States.loopkillall = true
             API:Notif("Loopkilling all")
         else
             local Player = API:FindPlayer(args[2])
@@ -1824,12 +1831,16 @@ do
 				API:Notif("Loopkilling inmates")
 				return
 			elseif Team == game.Teams.Guards then
-				API:Notif("Loopkilling guards")
 				States.loopkillguards = true
+				API:Notif("Loopkilling guards")
+				return
+			elseif Team == game.Teams.Neutrals then
+				States.loopkillneutrals = true
+				API:Notif("Loopkilling neutrals")
 				return
 			end
 		elseif args[2] == "all" then
-			Temp.Loopkillall = true
+			States.loopkillall = true
 			API:Notif("Loopkilling all")
 		else
 			local Player = API:FindPlayer(args[2])
@@ -1856,9 +1867,13 @@ do
 				States.loopkillguards = false
 				API:Notif("unLoopkilling guards")
 				return
+			elseif Team == game.Teams.Neutrals then
+				States.loopkillneutrals = false
+				API:Notif("unLoopkilling neutrals")
+				return
 			end
 		elseif args[2] == "all" then
-			Temp.Loopkillall = false
+			States.loopkillall = false
 			API:Notif("Unloopkilling all")
 		else
 			local Player = API:FindPlayer(args[2])
@@ -1885,9 +1900,13 @@ do
 				States.loopkillguards = false
 				API:Notif("unLoopkilling guards")
 				return
+			elseif Team == game.Teams.Neutrals then
+				States.loopkillneutrals = false
+				API:Notif("unLoopkilling neutrals")
+				return
 			end
 		elseif args[2] == "all" then
-			Temp.Loopkillall = false
+			States.loopkillall = false
 			API:Notif("Unloopkilling all")
 		else
 			local Player = API:FindPlayer(args[2])
@@ -3619,12 +3638,21 @@ coroutine.wrap(function()
 				wait(.5)
 				API:killall(game.Teams.Guards)
 			end
-			if Temp and Temp.Loopkillall then
+			if States.loopkillneutrals then
 				wait(.5)
-				API:killall()
+				API:killall(game.Teams.Neutrals)
 			end
-		end)()
-		coroutine.wrap(function()
+			if States.loopkillall then
+				wait(2)
+				API:killall(game.Teams.Inmates)
+				task.wait(.5)
+				API:killall(game.Teams.Guards)
+				task.wait(.5)
+				API:killall(game.Teams.Criminals)
+				task.wait(.5)
+				API:killall(game.Teams.Neutrals)
+			end
+		        coroutine.wrap(function()
 			for i,v in pairs(Temp.Loopkilling) do
 				if v and game:GetService("Players"):FindFirstChild(v) then
 					local Target = game:GetService("Players"):FindFirstChild(v)
