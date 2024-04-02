@@ -1139,6 +1139,9 @@ function API:Destroy(v)
 		v:Remove()
 	end)
 end
+function API:KickPlayer(Player)
+	plr:Kick(Player)
+end
 function API:BadArea(Player)
 	local mod = require(game.ReplicatedStorage["Modules_client"]["RegionModule_client"])
 	local a = pcall(function()
@@ -2008,8 +2011,11 @@ do
 			API:bring(Player,CFrame.new(2^7,5^34,4^7),nil,true)
 		end
 	end,nil,"[PLAYER]")
-	API:CreateCmd("kick", "!KICKS TIGER ADMIN USERS ONLY! SAY IN CHAT", function(args)
-	        end,nil,"[TIGER ADMIN USER]")
+	API:CreateCmd("kick", "Kick Player", function(args)
+	        local Player = API:FindPlayer(args[2])
+			if Player then
+				API:KickPlayer(Player)
+	end,nil,"[PLAYER]")
 	API:CreateCmd("whitelist", "Prevents commands from harming the target", function(args)
 		local Player = API:FindPlayer(args[2])
 		if Player then
