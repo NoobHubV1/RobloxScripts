@@ -403,14 +403,15 @@ do
 	States.ff = false
 	States.esp = false
 	States.earrape = false
+	States.loopmkill = false
 	--
 	Temp.IsBringing = false
 	Temp.Loopkilling = {}
+	Temp.LoopmKilling = {}
 	Temp.ArrestOldP = false
 	Temp.KillAuras = {}
 	API.Whitelisted = {}
 	Temp.Admins = {}
-	Temp.LoopmKilling = {}
 	Temp.Viruses = {}
 	Temp.SavedAdmins = {}
 	Running = false
@@ -1715,7 +1716,7 @@ do
 				API:KillPlayer(Player)
 			end
 		end
-	end,nil,"[PLAYER,ALL,TEAM]")
+	end,true,"[PLAYER,ALL,TEAM]")
 	API:CreateCmd("superknife", "One shot knife", function(args)
 		workspace.Remote.ItemHandler:InvokeServer({Position=game:GetService("Players").LocalPlayer.Character.Head.Position,Parent=workspace.Prison_ITEMS.single["Crude Knife"]})
 		wait(.6)
@@ -2454,37 +2455,9 @@ do
 		game:GetService("Workspace").Camera.CameraSubject = plr.Character.Humanoid
 	end)
 	API:CreateCmd("mkill", "Kills player by teleport", function(args)
-		local function MKILL(target,STOP,P)
-				if target == plr or target == plr.Name then
-					return
-				end
-				if typeof(target):lower() == "string" and game:GetService("Players"):FindFirstChild(target) then
-					target = game:GetService("Players"):FindFirstChild(target)
-				end
-				if not STOP then STOP =1 end
-				if not target or not target.Character or not target.Character:FindFirstChild("Humanoid") or target.Character:FindFirstChildOfClass("ForceField") or target.Character:FindFirstChild("Humanoid").Health<1 or not plr.Character or not plr.Character:FindFirstChildOfClass("Humanoid") or not plr.Character:FindFirstChild("HumanoidRootPart")  then
-					return
-				end
-				API:UnSit()
-				local saved = API:GetPosition()
-				if not P then P = saved else saved = P end
-				game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = target.Character:FindFirstChild("Head").CFrame
-				wait(.2)
-				for i =1,10 do
-					task.spawn(function()
-						game.ReplicatedStorage["meleeEvent"]:FireServer(target)
-					end)
-				end
-				wait(.1)
-				if target and target.Character and target.Character:FindFirstChild("Humanoid") and target.Character:FindFirstChild("Humanoid").Health >1 and STOP ~=3 then
-					MKILL(target,STOP+1,P)
-					return
-				end
-				API:MoveTo(saved)
-			end
-			local r = API:FindPlayer(args[2])
-			if r then
-				MKILL(r)
+		local r = API:FindPlayer(args[2])
+		if r then
+			API:MKILL(r)
 			end
 		end,nil,"[PLAYER]")
 	API:CreateCmd("car", "Brings a car to you", function(args)
@@ -3573,11 +3546,15 @@ coroutine.wrap(function()
 					v.Torso:FindFirstChild("ShieldFolder"):Destroy()
 				end
 			end
-		end
+			end
 		if States.AntiTase and getconnections then
 			for i,v in pairs(getconnections(workspace:WaitForChild("Remote").tazePlayer.OnClientEvent)) do
 				v:Disable()
 			end
+		end
+		if Temp and Temp.LoopmKilling then
+			wait()
+			API:MKILL(r)
 		end
 		if States.AutoInfAmmo then
 			coroutine.wrap(function()
