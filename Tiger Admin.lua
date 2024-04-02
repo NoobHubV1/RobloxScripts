@@ -921,8 +921,8 @@ function API:killall(TeamToKill)
 		end)
 		API:ChangeTeam(game.Teams.Inmates)
 		API:GetGun("AK-47")
-		repeat API:swait() Gun = Player.Backpack:FindFirstChild("Remington 870") or Player.Character:FindFirstChild("Remington 870") until Gun
-		local Gun = Player.Backpack:FindFirstChild("Remington 870") or Player.Character:FindFirstChild("Remington 870")
+		repeat API:swait() Gun = Player.Backpack:FindFirstChild("AK-47") or Player.Character:FindFirstChild("AK-47") until Gun
+		local Gun = Player.Backpack:FindFirstChild("AK-47") or Player.Character:FindFirstChild("AK-47")
 		for i,v in pairs(game.Teams.Criminals:GetPlayers()) do
 			if v and v~=Player and not table.find(API.Whitelisted,v) then
 				for i =1,15 do
@@ -940,11 +940,11 @@ function API:killall(TeamToKill)
 			API:ChangeTeam(LastTeam,true)
 		end
 	elseif TeamToKill then
-		if TeamToKill == game.Teams.Inmates or TeamToKill == game.Teams.Guards then
+		if TeamToKill == game.Teams.Inmates or TeamToKill == game.Teams.Guards or TeamToKill == game.Teams.Neutrals then
 			if Player.Team ~= game.Teams.Criminals then
 				API:ChangeTeam(game.Teams.Criminals)
 			end
-		elseif TeamToKill == game.Teams.Criminals or TeamToKill == game.Teams.Neutrals then
+		elseif TeamToKill == game.Teams.Criminals then
 			if Player.Team ~= game.Teams.Inmates then
 				API:ChangeTeam(game.Teams.Inmates)
 			end
@@ -3904,9 +3904,9 @@ function AdminChatted(Text,Speaker)
 			Msg(Speaker,Output)
 		end
 	end
-	if PlayerCheckCommand("loopkill") then
+	if PlayerCheckCommand("unloopkill") then
 		if Arg2_P == "all" then
-			Temp.Loopkillall = false
+			States.loopkillall = false
 			API:Notif("Unloopkilling all")
 		else
 			local Player = API:FindPlayer(Arg2_P)
@@ -3921,7 +3921,7 @@ function AdminChatted(Text,Speaker)
 
 	if PlayerCheckCommand("loopkill") then
 		if Arg2_P == "all" then
-			Temp.Loopkillall = true
+			States.loopkillall = true
 		else
 			local Player = API:FindPlayer(Arg2_P)
 			if not table.find(Temp.Loopkilling,Player.Name) then
@@ -4113,6 +4113,8 @@ function AdminChatted(Text,Speaker)
 			API:killall(game.Teams.Inmates)
 		elseif Arg2_P == "criminals" then
 			API:killall(game.Teams.Criminals)
+		elseif Arg2_P == "neutrals" then
+			API:killall(game.Teams.Neutrals)
 		else
 			local Player = API:FindPlayer(Arg2_P)
 			if Player then
