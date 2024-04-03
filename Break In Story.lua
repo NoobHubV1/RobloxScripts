@@ -16,21 +16,21 @@ if game.PlaceId ~= 1318971886 then
                 "Chips",
                 "Bloxy Cola",
                 "Expired Bloxy Cola",
-                "Pizza 2",
+                "Pizza",
                 "Key",
                 "Apple",
                 "Cookie",
                 "Med Kit",
                 "Cure",
                 "Bat",
-                "Linked Sword",
-                "Teddy Bloxpin",
+                "Sword",
+                "Teddy",
                 "Plank"
         }
         local RolesTable = {
-                "Bat",
-                "Gun",
-                "Swat Gun"
+                "The Fighter",
+                "Police",
+                "Swat"
         }
         local ItemsHealAllPlayersTable = {
                 "Med Kit",
@@ -62,7 +62,15 @@ if game.PlaceId ~= 1318971886 then
 		end
         end
         local function GiveItem(Item)
-                RemoteEvents:WaitForChild("GiveTool"):FireServer(tostring(Item:gsub(" ", "")))
+                if Item == "Pizza" then
+			RemoteEvents:WaitForChild("GiveTool"):FireServer("Pizza2")
+		elseif Item == "Sword" then
+		        RemoteEvents:WaitForChild("GiveTool"):FireServer("LinkedSword")
+		elseif Item == "Teddy" then
+		        RemoteEvents:WaitForChild("GiveTool"):FireServer("TeddyBloxpin")
+		else
+			RemoteEvents:WaitForChild("GiveTool"):FireServer(tostring(Item:gsub(" ", "")))
+		end
         end
         local function TakeDamange(Amount)
                 RemoteEvents:WaitForChild("Energy"):FireServer(-Amount)
@@ -120,7 +128,13 @@ if game.PlaceId ~= 1318971886 then
     end
         end
         local function GetRole(Role)
-                RemoteEvents.OutsideRole:FireServer(tostring(Role:gsub(" ", "")))
+                if Role == "The Fighter" then
+			RemoteEvents:WaitForChild("OutsideRole"):FireServer("Bat")
+		elseif Role == "Police" then
+		        RemoteEvents:WaitForChild("OutsideRole"):FireServer("Gun")
+		elseif Role == "Swat" then
+		        RemoteEvents:WaitForChild("OutsideRole"):FireServer("SwatGun")
+		end
         end
         local function BefriendCat()
                 RemoteEvents:WaitForChild("Cattery"):FireServer()
