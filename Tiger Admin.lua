@@ -373,6 +373,9 @@ do
 	States.DraggableGuis = false
 	States.spawnguns = false
 	States.loopkillguards = false
+	States.loopteamguards = false
+	States.loopteaminmates = false
+	States.loopteamcriminals = false
 	States.Antishield = false
 	States.DoorsDestroy = false
 	States.antipunch = false
@@ -2448,6 +2451,15 @@ do
 			end
 		end
 	end,nil,"[ME,PLAYER]")
+	API:CreateCmd("loopteamguard", "Loop changes your team to guard", function(args)
+		local value = ChangeState(args[2],"loopteamguards")
+	end,nil,"[ON/OFF]")
+	API:CreateCmd("loopteaminmate", "Loop changes your team to inmate", function(args)
+		local value = ChangeState(args[2],"loopteaminmates")
+	end,nil,"[ON/OFF]")
+	API:CreateCmd("loopteamcriminal", "Loop changes your team to criminal", function(args)
+		local value = ChangeState(args[2],"loopteamcriminals")
+	end,nil,"[ON/OFF]")
 	API:CreateCmd("unview", "Unwatches the selected target", function(args)
 		Temp.ViewingPlayer = nil
 		wait()
@@ -2784,7 +2796,7 @@ do
 	end,true)
 	API:CreateCmd("re", "refreshes your character", function(args)
 		API:Refresh(true)
-	end, true)
+	end,true)
 	API:CreateCmd("allcmds", "tells you the ammount of commands tiger admin has", function(args)
 		API:Notif("Tiger admin has "..tostring(AmmountCurrent).." commands.")
 	end)
@@ -3146,7 +3158,7 @@ do
 		API:MoveTo(Old)
 	end)
 
-	API:CreateCmd("Rc", "deletes all cars that are not seated", function(args)
+	API:CreateCmd("rc", "deletes all cars that are not seated", function(args)
 			local Old = API:GetPosition()
 		for i,v in pairs(game:GetService("Workspace").CarContainer:GetChildren()) do
 			if v then
@@ -3550,6 +3562,18 @@ coroutine.wrap(function()
 			for i,v in pairs(getconnections(workspace:WaitForChild("Remote").tazePlayer.OnClientEvent)) do
 				v:Disable()
 			end
+		end
+		if States.loopteamguards then
+			wait()
+			API:ChangeTeam(game.Teams.Guards)
+		end
+		if States.loopteaminmates then
+			wait()
+			API:ChangeTeam(game.Teams.Inmates)
+		end
+	        if States.loopteamcriminals then
+			wait()
+			API:ChangeTeam(game.Teams.Criminals)
 		end
 		if Temp and Temp.LoopmKilling then
 			wait()
