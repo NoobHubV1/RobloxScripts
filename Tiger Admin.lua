@@ -3614,12 +3614,8 @@ coroutine.wrap(function()
 				API:killall(game.Teams.Guards)
 			end
 			if Temp and Temp.Loopkillall then
-				wait(3.5)
-				API:killall(game.Teams.Gaurds)
-				task.wait(1.3)
-				API:killall(game.Teams.Inmates)
-				task.wait(1.3)
-				API:killall(game.Teams.Criminals)
+				wait(3)
+				API:killall()
 			end
 		end)()
 		coroutine.wrap(function()
