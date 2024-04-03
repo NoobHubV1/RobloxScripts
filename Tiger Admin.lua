@@ -2007,16 +2007,6 @@ do
 			API:bring(Player,CFrame.new(2^7,5^34,4^7),nil,true)
 		end
 	end,nil,"[PLAYER]")
-	API:CreateCmd("kick", "Kick Player", function(args)
-	        local Player = API:FindPlayer(args[2])
-		if Player then
-			if target == plr or target == plr.Name then
-		return
-	end
-spawn(function()
-work(game:GetService("Players")[v])
-		end
-	end,nil,"[PLAYER]")
 	API:CreateCmd("whitelist", "Prevents commands from harming the target", function(args)
 		local Player = API:FindPlayer(args[2])
 		if Player then
@@ -3030,16 +3020,16 @@ work(game:GetService("Players")[v])
 		end
 	end)
 	API:CreateCmd("loopmkill", "kills player by teleport loopkill", function(args)
-		local r = API:FindPlayer(args[2])
-		if r and not table.find(Temp.LoopmKilling,r.Name) then
-			table.insert(Temp.LoopmKilling, r.Name)
+		local Player = API:FindPlayer(args[2])
+		if Player then
+			     Temp.LoopmKilling = true
 			API:Notif("Now loopkilling player")
 		end
 	end,nil,"[PLAYER]")
 	API:CreateCmd("unloopmkill", "kills player by teleport loopkill", function(args)
-		local r = API:FindPlayer(args[2])
-		if r and table.find(Temp.LoopmKilling,r.Name) then
-			table.remove(Temp.LoopmKilling,table.find(Temp.LoopmKilling,r.Name))
+		local Player = API:FindPlayer(args[2])
+		if Player then
+			     Temp.LoopmKilling = false
 			API:Notif("Now unloopkilling player")
 		end
 	end,nil,"[PLAYER]")
@@ -3063,7 +3053,7 @@ work(game:GetService("Players")[v])
 	API:CreateCmd("loopopendoors", "Opens every single door on loop", function(args)
 		local value = ChangeState(args[2],"loopopendoors")
 		if value then
-			while wait(2.4) do
+			while wait(2) do
 				if not States.loopopendoors then
 					break
 				end
@@ -3100,7 +3090,7 @@ work(game:GetService("Players")[v])
 	API:CreateCmd("lod", "Opens every single door on loop", function(args)
 		local value = ChangeState(args[2],"loopopendoors")
 		if value then
-			while wait(2.4) do
+			while wait(2) do
 				if not States.loopopendoors then
 					break
 				end
@@ -3581,7 +3571,7 @@ coroutine.wrap(function()
 		end
 		if Temp and Temp.LoopmKilling then
 			wait()
-			API:MKILL(r)
+			API:MKILL(Player)
 		end
 		if States.AutoInfAmmo then
 			coroutine.wrap(function()
@@ -3624,8 +3614,12 @@ coroutine.wrap(function()
 				API:killall(game.Teams.Guards)
 			end
 			if Temp and Temp.Loopkillall then
-				wait(2)
-				API:killall()
+				wait(3.5)
+				API:killall(game.Teams.Gaurds)
+				task.wait(1.3)
+				API:killall(game.Teams.Inmates)
+				task.wait(1.3)
+				API:killall(game.Teams.Criminals)
 			end
 		end)()
 		coroutine.wrap(function()
@@ -3648,7 +3642,7 @@ coroutine.wrap(function()
 				if v and game:GetService("Players"):FindFirstChild(v) then
 					local Target = game:GetService("Players"):FindFirstChild(v)
 					if Target.Character and Target.Character:FindFirstChildOfClass("Humanoid") and Target.Character:FindFirstChildOfClass("Humanoid").Health >0 and not Target.Character:FindFirstChildOfClass("ForceField") then
-						API:KillMPlayer(Target)
+						API:(Target)
 					end
 				end
 			end
