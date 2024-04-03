@@ -3020,17 +3020,17 @@ do
 		end
 	end)
 	API:CreateCmd("loopmkill", "kills player by teleport loopkill", function(args)
-		local Player = API:FindPlayer(args[2])
-		if Player then
-			     Temp.LoopmKilling = true
-			API:Notif("Now loopkilling player")
+		local r = API:FindPlayer(args[2])
+			if r and not table.find(Temp.LoopmKilling,r.Name) then
+				table.insert(Temp.LoopmKilling, r.Name)
+				API:Notif("Now loopkilling player")
 		end
 	end,nil,"[PLAYER]")
 	API:CreateCmd("unloopmkill", "kills player by teleport loopkill", function(args)
-		local Player = API:FindPlayer(args[2])
-		if Player then
-			     Temp.LoopmKilling = false
-			API:Notif("Now unloopkilling player")
+		local r = API:FindPlayer(args[2])
+			if r and table.find(Temp.LoopmKilling,r.Name) then
+				table.remove(Temp.LoopmKilling,table.find(Temp.LoopmKilling,r.Name))
+				API:Notif("Now unloopkilling player")
 		end
 	end,nil,"[PLAYER]")
 	API:CreateCmd("joinlogs", "tells you who is leaving and joining", function(args)
