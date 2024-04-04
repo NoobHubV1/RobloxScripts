@@ -14,8 +14,10 @@ end
 
 local function GiveItem(Item)if Item == "Armor" then
 		             Events:WaitForChild("Vending"):FireServer(3, "Armor2", "Armor", tostring(LocalPlayer), 1)
-	                     elseif Item == "Crowbar 1" or Item == "Crowbar 2" or Item == "Crowbar 3" or Item == "Bat" or Item == "Pitchfork" or Item == "Hammer" or Item == "Wrench" or Item == "Broom" then
+	                     elseif Item == "Crowbar 1" or Item == "Crowbar 2" or Item == "Bat" or Item == "Pitchfork" or Item == "Hammer" or Item == "Wrench" or Item == "Broom" then
 		             Events:WaitForChild("Vending"):FireServer(3, tostring(Item:gsub(" ", "")), "Weapons", LocalPlayer.Name, 1)
+	                     elseif Item == "Diamond Crowbar" then
+		             Events:WaitForChild("Vending"):FireServer(3, "Crowbar3", "Weapons", LocalPlayer.Name, 1)
 	                     else
 		             Events:WaitForChild("GiveTool"):FireServer(tostring(Item:gsub(" ", "")))
 	                     end
@@ -77,7 +79,7 @@ local PhantomForcesWindow = Library:NewWindow("NoobHubV1 Hub")
 
 local BreakIn2 = PhantomForcesWindow:NewSection("Item Gui")
 
-BreakIn2:CreateDropdown("Item", {"Crowbar 1","Crowbar 2","Crowbar 3","Bat","Pitchfork","Hammer","Wrench","Broom","Armor","Med Kit","Key","Gold Key","Louise","Lollipop","Chips","Golden Apple","Pizza","Gold Pizza","Rainbow Pizza","Rainbow Pizza Box","Book","Phone","Cookie","Apple","Bloxy Cola","Expired Bloxy Cola","Bottle","Ladder","Battery"}, 2, function(Value)SelectedItem = Value
+BreakIn2:CreateDropdown("Item", {"Crowbar 1","Crowbar 2","Diamond Crowbar","Bat","Pitchfork","Hammer","Wrench","Broom","Armor","Med Kit","Key","Gold Key","Louise","Lollipop","Chips","Golden Apple","Pizza","Gold Pizza","Rainbow Pizza","Rainbow Pizza Box","Book","Phone","Cookie","Apple","Bloxy Cola","Expired Bloxy Cola","Bottle","Ladder","Battery"}, 2, function(Value)SelectedItem = Value
 end)
 
 BreakIn2:CreateButton("Get Item", function()GiveItem(SelectedItem)
