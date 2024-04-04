@@ -1,7 +1,7 @@
 -- Place Check
 if game.PlaceId ~= 1701332290 then
 
-	local OrionLib = loadstring(Game:HttpGet('https://raw.githubusercontent.com/NoobHubV1/NoobHubV1/main/OrionLib.lua'))()
+	local OrionLib = loadstring(Game:HttpGet('https://raw.githubusercontent.com/NoobHubV1/RobloxScripts/main/OrionLib.lua'))()
 	local ReplicatedStorage = game:GetService("ReplicatedStorage")
 	local NetworkEvents = ReplicatedStorage:WaitForChild("NetworkEvents")
 	local Players = game:GetService("Players")
