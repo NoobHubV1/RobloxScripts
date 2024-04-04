@@ -30,6 +30,14 @@ if game.PlaceId ~= 1701332290 then
                 )
 		end
 	end
+	local function Noclip(State)
+		LocalPlayer.Character.HumanoidRootPart.CanCollide = State
+		for i, v in pairs(LocalPlayer.Character:GetChildren()) do
+			if v:IsA("MeshPart") then
+				v.CanCollide = State
+			end
+		end
+	end
         local function Notify(name, content, image, time)
 		OrionLib:MakeNotification({
 			Name = name,
@@ -64,7 +72,7 @@ if game.PlaceId ~= 1701332290 then
 	Tab:AddDropdown({
 		Name = "Item",
 		Default = "Bandage",
-	        Options = {"Bandage", "MedKit", "Donut"},
+	        Options = {"Bandage", "Med Kit", "Donut"},
                 Callback = function(Value)
                         SelectedItem = Value
 		end
@@ -90,6 +98,7 @@ if game.PlaceId ~= 1701332290 then
                         getgenv().HealLoop = State
                         while HealLoop do
                                 HealYourself()
+				task.wait()
                         end
                 end
         })
@@ -108,6 +117,7 @@ if game.PlaceId ~= 1701332290 then
                         getgenv().HealAllLoop = State
                         while HealAllLoop do
                                 HealAllPlayers()
+				task.wait()
                         end
                 end
         })
@@ -125,6 +135,7 @@ if game.PlaceId ~= 1701332290 then
                         getgenv().KillZombiesLoop = State
                         while KillZombiesLoop do
                                 KillZombies()
+				task.wait()
                         end
                 end
         })
@@ -147,22 +158,33 @@ game:GetService("UserInputService").JumpRequest:connect(function()
 end)
                 end
         })
+	Tab:AddToggle({
+		Name = "Noclip",
+		Callback = function(State)
+			getgenv().Noclipping = State
+			if Noclipping == true then
+				spawn(function()
+					while Noclipping == true do
+						Noclip(false)
+						task.wait(.05)
+					end
+				end)
+			end
+			if Noclipping == false then
+				Noclip(true)
+			end
+		end
+	})
         Tab:AddButton({
                 Name = "Fly",
                 Callback = function()
-                        loadstring(Game:HttpGet('https://raw.githubusercontent.com/NoobHubV1/NoobHubV1/main/Fly.lua'))()
-                end
-         })
-         Tab:AddButton({
-                Name = "Noclip",
-                Callback = function()
-                        loadstring(Game:HttpGet('https://raw.githubusercontent.com/NoobHubV1/NoobHubV1/main/Noclip.lua'))()
+                        loadstring(Game:HttpGet('https://raw.githubusercontent.com/NoobHubV1/RobloxScripts/main/Fly.lua'))()
                 end
          })
          Tab:AddButton({
                 Name = "Shift Lock",
                 Callback = function()
-                        loadstring(Game:HttpGet('https://raw.githubusercontent.com/NoobHubV1/NoobHubV1/main/Shift%20Lock.lua'))()
+                        loadstring(Game:HttpGet('https://raw.githubusercontent.com/NoobHubV1/RobloxScripts/main/Shift%20Lock.lua'))()
                 end
          })
          Tab:AddButton({
