@@ -108,17 +108,35 @@ end)
 
 local BreakIn2 = PhantomForcesWindow:NewSection("Equip Item")
 
-BreakIn2:CreateDropdown("Equip Item", {"Crowbar 1","Crowbar 2","Crowbar 3","Bat","Pitchfork","Hammer","Wrench","Broom","Med Kit","Key","Gold Key","Louise","Lollipop","Chips","Golden Apple","Pizza","Gold Pizza","Rainbow Pizza","Rainbow Pizza Box","Book","Phone","Cookie","Apple","Bloxy Cola","Expired Bloxy Cola","Bottle","Ladder","Battery"}, 2, function(Value)EquipItem(Value)
+BreakIn2:CreateDropdown("Equip Item", {"Crowbar 1","Crowbar 2","Crowbar 3","Bat","Pitchfork","Hammer","Wrench","Broom","Med Kit","Key","Gold Key","Louise","Lollipop","Chips","Golden Apple","Pizza","Gold Pizza","Rainbow Pizza","Rainbow Pizza Box","Book","Phone","Cookie","Apple","Bloxy Cola","Expired Bloxy Cola","Bottle","Ladder","Battery"}, 2, function(Value)SelectedEquipItem = Value
+end)
+
+BreakIn2:CreateTextbox("Equip Item Textbox", function(Value)SelectedEquipItem = Value
+end)
+
+BreakIn2:CreateButton("Equip", function()EquipItem(SelectedEquipItem)
 end)
 
 local BreakIn2 = PhantomForcesWindow:NewSection("Unequip Item")
 
-BreakIn2:CreateDropdown("Unequip Item", {"Crowbar 1","Crowbar 2","Crowbar 3","Bat","Pitchfork","Hammer","Wrench","Broom","Med Kit","Key","Gold Key","Louise","Lollipop","Chips","Golden Apple","Pizza","Gold Pizza","Rainbow Pizza","Rainbow Pizza Box","Book","Phone","Cookie","Apple","Bloxy Cola","Expired Bloxy Cola","Bottle","Ladder","Battery"}, 2, function(Value)UnequipItem(Value)
+BreakIn2:CreateDropdown("Unequip Item", {"Crowbar 1","Crowbar 2","Crowbar 3","Bat","Pitchfork","Hammer","Wrench","Broom","Med Kit","Key","Gold Key","Louise","Lollipop","Chips","Golden Apple","Pizza","Gold Pizza","Rainbow Pizza","Rainbow Pizza Box","Book","Phone","Cookie","Apple","Bloxy Cola","Expired Bloxy Cola","Bottle","Ladder","Battery"}, 2, function(Value)SelectedUnequipItem = Value
+end)
+
+BreakIn2:CreateTextbox("Unequip Item Textbox", function(Value)SelectedUnequipItem = Value
+end)
+
+BreakIn2:CreateButton("Unequip", function()UnequipItem(SelectedUnequipItem)
 end)
 
 local BreakIn2 = PhantomForcesWindow:NewSection("Remove Item")
 
-BreakIn2:CreateDropdown("Remove Item", {"Crowbar 1","Crowbar 2","Crowbar 3","Bat","Pitchfork","Hammer","Wrench","Broom","Med Kit","Key","Gold Key","Louise","Lollipop","Chips","Golden Apple","Pizza","Gold Pizza","Rainbow Pizza","Rainbow Pizza Box","Book","Phone","Cookie","Apple","Bloxy Cola","Expired Bloxy Cola","Bottle","Ladder","Battery"}, 2, function(Value)RemoveItem(Value)
+BreakIn2:CreateDropdown("Remove Item", {"Crowbar 1","Crowbar 2","Crowbar 3","Bat","Pitchfork","Hammer","Wrench","Broom","Med Kit","Key","Gold Key","Louise","Lollipop","Chips","Golden Apple","Pizza","Gold Pizza","Rainbow Pizza","Rainbow Pizza Box","Book","Phone","Cookie","Apple","Bloxy Cola","Expired Bloxy Cola","Bottle","Ladder","Battery"}, 2, function(Value)SelectedRemoveItem = Value
+end)
+
+BreakIn2:CreateTextbox("Remove Item Textbox", function(Value)SelectedRemoveItem = Value
+end)
+
+BreakIn2:CreateButton("Remove Item Textbox", function(Value)RemoveItem(SelectedRemoveItem)
 end)
 
 Notify("Heal All Gui And More", "Loaded Script!", "rbxassetid://4483345998", 10)
