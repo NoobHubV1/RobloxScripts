@@ -30,25 +30,6 @@ if game.PlaceId ~= 1701332290 then
                 )
 		end
 	end
-	local function FindPlayer(String)
-		String = String:gsub("%s+", "")
-	for _, v in pairs(game:GetService("Players"):GetPlayers()) do
-		if v.Name:lower():match("^" .. String:lower()) or v.DisplayName:lower():match("^" .. String:lower()) then
-			return v
-		end
-	end
-	if not IgnoreError then
-		Notify("Warning", "Player has left or is not in your current game.", "rbxassetid://4483345998", 5)
-	end
-	return nil
-        end
-        local function ConvertPosition(Position)
-	if typeof(Position):lower() == "position" then
-		return CFrame.new(Position)
-	else
-		return Position
-		end
-	end
 	local function Noclip(State)
 		LocalPlayer.Character.HumanoidRootPart.CanCollide = State
 		for i, v in pairs(LocalPlayer.Character:GetChildren()) do
@@ -121,28 +102,6 @@ if game.PlaceId ~= 1701332290 then
                         end
                 end
         })
-	local Section = Tab:AddSection({
-                Name = "Heal Player"
-        })
-	Tab:AddTextbox({
-		Name = "Heal Player",
-		Default = "PlayerName",
-		Callback = function(Value)
-			Player = Value
-		end
-	})
-	Tab:AddButton({
-		Name = "Heal",
-		Callback = function()
-			local Player = FindPlayer(Player)
-		        if Player then
-				for i, v in pairs(Player()) do
-                                if v.Name ~= LocalPlayer then
-                                    NetworkEvents.RemoteFunction:InvokeServer("HEAL_PLAYER", v, math.huge)
-                        end
-		        end
-		end
-	})
         local Section = Tab:AddSection({
                 Name = "Heal All"
         })
