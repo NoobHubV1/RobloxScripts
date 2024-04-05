@@ -21,6 +21,13 @@ if game.PlaceId ~= 1701332290 then
                 end
 		end
 	end
+	local function HealPlayer(PlayerName)
+		for i, v in pairs(PlayerName()) do
+                if v.Name ~= LocalPlayer then
+                    NetworkEvents.RemoteFunction:InvokeServer("HEAL_PLAYER", v, math.huge)
+                end
+		end
+	end
 	local function KillZombies()
 		for i, v in pairs(game:GetService("Workspace").NPC:GetChildren()) do
                 NetworkEvents.RemoteFunction:InvokeServer(
@@ -102,6 +109,22 @@ if game.PlaceId ~= 1701332290 then
                         end
                 end
         })
+	local Section = Tab:AddSection({
+                Name = "Heal Player"
+        })
+	Tab:AddTextbox({
+		Name = "Heal Player",
+		Default = "PlayerName",
+		Callback = function(Value)
+			Player = Value
+		end
+	})
+	Tab:AddButton({
+		Name = "Heal",
+		Callback = function()
+			HealPlayer(Player)
+		end
+	})
         local Section = Tab:AddSection({
                 Name = "Heal All"
         })
