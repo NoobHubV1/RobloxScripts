@@ -56,24 +56,6 @@ local function Heal(Heal)if Heal == "Heal All Players" then
 	                 end
 end
 
-local function Button(Name)CreateButton(Name, function()
-end
-
-local function Toggle(Name, function)CreateToggle(Name, function(function)
-end
-
-local function Textbox(Name, function)CreateTextbox(Name, function(function)
-end
-
-local function Dropdown(Name, Options, Default, function)CreateDropdown(Name, Options, Default, function(function)
-end
-
-local function Section(Name)PhantomForcesWindow:NewSection(Name)
-end
-
-local function Train(Ability)Events:WaitForChild("RainbowWhatStat"):FireServer(Ability)
-end
-
 local function Notify(Name, Content, Image, Time)game:GetService("StarterGui"):SetCore("SendNotification",{
                 Title = Name;
                 Text = Content;
@@ -105,7 +87,7 @@ end)
 
 local BreakIn2 = PhantomForcesWindow:NewSection("Selected Heal")
 
-BreakIn2:Dropdown("Selected Heal", {"Heal All Players","Heal Yourself"}, 2, Value)SelectedHeal = Value
+BreakIn2:CreateDropdown("Selected Heal", {"Heal All Players","Heal Yourself"}, 1, function(Value)SelectedHeal = Value
 end)
 
 BreakIn2:CreateButton("Heal", function()Heal(SelectedHeal)
@@ -143,14 +125,6 @@ BreakIn2:CreateTextbox("Remove Item", function(Value)RemoveItemTextbox = Value
 end)
 
 BreakIn2:CreateButton("Remove", function(Value)RemoveItem(RemoveItemTextbox)
-end)
-
-local BreakIn2 = Section("Training")
-
-BreakIn2:Button("Train Strength")Train("Strength")
-end)
-
-BreakIn2:Button("Train Speed")Train("Speed")
 end)
 
 Notify("Heal All Gui And More", "Loaded Script!", "rbxassetid://4483345998", 10)
