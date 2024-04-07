@@ -13,7 +13,7 @@ local function UnequipAllTools()for i, v in pairs(LocalPlayer.Character:GetChild
 end
 
 local function GiveItem(Item)if Item == "Armor" then
-		                     Events:WaitForChild("Vending"):FireServer(3, "Armor2", "Armor", LocalPlayer, 1)
+		                     Events:WaitForChild("Vending"):FireServer(3, "Armor2", "Food", tostring(LocalPlayer), 1)
 	                     elseif Item == "Diamond Crowbar" then
 		                     Events:WaitForChild("Vending"):FireServer(3, "Crowbar3", "Food", LocalPlayer, 1)
 	                     else
