@@ -35,7 +35,7 @@ if game.PlaceId ~= 13864667823 then
 
 	Notify('Check Id Complete', "Loading Script", 'rbxassetid://4483345998', 2)
 
-		wait(2)
+		wait(1.4)
 
 	local Window = OrionLib:MakeWindow({
 		Name = "Break In 2 (Lobby)",
@@ -396,7 +396,7 @@ else
 
 	Notify('Check Id Complete', "Loading Script", 'rbxassetid://4483345998', 2)
 
-	        wait(2)
+	        wait(1.4)
 
 	local Window = OrionLib:MakeWindow({
 		Name = "Break In 2 (Game)",
@@ -418,9 +418,9 @@ else
 		Name = "Item",
 		Default = "Med Kit",
 		Options = ItemsTable,
-		Callback = function(Value)
-			if Value == 'Book' or Value == 'Phone' then
-				Notify('Warning', Value .. " Wont Work Unless You Own The Corresponding Gamepass.", 'rbxassetid://4483345998', 7)
+		Callback = function(Item)
+			if Item == "Book" or Item == "Phone" then
+				Notify("Warning", Item .. " Wont Work Unless You Own The Corresponding Gamepass.", "rbxassetid://4483345998", 7)
 			end
 			SelectedItem = Value
 		end
