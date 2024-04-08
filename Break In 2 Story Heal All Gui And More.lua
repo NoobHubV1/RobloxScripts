@@ -77,7 +77,10 @@ local PhantomForcesWindow = Library:NewWindow("NoobHubV1 Hub")
 
 local BreakIn2 = PhantomForcesWindow:NewSection("Item Gui")
 
-BreakIn2:CreateTextbox("Item", function(Value)ItemTextbox = Value
+BreakIn2:CreateTextbox("Item", function(Item)if Item == "Book" or Item == "Phone" then
+				                     Notify("Warning", Item .. " Wont Work Unless You Own The Corresponding Gamepass.", "rbxassetid://4483345998", 7)
+		                             end
+		                             ItemTextbox = Item
 end)
 
 BreakIn2:CreateButton("Get Item", function()GiveItem(ItemTextbox)
