@@ -54,22 +54,22 @@ local function Heal(Heal)if Heal == "Heal All Players" then
 	                 end
 end
 
-local function Notify(Name, Content, Image, Time)game:GetService("StarterGui"):SetCore("SendNotification",{
+local function Notify(Name, Content, Time)game:GetService("StarterGui"):SetCore("SendNotification",{
                 Title = Name;
                 Text = Content;
-		Icon = Image;
+		Icon = "rbxassetid://4483345998";
                 Duration = Time;
             })
 end
-Notify("Heal All Gui And More", "Loading Script.", "rbxassetid://4483345998", 3)
+Notify("Heal All Gui And More", "Loading Script.", 3)
 
                                                  wait(3)
 
-Notify("Heal All Gui And More", "Loading Script..", "rbxassetid://4483345998", 3)
+Notify("Heal All Gui And More", "Loading Script..", 3)
 
                                                  wait(3)
 
-Notify("Heal All Gui And More", "Loading Script...", "rbxassetid://4483345998", 3)
+Notify("Heal All Gui And More", "Loading Script...", 3)
 
                                                  wait(3)
 
@@ -78,7 +78,7 @@ local PhantomForcesWindow = Library:NewWindow("NoobHubV1 Hub")
 local BreakIn2 = PhantomForcesWindow:NewSection("Item Gui")
 
 BreakIn2:CreateTextbox("Item", function(Item)if Item == "Book" or Item == "Phone" then
-				                     Notify("Warning", Item .. " Wont Work Unless You Own The Corresponding Gamepass.", "rbxassetid://4483345998", 7)
+				                     Notify("Warning", Item .. " Wont Work Unless You Own The Corresponding Gamepass.", 7)
 		                             end
 		                             ItemTextbox = Item
 end)
@@ -128,5 +128,5 @@ end)
 BreakIn2:CreateButton("Remove", function(Value)RemoveItem(RemoveItemTextbox)
 end)
 
-Notify("Heal All Gui And More", "Loaded Script!", "rbxassetid://4483345998", 10)
+Notify("Heal All Gui And More", "Loaded Script!", 10)
 ScriptLoaded = true
