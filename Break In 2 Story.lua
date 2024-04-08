@@ -33,9 +33,9 @@ if game.PlaceId ~= 13864667823 then
 
                 wait(5)
 
-	Notify('Check Id Complete', "Loading Script", 'rbxassetid://4483345998', 2)
+	Notify('Check Id Complete', "Loading Script", 'rbxassetid://4483345998', 2.5)
 
-		wait(1.4)
+		wait(1.5)
 
 	local Window = OrionLib:MakeWindow({
 		Name = "Break In 2 (Lobby)",
@@ -394,9 +394,9 @@ else
 
                 wait(5)
 
-	Notify('Check Id Complete', "Loading Script", 'rbxassetid://4483345998', 2)
+	Notify('Check Id Complete', "Loading Script", 'rbxassetid://4483345998', 2.5)
 
-	        wait(1.4)
+	        wait(1.5)
 
 	local Window = OrionLib:MakeWindow({
 		Name = "Break In 2 (Game)",
