@@ -13,11 +13,13 @@ local function UnequipAllTools()for i, v in pairs(LocalPlayer.Character:GetChild
 end
 
 local function GiveItem(Item)if Item == "Armor" then
-		                     Events:WaitForChild("Vending"):FireServer(3, "Armor2", "Food", tostring(LocalPlayer), 1)
+		                     Events:WaitForChild("Vending"):FireServer(3, "Armor2", "Armor", tostring(LocalPlayer), 1)
 	                     elseif Item == "Diamond Crowbar" then
-		                     Events:WaitForChild("Vending"):FireServer(3, "Crowbar3", "Food", LocalPlayer, 1)
+		                     Events:WaitForChild("Vending"):FireServer(3, "Crowbar3", "Weapons", LocalPlayer, 1)
+	                     elseif Item == "Crowbar 1" or Item == "Crowbar 2" or Item == "Bat" or Item == "Wrench" or Item == "Pitchfork" or Item == "Hammer" or Item == "Broom" then
+		                     Events:WaitForChild("Vending"):FireServer(3, tostring(Item:gsub(" ", "")), "Weapons", LocalPlayer, 1)
 	                     else
-		                     Events:WaitForChild("Vending"):FireServer(3, tostring(Item:gsub(" ", "")), "Food", LocalPlayer, 1)
+		                     Events:WaitForChild("GiveTool"):FireServer(tostring(Item:gsub(" ", "")))
 	                     end
 end
 
@@ -77,13 +79,22 @@ local PhantomForcesWindow = Library:NewWindow("NoobHubV1 Hub")
 
 local BreakIn2 = PhantomForcesWindow:NewSection("Item Gui")
 
-BreakIn2:CreateTextbox("Item", function(Item)if Item == "Book" or Item == "Phone" then
+BreakIn2:CreateDropdown("Item", {"Crowbar 1","Crowbar 2","Diamond Crowbar","Bat","Wrench","Pitchfork","Hammer","Broom","Armor","Med Kit","Key","Gold Key","Golden Apple","Pizza","Gold Pizza","Cookie","Lollipop","Louise","Apple","Bottle","Bloxy Cola","Expired Bloxy Cola","Rainbow Pizza","Rainbow Pizza Box","Crowbar","Battery","Ladder","Book","Phone"}, 9, function(Item)if Item == "Book" or Item == "Phone" then
+				                                                                                                                                                                                                                                                                                                                                                       Notify("Warning", Item .. " Wont Work Unless You Own The Corresponding Gamepass.", 7)
+		                                                                                                                                                                                                                                                                                                                                                               end
+		                                                                                                                                                                                                                                                                                                                                                               SelectedItem = Item
+end)
+
+BreakIn2:CreateTextbox("Item Textbox", function(Item)if Item == "Book" or Item == "Phone" then
 				                     Notify("Warning", Item .. " Wont Work Unless You Own The Corresponding Gamepass.", 7)
 		                             end
 		                             ItemTextbox = Item
 end)
 
-BreakIn2:CreateButton("Get Item", function()GiveItem(ItemTextbox)
+BreakIn2:CreateButton("Get Item Textbox", function()GiveItem(ItemTextbox)
+end)
+
+BreakIn2:CreateButton("Get Item Dropdown", function()GiveItem(SelectedItem)
 end)
 
 local BreakIn2 = PhantomForcesWindow:NewSection("Selected Heal")
