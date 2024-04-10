@@ -96,9 +96,9 @@ else
 	local Players = game:GetService("Players")
 	local LocalPlayer = Players.LocalPlayer
 	local Lighting = game:GetService("Lighting")
-	local OriginalWalkspeed = LocalPlayer.Character.Humanoid.WalkSpeed
+	local OriginalWalkSpeed = LocalPlayer.Character.Humanoid.WalkSpeed
 	local OriginalJumpPower = LocalPlayer.Character.Humanoid.JumpPower
-	local ModifiedWalkspeed = 50
+	local ModifiedWalkSpeed = 50
 	local ModifiedJumpPower = 100
 	local OriginalBrightness = Lighting.Brightness
 	local OriginalFog = Lighting.FogEnd
