@@ -843,12 +843,12 @@ else
 		Name = "Enable Inf Jump",
 		Default = false,
 		Callback = function(Value)
-			local InfJump = State
-		game:GetService("UserInputService").JumpRequest:connect(function()
-		if InfJump then
-		LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState("Jumping")
-		end
-		end)
+			InfJump = Value
+game:GetService("UserInputService").JumpRequest:connect(function()
+	if InfJump then
+		game.Players.LocalPlayer.Character:FindFirstChildOfClass('Humanoid'):ChangeState("Jumping")
+ end
+end)
 		end
 	})
 	Tab:AddToggle({
