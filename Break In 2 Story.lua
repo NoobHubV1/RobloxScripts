@@ -95,9 +95,12 @@ else
 	local ScriptLoaded = false
 	local Players = game:GetService("Players")
 	local LocalPlayer = Players.LocalPlayer
+	local UserInputService = game:GetService("UserInputService")
+	local JumpRequest = UserInputService.JumpRequest
+	local Humanoid = LocalPlayer.Character.Humanoid
 	local Lighting = game:GetService("Lighting")
-	local OriginalWalkspeed = LocalPlayer.Character.Humanoid.WalkSpeed
-	local OriginalJumpPower = LocalPlayer.Character.Humanoid.JumpPower
+	local OriginalWalkspeed = Humanoid.WalkSpeed
+	local OriginalJumpPower = Humanoid.JumpPower
 	local ModifiedWalkspeed = 50
 	local ModifiedJumpPower = 100
 	local OriginalBrightness = Lighting.Brightness
@@ -383,7 +386,23 @@ else
 		end
 	end
 	local function LoadScriptNoobHubV1(Script)
-		loadstring(Game:HttpGetAsync(("https://raw.githubusercontent.com/NoobHubV1/RobloxScripts/main/Script")))()
+		if Script == "Break In 2 Story" or Script == "Break%20In%202%20Story" then
+			  loadstring(Game:HttpGetAsync(("https://raw.githubusercontent.com/NoobHubV1/RobloxScripts/main/Break%20In%202%20Story.lua")))()
+		elseif Script == "Fly" then
+			  loadstring(Game:HttpGetAsync(("https://raw.githubusercontent.com/NoobHubV1/RobloxScripts/main/Fly.lua")))()
+		elseif Script == "Arceus X V3" or Script == "Arceus%20X%20V3" then
+			  loadstring(Game:HttpGetAsync(("https://raw.githubusercontent.com/NoobHubV1/RobloxScripts/main/Arceus%20X%20V3.lua")))()
+		elseif Script == "Inf Jump" or Script == "Inf%20Jump" then
+			  loadstring(Game:HttpGetAsync(("https://raw.githubusercontent.com/NoobHubV1/RobloxScripts/main/Inf%20Jump.lua")))()
+		end
+	end
+	local function InfJump(State)
+		local InfJump = State
+		JumpRequest:connect(function()
+		if InfJump then
+		Humanoid:ChangeState("Jumping")
+		end
+		end)
 	end
 	local function Notify(name, content, image, time)
 		OrionLib:MakeNotification({
@@ -805,10 +824,10 @@ else
 		Default = false,
 		Callback = function(Value)
 			if Value == true then
-				OriginalWalkSpeed = LocalPlayer.Character.Humanoid.WalkSpeed
-				LocalPlayer.Character.Humanoid.WalkSpeed = ModifiedWalkSpeed
+				OriginalWalkSpeed = Humanoid.WalkSpeed
+				Humanoid.WalkSpeed = ModifiedWalkSpeed
 			else
-				LocalPlayer.Character.Humanoid.WalkSpeed = OriginalWalkSpeed
+		                Humanoid.WalkSpeed = OriginalWalkSpeed
 			end
 		end    
 	})
@@ -817,16 +836,16 @@ else
 		Default = false,
 		Callback = function(Value)
 			if Value == true then
-				OriginalJumpPower = LocalPlayer.Character.Humanoid.JumpPower
-				LocalPlayer.Character.Humanoid.JumpPower = ModifiedJumpPower
-				LocalPlayer.Character.Humanoid.UseJumpPower = Value
+				OriginalJumpPower = Humanoid.JumpPower
+				Humanoid.JumpPower = ModifiedJumpPower
+				Humanoid.UseJumpPower = Value
 			else
-				LocalPlayer.Character.Humanoid.JumpPower = OriginalJumpPower
+				Humanoid.JumpPower = OriginalJumpPower
 			end
 		end    
 	})
 	Tab:AddToggle({
-		Name = "Enable Noclip",
+		Name = "Enable Inf Jump",
 		Default = false,
 		Callback = function(Value)
 			getgenv().Noclipping = Value
@@ -840,6 +859,24 @@ else
 			end
 			if Noclipping == false then
 				Noclip(true)
+			end
+		end
+	})
+	Tab:AddToggle({
+		Name = "Enable Noclip",
+		Default = false,
+		Callback = function(Value)
+			getgenv().InfJump = Value
+			if InfJump == true then
+				spawn(function()
+					while InfJump == true do
+						InfJump(true)
+						task.wait(.05)
+					end
+				end)
+			end
+			if InfJump == false then
+				InfJump(false)
 			end
 		end
 	})
