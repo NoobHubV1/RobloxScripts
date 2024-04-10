@@ -382,6 +382,9 @@ else
 			game:GetService("Workspace").WavePart.CanTouch = false
 		end
 	end
+	local function LoadScriptNoobHubV1(Script)
+		loadstring(Game:HttpGetAsync(("https://raw.githubusercontent.com/NoobHubV1/RobloxScripts/main/Script")))()
+	end
 	local function Notify(name, content, image, time)
 		OrionLib:MakeNotification({
 			Name = name,
@@ -1166,6 +1169,22 @@ else
 		Name = "Heal All Gui And More",
 		Callback = function()
 			loadstring(Game:HttpGet('https://raw.githubusercontent.com/NoobHubV1/RobloxScripts/main/Break%20In%202%20Story%20Heal%20All%20Gui%20And%20More.lua'))()
+		end
+	})
+
+	Tab:AddTextbox({
+		Name = "Script",
+		Default = "Fly.lua",
+		TextDisappear = false,
+		Callback = function(Value)
+			LoadScript = Value
+		end
+	})
+
+	Tab:AddButton({
+		Name = "Load Script",
+		Callback = function()
+			LoadScriptNoobHubV1(LoadScript)
 		end
 	})
 
