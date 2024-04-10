@@ -1,7 +1,6 @@
 local Library = loadstring(game:HttpGetAsync(("https://github.com/bloodball/-back-ups-for-libs/raw/main/wizard")))()
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
-local JumpRequest = UserInputService.JumpRequest
 local ScriptLoaded = false
 
 local function Notify(Name, Content, Time)game:GetService("StarterGui"):SetCore("SendNotification",{
