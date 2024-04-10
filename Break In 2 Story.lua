@@ -399,14 +399,6 @@ else
 			  loadstring(game:HttpGet("https://raw.githubusercontent.com/memejames/Hide/main/Keyssten"))()
 		end
 	end
-	local function InfJump(State)
-		local InfJump = State
-		game:GetService("UserInputService").JumpRequest:connect(function()
-		if InfJump then
-		LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState("Jumping")
-		end
-		end)
-	end
 	local function Notify(name, content, image, time)
 		OrionLib:MakeNotification({
 			Name = name,
@@ -447,7 +439,7 @@ else
 			if Item == "Book" or Item == "Phone" then
 				Notify("Warning", Item .. " Wont Work Unless You Own The Corresponding Gamepass.", "rbxassetid://4483345998", 7)
 			end
-			SelectedItem = Value
+			SelectedItem = Item
 		end
 	})
 	Tab:AddButton({
@@ -851,18 +843,12 @@ else
 		Name = "Enable Inf Jump",
 		Default = false,
 		Callback = function(Value)
-			getgenv().InfJump = Value
-			if InfJump == true then
-				spawn(function()
-					while InfJump == true do
-						InfJump(true)
-						task.wait(.05)
-					end
-				end)
-			end
-			if InfJump == false then
-				InfJump(false)
-			end
+			local InfJump = State
+		game:GetService("UserInputService").JumpRequest:connect(function()
+		if InfJump then
+		LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState("Jumping")
+		end
+		end)
 		end
 	})
 	Tab:AddToggle({
