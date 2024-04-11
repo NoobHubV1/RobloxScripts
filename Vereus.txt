@@ -1,1 +1,1 @@
-loadstring(Game:HttpGetAsync(("https://raw.githubusercontent.com/NoobHubV1/RobloxScripts-FE/main/Vereus.lua?token=GHSAT0AAAAAACQKBX6FLPLJNQYEONEJKCDEZQX5SDA")))()
+loadstring(Game:HttpGetAsync(("https://raw.githubusercontent.com/NoobHubV1/NoobHubV1/main/FE/Vereus.txt")))()
