@@ -28,6 +28,34 @@ local function ChangeTeam(Team)
         end
 end
 
+local function TaseAll()local Oldt = Player.Team
+			ChangeTeam(game.Teams.Guards)
+			repeat task.wait() until Player.Backpack:FindFirstChild("Taser")
+			wait(.7)
+			local ohTable1 = {}
+			for i,v in pairs(game:GetService("Players"):GetPlayers()) do
+				if v and v~= Player and v.Team ~= game.Teams.Guards then
+					table.insert(ohTable1, {
+						["RayObject"] = Ray.new(Vector3.new(), Vector3.new()),
+						["Distance"] = -1,
+						["Cframe"] = CFrame.new(),
+						["Hit"] = v.Character.Head
+					})
+				end
+			end
+			local ohInstance2 = game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("Taser") or game:GetService("Players").LocalPlayer.Character:FindFirstChild("Taser")
+			game:GetService("ReplicatedStorage").ShootEvent:FireServer(ohTable1, ohInstance2)
+			task.spawn(function()
+				game:GetService("ReplicatedStorage").ReloadEvent:FireServer(game:GetService("Players").LocalPlayer.Backpack.Taser)
+			end)
+			wait(.7)
+			ChangeTeam(Oldt)
+end
+
+local function LoadScriptTigerAdmin()
+        loadstring(Game:HttpGetAsync(("https://raw.githubusercontent.com/NoobHubV1/RobloxScripts/main/Tiger%20Admin.lua")))()
+end
+
 local PhantomForcesWindow = Library:NewWindow("NoobHubV1 Hub")
 
 local PrisonLife = PhantomForcesWindow:NewSection("Item Gui")
@@ -49,4 +77,12 @@ PrisonLife:CreateTextbox("Team", function(Team)if Team == "Inmate" then
                                               elseif Team == "Neutral" then
                                                       ChangeTeam(game.Teams.Neutral)
                                               end
+end)
+
+local PrisonLife = PhantomForcesWindow:NewSection("Tase All and Tiger Admin")
+
+PrisonLife:CreateButton("Tase All", function()TaseAll()
+end)
+
+PrisonLife:CreateButton("Tiger Admin", function()LoadScriptTigerAdmin()
 end)
