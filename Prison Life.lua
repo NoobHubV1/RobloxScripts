@@ -40,7 +40,7 @@ end)
 
 local PrisonLife = PhantomForcesWindow:NewSection("Change Team")
 
-PrionLife:CreateTextbox("Team", function(Team)if Team == "Inmate" then
+PrisonLife:CreateTextbox("Team", function(Team)if Team == "Inmate" then
                                                       ChangeTeam(game.Teams.Inmates)
                                               elseif Team == "Guard" then
                                                       ChangeTeam(game.Teams.Guards)
