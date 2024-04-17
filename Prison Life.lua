@@ -1,4 +1,9 @@
 local Library = loadstring(Game:HttpGet('https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/wizard'))()
+local plr = game:GetService("Players").LocalPlayer
+
+local function GetCameraPosition()
+	workspace["CurrentCamera"].CFrame
+end
 
 local function GiveItem(Item)
         if Item == "Shotgun" then
@@ -16,44 +21,98 @@ local function GiveItem(Item)
         end
 end
 
-local function ChangeTeam(Team)
-        if Team == game.Teams.Inmates then
-                workspace.Remote.TeamEvent:FireServer("Bright orange")
-        elseif Team == game.Teams.Guards then
-                workspace.Remote.TeamEvent:FireServer("Bright blue")
-        elseif Team == game.Teams.Criminals then
-                workspace.Remote.TeamEvent:FireServer("Bright red")
-        elseif Team == game.Teams.Neutral then
-                workspace.Remote.TeamEvent:FireServer("Bright grey")
-        end
+local function ConvertPosition(Position)
+	if typeof(Position):lower() == "position" then
+		return CFrame.new(Position)
+	else
+		return Position
+	end
 end
 
-local function TaseAll()local Oldt = Player.Team
-			ChangeTeam(game.Teams.Guards)
-			repeat task.wait() until Player.Backpack:FindFirstChild("Taser")
-			wait(.7)
-			local ohTable1 = {}
-			for i,v in pairs(game:GetService("Players"):GetPlayers()) do
-				if v and v~= Player and v.Team ~= game.Teams.Guards then
-					table.insert(ohTable1, {
-						["RayObject"] = Ray.new(Vector3.new(), Vector3.new()),
-						["Distance"] = -1,
-						["Cframe"] = CFrame.new(),
-						["Hit"] = v.Character.Head
-					})
+local function Loop(Times, calling)
+	for i = 1, tonumber(Times) do
+		calling()
+	end
+end
+
+local function WaitForRespawn(Cframe)
+	plr.Character:WaitForChild("HumanoidRootPart")
+
+	local Cframe = ConvertPosition(Cframe)
+	local CameraCframe = GetCameraPosition()
+	coroutine.wrap(function()
+		local a
+		a = Player.CharacterAdded:Connect(function(NewCharacter)
+			pcall(function()
+				coroutine.wrap(function()
+					workspace.CurrentCamera:GetPropertyChangedSignal("CFrame"):Wait()
+					API:Loop(5, function()
+						workspace["CurrentCamera"].CFrame = CameraCframe
+					end)
+				end)()
+				NewCharacter:WaitForChild("HumanoidRootPart")
+				plr.Character.HumanoidRootPart.CFrame = Cframe
+				if NoForce then
+					task.spawn(function()
+						NewCharacter:WaitForChild("ForceField"):Destroy()
+					end)
 				end
-			end
-			local ohInstance2 = game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("Taser") or game:GetService("Players").LocalPlayer.Character:FindFirstChild("Taser")
-			game:GetService("ReplicatedStorage").ShootEvent:FireServer(ohTable1, ohInstance2)
-			task.spawn(function()
-				game:GetService("ReplicatedStorage").ReloadEvent:FireServer(game:GetService("Players").LocalPlayer.Backpack.Taser)
 			end)
-			wait(.7)
-			ChangeTeam(Oldt)
+			a:Disconnect()
+			Cframe = nil
+		end)
+		task.spawn(function()
+			wait(2)
+			if a then
+				a:Disconnect()
+			end
+		end)
+	end)()
+end
+
+local function ChangeTeam(Team)
+        pcall(function()
+		repeat task.wait() until game:GetService("Players").LocalPlayer.Character
+		game:GetService("Players").LocalPlayer.Character:WaitForChild("HumanoidRootPart")
+
+		API:WaitForRespawn(Pos or API:GetPosition(),NoForce)
+	end)
+	if TeamPath == game.Teams.Criminals then
+		task.spawn(function()
+			workspace.Remote.TeamEvent:FireServer("Bright orange")
+		end)
+		repeat API:swait() until Player.Team == game.Teams.Inmates and Player.Character:FindFirstChild("HumanoidRootPart")
+		repeat
+			API:swait()
+			if firetouchinterest then
+				firetouchinterest(plr.Character:FindFirstChildOfClass("Part"), game:GetService("Workspace")["Criminals Spawn"]:GetChildren()[1], 0)
+				firetouchinterest(plr.Character:FindFirstChildOfClass("Part"), game:GetService("Workspace")["Criminals Spawn"]:GetChildren()[1], 1)
+			end
+			game:GetService("Workspace")["Criminals Spawn"]:GetChildren()[1].Transparency = 1
+			game:GetService("Workspace")["Criminals Spawn"]:GetChildren()[1].CanCollide = false
+			game:GetService("Workspace")["Criminals Spawn"]:GetChildren()[1].CFrame = API:GetPosition()
+		until plr.Team == game:GetService("Teams").Criminals
+		game:GetService("Workspace")["Criminals Spawn"]:GetChildren()[1].CFrame = CFrame.new(0, 3125, 0)
+	else
+		if TeamPath == game.Teams.Neutral then
+			workspace['Remote']['TeamEvent']:FireServer("Bright grey")
+		else
+			if not TeamPath or not TeamPath.TeamColor then
+				workspace['Remote']['TeamEvent']:FireServer("Bright orange")
+			else
+				workspace['Remote']['TeamEvent']:FireServer(TeamPath.TeamColor.Name)
+			end
+		end
+	end
+end
 end
 
 local function LoadScriptTigerAdmin()
         loadstring(Game:HttpGetAsync(("https://raw.githubusercontent.com/NoobHubV1/RobloxScripts/main/Tiger%20Admin.lua")))()
+end
+
+local function Refresh()
+	ChangeTeam(plr.Team)
 end
 
 local PhantomForcesWindow = Library:NewWindow("NoobHubV1 Hub")
@@ -79,9 +138,13 @@ PrisonLife:CreateTextbox("Team", function(Team)if Team == "Inmate" then
                                               end
 end)
 
-local PrisonLife = PhantomForcesWindow:NewSection("Tase All and Tiger Admin")
+local PrisonLife = PhantomForcesWindow:NewSection("Refresh and Tiger Admin")
 
-PrisonLife:CreateButton("Tase All", function()TaseAll()
+PrisonLife:CreateButton("Refresh", function()Refresh(true)
+end)
+
+PrisonLife:CreateToggle("Auto Respawn", function(State)Refresh(true)
+		                                       task.spawn(function(State)
 end)
 
 PrisonLife:CreateButton("Tiger Admin", function()LoadScriptTigerAdmin()
