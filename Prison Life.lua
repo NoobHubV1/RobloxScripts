@@ -1,6 +1,11 @@
 local Library = loadstring(Game:HttpGet('https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/wizard'))()
 local plr = game:GetService("Players").LocalPlayer
 local Remote = workspace.Remote
+local StarterGui = game:GetService("StarterGui")
+
+local Notify = function(Name, Content, Time)
+	StarterGui:SetCore("SendNotification",{Title = Name;Text = Content;Time = Time;})
+end
 
 local function GiveItem(Item)
         if Item == "Shotgun" then
@@ -16,6 +21,12 @@ local function GiveItem(Item)
         elseif Item == "M4A1" then
                 Remote.ItemHandler:InvokeServer({Position=plr.Character.Head.Position,Parent=workspace.Prison_ITEMS.giver["M4A1"]})
         end
+end
+
+local function GuardsFull()
+	if game.Teams.Guards == 8 then
+		Notify("Guards Team Full")
+	end
 end
 
 local function ChangeTeam(Team)
@@ -35,8 +46,16 @@ local function LoadScriptTigerAdmin()
 end
 
 local function Refresh()
-	if not plr.Character.Humanoid.Health == 100 then
-		ChangeTeam(plr.Team)
+	ChangeTeam(plr.Team)
+end
+
+local AutoRefresh = function(State)
+	if plr.Character.Humanoid.Health == 0 then
+		getgenv().RefreshLoop = State
+		while RefreshLoop do
+		Refresh(true)
+		task.wait()
+		end
 	end
 end
 
@@ -66,6 +85,9 @@ end)
 local PrisonLife = PhantomForcesWindow:NewSection("Refresh and Tiger Admin")
 
 PrisonLife:CreateButton("Refresh", function()Refresh(true)
+end)
+
+PrisonLife:CreateToggle("Auto Refresh", function(State)AutoRefresh(State)
 end)
 
 PrisonLife:CreateButton("Tiger Admin", function()LoadScriptTigerAdmin()
