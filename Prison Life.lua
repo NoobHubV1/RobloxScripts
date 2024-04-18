@@ -35,7 +35,7 @@ local function LoadScriptTigerAdmin()
 end
 
 local function Refresh()
-	if plr.Character.Humanoid.Health = 0 then
+	if not plr.Character.Humanoid.Health == 100 then
 		ChangeTeam(plr.Team)
 	end
 end
