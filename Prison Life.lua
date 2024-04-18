@@ -41,6 +41,7 @@ end
 local function AutoRefresh(State)
 	Refresh(true)
 	task.spawn(function()
+	end
 end
 
 local PhantomForcesWindow = Library:NewWindow("NoobHubV1 Hub")
