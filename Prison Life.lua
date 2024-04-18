@@ -2,10 +2,6 @@ local Library = loadstring(Game:HttpGet('https://raw.githubusercontent.com/blood
 local plr = game:GetService("Players").LocalPlayer
 local Remote = workspace.Remote
 
-local function GetCameraPosition()
-	workspace["CurrentCamera"].CFrame
-end
-
 local function GiveItem(Item)
         if Item == "Shotgun" then
                 Remote.ItemHandler:InvokeServer({Position=plr.Character.Head.Position,Parent=workspace.Prison_ITEMS.giver["Remington 870"]})
