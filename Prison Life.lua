@@ -38,6 +38,11 @@ local function Refresh()
 	ChangeTeam(plr.Team)
 end
 
+local function AutoRefresh(State)
+	Refresh(true)
+	task.spawn(function()
+end
+
 local PhantomForcesWindow = Library:NewWindow("NoobHubV1 Hub")
 
 local PrisonLife = PhantomForcesWindow:NewSection("Item Gui")
@@ -64,6 +69,9 @@ end)
 local PrisonLife = PhantomForcesWindow:NewSection("Refresh and Tiger Admin")
 
 PrisonLife:CreateButton("Refresh", function()Refresh(true)
+end)
+
+PrisonLife:CreateButton("Auto Refresh", function(Value)AutoRefresh(Value)
 end)
 
 PrisonLife:CreateButton("Tiger Admin", function()LoadScriptTigerAdmin()
