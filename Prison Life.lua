@@ -66,9 +66,5 @@ local PrisonLife = PhantomForcesWindow:NewSection("Refresh and Tiger Admin")
 PrisonLife:CreateButton("Refresh", function()Refresh(true)
 end)
 
-PrisonLife:CreateToggle("Auto Respawn", function(State)Refresh(true)
-		                                       task.spawn(function()
-end)
-
 PrisonLife:CreateButton("Tiger Admin", function()LoadScriptTigerAdmin()
 end)
