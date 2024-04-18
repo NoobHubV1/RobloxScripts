@@ -35,7 +35,9 @@ local function LoadScriptTigerAdmin()
 end
 
 local function Refresh()
-	ChangeTeam(plr.Team)
+	if plr.Character.Humanoid.Health = 0 then
+		ChangeTeam(plr.Team)
+	end
 end
 
 local PhantomForcesWindow = Library:NewWindow("NoobHubV1 Hub")
