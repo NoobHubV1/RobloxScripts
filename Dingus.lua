@@ -118,15 +118,6 @@ local AllTasks = function()
     end
 end
 
-local function Noclip(State)
-    LocalPlayer.Character.HumanoidRootPart.CanCollide = State
-		for i, v in pairs(LocalPlayer.Character:GetChildren()) do
-			if v:IsA("MeshPart") then
-				v.CanCollide = State
-			end
-    end
-end
-
 local goober = library:CreateWindow({
     Name = "dingus",
 })
@@ -151,14 +142,11 @@ local espsection = Esp:CreateSection({
     Name = "Esp Script"
 })
 
-local noclipsection = Combat:CreateSection({
-    Name = "Noclip"
-})
-
 shootersection:AddButton({
     Name = "kill all",
     Callback = function()
         killplayer("all")
+	wait(.5)
         Notify("Dingus", "Kill All Execute", 5)
     end
 })
@@ -202,6 +190,7 @@ shootersection:AddButton({
     Name = "kill him",
     Callback = function()
         killplayer(library.Flags["goober"])
+	wait(.5)
         Notify("Dingus", "Kill Player Execute", 5)
     end
 })
@@ -210,25 +199,8 @@ hidersection:AddButton({
     Name = "All Tasks",
     Callback = function()
         AllTasks()
+	wait(.5)
         Notify("Dingus", "All Tasks Execute", 5)
-    end
-})
-
-noclipsection:AddButton({
-    Name = "Noclip [ON/OFF]"
-    Callback = function(Value)
-        getgenv().Noclipping = Value
-			if Noclipping == true then
-				spawn(function()
-					while Noclipping == true do
-						Noclip(false)
-						task.wait(.05)
-					end
-				end)
-			end
-			if Noclipping == false then
-				Noclip(true)
-            end
     end
 })
 
