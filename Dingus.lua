@@ -1,3 +1,21 @@
+local OrionLib = loadstring(Game:HttpGetAsync(("https://raw.githubusercontent.com/NoobHubV1/RobloxScripts/main/OrionLib.lua")))()
+
+local Notify = function(Name, Content, Time)
+    OrionLib:MakeNotification({
+            Name = Name,
+            Content = Content,
+            Image = "rbxassetid://4483345998",
+            Time = Time
+    })
+end
+Notify("Check Id", "Check Id Game", 5)
+
+    wait(5)
+
+Notify("Check Id Complete", "Loading Script...", 2)
+
+    wait(2)
+
 local PathfindingService = game:GetService("PathfindingService")
 local Players = game:GetService("Players")
 local Character = Players.LocalPlayer.Character or Players.LocalPlayer.CharacterAdded:Wait()
@@ -92,13 +110,6 @@ local Notify = function(Name, Content, Time)
             Time = Time
     })
 end
-Notify("Check Id", "Check Id Game", 5)
-
-    wait(5)
-
-Notify("Check Id Complete", "Loading Script...", 2)
-
-    wait(2)
 
 local goober = library:CreateWindow({
     Name = "dingus",
