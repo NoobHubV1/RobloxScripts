@@ -6,6 +6,7 @@ local tasks = {}
 local proximityprompts = {}
 local path = PathfindingService:CreatePath({AgentCanJump = false,AgentCanClimb = false,})
 local library = loadstring(game:GetObjects("rbxassetid://7657867786")[1].Source)()
+local OrionLib = loadstring(Game:HttpGetAsync(("https://raw.githubusercontent.com/NoobHubV1/RobloxScripts/main/OrionLib.lua")))()
 local Wait = library.subs.Wait
 local config = require(game:GetService("ReplicatedStorage").config)
 local HumanoidRootPart = Character.HumanoidRootPart
@@ -83,6 +84,22 @@ for i,v in pairs(workspace.LoadedMap:GetDescendants()) do
     end
 end
 
+local Notify = function(Name, Content, Time)
+    OrionLib:MakeNotification({
+            Name = Name,
+            Content = Content,
+            Image = "rbxassetid://4483345998",
+            Time = Time
+    })
+end
+Notify("Check Id", "Check Id Game", 5)
+
+    wait(5)
+
+Notify("Check Id Complete", "Loading Script...", 2)
+
+    wait(2)
+
 local goober = library:CreateWindow({
     Name = "dingus",
 })
@@ -103,6 +120,7 @@ shootersection:AddButton({
     Name = "kill all",
     Callback = function()
         killplayer("all")
+        Notify("Dingus", "Kill All Execute", 5)
     end
 })
 
@@ -168,6 +186,7 @@ hidersection:AddButton({
         for i = 1, 50 do
             game.ReplicatedStorage.Remotes.InvokeTaskCompleted:InvokeServer(i)
         end
+        Notify("Dingus", "Win Execute", 5)
     end
 })
 
@@ -184,3 +203,5 @@ hidersection:AddToggle({
         end
     end
 })
+
+Notify("NoobHubV1 Hub", "Loaded Script!", 6)
