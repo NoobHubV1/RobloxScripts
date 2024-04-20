@@ -219,13 +219,13 @@ hidersection:AddButton({
 
 TeamWin:AddTextbox({
     Name = "Team",
-    Flag = "TeamWin"
+    Flag = "goober"
 })
 
 TeamWin:AddButton({
     Name = "Give Win",
     Callback = function(Team)
-	TeamWin(library.Flags["TeamWin"])
+	TeamWin(library.Flags["goober"])
     end
 })
 
