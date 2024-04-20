@@ -120,13 +120,13 @@ end
 
 local function TeamWin(Team)
     if Team == "Hunters" then
-	       killplayer("all")
-	       wait(.10)
-	       Notify("Dingus", "Hunters Give Win Execute", 5)
+	    killplayer("all")
+	    wait(.10)
+	    Notify("Dingus", "Hunters Give Win Execute", 5)
     elseif Team == "Hiders" then
-	       AllTasks()
-	       wait(.10)
-	       Notify("Dingus", "Hiders Give Win Execute", 5)
+	    AllTasks()
+	    wait(.10)
+	    Notify("Dingus", "Hiders Give Win Execute", 5)
     end
 end
 
