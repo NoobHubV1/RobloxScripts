@@ -79,7 +79,7 @@ local function fireproximityprompt(Obj, Amount, Skip)
 end
 
 local function killplayer(name)
-    if name == "all" or name == "others" or name = "everyone" then
+    if name == "all" then
         for i,v in pairs(Players:GetPlayers()) do
             if v ~= Players.LocalPlayer then
                 game:GetService("ReplicatedStorage").Remotes.KillCharacter:InvokeServer(v.Character)
@@ -118,6 +118,18 @@ local AllTasks = function()
     end
 end
 
+local function TeamWin(Team)
+    if Team == "Hunters" then
+	       killplayer("all")
+	       wait(.10)
+	       Notify("Dingus", "Hunters Give Win Execute", 5)
+    elseif Team == "Hiders" then
+	       AllTasks()
+	       wait(.10)
+	       Notify("Dingus", "Hiders Give Win Execute", 5)
+    end
+end
+
 local goober = library:CreateWindow({
     Name = "dingus",
 })
@@ -140,6 +152,10 @@ local shootersection = Combat:CreateSection({
 
 local espsection = Esp:CreateSection({
     Name = "Esp Script"
+})
+
+local TeamWin = Combat:CreateSection({
+    Name = "Give Team Win"
 })
 
 shootersection:AddToggle({
@@ -180,14 +196,14 @@ shootersection:AddTextbox({
 shootersection:AddButton({
     Name = "kill him",
     Callback = function(Name)
-        if Name == "all" or Name == "others" or Name == "everyone" then
+        if Name == "all" then
 		killplayer("all")
-	        wait(.5)
-	        Notify("Dingus", "kill Name .. "Execute", 5)
+	        wait(.10)
+	        Notify("Dingus", "kill All Execute", 5)
 	else
 		killplayer(library.Flags["goober"])
-	        wait(.5)
-                Notify("Dingus", "Kill Name .. "Execute", 5)
+	        wait(.10)
+                Notify("Dingus", "Kill Player Execute", 5)
 	end
     end
 })
@@ -196,8 +212,20 @@ hidersection:AddButton({
     Name = "All Tasks",
     Callback = function()
         AllTasks()
-	wait(.5)
+	wait(.10)
         Notify("Dingus", "All Tasks Execute", 5)
+    end
+})
+
+TeamWin:AddTextbox({
+    Name = "Team",
+    Flag = "TeamWin"
+})
+
+TeamWin:AddButton({
+    Name = "Give Win",
+    Callback = function(Team)
+	TeamWin(library.Flags["TeamWin"])
     end
 })
 
