@@ -118,18 +118,6 @@ local AllTasks = function()
     end
 end
 
-local function TeamWin(Team)
-    if Team == "Hunters" then
-	    killplayer("all")
-	    wait(.10)
-	    Notify("Dingus", "Hunters Give Win Execute", 5)
-    elseif Team == "Hiders" then
-	    AllTasks()
-	    wait(.10)
-	    Notify("Dingus", "Hiders Give Win Execute", 5)
-    end
-end
-
 local goober = library:CreateWindow({
     Name = "dingus",
 })
@@ -152,10 +140,6 @@ local shootersection = Combat:CreateSection({
 
 local espsection = Esp:CreateSection({
     Name = "Esp Script"
-})
-
-local TeamWin = Combat:CreateSection({
-    Name = "Give Team Win"
 })
 
 shootersection:AddToggle({
@@ -214,18 +198,6 @@ hidersection:AddButton({
         AllTasks()
 	wait(.10)
         Notify("Dingus", "All Tasks Execute", 5)
-    end
-})
-
-TeamWin:AddTextbox({
-    Name = "Team",
-    Flag = "goober"
-})
-
-TeamWin:AddButton({
-    Name = "Give Win",
-    Callback = function(Team)
-	TeamWin(library.Flags["goober"])
     end
 })
 
