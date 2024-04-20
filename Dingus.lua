@@ -142,15 +142,6 @@ local espsection = Esp:CreateSection({
     Name = "Esp Script"
 })
 
-shootersection:AddButton({
-    Name = "kill all",
-    Callback = function()
-        killplayer("all")
-	wait(.5)
-        Notify("Dingus", "Kill All Execute", 5)
-    end
-})
-
 shootersection:AddToggle({
     Name = "no shoot cooldown",
     Callback = function(v)
@@ -191,12 +182,12 @@ shootersection:AddButton({
     Callback = function(Name)
         if Name == "all" or Name == "others" or Name == "everyone" then
 		killplayer("all")
-	wait(.5)
-	Notify("Dingus", "kill Name .. "Execute", 5)
+	        wait(.5)
+	        Notify("Dingus", "kill Name .. "Execute", 5)
 	else
 		killplayer(library.Flags["goober"])
-	wait(.5)
-        Notify("Dingus", "Kill Name .. "Execute", 5)
+	        wait(.5)
+                Notify("Dingus", "Kill Name .. "Execute", 5)
 	end
     end
 })
