@@ -79,8 +79,8 @@ local function fireproximityprompt(Obj, Amount, Skip)
 end
 
 local function killplayer(name)
-    if name == "all" then
-        for i,v in pairs(Players:GetChildren()) do
+    if name == "all" or name == "others" or name = "everyone" then
+        for i,v in pairs(Players:GetPlayers()) do
             if v ~= Players.LocalPlayer then
                 game:GetService("ReplicatedStorage").Remotes.KillCharacter:InvokeServer(v.Character)
             end
@@ -188,10 +188,16 @@ shootersection:AddTextbox({
 
 shootersection:AddButton({
     Name = "kill him",
-    Callback = function()
-        killplayer(library.Flags["goober"])
+    Callback = function(Name)
+        if Name == "all" or Name == "others" or Name == "everyone" then
+		killplayer("all")
 	wait(.5)
-        Notify("Dingus", "Kill Player Execute", 5)
+	Notify("Dingus", "kill Name .. "Execute", 5)
+	else
+		killplayer(library.Flags["goober"])
+	wait(.5)
+        Notify("Dingus", "Kill Name .. "Execute", 5)
+	end
     end
 })
 
