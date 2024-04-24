@@ -2,6 +2,7 @@ local Library = loadstring(Game:HttpGet('https://raw.githubusercontent.com/blood
 local plr = game:GetService("Players").LocalPlayer
 local Remote = workspace.Remote
 local StarterGui = game:GetService("StarterGui")
+local plr = game.Players.LocalPlayer
 
 local Notify = function(Name, Content, Time)
 	StarterGui:SetCore("SendNotification",{Title = Name;Text = Content;Time = Time;})
@@ -46,16 +47,10 @@ local function LoadScriptTigerAdmin()
 end
 
 local function Refresh()
-	ChangeTeam(plr.Team)
-end
-
-local AutoRefresh = function(State)
-	if plr.Character.Humanoid.Health == 0 then
-		getgenv().RefreshLoop = State
-		while RefreshLoop do
-		Refresh(true)
-		task.wait()
-		end
+	if not plr.Character.Humanoid.Health == 100 then
+		Notify("Prison Life", "You Health 100 No Refresh", 5)
+	else
+		Refresh()
 	end
 end
 
@@ -85,9 +80,6 @@ end)
 local PrisonLife = PhantomForcesWindow:NewSection("Refresh and Tiger Admin")
 
 PrisonLife:CreateButton("Refresh", function()Refresh(true)
-end)
-
-PrisonLife:CreateToggle("Auto Refresh", function(State)AutoRefresh(State)
 end)
 
 PrisonLife:CreateButton("Tiger Admin", function()LoadScriptTigerAdmin()
