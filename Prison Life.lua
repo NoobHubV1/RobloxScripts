@@ -8,6 +8,18 @@ local Notify = function(Name, Content, Time)
 	StarterGui:SetCore("SendNotification",{Title = Name;Text = Content;Time = Time;})
 end
 
+local ErrorNotify = function()
+	404: Not Found
+end
+
+local function Loop(State, Time, functionLoop)
+	getgenv().Loop = State
+	while Loop do
+	functionLoop
+	task.wait(Time)
+	end
+end
+
 local function GiveItem(Item)
         if Item == "Shotgun" then
                 Remote.ItemHandler:InvokeServer({Position=plr.Character.Head.Position,Parent=workspace.Prison_ITEMS.giver["Remington 870"]})
@@ -54,6 +66,14 @@ local function Refresh()
 	end
 end
 
+local function AutoRefresh(State)
+	if not plr.Character.Humanoid.Health == 100 then
+		ErrorNotify()
+	else
+		Loop(State, 0, Refresh())
+	end
+end
+
 local PhantomForcesWindow = Library:NewWindow("NoobHubV1 Hub")
 
 local PrisonLife = PhantomForcesWindow:NewSection("Item Gui")
@@ -80,6 +100,9 @@ end)
 local PrisonLife = PhantomForcesWindow:NewSection("Refresh and Tiger Admin")
 
 PrisonLife:CreateButton("Refresh", function()Refresh(true)
+end)
+
+PrisonLife:CreateToggle("Auto Refresh", function(State)AutoRefresh(State)
 end)
 
 PrisonLife:CreateButton("Tiger Admin", function()LoadScriptTigerAdmin()
