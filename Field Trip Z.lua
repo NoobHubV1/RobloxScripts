@@ -11,15 +11,58 @@ if game.PlaceId ~= 1701332290 then
 	local function GiveItem(Item)
 		NetworkEvents.RemoteFunction:InvokeServer("PICKUP_ITEM", tostring(Item:gsub(" ", "")))
 	end
+	local function GetPlrs(txt)
+		local tl = txt:lower()
+	    local found= {}
+	    if tl == "me" or tl == "me " then
+	    table.insert(found,game.Players.LocalPlayer)
+	    return found
+	    elseif tl == "random" or tl == "random " then
+	    table.insert(found,game.Players:GetPlayers()[math.random(1, #Game.Players:GetPlayers())])
+	    return found
+	    elseif tl == "others" or tl == "others " then
+	    for i,v in pairs(game.Players:GetPlayers()) do
+	    if v ~= game.Players.LocalPlayer then
+	    table.insert(found, v)
+	    end
+	    end
+	    return found
+	    elseif tl == "all" or tl == "all " then
+	    for i,v in pairs(game.Players:GetPlayers()) do
+	    table.insert(found, v)
+	    end
+	    return found
+	    elseif tl == "enemies" or tl == "enemies " then
+	    for i,v in pairs(game.Players:GetPlayers()) do
+	    if v ~= game.Players.LocalPlayer and v.Team ~= plr.Team then
+	    table.insert(found, v)
+	    end
+	    end
+	    return found
+	    elseif tl == "team" or tl == "team " then
+	    for i,v in pairs(game.Players:GetPlayers()) do
+	    if v ~= game.Players.LocalPlayer and v.Team == plr.Team then
+	    table.insert(found, v)
+	    end
+	    end
+	    return found
+	    else
+	    for i,v in pairs(game.Players:GetPlayers()) do
+	    if v.Name:lower():match(tl) or v.DisplayName:lower():match(tl) then
+	    table.insert(found, v)
+	    end
+	    end
+	    return found
+		end
+	end
 	local function HealYourself()
-		NetworkEvents.RemoteFunction:InvokeServer("HEAL_PLAYER", LocalPlayer, math.huge)
+		NetworkEvents.RemoteFunction:InvokeServer("HEAL_PLAYER", GetPlrs("me"), math.huge)
 	end
 	local function HealAllPlayers()
-		for i, v in pairs(game.Players:GetPlayers()) do
-                if v.Name ~= LocalPlayer then
-                    NetworkEvents.RemoteFunction:InvokeServer("HEAL_PLAYER", v, math.huge)
-                end
-		end
+		NetworkEvents.RemoteFunction:InvokeServer("HEAL_PLAYER", GetPlrs("all"), math.huge)
+	end
+	local function HealPlayer(Name)
+		NetworkEvents.RemoteFunction:InvokeServer("HEAL_PLAYER", GetPlrs(Name), math.huge)
 	end
 	local function KillZombies()
 		for i, v in pairs(game:GetService("Workspace").NPC:GetChildren()) do
@@ -38,6 +81,7 @@ if game.PlaceId ~= 1701332290 then
 			end
 		end
 	end
+	
         local function Notify(name, content, image, time)
 		OrionLib:MakeNotification({
 			Name = name,
@@ -102,6 +146,33 @@ if game.PlaceId ~= 1701332290 then
                         end
                 end
         })
+	local Section = Tab:AddSection({
+                Name = "Heal Player"
+        })
+	Tab:AddTextbox({
+                Name = "Heal Player",
+		Default = "PlayerName",
+		TextDisappear = false,
+                Callback = function(Value)
+                        PlayerName = Value
+               end
+        })
+	Tab:AddButton({
+                Name = "Heal Player",
+                Callback = function()
+                        HealPlayer(PlayerName)
+                end
+	})
+	Tab:AddToggle({
+		Name = "Loop Heal Player",
+		Default = false,
+		Callback = function(State)
+			while true do 
+				HealPlayer(PlayerName)
+			        task.wait()
+			end
+		end
+	})
         local Section = Tab:AddSection({
                 Name = "Heal All"
         })
