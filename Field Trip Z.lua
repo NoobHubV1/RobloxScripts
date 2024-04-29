@@ -11,58 +11,29 @@ if game.PlaceId ~= 1701332290 then
 	local function GiveItem(Item)
 		NetworkEvents.RemoteFunction:InvokeServer("PICKUP_ITEM", tostring(Item:gsub(" ", "")))
 	end
-	local function GetPlrs(txt)
-		local tl = txt:lower()
-	    local found= {}
-	    if tl == "me" or tl == "me " then
-	    table.insert(found,game.Players.LocalPlayer)
-	    return found
-	    elseif tl == "random" or tl == "random " then
-	    table.insert(found,game.Players:GetPlayers()[math.random(1, #Game.Players:GetPlayers())])
-	    return found
-	    elseif tl == "others" or tl == "others " then
-	    for i,v in pairs(game.Players:GetPlayers()) do
-	    if v ~= game.Players.LocalPlayer then
-	    table.insert(found, v)
-	    end
-	    end
-	    return found
-	    elseif tl == "all" or tl == "all " then
-	    for i,v in pairs(game.Players:GetPlayers()) do
-	    table.insert(found, v)
-	    end
-	    return found
-	    elseif tl == "enemies" or tl == "enemies " then
-	    for i,v in pairs(game.Players:GetPlayers()) do
-	    if v ~= game.Players.LocalPlayer and v.Team ~= plr.Team then
-	    table.insert(found, v)
-	    end
-	    end
-	    return found
-	    elseif tl == "team" or tl == "team " then
-	    for i,v in pairs(game.Players:GetPlayers()) do
-	    if v ~= game.Players.LocalPlayer and v.Team == plr.Team then
-	    table.insert(found, v)
-	    end
-	    end
-	    return found
-	    else
-	    for i,v in pairs(game.Players:GetPlayers()) do
-	    if v.Name:lower():match(tl) or v.DisplayName:lower():match(tl) then
-	    table.insert(found, v)
-	    end
-	    end
-	    return found
+	local GetPlayer = function(Input)
+		for _, Player in ipairs(game.Players:GetPlayers()) do
+                    if (string.lower(Input) == string.sub(string.lower(Player.Name), 1, #Input)) then
+                        return Player;
+                    end
+	      end
+	end
+	local HealPlayer = function(Name)
+	        if Name == "all" then
+			for i, v in pairs(game.Players:GetPlayers()) do
+                            if v.Name ~= game:GetService("Players").LocalPlayer then
+                    game:GetService("ReplicatedStorage").NetworkEvents.RemoteFunction:InvokeServer(
+                        "HEAL_PLAYER",
+                        v,
+                        math.huge
+                    )
+                            end
+		      end
+	        elseif Name == "me" then
+		        NetworkEvents.RemoteFunction:InvokeServer("HEAL_PLAYER", LocalPlayer, math.huge)
+		else
+			NetworkEvents.RemoteFunction:InvokeServer("HEAL_PLAYER", GetPlayer(Name), math.huge)
 		end
-	end
-	local function HealYourself()
-		NetworkEvents.RemoteFunction:InvokeServer("HEAL_PLAYER", GetPlrs("me"), math.huge)
-	end
-	local function HealAllPlayers()
-		NetworkEvents.RemoteFunction:InvokeServer("HEAL_PLAYER", GetPlrs("all"), math.huge)
-	end
-	local function HealPlayer(Name)
-		NetworkEvents.RemoteFunction:InvokeServer("HEAL_PLAYER", GetPlrs(Name), math.huge)
 	end
 	local function KillZombies()
 		for i, v in pairs(game:GetService("Workspace").NPC:GetChildren()) do
@@ -133,7 +104,7 @@ if game.PlaceId ~= 1701332290 then
         Tab:AddButton({
 		Name = "Heal Yourself",
 		Callback = function()
-			HealYourself()
+			HealPlayer("me")
 		end
 	})
         Tab:AddToggle({
@@ -141,7 +112,7 @@ if game.PlaceId ~= 1701332290 then
                 Callback = function(State)
                         getgenv().HealLoop = State
                         while HealLoop do
-                                HealYourself()
+                                HealPlayer("me")
 				task.wait()
                         end
                 end
@@ -150,7 +121,7 @@ if game.PlaceId ~= 1701332290 then
                 Name = "Heal Player"
         })
 	Tab:AddTextbox({
-                Name = "Heal Player",
+                Name = "Player Name",
 		Default = "PlayerName",
 		TextDisappear = false,
                 Callback = function(Value)
@@ -167,9 +138,10 @@ if game.PlaceId ~= 1701332290 then
 		Name = "Loop Heal Player",
 		Default = false,
 		Callback = function(State)
-			while true do 
+			getgenv().HealLoop = State
+			while HealLoop do
 				HealPlayer(PlayerName)
-			        task.wait()
+				task.wait()
 			end
 		end
 	})
@@ -179,7 +151,7 @@ if game.PlaceId ~= 1701332290 then
         Tab:AddButton({
                 Name = "Heal All",
                 Callback = function()
-                        HealAllPlayers()
+                        HealPlayer("all")
                end
          })
          Tab:AddToggle({
@@ -187,7 +159,7 @@ if game.PlaceId ~= 1701332290 then
                 Callback = function(State)
                         getgenv().HealAllLoop = State
                         while HealAllLoop do
-                                HealAllPlayers()
+                                HealPlayer("all")
 				task.wait()
                         end
                 end
