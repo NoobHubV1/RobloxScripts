@@ -11,13 +11,19 @@ if game.PlaceId ~= 1701332290 then
 	local function GiveItem(Item)
 		NetworkEvents.RemoteFunction:InvokeServer("PICKUP_ITEM", tostring(Item:gsub(" ", "")))
 	end
-	local GetPlayer = function(Input)
-		for _, Player in ipairs(game.Players:GetPlayers()) do
-                    if (string.lower(Input) == string.sub(string.lower(Player.Name), 1, #Input)) then
-                        return Player;
-                    end
-	      end
+	function getPlayer(Player)
+		local function findPlayer(stringg)
+		if (stringg == ("me")) then
+			return lp
+		else
+			for _, v in pairs(game.Players:GetPlayers()) do
+				if (stringg:lower() == (v.Name:lower()):sub(1, #stringg)) then return v end
+			end
+		end
 	end
+	return findPlayer(Player)
+	        end
+        end
 	local HealPlayer = function(Name)
 	        if Name == "all" then
 			for i, v in pairs(game.Players:GetPlayers()) do
@@ -32,7 +38,10 @@ if game.PlaceId ~= 1701332290 then
 	        elseif Name == "me" then
 		        NetworkEvents.RemoteFunction:InvokeServer("HEAL_PLAYER", LocalPlayer, math.huge)
 		else
-			NetworkEvents.RemoteFunction:InvokeServer("HEAL_PLAYER", GetPlayer(Name), math.huge)
+			local player = getPlayer(Name)
+		        if player then
+			             NetworkEvents.RemoteFunction:InvokeServer("HEAL_PLAYER", player, math.huge)
+		        end
 		end
 	end
 	local function KillZombies()
