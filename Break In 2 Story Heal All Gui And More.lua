@@ -1,3 +1,7 @@
+-- Place Check
+if game.PlaceId ~= 13864667823 then
+	if game.PlaceId == 14775231477 or game.PlaceId == 13864661000 then
+
 local Library = loadstring(game:HttpGetAsync(("https://github.com/bloodball/-back-ups-for-libs/raw/main/wizard")))()
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
@@ -23,25 +27,38 @@ local function GiveItem(Item)if Item == "Armor" then
 	                     end
 end
 
-local function UnequipItem(Item)LocalPlayer.Character:WaitForChild(tostring(Item:gsub(" ", ""))).Parent = LocalPlayer.Backpack
+local Loop = function(State, Calling, Value, Time)
+	getgenv().Loop = State
+	while Loop do
+		Calling(Value)
+	        task.wait(Time)
+	end
 end
 
-local function RemoveItem(Item)LocalPlayer.Backpack:WaitForChild(tostring(Item:gsub(" ", ""))):Destroy()
+local function UnequipItem(Item)
+	LocalPlayer.Character:WaitForChild(tostring(Item:gsub(" ", ""))).Parent = LocalPlayer.Backpack
 end
 
-local function EquipItem(Item)LocalPlayer.Backpack:WaitForChild(tostring(Item:gsub(" ", ""))).Parent = LocalPlayer.Character
+local function RemoveItem(Item)
+	LocalPlayer.Backpack:WaitForChild(tostring(Item:gsub(" ", ""))):Destroy()
 end
 
-local function HealTheNoobs()Events.HealTheNoobs:FireServer()
+local function EquipItem(Item)
+	LocalPlayer.Backpack:WaitForChild(tostring(Item:gsub(" ", ""))).Parent = LocalPlayer.Character
 end
 
-local function HealAllPlayers()UnequipAllTools()
-                               task.wait(.1)
-                               GiveItem("Golden Apple")
-                               task.wait(.1)
-                               EquipItem("Golden Apple")
-                               task.wait(.1)
-                               HealTheNoobs()
+local function HealTheNoobs()
+	Events.HealTheNoobs:FireServer()
+end
+
+local function HealAllPlayers()
+	UnequipAllTools()
+        task.wait(.1)
+        GiveItem("Golden Apple")
+        task.wait(.1)
+        EquipItem("Golden Apple")
+        task.wait(.1)
+        HealTheNoobs()
 end
 
 local function HealYourself()
@@ -49,29 +66,78 @@ local function HealYourself()
         Events.Energy:FireServer(25, "Pizza")
 end
 
-local function Heal(Heal)if Heal == "Heal All Players" then
-		                 HealAllPlayers()
-	                 elseif Heal == "Heal Yourself" then
-		                 HealYourself()
-	                 end
+local function Heal(Heal)
+	if Heal == "Heal All Players" then
+		HealAllPlayers()
+	elseif Heal == "Heal Yourself" then
+		HealYourself()
+	end
 end
 
-local function Notify(Name, Content, Time)game:GetService("StarterGui"):SetCore("SendNotification",{
-                Title = Name;
-                Text = Content;
-		Icon = "rbxassetid://4483345998";
-                Duration = Time;
-            })
+function Tween(Obj, Prop, New, Time)
+	if not Time then
+		Time = .5
+	end
+	local TweenService = game:GetService("TweenService")
+	local info = TweenInfo.new(
+		Time, 
+		Enum.EasingStyle.Quart, 
+		Enum.EasingDirection.Out, 
+		0, 
+		false,
+		0
+	)
+	local propertyTable = {
+		[Prop] = New,
+	}
+
+	TweenService:Create(Obj, info, propertyTable):Play()
 end
-Notify("Heal All Gui And More", "Loading Script.", 3)
+
+function Notify(Text,Dur)
+	task.spawn(function()
+		if not Dur then
+			Dur = 1.5
+		end
+		local Notif = Instance.new("ScreenGui")
+		local Frame_1 = Instance.new("Frame")
+		local TextLabel = Instance.new("TextLabel")
+		Notif.Parent = (game:GetService("CoreGui") or gethui())
+		Notif.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+		Frame_1.Parent = Notif
+		Frame_1.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+		Frame_1.BackgroundTransparency=1
+		Frame_1.BorderSizePixel = 0
+		Frame_1.Position = UDim2.new(0, 0, 0.0500000007, 0)
+		Frame_1.Size = UDim2.new(1, 0, 0.100000001, 0)
+		TextLabel.Parent = Frame_1
+		TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+		TextLabel.BackgroundTransparency = 1.000
+		TextLabel.TextTransparency =1
+		TextLabel.Size = UDim2.new(1, 0, 1, 0)
+		TextLabel.Font = Enum.Font.Highway
+		TextLabel.Text = Text or "Text not found"
+		TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+		TextLabel.TextSize = 21.000
+		Tween(Frame_1,"BackgroundTransparency",0.350,.5)
+		Tween(TextLabel,"TextTransparency",0,.5)
+		wait(Dur+.7)
+		Tween(Frame_1,"BackgroundTransparency",1,.5)
+		Tween(TextLabel,"TextTransparency",1,.5)
+		wait(.7)
+		Notif:Destroy()
+	end)
+	return
+end
+Notify("(Heal All Gui And More) Loading Script.",2)
 
                                                  wait(3)
 
-Notify("Heal All Gui And More", "Loading Script..", 3)
+Notify("(Heal All Gui And More) Loading Script..",2)
 
                                                  wait(3)
 
-Notify("Heal All Gui And More", "Loading Script...", 3)
+Notify("(Heal All Gui And More) Loading Script...",2)
 
                                                  wait(3)
 
@@ -105,11 +171,7 @@ end)
 BreakIn2:CreateButton("Heal", function()Heal(SelectedHeal)
 end)
 
-BreakIn2:CreateToggle("Loop Heal", function(State)getgenv().HealLoop = State
-while HealLoop do
-Heal(SelectedHeal)
-task.wait(WaitTime)
-end
+BreakIn2:CreateToggle("Loop Heal", function(Value)Loop(Value, Heal, SelectedHeal, WaitTime)
 end)
 
 BreakIn2:CreateTextbox("Wait Time Loop Heal", function(Amount)WaitTime = Amount
@@ -139,5 +201,5 @@ end)
 BreakIn2:CreateButton("Remove", function(Value)RemoveItem(RemoveItemTextbox)
 end)
 
-Notify("Heal All Gui And More", "Loaded Script!", 10)
+Notify("(Heal All Gui And More) Loaded Script!",5)
 ScriptLoaded = true
