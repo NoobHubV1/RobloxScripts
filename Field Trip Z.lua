@@ -11,19 +11,6 @@ if game.PlaceId ~= 1701332290 then
 	local function GiveItem(Item)
 		NetworkEvents.RemoteFunction:InvokeServer("PICKUP_ITEM", tostring(Item:gsub(" ", "")))
 	end
-	function getPlayer(Player)
-		local function findPlayer(stringg)
-		if (stringg == ("me")) then
-			return lp
-		else
-			for _, v in pairs(game.Players:GetPlayers()) do
-				if (stringg:lower() == (v.Name:lower()):sub(1, #stringg)) then return v end
-			end
-		end
-	end
-	return findPlayer(Player)
-	        end
-        end
 	local HealPlayer = function(Name)
 	        if Name == "all" then
 			for i, v in pairs(game.Players:GetPlayers()) do
@@ -38,10 +25,15 @@ if game.PlaceId ~= 1701332290 then
 	        elseif Name == "me" then
 		        NetworkEvents.RemoteFunction:InvokeServer("HEAL_PLAYER", LocalPlayer, math.huge)
 		else
-			local player = getPlayer(Name)
-		        if player then
-			             NetworkEvents.RemoteFunction:InvokeServer("HEAL_PLAYER", player, math.huge)
-		        end
+			local PlayerName = Name.Text
+			        local Player = game:GetService("Players")[PlayerName]
+
+			        if Player then
+				        for i = 1,1 do
+					        wait(.08)
+					        NetworkEvents.RemoteFunction:InvokeServer("HEAL_PLAYER", Player, math.huge)
+				        end
+			        end
 		end
 	end
 	local function KillZombies()
@@ -61,7 +53,6 @@ if game.PlaceId ~= 1701332290 then
 			end
 		end
 	end
-	
         local function Notify(name, content, image, time)
 		OrionLib:MakeNotification({
 			Name = name,
