@@ -72,12 +72,6 @@ local Others = W1:MakeTab({
     PremiumOnly = false
 })
 
-local Humanoid = W1:MakeTab({
-    Name = "Humanoid",
-    Icon = "rbxassetid://6890648157", --- rbxassetid://4483345998
-    PremiumOnly = false
-})
-
 Toggles:AddToggle({
     Name = "AntiFagInfect",
     Default = false,
@@ -233,62 +227,6 @@ end
 end
 	    end) 
   end
-})
-
-Humanoid:AddTextbox({
-	  Name = "Speed Amount",
-	  Default = "Amount",
-	  TextDisappear = false,
-	  Callback = function(Value)
-	      Speed = Value
-	  end
-})
-
-Humanoid:AddTextbox({
-	  Name = "Jump Amount",
-	  Default = "Amount",
-	  TextDisappear = false,
-	  Callback = function(Value)
-	      Jump = Value
-	  end
-})
-
-Humanoid:AddToggle({
-	  Name = Enabled Walk Speed",
-	  Default = false,
-	  Callback = function(State)
-	      getgenv().WalkSpeed = State
-	      if WalkSpeed == true then
-		      spawn(function()
-			      while WalkSpeed == true do
-				      game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Speed
-				      task.wait(.05)
-			      end
-		      end)
-	      end
-	      if WalkSpeed == false then
-		     game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 16
-	      end
-        end
-})
-
-Humanoid:AddToggle({
-	  Name = Enabled Walk Speed",
-	  Default = false,
-	  Callback = function(State)
-	      getgenv().JumpPower = State
-	      if JumpPower == true then
-		      spawn(function()
-			      while JumpPower == true do
-				      game.Players.LocalPlayer.Character.Humanoid.JumpPower = Jump
-				      task.wait(.05)
-			      end
-		      end)
-	      end
-	      if JumpPower == false then
-		     game.Players.LocalPlayer.Character.Humanoid.JumpPower = 50
-	      end
-        end
 })
 
 Others:AddButton({
