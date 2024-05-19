@@ -198,12 +198,14 @@ Toggles:AddButton({
                         repeat task.wait(1)
                         game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(434.0252685546875, 25.781383514404297, 281.36041259765625)    
                         fireproximityprompt(_G.MetalBatProximity, 2, false)
-                        until game.Players.LocalPlayer.Character:FindFirstChild("Bat") or game.Players.LocalPlayer.Backpack:FindFirstChild("Bat") or game.Players.LocalPlayer.Backpack:FindFirstChild("Metal  Bat") or game.Players.LocalPlayer.Character:FindFirstChild("Metal  Bat")
+                        until game.Players.LocalPlayer.Character:FindFirstChild("Bat") or game.Players.LocalPlayer.Backpack:FindFirstChild("Bat") or game.Players.LocalPlayer.Backpack:FindFirstChild("Metal  Bat") or game.Players.LocalPlayer.Character:FindFirstChild("Metal  Bat") or game.Players.LocalPlayer.Character:FindFirstChild("Neon") or game.Players.LocalPlayer.Character:FindFirstChild("Neon")
                         game:GetService("Players").localPlayer.Character:MoveTo(oldpos)
                         if game.Players.LocalPlayer.Backpack:FindFirstChild("Bat") then
                             game.Players.LocalPlayer.Character.Humanoid:EquipTool(game.Players.LocalPlayer.Backpack:FindFirstChild("Bat"))
                         elseif game.Players.LocalPlayer.Backpack:FindFirstChild("Metal  Bat") then    
                             game.Players.LocalPlayer.Character.Humanoid:EquipTool(game.Players.LocalPlayer.Backpack:FindFirstChild("Metal  Bat"))
+			elseif game.Players.LocalPlayer.Backpack:FindFirstChild("Neon") then
+			    game.Players.LocalPlayer.Character.Humanoid:EquipTool(game.Players.LocalPlayer.Backpack:FindFirstChild("Neon"))
                         end    
                     end
             until v.Character.Humanoid.Health <= 0
@@ -222,6 +224,8 @@ else
         game.Players.LocalPlayer.Character.Humanoid:EquipTool(game.Players.LocalPlayer.Backpack:FindFirstChild("Bat"))
     elseif game.Players.LocalPlayer.Backpack:FindFirstChild("Metal  Bat") then    
         game.Players.LocalPlayer.Character.Humanoid:EquipTool(game.Players.LocalPlayer.Backpack:FindFirstChild("Metal  Bat"))
+    elseif game.Players.LocalPlayer.Backpack:FindFirstChild("Neon") then
+	game.Players.LocalPlayer.Character.Humanoid:EquipTool(game.Players.LocalPlayer.Backpack:FindFirstChild("Neon"))
     end  
     game:GetService("Players").localPlayer.Character:MoveTo(oldpos)
 end    
