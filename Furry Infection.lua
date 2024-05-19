@@ -1,5 +1,5 @@
 pcall(function()
-local OrionLib = loadstring(Game:HttpGet('https://raw.githubusercontent.com/NoobHubV1/NoobHubV1/main/OrionLib.lua'))()
+local OrionLib = loadstring(Game:HttpGet('https://raw.githubusercontent.com/NoobHubV1/RobloxScripts/main/OrionLib.lua'))()
 for i,v in pairs(workspace:GetDescendants()) do
     if v.Name == "ItemName" and v.Parent.Name == "Configuration" and v.Parent.Parent.Name == "Bat" and v.Value == "Metal  Bat" then
         _G.MetalBatProximity = v.Parent.Parent:FindFirstChild("ProximityPrompt")
