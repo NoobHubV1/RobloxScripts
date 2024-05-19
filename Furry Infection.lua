@@ -96,7 +96,7 @@ Toggles:AddToggle({
                 _G.killaura = false
                 notify("Furry Infection NoobHubV1","KillAura Off NoobHubV1")
             end
-while _G.killaura do 
+while _G.killaura do task.wait()
 pcall(function()
 for i,v in pairs(game.Players:GetPlayers()) do
 
@@ -111,7 +111,7 @@ for i,v in pairs(game.Players:GetPlayers()) do
         
         if (lp.Character and lp.Character:FindFirstChild("Head") and character:FindFirstChild("Head")) then
             local mag = (v.Character.Head.Position - lp.Character.Head.Position).Magnitude
-                  if mag < 1000  then
+                  if mag < 50 then
 
 
 local ohInstance1 = v.Character.HumanoidRootPart
@@ -126,7 +126,6 @@ end
 end)
 end
 end)
-task.wait()
 end
 })    
 
@@ -168,7 +167,7 @@ Toggles:AddButton({
 	Callback = function()
 	    pcall(function()
       	for i,v in pairs(game.Players:GetPlayers()) do
-            if game.Players.LocalPlayer.Character:FindFirstChild("Bat") or game.Players.LocalPlayer.Backpack:FindFirstChild("Bat") or game.Players.LocalPlayer.Backpack:FindFirstChild("Metal  Bat") or game.Players.LocalPlayer.Character:FindFirstChild("Metal  Bat") then
+            if game.Players.LocalPlayer.Character:FindFirstChild("Bat") or game.Players.LocalPlayer.Backpack:FindFirstChild("Bat") or game.Players.LocalPlayer.Backpack:FindFirstChild("Metal  Bat") or game.Players.LocalPlayer.Character:FindFirstChild("Metal  Bat") or game.Players.LocalPlayer.Character:FindFirstChild("Neon") or game.Players.LocalPlayer.Character:FindFirstChild("Neon") then
             if v.Character.Name == game.Players.LocalPlayer.Character.Name then
             
             else
@@ -179,7 +178,7 @@ Toggles:AddButton({
                 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(v.Character.HumanoidRootPart.Position)
                 oldposition = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
                 repeat wait()
-                    if game.Players.LocalPlayer.Character:FindFirstChild("Bat") or game.Players.LocalPlayer.Character:FindFirstChild("Metal  Bat") then
+                    if game.Players.LocalPlayer.Character:FindFirstChild("Bat") or game.Players.LocalPlayer.Character:FindFirstChild("Metal  Bat") or game.Players.LocalPlayer.Character:FindFirstChild("Neon") then
                     task.wait()
                     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(v.Character.HumanoidRootPart.Position+Vector3.new(0,3,0))
                     local ohInstance1 = v.Character.HumanoidRootPart
@@ -191,7 +190,9 @@ Toggles:AddButton({
                         game.Players.LocalPlayer.Character.Humanoid:EquipTool(game.Players.LocalPlayer.Backpack:FindFirstChild("Bat"))
                     elseif game.Players.LocalPlayer.Backpack:FindFirstChild("Metal  Bat") then
                         game.Players.LocalPlayer.Character.Humanoid:EquipTool(game.Players.LocalPlayer.Backpack:FindFirstChild("Metal  Bat"))
-                    elseif not game.Players.LocalPlayer.Backpack:FindFirstChild("Bat") or game.Players.LocalPlayer.Backpack:FindFirstChild("Metal  Bat") then
+		    elseif game.Players.LocalPlayer.Backpack:FindFirstChild("Neon") then
+			game.Players.LocalPlayer.Character.Humanoid:EquipTool(game.Players.LocalPlayer.Backpack:FindFirstChild("Neon"))
+                    elseif not game.Players.LocalPlayer.Backpack:FindFirstChild("Bat") or game.Players.LocalPlayer.Backpack:FindFirstChild("Metal  Bat") or game.Players.LocalPlayer.Backpack:FindFirstChild("Neon") then
                         local oldpos = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position
                         game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(434.0252685546875, 25.781383514404297, 281.36041259765625)
                         repeat task.wait(1)
