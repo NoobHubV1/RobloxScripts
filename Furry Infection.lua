@@ -41,7 +41,7 @@ end
 
 local fagfolder1 = workspace:FindFirstChild("FagFolder")
 
-local W1 = OrionLib:MakeWindow({Name = "Furry Infection", HidePremium = false, SaveConfig = false, ConfigFolder = "Furry Infection Fucker nigger"})
+local W1 = OrionLib:MakeWindow({Name = "Furry Infection", HidePremium = true, SaveConfig = true, ConfigFolder = "Furry Infection"})
 
 OrionLib:MakeNotification({
     Name = "Furry Infection NoobHubV1",
@@ -72,6 +72,12 @@ local Others = W1:MakeTab({
     PremiumOnly = false
 })
 
+local Humanoid = W1:MakeTab({
+    Name = "Humanoid",
+    Icon = "rbxassetid://6890648157", --- rbxassetid://4483345998
+    PremiumOnly = false
+})
+
 Toggles:AddToggle({
     Name = "AntiFagInfect",
     Default = false,
@@ -96,7 +102,7 @@ Toggles:AddToggle({
                 _G.killaura = false
                 notify("Furry Infection NoobHubV1","KillAura Off NoobHubV1")
             end
-while _G.killaura do wait()
+while _G.killaura do 
 pcall(function()
 for i,v in pairs(game.Players:GetPlayers()) do
 
@@ -111,7 +117,7 @@ for i,v in pairs(game.Players:GetPlayers()) do
         
         if (lp.Character and lp.Character:FindFirstChild("Head") and character:FindFirstChild("Head")) then
             local mag = (v.Character.Head.Position - lp.Character.Head.Position).Magnitude
-                  if mag < 25  then
+                  if mag < 1000  then
 
 
 local ohInstance1 = v.Character.HumanoidRootPart
@@ -126,6 +132,7 @@ end
 end)
 end
 end)
+task.wait()
 end
 })    
 
@@ -226,6 +233,62 @@ end
 end
 	    end) 
   end
+})
+
+Humanoid:AddTextbox({
+	  Name = "Speed Amount",
+	  Default = "Amount",
+	  TextDisappear = false,
+	  Callback = function(Value)
+	      Speed = Value
+	  end
+})
+
+Humanoid:AddTextbox({
+	  Name = "Jump Amount",
+	  Default = "Amount",
+	  TextDisappear = false,
+	  Callback = function(Value)
+	      Jump = Value
+	  end
+})
+
+Humanoid:AddToggle({
+	  Name = Enabled Walk Speed",
+	  Default = false,
+	  Callback = function(State)
+	      getgenv().WalkSpeed = State
+	      if WalkSpeed == true then
+		      spawn(function()
+			      while WalkSpeed == true do
+				      game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Speed
+				      task.wait(.05)
+			      end
+		      end)
+	      end
+	      if WalkSpeed == false then
+		     game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 16
+	      end
+        end
+})
+
+Humanoid:AddToggle({
+	  Name = Enabled Walk Speed",
+	  Default = false,
+	  Callback = function(State)
+	      getgenv().JumpPower = State
+	      if JumpPower == true then
+		      spawn(function()
+			      while JumpPower == true do
+				      game.Players.LocalPlayer.Character.Humanoid.JumpPower = Jump
+				      task.wait(.05)
+			      end
+		      end)
+	      end
+	      if JumpPower == false then
+		     game.Players.LocalPlayer.Character.Humanoid.JumpPower = 50
+	      end
+        end
 })
 
 Others:AddButton({
