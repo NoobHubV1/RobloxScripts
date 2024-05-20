@@ -111,7 +111,7 @@ for i,v in pairs(game.Players:GetPlayers()) do
         
         if (lp.Character and lp.Character:FindFirstChild("Head") and character:FindFirstChild("Head")) then
             local mag = (v.Character.Head.Position - lp.Character.Head.Position).Magnitude
-                  if mag < 50 then
+                  if mag < 100 then
 
 
 local ohInstance1 = v.Character.HumanoidRootPart
