@@ -1,3 +1,5 @@
+if game.PlaceId ~= 13924946576 then
+
 local OrionLib = loadstring(Game:HttpGetAsync(("https://raw.githubusercontent.com/NoobHubV1/RobloxScripts/main/OrionLib.lua")))()
 
 local Notify = function(Name, Content, Time)
@@ -37,6 +39,17 @@ local function GetPlayer(Input)
         if (string.lower(Input) == string.sub(string.lower(Player.Name), 1, #Input)) then
             return Player;
         end
+    end
+end
+
+local Loop = function(State, calling, functi, time)
+    if not functi then
+	    functi = not
+    end
+    getgenv().Loop = State
+    while Loop do
+    calling(functi)
+    task.wait(time)
     end
 end
 
