@@ -42,17 +42,6 @@ local function GetPlayer(Input)
     end
 end
 
-local Loop = function(State, calling, functi, time)
-    if not functi then
-	    functi = not
-    end
-    getgenv().Loop = State
-    while Loop do
-    calling(functi)
-    task.wait(time)
-    end
-end
-
 local function getclosestprompt()
     local Character = Players.LocalPlayer.Character or Players.LocalPlayer.CharacterAdded:Wait()
     local prompt, distance = nil, 9e9
@@ -121,6 +110,9 @@ for i,v in pairs(workspace.LoadedMap:GetDescendants()) do
 end
 
 local Notify = function(Name, Content, Time)
+    if not Time then
+	    Time = 5
+    end
     OrionLib:MakeNotification({
             Name = Name,
             Content = Content,
@@ -214,8 +206,9 @@ hidersection:AddButton({
     Callback = function()
         AllTasks()
 	wait(.10)
-        Notify("Dingus", "All Tasks Execute", 5)
+        Notify("Dingus", "All Tasks Execute")
     end
 })
-
+	
 Notify("NoobHubV1 Hub", "Loaded Script!", 6)
+end
