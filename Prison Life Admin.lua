@@ -15,13 +15,13 @@ PLadmin_Settings = {
   AutoGuns = false; --Automatically get all guns
   OldItemMethod = false; --Use teleport for getting items (USE THIS IF PRISON LIFE PATCHES THE TABLE METHOD)
   Fullbright = false; --Enable fullbrightness
-  AutoWhitelist = true; --Automatically whitelist ranked players (DO NOT USE WHEN RANKING ALL PLAYERS)
-  CrashCmds = true; --Allow crash commands for ranked
-  GiveCmds = true; --Allow ranked players to give out commands to others
-  NukeCmds = true; --Allow ranked players to use nuke commands (Very annoying)
-  MultiCmd = true; --Allow ranked players to use the arguments: "all, and team", EX: ;kill all
-  Output = true; --Chat the output commands of ranked players
+  RankedAutoWhitelist = true; --Automatically whitelist ranked players (DO NOT USE WHEN RANKING ALL PLAYERS)
+  RankedCrashCmds = true; --Allow crash commands for ranked
+  RankedGiveCmds = true; --Allow ranked players to give out commands to others
+  RankedNukeCmds = true; --Allow ranked players to use nuke commands (Very annoying)
+  RankedMultiCmd = true; --Allow ranked players to use the arguments: "all, and team", EX: ;kill all
+  RankedOutput = true; --Chat the output commands of ranked players
   WhisperToRanked = true; --Use whisper for outputing commands for ranked players
-  Force_isMobile = false; --Force mobile action gui (Punch and crawl buttons) if executor is too shitty and detected as "emulator"
+  Force_isMobile = true; --Force mobile action gui (Punch and crawl buttons) if executor is too shitty and detected as "emulator"
 };wait() --Fixed on libhydrogen!!!
 loadstring(Game:HttpGet('https://gist.githubusercontent.com/NoobHubV1/7e8918b07a2130bf9bdce2fc53333a3b/raw/2192b83fa8a0d43c888d85e89a1e567f392f389e/Prison%20Life%20Admin%20Script.lua'))()
