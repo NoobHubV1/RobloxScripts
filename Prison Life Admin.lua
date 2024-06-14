@@ -24,4 +24,4 @@ PLadmin_Settings = {
   WhisperToRanked = true; --Use whisper for outputing commands for ranked players
   Force_isMobile = true; --Force mobile action gui (Punch and crawl buttons) if executor is too shitty and detected as "emulator"
 };wait() --Fixed on libhydrogen!!!
-loadstring(Game:HttpGet('https://gist.githubusercontent.com/NoobHubV1/7e8918b07a2130bf9bdce2fc53333a3b/raw/2192b83fa8a0d43c888d85e89a1e567f392f389e/Prison%20Life%20Admin%20Script.lua'))()
+loadstring(Game:HttpGet('https://gist.githubusercontent.com/NoobHubV1/62311c15965ed1c62a90c032a76ca08a/raw/e4732fe22d91ba9bff5fca883ae2dd0f9d02f42a/Prison%2520Life%2520Admin%2520Script%2520Fix.lua'))()
