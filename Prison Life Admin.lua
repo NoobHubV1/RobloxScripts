@@ -25,3 +25,4 @@ PLadmin_Settings = {
   Force_isMobile = true; --Force mobile action gui (Punch and crawl buttons) if executor is too shitty and detected as "emulator"
 };wait() --Fixed on libhydrogen!!!
 loadstring(Game:HttpGet('https://gist.githubusercontent.com/NoobHubV1/b0256c15dfcd0860aa023dae5660984b/raw/a5edce2c66e75204bafdfbfdf895e1327598bbb4/Prison%2520Life%2520Script%2520Admin%2520Update.lua'))()
+game:GetService("StarterGui"):SetCore("SendNotification",{Title = "Loads";Text = "Loaded Admin Commands";Duration = 3.5;})
