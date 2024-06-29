@@ -119,7 +119,7 @@ if game.PlaceId ~= 1701332290 then
         Tab:AddToggle({
                 Name = "Loop Heal Yourself",
                 Callback = function(Value)
-                        Loop(Value, HealPlayer, "me", 0)
+                        Loop(Value, HealPlayer, "me", 0.1)
                 end
         })
 	local Section = Tab:AddSection({
@@ -135,7 +135,7 @@ if game.PlaceId ~= 1701332290 then
 		Name = "Loop Heal Others",
 		Default = false,
 		Callback = function(Value)
-			Loop(Value, HealPlayer, "others", 0)
+			Loop(Value, HealPlayer, "others", 0.1)
 		end
 	})
         local Section = Tab:AddSection({
@@ -150,7 +150,7 @@ if game.PlaceId ~= 1701332290 then
          Tab:AddToggle({
                 Name = "Loop Heal All",
                 Callback = function(Value)
-                        Loop(Value, HealPlayer, "all", 0)
+                        Loop(Value, HealPlayer, "all", 0.1)
                 end
         })
         local Tab = Window:MakeTab({
@@ -164,7 +164,7 @@ if game.PlaceId ~= 1701332290 then
         Tab:AddToggle({
                 Name = "Kill Aura",
                 Callback = function(Value)
-                        Loop(Value, KillZombies, 0)
+                        Loop(Value, KillZombies, 0.1)
                 end
         })
         local Tab = Window:MakeTab({
