@@ -11,49 +11,25 @@ if game.PlaceId ~= 1701332290 then
 	local function GiveItem(Item)
 		NetworkEvents.RemoteFunction:InvokeServer("PICKUP_ITEM", tostring(Item:gsub(" ", "")))
 	end
-	local GetPlayer = function(String)
-		local Found = {}
-   local strl = String:lower()
-   if strl == "all" then
-       for i,v in pairs(game.Players:GetPlayers()) do
-           table.insert(Found,v.Name)
-       end
-   elseif strl == "others" then
-       for i,v in pairs(game.Players:GetPlayers()) do
-           if v.Name ~= game.Players.LocalPlayer.Name then
-               table.insert(Found,v.Name)
-           end
-       end  
-elseif strl == "me" then
-       for i,v in pairs(game.Players:GetPlayers()) do
-           if v.Name == game.Players.LocalPlayer.Name then
-               table.insert(Found,v.Name)
-           end
-       end  
-   else
-       for i,v in pairs(game.Players:GetPlayers()) do
-           if v.Name:lower():sub(1, #String) == String:lower() then
-               table.insert(Found,v.Name)
-           end
-       end    
-   end
-   return Found
-	end
 	local HealPlayer = function(Name)
 	        if Name == "all" then
 			for i, v in pairs(game.Players:GetPlayers()) do
                             if v.Name ~= game:GetService("Players").LocalPlayer then
-                    game:GetService("ReplicatedStorage").NetworkEvents.RemoteFunction:InvokeServer(
+                    NetworkEvents.RemoteFunction:InvokeServer(
                         "HEAL_PLAYER",
                         v,
                         math.huge
                     )
                             end
-		      end
+		        end
+		elseif Name == "others" then
+			for i, v in pairs(game.Players:GetPlayers()) do
+			    if v ~= game:GetService("Players").LocalPlayer then
+		    NetworkEvents.RemoteFunction:InvokeServer("HEAL_PLAYER", v, math.huge)
+			    end
+			end
 	        elseif Name == "me" then
 		        NetworkEvents.RemoteFunction:InvokeServer("HEAL_PLAYER", LocalPlayer, math.huge)
-		else
-			NetworkEvents.RemoteFunction:InvokeServer("HEAL_PLAYER", GetPlayer(Name), math.huge)
 		end
 	end
 	local function KillZombies()
@@ -65,6 +41,16 @@ elseif strl == "me" then
                 )
 		end
 	end
+	local Loop = function(State, Functi, Functi2, Time)
+		getgenv().Loop = State
+	           while Loop do
+		          LoadFuncti(Functi, Functi2)
+			  task.wait(Time)
+		end
+	end
+	local function LoadFuncti(Calling, Functi)
+		Calling(Functi)
+	end
 	local function Noclip(State)
 		LocalPlayer.Character.HumanoidRootPart.CanCollide = State
 		for i, v in pairs(LocalPlayer.Character:GetChildren()) do
@@ -72,6 +58,9 @@ elseif strl == "me" then
 				v.CanCollide = State
 			end
 		end
+	end
+	local LoadHttps = function(Https)
+		spawn(loadstring(Game:HttpGet(Https)))
 	end
         local function Notify(name, content, image, time)
 		OrionLib:MakeNotification({
@@ -115,7 +104,7 @@ elseif strl == "me" then
         Tab:AddButton({
 		Name = "Get Item",
 		Callback = function()
-			GiveItem(SelectedItem)
+			LoadFuncti(SelectedItem)
 		end
 	})
         local Section = Tab:AddSection({
@@ -124,45 +113,29 @@ elseif strl == "me" then
         Tab:AddButton({
 		Name = "Heal Yourself",
 		Callback = function()
-			HealPlayer("me")
+			LoadFuncti(HealPlayer, "me")
 		end
 	})
         Tab:AddToggle({
                 Name = "Loop Heal Yourself",
-                Callback = function(State)
-                        getgenv().HealLoop = State
-                        while HealLoop do
-                                HealPlayer("me")
-				task.wait()
-                        end
+                Callback = function(Value)
+                        Loop(Value, HealPlayer, "me", 0)
                 end
         })
 	local Section = Tab:AddSection({
-                Name = "Heal Player"
-        })
-	Tab:AddTextbox({
-                Name = "Player Name",
-		Default = "PlayerName",
-		TextDisappear = false,
-                Callback = function(Value)
-                        PlayerName = Value
-               end
+                Name = "Heal Others"
         })
 	Tab:AddButton({
-                Name = "Heal Player",
+                Name = "Heal Others",
                 Callback = function()
-                        HealPlayer(PlayerName)
+                        LoadFuncti(HealPlayer, "others")
                 end
 	})
 	Tab:AddToggle({
-		Name = "Loop Heal Player",
+		Name = "Loop Heal Others",
 		Default = false,
-		Callback = function(State)
-			getgenv().HealLoop = State
-			while HealLoop do
-				HealPlayer(PlayerName)
-				task.wait()
-			end
+		Callback = function(Value)
+			Loop(Value, HealPlayer, "others", 0)
 		end
 	})
         local Section = Tab:AddSection({
@@ -171,17 +144,13 @@ elseif strl == "me" then
         Tab:AddButton({
                 Name = "Heal All",
                 Callback = function()
-                        HealPlayer("all")
+                        LoadFuncti(HealPlayer, "all")
                end
          })
          Tab:AddToggle({
                 Name = "Loop Heal All",
-                Callback = function(State)
-                        getgenv().HealAllLoop = State
-                        while HealAllLoop do
-                                HealPlayer("all")
-				task.wait()
-                        end
+                Callback = function(Value)
+                        Loop(Value, HealPlayer, "all", 0)
                 end
         })
         local Tab = Window:MakeTab({
@@ -194,12 +163,8 @@ elseif strl == "me" then
 	})
         Tab:AddToggle({
                 Name = "Kill Aura",
-                Callback = function(State)
-                        getgenv().KillZombiesLoop = State
-                        while KillZombiesLoop do
-                                KillZombies()
-				task.wait()
-                        end
+                Callback = function(Value)
+                        Loop(Value, KillZombies, 0)
                 end
         })
         local Tab = Window:MakeTab({
@@ -241,19 +206,19 @@ end)
         Tab:AddButton({
                 Name = "Fly",
                 Callback = function()
-                        loadstring(Game:HttpGet('https://raw.githubusercontent.com/NoobHubV1/RobloxScripts/main/Fly.lua'))()
+                        LoadHttps("https://raw.githubusercontent.com/NoobHubV1/RobloxScripts/main/Fly.lua")
                 end
          })
          Tab:AddButton({
                 Name = "Shift Lock",
                 Callback = function()
-                        loadstring(Game:HttpGet('https://raw.githubusercontent.com/NoobHubV1/RobloxScripts/main/Shift%20Lock.lua'))()
+                        LoadHttps("https://raw.githubusercontent.com/NoobHubV1/RobloxScripts/main/Shift%20Lock.lua")
                 end
          })
          Tab:AddButton({
                 Name = "Keyboard",
                 Callback = function()
-                        loadstring(game:HttpGet("https://raw.githubusercontent.com/advxzivhsjjdhxhsidifvsh/mobkeyboard/main/main.txt", true))()
+                        LoadHttps("https://raw.githubusercontent.com/advxzivhsjjdhxhsidifvsh/mobkeyboard/main/main.txt")
                 end
          })
          local Tab = Window:MakeTab({
