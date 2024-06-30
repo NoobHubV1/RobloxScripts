@@ -1,4 +1,4 @@
-local OrionLib = loadstring(Game:HttpGetAsync"https://raw.githubusercontent.com/NoobHubV1/RobloxScripts/main/OrionLib.lua")()
+local OrionLib = spawn(loadstring(Game:HttpGet("https://raw.githubusercontent.com/NoobHubV1/RobloxScripts/main/OrionLib.lua")))
 
 local Notify = function(Name, Content, Time)
     OrionLib:MakeNotification({
@@ -108,9 +108,6 @@ for i,v in pairs(workspace.LoadedMap:GetDescendants()) do
 end
 
 local Notify = function(Name, Content, Time)
-    if not Time then
-	    Time = 5
-    end
     OrionLib:MakeNotification({
             Name = Name,
             Content = Content,
