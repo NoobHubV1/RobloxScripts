@@ -41,13 +41,6 @@ if game.PlaceId ~= 1701332290 then
                 )
 		end
 	end
-	local Loop = function(State, Functi, Functi2, Time)
-		getgenv().Loop = State
-	           while Loop do
-		          LoadFuncti(Functi, Functi2)
-			  task.wait(Time)
-		end
-	end
 	local function LoadFuncti(Calling, Functi)
 		Calling(Functi)
 	end
@@ -118,8 +111,12 @@ if game.PlaceId ~= 1701332290 then
 	})
         Tab:AddToggle({
                 Name = "Loop Heal Yourself",
-                Callback = function(Value)
-                        Loop(Value, HealPlayer, "me", 0.1)
+                Callback = function(State)
+                        getgenv().Loop = State
+			   while Loop do
+				   LoadFuncti(HealPlayer, "me")
+			   task.wait()
+			end
                 end
         })
 	local Section = Tab:AddSection({
@@ -129,13 +126,18 @@ if game.PlaceId ~= 1701332290 then
                 Name = "Heal Others",
                 Callback = function()
                         LoadFuncti(HealPlayer, "others")
+			end
                 end
 	})
 	Tab:AddToggle({
 		Name = "Loop Heal Others",
 		Default = false,
-		Callback = function(Value)
-			Loop(Value, HealPlayer, "others", 0.1)
+		Callback = function(State)
+			getgenv().Loop = State
+			   while Loop do
+				   LoadFuncti(HealPlayer, "others")
+			   task.wait()
+			end
 		end
 	})
         local Section = Tab:AddSection({
@@ -149,8 +151,12 @@ if game.PlaceId ~= 1701332290 then
          })
          Tab:AddToggle({
                 Name = "Loop Heal All",
-                Callback = function(Value)
-                        Loop(Value, HealPlayer, "all", 0.1)
+                Callback = function(State)
+                        getgenv().Loop = State
+			   while Loop do
+				   LoadFuncti(HealPlayer, "all")
+			   task.wait()
+			end
                 end
         })
         local Tab = Window:MakeTab({
@@ -163,8 +169,12 @@ if game.PlaceId ~= 1701332290 then
 	})
         Tab:AddToggle({
                 Name = "Kill Aura",
-                Callback = function(Value)
-                        Loop(Value, KillZombies, 0.1)
+                Callback = function(State)
+                        getgenv().Loop = State
+			   while Loop do
+				   LoadFuncti(KillZombies)
+			   task.wait()
+			end
                 end
         })
         local Tab = Window:MakeTab({
