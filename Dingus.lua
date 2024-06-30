@@ -1,5 +1,3 @@
-if game.PlaceId ~= 13924946576 then
-
 local OrionLib = loadstring(Game:HttpGetAsync(("https://raw.githubusercontent.com/NoobHubV1/RobloxScripts/main/OrionLib.lua")))()
 
 local Notify = function(Name, Content, Time)
