@@ -1,4 +1,4 @@
-local OrionLib = spawn(loadstring(Game:HttpGet("https://raw.githubusercontent.com/NoobHubV1/RobloxScripts/main/OrionLib.lua")))
+local OrionLib = loadstring(Game:HttpGet("https://raw.githubusercontent.com/NoobHubV1/RobloxScripts/main/OrionLib.lua"))()
 
 local Notify = function(Name, Content, Time)
     OrionLib:MakeNotification({
