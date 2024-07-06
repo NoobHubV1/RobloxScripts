@@ -183,16 +183,10 @@ shootersection:AddTextbox({
 
 shootersection:AddButton({
     Name = "kill him",
-    Callback = function(Name)
-        if Name == "all" then
-		killplayer("all")
-	        wait(.10)
-	        Notify("Dingus", "kill All Execute", 5)
-	else
+    Callback = function()
 		killplayer(library.Flags["goober"])
 	        wait(.10)
-                Notify("Dingus", "Kill Player Execute", 5)
-	end
+                Notify("Dingus", "Kill Execute", 5)
     end
 })
 
@@ -206,4 +200,3 @@ hidersection:AddButton({
 })
 	
 Notify("NoobHubV1 Hub", "Loaded Script!", 6)
-end
