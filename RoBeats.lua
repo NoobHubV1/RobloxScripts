@@ -32,7 +32,7 @@ game:GetService("StarterGui"):SetCore("SendNotification",{
                 Duration = 10;
             })
 
-            wait(3)
+            wait(0)
 
 --// variables
 
