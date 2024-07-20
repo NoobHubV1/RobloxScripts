@@ -80,8 +80,9 @@ end
 
 local function killplayer(name)
     if name == "all" or name == "everyone" or name == "@" or name == "others" or name == "@a" then
-        for i,v in pairs(Players:GetPlayers()) do
-            game:GetService("ReplicatedStorage").Remotes.KillCharacter:InvokeServer(v.Character)
+        for i,AllPlayers in pairs(Players:GetPlayers()) do
+	    if AllPlayers ~= game.Players.LocalPlayer then
+               game:GetService("ReplicatedStorage").Remotes.KillCharacter:InvokeServer(AllPlayers.Character)
         end
     else
         game:GetService("ReplicatedStorage").Remotes.KillCharacter:InvokeServer(GetPlayer(name).Character)
