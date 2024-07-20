@@ -79,15 +79,9 @@ local function fireproximityprompt(Obj, Amount, Skip)
 end
 
 local function killplayer(name)
-    if name == "all" or name == "everyone" or name == "@" then
+    if name == "all" or name == "everyone" or name == "@" or name == "others" or name == "@a" then
         for i,v in pairs(Players:GetPlayers()) do
             game:GetService("ReplicatedStorage").Remotes.KillCharacter:InvokeServer(v.Character)
-        end
-    elseif name == "others" or name == "@a" then
-	for i,v in pairs(Players:GetPlayers()) do
-            if v ~= Players.LocalPlayer then
-                game:GetService("ReplicatedStorage").Remotes.KillCharacter:InvokeServer(v.Character)
-            end
         end
     else
         game:GetService("ReplicatedStorage").Remotes.KillCharacter:InvokeServer(GetPlayer(name).Character)
