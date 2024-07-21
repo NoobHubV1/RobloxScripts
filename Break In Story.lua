@@ -141,8 +141,8 @@ if game.PlaceId ~= 1318971886 then
         end
         local function KillOthersPlayers()
                 for i, v in pairs(game.Players:GetPlayers()) do
-        if v.Name ~= LocalPlayer then
-            RemoteEvents:WaitForChild("ToxicDrown"):FireServer(1, v.Name)
+        if v ~= LocalPlayer then
+            RemoteEvents:WaitForChild("ToxicDrown"):FireServer(1, v)
         end
     end
         end
