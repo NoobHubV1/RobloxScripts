@@ -124,8 +124,8 @@ if game.PlaceId ~= 1318971886 then
         end
         local function KillEnemies()
                 for i, v in pairs(game.Workspace.BadGuys:GetChildren()) do
-        RemoteEvents.HitBadguy:FireServer(v, 500)
-    end
+	            RemoteEvents.HitBadguy:FireServer(v, 10)
+		end
         end
         local function GetRole(Role)
                 if Role == "The Fighter" then
@@ -406,21 +406,10 @@ end)
                         getgenv().KillBadGuysLoop = Value
                         while KillBadGuysLoop do
                                 KillEnemies()
-                                task.wait(WaitTimeKillAura)
+                                task.wait()
                         end
                 end
         })
-        local Section = Tab:AddSection({
-		Name = "Wait time Kill Aura"
-	})
-        Tab:AddTextbox({
-		Name = "Wait Time",
-		Default = "Amount",
-		TextDisappear = false,
-		Callback = function(Amount)
-			WaitTimeKillAura = Amount
-		end	  
-	})
         local Tab = Window:MakeTab({
 		Name = "Misc",
 		Icon = "rbxassetid://4483345998",
