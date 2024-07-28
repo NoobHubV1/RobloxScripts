@@ -118,6 +118,10 @@ local AllTasks = function()
     end
 end
 
+local function LoadHttps(Https)
+	loadstring(game:HttpGet(Https))()
+end
+
 local goober = library:CreateWindow({
     Name = "dingus",
 })
@@ -126,8 +130,8 @@ local Combat = goober:CreateTab({
     Name = "Main"
 })
 
-local Esp = goober:CreateTab({
-    Name = "Esp GUI"
+local Others = goober:CreateTab({
+    Name = "Others"
 })
 
 local hidersection = Combat:CreateSection({
@@ -138,8 +142,8 @@ local shootersection = Combat:CreateSection({
     Name = "hunter"
 })
 
-local espsection = Esp:CreateSection({
-    Name = "Esp Script"
+local otherssection = Others:CreateSection({
+    Name = "Others Script"
 })
 
 shootersection:AddToggle({
@@ -165,10 +169,17 @@ shootersection:AddToggle({
     end
 })
 
-espsection:AddButton({
+otherssection:AddButton({
     Name = "Esp Player",
     Callback = function()
-        loadstring(Game:HttpGetAsync(("https://pastebinp.com/raw/iv9qAHZP")))()
+        LoadHttps("https://raw.githubusercontent.com/fatesc/fates-esp/main/main.lua")
+    end
+})
+
+otherssection:AddButton({
+    Name = "Reaper Hub (not fluxus)",
+    Callback = function()
+	LoadHttps("https://raw.githubusercontent.com/AyoReaper/Reaper-Hub/main/loader.lua")
     end
 })
 
