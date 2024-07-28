@@ -172,7 +172,7 @@ shootersection:AddToggle({
 otherssection:AddButton({
     Name = "Esp Player",
     Callback = function()
-        LoadHttps("https://raw.githubusercontent.com/fatesc/fates-esp/main/main.lua")
+        LoadHttps("https://raw.githubusercontent.com/ToraScript/Script/main/HUNTDuels")
     end
 })
 
@@ -180,6 +180,34 @@ otherssection:AddButton({
     Name = "Reaper Hub (not fluxus)",
     Callback = function()
 	LoadHttps("https://raw.githubusercontent.com/AyoReaper/Reaper-Hub/main/loader.lua")
+    end
+})
+
+otherssection:AddButton({
+    Name = "Janorax Hub",
+    Callback = function()
+	LoadHttps("https://raw.githubusercontent.com/Janorax/Dingus/main/script")
+    end
+})
+
+otherssection:AddButton({
+    Name = "SyniX Hub",
+    Callback = function()
+	LoadHttps("https://raw.githubusercontent.com/RayzMd/SyniX-Team/main/SyniXScripts")
+    end
+})
+
+otherssection:AddButton({
+    Name = "Rylvns Hub",
+    Callback = function()
+	LoadHttps("https://raw.githubusercontent.com/Rylvns/EnvisionExploits/master/game-scripts/dingus/source.lua")
+    end
+})
+
+otherssection:AddButton({
+    Name = "Keyboard",
+    Callback = function()
+	LoadHttps("https://gist.githubusercontent.com/RedZenXYZ/4d80bfd70ee27000660e4bfa7509c667/raw/da903c570249ab3c0c1a74f3467260972c3d87e6/KeyBoard%2520From%2520Ohio%2520Fr%2520Frza")
     end
 })
 
