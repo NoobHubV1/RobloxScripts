@@ -32,12 +32,19 @@ local HumanoidRootPart = Character.HumanoidRootPart
 
 
 -- taken from devforum
-local function GetPlayer(Input)
-    for _, Player in ipairs(Players:GetPlayers()) do
-        if (string.lower(Input) == string.sub(string.lower(Player.Name), 1, #Input)) then
-            return Player;
-        end
-    end
+local function GetPlayer(String)
+        if not String then return end
+	local Yes = {}
+	for _, Player in ipairs(game.Players:GetPlayers()) do
+		if string.lower(Player.Name):match(string.lower(String)) or string.lower(Player.DisplayName):match(string.lower(String)) then
+			table.insert(Yes, Player)
+		end
+	end
+	if #Yes > 0 then
+		return Yes[1]
+	elseif #Yes < 1 then
+		return nil
+	end
 end
 
 local function getclosestprompt()
