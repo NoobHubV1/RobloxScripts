@@ -18,6 +18,26 @@ local function GrabItem(Item)
         end
 end
 
+local GrabAll = function()
+        GrabItem("Virus")
+        task.wait(0.3)
+        GrabItem("Cure")
+end
+
+local AutoGrabAll = function(State)
+        getgenv().Loop = State
+        while Loop do
+        if game.Players.LocalPlayer.Character:FindFirstChild("Cure") or game.Players.LocalPlayer.Backpack:FindFirstChild("Cure") or game.Players.LocalPlayer.Backpack:FindFirstChild("Virus") or game.Players.LocalPlayer.Character:FindFirstChild("Virus") then
+        -- nothing
+        else
+        GrabItem("Virus")
+        task.wait(0.3)
+        GrabItem("Cure")
+        end
+        task.wait()
+        end
+end
+
 local Window = Library:NewWindow("NoobHubV1 Hub")
 
 local Section = Window:NewSection("Main")
@@ -26,4 +46,10 @@ Section:CreateDropdown("Item", {"Virus","Cure"}, 1, function(val)SelectedItem = 
 end)
 
 Section:CreateButton("Grab Item", function()GrabItem(SelectedItem)
+end)
+
+Section:CreateButton("Grab All Items", function()GrabAll()
+end)
+
+Section:CreateToggle("Auto Grab All Items", function(val)AutoGrabAll()
 end)
