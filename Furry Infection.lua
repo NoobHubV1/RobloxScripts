@@ -148,9 +148,9 @@ if game.Players.LocalPlayer.Character:FindFirstChild("Bat") or game.Players.Loca
     
 else    
     local oldpos = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position
-    game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(434.0252685546875, 25.781383514404297, 281.36041259765625)
-    repeat task.wait(1)
-    game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(434.0252685546875, 25.781383514404297, 281.36041259765625)    
+    game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-136.6771240234375, 27.783193588256836, 20.907127380371094)
+    repeat task.wait()
+    game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-136.6771240234375, 27.783193588256836, 20.907127380371094)    
     fireproximityprompt(_G.MetalBatProximity, 2, false)
     until game.Players.LocalPlayer.Character:FindFirstChild("Bat") or game.Players.LocalPlayer.Backpack:FindFirstChild("Bat") or game.Players.LocalPlayer.Backpack:FindFirstChild("Metal  Bat") or game.Players.LocalPlayer.Character:FindFirstChild("Metal  Bat")
     game:GetService("Players").localPlayer.Character:MoveTo(oldpos)
@@ -195,9 +195,9 @@ Toggles:AddButton({
 			game.Players.LocalPlayer.Character.Humanoid:EquipTool(game.Players.LocalPlayer.Backpack:FindFirstChild("Neon"))
                     elseif not game.Players.LocalPlayer.Backpack:FindFirstChild("Bat") or game.Players.LocalPlayer.Backpack:FindFirstChild("Metal  Bat") or game.Players.LocalPlayer.Backpack:FindFirstChild("Neon") then
                         local oldpos = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position
-                        game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(434.0252685546875, 25.781383514404297, 281.36041259765625)
-                        repeat task.wait(1)
-                        game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(434.0252685546875, 25.781383514404297, 281.36041259765625)    
+                        game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-136.6771240234375, 27.783193588256836, 20.907127380371094)
+                        repeat task.wait()
+                        game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-136.6771240234375, 27.783193588256836, 20.907127380371094)    
                         fireproximityprompt(_G.MetalBatProximity, 2, false)
                         until game.Players.LocalPlayer.Character:FindFirstChild("Bat") or game.Players.LocalPlayer.Backpack:FindFirstChild("Bat") or game.Players.LocalPlayer.Backpack:FindFirstChild("Metal  Bat") or game.Players.LocalPlayer.Character:FindFirstChild("Metal  Bat") or game.Players.LocalPlayer.Character:FindFirstChild("Neon") or game.Players.LocalPlayer.Character:FindFirstChild("Neon")
                         game:GetService("Players").localPlayer.Character:MoveTo(oldpos)
@@ -216,9 +216,9 @@ Toggles:AddButton({
       	end
 else
     local oldpos = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position
-    game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(434.0252685546875, 25.781383514404297, 281.36041259765625)
+    game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-136.6771240234375, 27.783193588256836, 20.907127380371094)
     repeat task.wait()
-    game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(434.0252685546875, 25.781383514404297, 281.36041259765625)    
+    game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-136.6771240234375, 27.783193588256836, 20.907127380371094)    
     fireproximityprompt(_G.MetalBatProximity, 2, false)
     until game.Players.LocalPlayer.Character:FindFirstChild("Bat") or game.Players.LocalPlayer.Backpack:FindFirstChild("Bat") or game.Players.LocalPlayer.Backpack:FindFirstChild("Metal  Bat") or game.Players.LocalPlayer.Character:FindFirstChild("Metal  Bat")
     if game.Players.LocalPlayer.Backpack:FindFirstChild("Bat") then
@@ -323,9 +323,9 @@ while _G.killall do task.wait()
                         game.Players.LocalPlayer.Character.Humanoid:EquipTool(game.Players.LocalPlayer.Backpack:FindFirstChild("Metal  Bat"))
                     elseif not game.Players.LocalPlayer.Backpack:FindFirstChild("Bat") or game.Players.LocalPlayer.Backpack:FindFirstChild("Metal  Bat") then
                         local oldpos = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position
-                        game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(434.0252685546875, 25.781383514404297, 281.36041259765625)
-                        repeat task.wait(1)
-                        game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(434.0252685546875, 25.781383514404297, 281.36041259765625)    
+                        game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-136.6771240234375, 27.783193588256836, 20.907127380371094)
+                        repeat task.wait()
+                        game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-136.6771240234375, 27.783193588256836, 20.907127380371094)    
                         fireproximityprompt(_G.MetalBatProximity, 2, false)
                         until game.Players.LocalPlayer.Character:FindFirstChild("Bat") or game.Players.LocalPlayer.Backpack:FindFirstChild("Bat") or game.Players.LocalPlayer.Backpack:FindFirstChild("Metal  Bat") or game.Players.LocalPlayer.Character:FindFirstChild("Metal  Bat")
                         game:GetService("Players").localPlayer.Character:MoveTo(oldpos)
@@ -342,9 +342,9 @@ while _G.killall do task.wait()
       	end
 else
     local oldpos = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position
-    game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(434.0252685546875, 25.781383514404297, 281.36041259765625)
+    game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-136.6771240234375, 27.783193588256836, 20.907127380371094)
     repeat task.wait()
-    game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(434.0252685546875, 25.781383514404297, 281.36041259765625)    
+    game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-136.6771240234375, 27.783193588256836, 20.907127380371094)    
     fireproximityprompt(_G.MetalBatProximity, 2, false)
     until game.Players.LocalPlayer.Character:FindFirstChild("Bat") or game.Players.LocalPlayer.Backpack:FindFirstChild("Bat") or game.Players.LocalPlayer.Backpack:FindFirstChild("Metal  Bat") or game.Players.LocalPlayer.Character:FindFirstChild("Metal  Bat")
     if game.Players.LocalPlayer.Backpack:FindFirstChild("Bat") then
