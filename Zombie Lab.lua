@@ -24,18 +24,34 @@ local GrabAll = function()
         GrabItem("Cure")
 end
 
-local AutoGrabAll = function(State)
+local function AutoGrabVirus(State)
         getgenv().Loop = State
         while Loop do
-        if game.Players.LocalPlayer.Character:FindFirstChild("Cure") or game.Players.LocalPlayer.Backpack:FindFirstChild("Cure") or game.Players.LocalPlayer.Backpack:FindFirstChild("Virus") or game.Players.LocalPlayer.Character:FindFirstChild("Virus") then
+        if game.Players.LocalPlayer.Character:FindFirstChild("Virus") or game.Players.LocalPlayer.Backpack:FindFirstChild("Virus") then
         -- nothing
         else
         GrabItem("Virus")
-        task.wait(0.3)
+        end
+        task.wait()
+        end
+end
+
+local function AutoGrabCure(State)
+        getgenv().Loop = State
+        while Loop do
+        if game.Players.LocalPlayer.Character:FindFirstChild("Cure") or game.Players.LocalPlayer.Backpack:FindFirstChild("Cure") then
+        -- nothing
+        else
         GrabItem("Cure")
         end
         task.wait()
         end
+end
+
+local AutoGrabAll = function(Value)
+        AutoGrabCure(Value)
+        task.wait(0.4)
+        AutoGrabVirus(Value)
 end
 
 local Window = Library:NewWindow("NoobHubV1 Hub")
@@ -48,8 +64,14 @@ end)
 Section:CreateButton("Grab Item", function()GrabItem(SelectedItem)
 end)
 
+Section:CreateToggle("Auto Grab Virus", function(val)AutoGrabVirus(val)
+end)
+
+Section:CreateToggle("Auto Grab Cure", function(val)AutoGrabCure(val)
+end)
+
 Section:CreateButton("Grab All Items", function()GrabAll()
 end)
 
-Section:CreateToggle("Auto Grab All Items", function(val)AutoGrabAll()
+Section:CreateToggle("Auto Grab All Items", function(val)AutoGrabAll(val)
 end)
