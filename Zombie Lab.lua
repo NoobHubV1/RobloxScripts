@@ -4,8 +4,8 @@ local plr = game.Players.LocalPlayer
 local function GrabItem(Item)
         local savedcf = plr.Character.HumanoidRootPart.Position
         if Item == "Virus" then
-                plr.Character.HumanoidRootPart.CFrame = CFrame.new(-80.16571044921875, -11.020002365112305, -52.87663650512695)
-                task.wait()
+                plr.Character.HumanoidRootPart.CFrame = CFrame.new(-73.71356964111328, -15.50000286102295, -58.679542541503906)
+		task.wait()
                 game:GetService("ReplicatedStorage").Events.GiveVirus:FireServer()
                 task.wait(0.3)
                 plr.Character.HumanoidRootPart.CFrame = CFrame.new(savedcf)
