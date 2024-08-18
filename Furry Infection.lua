@@ -97,6 +97,7 @@ Toggles:AddToggle({
                 notify("Furry Infection NoobHubV1","KillAura Off NoobHubV1")
             end
 while _G.killaura do
+for i = 1, 3 do
 pcall(function()
 for i,v in pairs(game.Players:GetPlayers()) do
 
@@ -124,6 +125,7 @@ end
 end
 end
 end)
+end
 task.wait()
 end
 end)
