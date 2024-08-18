@@ -181,7 +181,7 @@ Toggles:AddButton({
                 repeat wait()
                     if game.Players.LocalPlayer.Character:FindFirstChild("Bat") or game.Players.LocalPlayer.Character:FindFirstChild("Metal  Bat") or game.Players.LocalPlayer.Character:FindFirstChild("Neon") then
                     task.wait()
-                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(v.Character.HumanoidRootPart.Position+Vector3.new(0,3,0))
+                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(v.Character.HumanoidRootPart.Position+Vector3.new(0,2,0))
                     local ohInstance1 = v.Character.HumanoidRootPart
                     local ohInstance2 = v.Character.Humanoid
                     local ohVector33 = Vector3.new(game.Players.LocalPlayer.Character.HumanoidRootPart.Position)
@@ -311,7 +311,7 @@ while _G.killall do task.wait()
                 repeat task.wait()
                     if game.Players.LocalPlayer.Character:FindFirstChild("Bat") or game.Players.LocalPlayer.Character:FindFirstChild("Metal  Bat") then
                     task.wait()
-                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(v.Character.HumanoidRootPart.Position+Vector3.new(0,5,0))
+                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(v.Character.HumanoidRootPart.Position+Vector3.new(0,2,0))
                     local ohInstance1 = v.Character.HumanoidRootPart
                     local ohInstance2 = v.Character.Humanoid
                     local ohVector33 = Vector3.new(game.Players.LocalPlayer.Character.HumanoidRootPart.Position)
