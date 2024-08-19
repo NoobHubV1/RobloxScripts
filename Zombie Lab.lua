@@ -168,17 +168,23 @@ local function GiveVirus()
         game.ReplicatedStorage.Events.GiveVirus:FireServer()
 end
 
+function ClickTool(Tool)
+	for i, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+if v.ToolTip == Tool then v.Parent = game.Players.LocalPlayer.Character end
+if game.Players.LocalPlayer.Character:FindFirstChildWhichIsA("Tool") then game.Players.LocalPlayer.Character:FindFirstChildWhichIsA("Tool"):Activate()
+end
+	end
+end
+
 TextButton.MouseButton1Click:Connect(function()
 GiveVirus()
-local savedcf = plr.Character.HumanoidRootPart.CFrame
 local Target = TextBox.Text
-for i = 1, 50 do
+for i = 1, 20 do
 plr.Character.Humanoid:EquipTool(plr.Backpack:FindFirstChild("Virus"))
-plr.Character.HumanoidRootPart.CFrame = GetPlayer(Target).Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, 1)
+plr.Character.HumanoidRootPart.CFrame = GetPlayer(Target).Character.HumanoidRootPart.CFrame * CFrame.new(-1, 0, 1)
+ClickTool("Virus")
 task.wait()
 end
-task.wait(0.1)
-plr.Character.HumanoidRootPart.CFrame = savedcf
 end)
 end
 
@@ -263,17 +269,24 @@ local function GiveCure()
         game.ReplicatedStorage.Events.GiveCure:FireServer()
 end
 
+function ClickTool(Tool)
+	for i, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+if v.ToolTip == Tool then v.Parent = game.Players.LocalPlayer.Character end
+if game.Players.LocalPlayer.Character:FindFirstChildWhichIsA("Tool") then game.Players.LocalPlayer.Character:FindFirstChildWhichIsA("Tool"):Activate()
+end
+	end
+end
+
 TextButton.MouseButton1Click:Connect(function()
 GiveCure()
-local savedcf = plr.Character.HumanoidRootPart.CFrame
+local savedcf = plr.Character.HumanoidRootPart.Position
 local Target = TextBox.Text
-for i = 1, 50 do
+for i = 1, 20 do
 plr.Character.Humanoid:EquipTool(plr.Backpack:FindFirstChild("Cure"))
-plr.Character.HumanoidRootPart.CFrame = GetPlayer(Target).Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, 1)
+plr.Character.HumanoidRootPart.CFrame = GetPlayer(Target).Character.HumanoidRootPart.CFrame * CFrame.new(-1, 0, 1)
+ClickTool("Cure")
 task.wait()
 end
-task.wait(0.1)
-plr.Character.HumanoidRootPart.CFrame = savedcf
 end)
 end
 
