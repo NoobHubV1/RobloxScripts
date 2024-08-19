@@ -185,6 +185,8 @@ plr.Character.HumanoidRootPart.CFrame = GetPlayer(Target).Character.HumanoidRoot
 ClickTool("Virus")
 task.wait()
 end
+task.wait(1)
+plr.Character.HumanoidRootPart.CFrame = CFrame.new(savedcf)
 end)
 end
 
@@ -287,6 +289,8 @@ plr.Character.HumanoidRootPart.CFrame = GetPlayer(Target).Character.HumanoidRoot
 ClickTool("Cure")
 task.wait()
 end
+task.wait(1)
+plr.Character.HumanoidRootPart.CFrame = CFrame.new(savedcf)
 end)
 end
 
