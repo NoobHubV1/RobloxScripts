@@ -179,7 +179,7 @@ end
 TextButton.MouseButton1Click:Connect(function()
 GiveVirus()
 local Target = TextBox.Text
-for i = 1, 20 do
+for i = 1, 30 do
 plr.Character.Humanoid:EquipTool(plr.Backpack:FindFirstChild("Virus"))
 plr.Character.HumanoidRootPart.CFrame = GetPlayer(Target).Character.HumanoidRootPart.CFrame * CFrame.new(-1, 0, 1)
 ClickTool("Virus")
@@ -283,7 +283,7 @@ TextButton.MouseButton1Click:Connect(function()
 GiveCure()
 local savedcf = plr.Character.HumanoidRootPart.Position
 local Target = TextBox.Text
-for i = 1, 20 do
+for i = 1, 30 do
 plr.Character.Humanoid:EquipTool(plr.Backpack:FindFirstChild("Cure"))
 plr.Character.HumanoidRootPart.CFrame = GetPlayer(Target).Character.HumanoidRootPart.CFrame * CFrame.new(-1, 0, 1)
 ClickTool("Cure")
@@ -311,9 +311,6 @@ Section:CreateToggle("Auto Grab Cure", function(val)AutoGrabCure(val)
 end)
 
 Section:CreateButton("Grab All Items", function()GrabAll()
-end)
-
-Section:CreateButton("Virus All", function()VirusAll()
 end)
 
 Section:CreateToggle("Auto Grab All Items", function(val)AutoGrabAll(val)
