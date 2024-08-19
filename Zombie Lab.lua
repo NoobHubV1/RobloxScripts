@@ -181,7 +181,7 @@ GiveVirus()
 local Target = TextBox.Text
 for i = 1, 30 do
 plr.Character.Humanoid:EquipTool(plr.Backpack:FindFirstChild("Virus"))
-plr.Character.HumanoidRootPart.CFrame = GetPlayer(Target).Character.HumanoidRootPart.CFrame * CFrame.new(-1, 0, 1)
+plr.Character.HumanoidRootPart.CFrame = GetPlayer(Target).Character.HumanoidRootPart.CFrame * CFrame.new(-2, 0, 2)
 ClickTool("Virus")
 task.wait()
 end
@@ -285,7 +285,7 @@ local savedcf = plr.Character.HumanoidRootPart.Position
 local Target = TextBox.Text
 for i = 1, 30 do
 plr.Character.Humanoid:EquipTool(plr.Backpack:FindFirstChild("Cure"))
-plr.Character.HumanoidRootPart.CFrame = GetPlayer(Target).Character.HumanoidRootPart.CFrame * CFrame.new(-1, 0, 1)
+plr.Character.HumanoidRootPart.CFrame = GetPlayer(Target).Character.HumanoidRootPart.CFrame * CFrame.new(-2, 0, 2)
 ClickTool("Cure")
 task.wait()
 end
