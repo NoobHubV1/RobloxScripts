@@ -165,7 +165,11 @@ local function GetPlayer(String)
 end
 
 local function GiveVirus()
+	if game.Players.LocalPlayer.Character:FindFirstChild("Virus") or game.Players.LocalPlayer.Backpack:FindFirstChild("Virus") then
+        -- nothing
+	else
         game.ReplicatedStorage.Events.GiveVirus:FireServer()
+	end
 end
 
 function ClickTool(Tool)
@@ -268,7 +272,11 @@ local function GetPlayer(String)
 end
 
 local function GiveCure()
+	if game.Players.LocalPlayer.Character:FindFirstChild("Cure") or game.Players.LocalPlayer.Backpack:FindFirstChild("Cure") then
+        -- nothing
+	else
         game.ReplicatedStorage.Events.GiveCure:FireServer()
+	end
 end
 
 function ClickTool(Tool)
