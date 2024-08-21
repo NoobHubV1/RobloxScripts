@@ -87,7 +87,7 @@ local AutoKill = function(State)
         end
 end
 
-local function KillPlayer()
+local function ChangeTeamPlayer()
         -- Gui to Lua
 -- Version: 3.2
 
@@ -258,7 +258,7 @@ plr.Character.HumanoidRootPart.CFrame = Player.Character.HumanoidRootPart.CFrame
 ClickTool("Virus")
 task.wait()
 end
-Notif("(Succes) Virus "..Player.Name)
+Notif("(Success) Virus "..Player.Name)
 else
 Notif("(Error) No Player Found",3)
 end
@@ -271,7 +271,7 @@ plr.Character.HumanoidRootPart.CFrame = Player.Character.HumanoidRootPart.CFrame
 ClickTool("Cure")
 task.wait()
 end
-Notif("(Succes) Cure "..Player.Name)
+Notif("(Success) Cure "..Player.Name)
 else
 Notif("(Error) No Player Found",3)
 end
@@ -309,5 +309,5 @@ end)
 
 local Section = Window:NewSection("Others")
 
-Section:CreateButton("Kill Player", function()KillPlayer()
+Section:CreateButton("Cure/Virus Player", function()ChangeTeamPlayer()
 end)
