@@ -252,7 +252,7 @@ else
 if Player.Team == game.Teams.Human then
 if Player ~= nil then
 GiveItem("Virus")
-for i = 1, 20 do
+for i = 1, 23 do
 plr.Character.Humanoid:EquipTool(plr.Backpack:FindFirstChild("Virus"))
 plr.Character.HumanoidRootPart.CFrame = Player.Character.HumanoidRootPart.CFrame * CFrame.new(-2, 0, 2)
 ClickTool("Virus")
@@ -265,7 +265,7 @@ end
 elseif Player.Team == game.Teams.Zombie then
 if Player ~= nil then
 GiveItem("Cure")
-for i = 1, 20 do
+for i = 1, 23 do
 plr.Character.Humanoid:EquipTool(plr.Backpack:FindFirstChild("Cure"))
 plr.Character.HumanoidRootPart.CFrame = Player.Character.HumanoidRootPart.CFrame * CFrame.new(-2, 0, 2)
 ClickTool("Cure")
