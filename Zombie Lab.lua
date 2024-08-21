@@ -258,7 +258,7 @@ plr.Character.HumanoidRootPart.CFrame = Player.Character.HumanoidRootPart.CFrame
 ClickTool("Virus")
 task.wait()
 end
-Notif("(Success) Virus "..Player.DisplayName)
+Notif("(Success) Virus "..Player.DisplayName,3)
 else
 Notif("(Error) No Player Found",3)
 end
@@ -271,7 +271,7 @@ plr.Character.HumanoidRootPart.CFrame = Player.Character.HumanoidRootPart.CFrame
 ClickTool("Cure")
 task.wait()
 end
-Notif("(Success) Cure "..Player.DisplayName)
+Notif("(Success) Cure "..Player.DisplayName,3)
 else
 Notif("(Error) No Player Found",3)
 end
