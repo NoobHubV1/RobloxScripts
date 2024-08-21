@@ -118,7 +118,7 @@ TextLabel.BackgroundTransparency = 1.000
 TextLabel.Position = UDim2.new(0.157534242, 0, 0, 0)
 TextLabel.Size = UDim2.new(0, 200, 0, 50)
 TextLabel.Font = Enum.Font.SourceSans
-TextLabel.Text = "Kill Player script"
+TextLabel.Text = "Virus And Cure Player script"
 TextLabel.TextColor3 = Color3.fromRGB(0, 0, 0)
 TextLabel.TextScaled = true
 TextLabel.TextSize = 14.000
@@ -141,13 +141,69 @@ TextButton.BackgroundColor3 = Color3.fromRGB(170, 0, 255)
 TextButton.Position = UDim2.new(0.311643839, 0, 0.713450253, 0)
 TextButton.Size = UDim2.new(0, 109, 0, 39)
 TextButton.Font = Enum.Font.SourceSans
-TextButton.Text = "KILL"
+TextButton.Text = "Virus/Cure"
 TextButton.TextColor3 = Color3.fromRGB(0, 0, 0)
 TextButton.TextScaled = true
 TextButton.TextSize = 14.000
 TextButton.TextWrapped = true
 
 local plr = game.Players.LocalPlayer
+
+function Tween(Obj, Prop, New, Time)
+	if not Time then
+		Time = .5
+	end
+	local TweenService = game:GetService("TweenService")
+	local info = TweenInfo.new(
+		Time, 
+		Enum.EasingStyle.Quart, 
+		Enum.EasingDirection.Out, 
+		0, 
+		false,
+		0
+	)
+	local propertyTable = {
+		[Prop] = New,
+	}
+
+	TweenService:Create(Obj, info, propertyTable):Play()
+end
+
+function Notif(Text,Dur)
+	task.spawn(function()
+		if not Dur then
+			Dur = 1.5
+		end
+		local Notif = Instance.new("ScreenGui")
+		local Frame_1 = Instance.new("Frame")
+		local TextLabel = Instance.new("TextLabel")
+		Notif.Parent = (game:GetService("CoreGui") or gethui())
+		Notif.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+		Frame_1.Parent = Notif
+		Frame_1.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+		Frame_1.BackgroundTransparency=1
+		Frame_1.BorderSizePixel = 0
+		Frame_1.Position = UDim2.new(0, 0, 0.0500000007, 0)
+		Frame_1.Size = UDim2.new(1, 0, 0.100000001, 0)
+		TextLabel.Parent = Frame_1
+		TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+		TextLabel.BackgroundTransparency = 1.000
+		TextLabel.TextTransparency =1
+		TextLabel.Size = UDim2.new(1, 0, 1, 0)
+		TextLabel.Font = Enum.Font.Highway
+		TextLabel.Text = Text or "Text not found"
+		TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+		TextLabel.TextSize = 21.000
+		Tween(Frame_1,"BackgroundTransparency",0.350,.5)
+		Tween(TextLabel,"TextTransparency",0,.5)
+		wait(Dur+.7)
+		Tween(Frame_1,"BackgroundTransparency",1,.5)
+		Tween(TextLabel,"TextTransparency",1,.5)
+		wait(.7)
+		Notif:Destroy()
+	end)
+	return
+end
 
 function GetPlayer(String)
         if not String then return end
@@ -189,22 +245,36 @@ end
 end
 
 TextButton.MouseButton1Click:Connect(function()
-local Target = TextBox.Text
-if GetPlayer(Target).Team == game.Teams.Human then
+local Player = GetPlayer(TextBox.Text)
+if Player.Character.Humanoid.Health == 0 then
+-- nothing
+else
+if Player.Team == game.Teams.Human then
+if Player ~= nil then
 GiveItem("Virus")
-for i = 1, 25 do
+for i = 1, 20 do
 plr.Character.Humanoid:EquipTool(plr.Backpack:FindFirstChild("Virus"))
-plr.Character.HumanoidRootPart.CFrame = GetPlayer(Target).Character.HumanoidRootPart.CFrame * CFrame.new(-2, 0, 2)
+plr.Character.HumanoidRootPart.CFrame = Player.Character.HumanoidRootPart.CFrame * CFrame.new(-2, 0, 2)
 ClickTool("Virus")
 task.wait()
 end
-elseif GetPlayer(Target).Team == game.Teams.Zombie then
+Notif("(Succes) Virus "..Player.Name)
+else
+Notif("(Error) No Player Found",3)
+end
+elseif Player.Team == game.Teams.Zombie then
+if Player ~= nil then
 GiveItem("Cure")
-for i = 1, 25 do
+for i = 1, 20 do
 plr.Character.Humanoid:EquipTool(plr.Backpack:FindFirstChild("Cure"))
-plr.Character.HumanoidRootPart.CFrame = GetPlayer(Target).Character.HumanoidRootPart.CFrame * CFrame.new(-2, 0, 2)
+plr.Character.HumanoidRootPart.CFrame = Player.Character.HumanoidRootPart.CFrame * CFrame.new(-2, 0, 2)
 ClickTool("Cure")
 task.wait()
+end
+Notif("(Succes) Cure "..Player.Name)
+else
+Notif("(Error) No Player Found",3)
+end
 end
 end
 end)
