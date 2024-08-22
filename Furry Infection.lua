@@ -174,7 +174,7 @@ end
 end
 end)
 end
-wait()
+task.wait()
 end
 end)
 end
@@ -222,7 +222,7 @@ end
 end
 end)
 end
-wait()
+task.wait()
 end
 end)
 end
