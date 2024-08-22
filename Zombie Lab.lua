@@ -237,17 +237,13 @@ local function GiveItem(Item)
 end
 
 function ClickTool(Tool)
-	for i, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-if v.ToolTip == Tool then v.Parent = game.Players.LocalPlayer.Character end
-if game.Players.LocalPlayer.Character:FindFirstChildWhichIsA("Tool") then game.Players.LocalPlayer.Character:FindFirstChildWhichIsA("Tool"):Activate()
-end
-	end
+	plr.Character:FindFirstChild(Tool):Activate()
 end
 
 TextButton.MouseButton1Click:Connect(function()
 local Player = GetPlayer(TextBox.Text)
 if Player.Character.Humanoid.Health == 0 then
--- nothing
+Notif("(Error) Player Dead")
 else
 if Player.Team == game.Teams.Human then
 if Player ~= nil then
