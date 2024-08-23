@@ -205,19 +205,17 @@ function Notif(Text,Dur)
 	return
 end
 
-function GetPlayer(String)
-        if not String then return end
-	local Yes = {}
-	for _, Player in ipairs(game.Players:GetPlayers()) do
-		if string.lower(Player.Name):match(string.lower(String)) or string.lower(Player.DisplayName):match(string.lower(String)) then
-			table.insert(Yes, Player)
+function GetPlayer(Player)
+        local function findPlayer(stringg)
+	        if (stringg == ("me")) then
+			return lp
+		else
+			for _, v in pairs(game.Players:GetPlayers()) do
+				if (stringg:lower() == (v.Name:lower()):sub(1, #stringg)) or (stringg:lower() == (v.DisplayName:lower()):sub(1, #stringg)) then return v end
+			end
 		end
 	end
-	if #Yes > 0 then
-		return Yes[1]
-	elseif #Yes < 1 then
-		return nil
-	end
+	return findPlayer(Player)
 end
 
 local function GiveItem(Item)
@@ -240,6 +238,14 @@ function ClickTool(Tool)
 	plr.Character:FindFirstChild(Tool):Activate()
 end
 
+local function EquipTool(Tool)
+	plr.Character.Humanoid:EquipTool(plr.Backpack:FindFirstChild(Tool))
+end
+
+function Goto(Player)
+	plr.Character.HumanoidRootPart.CFrame = Player.Character.HumanoidRootPart.CFrame * CFrame.new(-2, 0, 2)
+end
+
 TextButton.MouseButton1Click:Connect(function()
 local Player = GetPlayer(TextBox.Text)
 if Player.Character.Humanoid.Health == 0 then
@@ -248,9 +254,10 @@ else
 if Player.Team == game.Teams.Human then
 if Player ~= nil then
 GiveItem("Virus")
+task.wait(0.25)
 for i = 1, 23 do
-plr.Character.Humanoid:EquipTool(plr.Backpack:FindFirstChild("Virus"))
-plr.Character.HumanoidRootPart.CFrame = Player.Character.HumanoidRootPart.CFrame * CFrame.new(-2, 0, 2)
+EquipTool("Virus")
+Goto(Player)
 ClickTool("Virus")
 task.wait()
 end
@@ -261,9 +268,10 @@ end
 elseif Player.Team == game.Teams.Zombie then
 if Player ~= nil then
 GiveItem("Cure")
+task.wait(0.25)
 for i = 1, 23 do
-plr.Character.Humanoid:EquipTool(plr.Backpack:FindFirstChild("Cure"))
-plr.Character.HumanoidRootPart.CFrame = Player.Character.HumanoidRootPart.CFrame * CFrame.new(-2, 0, 2)
+EquipTool("Cure")
+Goto(Player)
 ClickTool("Cure")
 task.wait()
 end
