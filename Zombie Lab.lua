@@ -257,7 +257,7 @@ else
 if Player.Team == game.Teams.Human then
 if Player ~= nil then
 GiveItem("Virus")
-for i = 1, 30 do
+for i = 1, 29 do
 EquipTool("Virus")
 Goto(Player)
 ClickTool("Virus")
@@ -270,7 +270,7 @@ end
 elseif Player.Team == game.Teams.Zombie then
 if Player ~= nil then
 GiveItem("Cure")
-for i = 1, 23 do
+for i = 1, 29 do
 EquipTool("Cure")
 Goto(Player)
 ClickTool("Cure")
