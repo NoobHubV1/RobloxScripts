@@ -104,6 +104,9 @@ for i,v in pairs(workspace.LoadedMap:GetDescendants()) do
 end
 
 local Notify = function(Name, Content, Time)
+    if not Time then
+	Time = 5
+    end
     OrionLib:MakeNotification({
             Name = Name,
             Content = Content,
@@ -117,7 +120,6 @@ local AllTasks = function()
         game.ReplicatedStorage.Remotes.InvokeTaskCompleted:InvokeServer(i)
     end
 end
-
 local function LoadHttps(Https)
 	loadstring(game:HttpGet(Https))()
 end
@@ -219,9 +221,14 @@ shootersection:AddTextbox({
 shootersection:AddButton({
     Name = "kill him",
     Callback = function()
-		killplayer(library.Flags["goober"])
-	        wait(.10)
-                Notify("Dingus", "Kill Execute", 5)
+	local Player = library.Flags["goober"]
+	if GetPlayer(Player) == "all" or GetPlayer(Player) == "others" or GetPlayer(Player) == "@" or GetPlayer(Player) == "@a" then
+	killplayer("all")
+	Notif("Dingus", "(Success) Killed all", 5)
+	else
+	killplayer(Player)
+        Notify("Dingus", "(Success) Killed "..GetPlayer(Player).DisplayName, 5)
+	end
     end
 })
 
