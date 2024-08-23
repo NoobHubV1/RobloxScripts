@@ -235,7 +235,10 @@ local function GiveItem(Item)
 end
 
 function ClickTool(Tool)
-	plr.Character:FindFirstChild(Tool):Activate()
+	for i, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+if v.ToolTip == Tool then v.Parent = game.Players.LocalPlayer.Character end
+if game.Players.LocalPlayer.Character:FindFirstChildWhichIsA("Tool") then game.Players.LocalPlayer.Character:FindFirstChildWhichIsA("Tool"):Activate() end
+	end
 end
 
 local function EquipTool(Tool)
@@ -254,8 +257,7 @@ else
 if Player.Team == game.Teams.Human then
 if Player ~= nil then
 GiveItem("Virus")
-task.wait(0.25)
-for i = 1, 23 do
+for i = 1, 30 do
 EquipTool("Virus")
 Goto(Player)
 ClickTool("Virus")
@@ -268,7 +270,6 @@ end
 elseif Player.Team == game.Teams.Zombie then
 if Player ~= nil then
 GiveItem("Cure")
-task.wait(0.25)
 for i = 1, 23 do
 EquipTool("Cure")
 Goto(Player)
