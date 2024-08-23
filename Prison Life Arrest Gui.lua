@@ -85,7 +85,7 @@ end
 TextButton.MouseButton1Click:Connect(function()
 local Target = TextBox.Text
 local savedcf = plr.Character.HumanoidRootPart.Position
-for i = 1, 20 do
+for i = 1, 35 do
 Goto(GetPlayer(Target))
 Arrest(GetPlayer(Target))
 task.wait()
