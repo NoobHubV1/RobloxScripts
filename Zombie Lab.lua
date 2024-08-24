@@ -207,12 +207,8 @@ end
 
 function GetPlayer(Player)
         local function findPlayer(stringg)
-	        if (stringg == ("me")) then
-			return lp
-		else
-			for _, v in pairs(game.Players:GetPlayers()) do
-				if (stringg:lower() == (v.Name:lower()):sub(1, #stringg)) or (stringg:lower() == (v.DisplayName:lower()):sub(1, #stringg)) then return v end
-			end
+		for _, v in pairs(game.Players:GetPlayers()) do
+			if (stringg:lower() == (v.Name:lower()):sub(1, #stringg)) or (stringg:lower() == (v.DisplayName:lower()):sub(1, #stringg)) then return v end
 		end
 	end
 	return findPlayer(Player)
@@ -246,8 +242,8 @@ function Goto(Player)
 	plr.Character.HumanoidRootPart.CFrame = Player.Character.HumanoidRootPart.CFrame * CFrame.new(-2, 0, 2)
 end
 
-TextButton.MouseButton1Click:Connect(function()
-local Player = GetPlayer(TextBox.Text)
+local function ChangeTeam(Player)
+	local Player = GetPlayer(Player)
 if Player.Character.Humanoid.Health == 0 then
 Notif("(Error) Player Dead")
 else
@@ -280,6 +276,21 @@ else
 Notif("(Error) No Player Found",3)
 end
 end
+end
+end
+
+TextButton.MouseButton1Click:Connect(function()
+local Player = TextBox.Text
+if Player == "me" then
+if plr.Team == game.Teams.Human then
+GiveItem("Virus")
+Notif("(Success) Virus "..plr.DisplayName)
+elseif plr.Team == game.Teams.Zombie then
+GiveItem("Cure")
+Notif("(Success) Cure "..plr.DisplayName)
+end
+else
+ChangeTeam(Player)
 end
 end)
 end
