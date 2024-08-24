@@ -23,7 +23,7 @@ local function Tween(Obj, Prop, New, Time)
 	TweenService:Create(Obj, info, propertyTable):Play()
 end
 
-local function Notify(Text,Dur)
+local function Notif(Text,Dur)
 	task.spawn(function()
 		if not Dur then
 			Dur = 1.5
