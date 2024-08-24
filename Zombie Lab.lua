@@ -254,8 +254,8 @@ else
 if Player.Team == game.Teams.Human then
 if Player ~= nil then
 GiveItem("Virus")
-task.wait(0.2)
-for i = 1, 23 do
+task.wait(0.3)
+for i = 1, 25 do
 EquipTool("Virus")
 Goto(Player)
 ClickTool("Virus")
@@ -268,8 +268,8 @@ end
 elseif Player.Team == game.Teams.Zombie then
 if Player ~= nil then
 GiveItem("Cure")
-task.wait(0.2)
-for i = 1, 23 do
+task.wait(0.3)
+for i = 1, 25 do
 EquipTool("Cure")
 Goto(Player)
 ClickTool("Cure")
