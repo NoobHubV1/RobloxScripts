@@ -89,6 +89,7 @@ end
 
 local function LoadHttps(Https)
 	loadstring(game:HttpGet(Https))()
+end
 
 local function ChangeTeamPlayer()
         LoadHttps("https://raw.githubusercontent.com/NoobHubV1/FE/main/Zombie%20Lab%20Change%20Team.lua")
