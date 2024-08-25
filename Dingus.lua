@@ -84,9 +84,15 @@ local function killplayer(name)
 	    if v ~= game.Players.LocalPlayer then
                game:GetService("ReplicatedStorage").Remotes.KillCharacter:InvokeServer(v.Character)
 	    end
-        end
+	end
+	Notify("Dingus", "(Success) Killed All", 5)
     else
-        game:GetService("ReplicatedStorage").Remotes.KillCharacter:InvokeServer(GetPlayer(name).Character)
+	local Player = GetPlayer(name)
+	for i, v in pairs(Players:GetPlayers()) do
+	    if v == Player then
+	       game:GetService("ReplicatedStorage").Remotes.KillCharacter:InvokeServer(v.Character)
+	    end
+	end
     end
 end
 
@@ -221,14 +227,9 @@ shootersection:AddTextbox({
 shootersection:AddButton({
     Name = "kill him",
     Callback = function()
-	local Player = library.Flags["goober"]
-	if GetPlayer(Player) == "all" or GetPlayer(Player) == "others" or GetPlayer(Player) == "@" or GetPlayer(Player) == "@a" then
-	killplayer("all")
-	Notif("Dingus", "(Success) Killed all", 5)
-	else
-	killplayer(Player)
-        Notify("Dingus", "(Success) Killed "..GetPlayer(Player).DisplayName, 5)
-	end
+	local Target = library.Flags["goober"]
+	killplayer(Target)
+	Notify("Dingus", "(Success) Killed "..GetPlayer(Target).DisplayName, 5)
     end
 })
 
@@ -241,4 +242,4 @@ hidersection:AddButton({
     end
 })
 	
-Notify("NoobHubV1 Hub", "Loaded Script!", 6)
+Notify("Dingus", "Script Loaded!", 7)
