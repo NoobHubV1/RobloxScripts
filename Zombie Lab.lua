@@ -149,8 +149,20 @@ local function LoadHttps(Https)
 	loadstring(game:HttpGet(Https))()
 end
 
-local function ChangeTeamPlayer()
-        LoadHttps("https://raw.githubusercontent.com/NoobHubV1/FE/main/Zombie%20Lab%20Change%20Team.lua")
+local function ChangeTeamBring()
+        LoadHttps("https://raw.githubusercontent.com/NoobHubV1/FE/main/Zombie%20Lab%20Change%20Team%20(Bring%20Plr).lua")
+end
+
+local function ChangeTeamGoto()
+	LoadHttps("https://raw.githubusercontent.com/NoobHubV1/FE/main/Zombie%20Lab%20Change%20Team%20(Goto%20Plr).lua")
+end
+
+local SelectedMode = function(Mode)
+	if Mode == "Bring" then
+		ChangeTeamBring()
+	elseif Mode == "Goto" then
+		ChangeTeamGoto()
+	end
 end
 
 local Window = Library:NewWindow("NoobHubV1 Hub")
@@ -182,7 +194,10 @@ end)
 
 local Section = Window:NewSection("Others")
 
-Section:CreateButton("Cure/Virus Player", function()ChangeTeamPlayer()
+Section:CreateDropdown("Mode", {"Bring","Goto"}, 1, function(Value)Arg2 = Value
+end)
+
+Section:CreateButton("Cure/Virus Player", function()SelectedMode(Arg2)
 end)
 
 Notif("(Zombie Lab) Script Loaded!",5)
