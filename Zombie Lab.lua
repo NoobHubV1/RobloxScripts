@@ -165,6 +165,224 @@ local SelectedMode = function(Mode)
 	end
 end
 
+local function minigun()
+	local aux = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Upbolt/Hydroxide/revision/ohaux.lua"))()
+	
+		local scriptPath = game:GetService("Players").LocalPlayer.Backpack.Pistol.GunScript_Local
+		local closureName = "Unnamed function"
+		local upvalueIndex = 6
+		local closureConstants = {
+			[1] = "script",
+			[3] = "Parent",
+			[4] = "Stop",
+			[5] = "workspace",
+			[6] = workspace,
+			[7] = "CurrentCamera"
+		}
+	
+		local closure = aux.searchClosure(scriptPath, closureName, upvalueIndex, closureConstants)
+		local value = true
+		local elementIndex = "MinigunEnabled"
+	
+		debug.getupvalue(closure, upvalueIndex)[elementIndex] = value
+end
+
+local function Damage()
+	local aux = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Upbolt/Hydroxide/revision/ohaux.lua"))()
+	
+		local scriptPath = game:GetService("Players").LocalPlayer.Backpack.Pistol.GunScript_Local
+		local closureName = "Unnamed function"
+		local upvalueIndex = 6
+		local closureConstants = {
+			[1] = "script",
+			[3] = "Parent",
+			[4] = "Stop",
+			[5] = "workspace",
+			[6] = workspace,
+			[7] = "CurrentCamera"
+		}
+	
+		local closure = aux.searchClosure(scriptPath, closureName, upvalueIndex, closureConstants)
+		local value = math.huge
+		local elementIndex = "BaseDamage"
+	
+		debug.getupvalue(closure, upvalueIndex)[elementIndex] = value
+		
+		local aux = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Upbolt/Hydroxide/revision/ohaux.lua"))()
+	
+		local scriptPath = game:GetService("Players").LocalPlayer.Backpack.Pistol.GunScript_Local
+		local closureName = "Unnamed function"
+		local upvalueIndex = 6
+		local closureConstants = {
+			[1] = "script",
+			[3] = "Parent",
+			[4] = "Stop",
+			[5] = "workspace",
+			[6] = workspace,
+			[7] = "CurrentCamera"
+		}
+	
+		local closure = aux.searchClosure(scriptPath, closureName, upvalueIndex, closureConstants)
+		local value = math.huge
+		local elementIndex = "HeadshotDamageMultiplier"
+	
+		debug.getupvalue(closure, upvalueIndex)[elementIndex] = value
+end
+
+local function firerate()
+	local aux = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Upbolt/Hydroxide/revision/ohaux.lua"))()
+	
+		local scriptPath = game:GetService("Players").LocalPlayer.Backpack.Pistol.GunScript_Local
+		local closureName = "Unnamed function"
+		local upvalueIndex = 6
+		local closureConstants = {
+			[1] = "script",
+			[3] = "Parent",
+			[4] = "Stop",
+			[5] = "workspace",
+			[6] = workspace,
+			[7] = "CurrentCamera"
+		}
+	
+		local closure = aux.searchClosure(scriptPath, closureName, upvalueIndex, closureConstants)
+		local value = 0
+		local elementIndex = "FireRate"
+	
+		debug.getupvalue(closure, upvalueIndex)[elementIndex] = value
+end
+
+local function infammo()
+	local aux = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Upbolt/Hydroxide/revision/ohaux.lua"))()
+	
+		local scriptPath = game:GetService("Players").LocalPlayer.Backpack.Pistol.GunScript_Local
+		local closureName = "Unnamed function"
+		local upvalueIndex = 6
+		local closureConstants = {
+			[1] = "script",
+			[3] = "Parent",
+			[4] = "Stop",
+			[5] = "workspace",
+			[6] = workspace,
+			[7] = "CurrentCamera"
+		}
+	
+		local closure = aux.searchClosure(scriptPath, closureName, upvalueIndex, closureConstants)
+		local value = 9e9
+		local elementIndex = "AmmoPerClip"
+	
+		debug.getupvalue(closure, upvalueIndex)[elementIndex] = value
+end
+
+local function shotgun()
+        local aux = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Upbolt/Hydroxide/revision/ohaux.lua"))()
+	
+		local scriptPath = game:GetService("Players").LocalPlayer.Backpack.Pistol.GunScript_Local
+		local closureName = "Unnamed function"
+		local upvalueIndex = 6
+		local closureConstants = {
+			[1] = "script",
+			[3] = "Parent",
+			[4] = "Stop",
+			[5] = "workspace",
+			[6] = workspace,
+			[7] = "CurrentCamera"
+		}
+	
+		local closure = aux.searchClosure(scriptPath, closureName, upvalueIndex, closureConstants)
+		local value = true
+		local elementIndex = "ShotgunEnabled"
+	
+		debug.getupvalue(closure, upvalueIndex)[elementIndex] = value
+end
+
+local function autofire()
+	local aux = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Upbolt/Hydroxide/revision/ohaux.lua"))()
+	
+		local scriptPath = game:GetService("Players").LocalPlayer.Backpack.Pistol.GunScript_Local
+		local closureName = "Unnamed function"
+		local upvalueIndex = 6
+		local closureConstants = {
+			[1] = "script",
+			[3] = "Parent",
+			[4] = "Stop",
+			[5] = "workspace",
+			[6] = workspace,
+			[7] = "CurrentCamera"
+		}
+	
+		local closure = aux.searchClosure(scriptPath, closureName, upvalueIndex, closureConstants)
+		local value = true
+		local elementIndex = "Auto"
+	
+		debug.getupvalue(closure, upvalueIndex)[elementIndex] = value
+end
+
+local function reloadtime()
+	local aux = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Upbolt/Hydroxide/revision/ohaux.lua"))()
+	
+		local scriptPath = game:GetService("Players").LocalPlayer.Backpack.Pistol.GunScript_Local
+		local closureName = "Unnamed function"
+		local upvalueIndex = 7
+		local closureConstants = {
+			[1] = "Health",
+			[2] = "ChargedShotEnabled",
+			[3] = "ChargeSound",
+			[4] = "FindFirstChild",
+			[5] = "Play",
+			[6] = "wait"
+		}
+	
+		local closure = aux.searchClosure(scriptPath, closureName, upvalueIndex, closureConstants)
+		local value = 0
+		local elementIndex = "ReloadTime"
+	
+		debug.getupvalue(closure, upvalueIndex)[elementIndex] = value
+		
+		
+		
+		local aux = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Upbolt/Hydroxide/revision/ohaux.lua"))()
+	
+		local scriptPath = game:GetService("Players").LocalPlayer.Backpack.Pistol.GunScript_Local
+		local closureName = "Unnamed function"
+		local upvalueIndex = 7
+		local closureConstants = {
+			[1] = "Health",
+			[2] = "ChargedShotEnabled",
+			[3] = "ChargeSound",
+			[4] = "FindFirstChild",
+			[5] = "Play",
+			[6] = "wait"
+		}
+	
+		local closure = aux.searchClosure(scriptPath, closureName, upvalueIndex, closureConstants)
+		local value = math.huge
+		local elementIndex = "ReloadAnimationSpeed"
+	
+		debug.getupvalue(closure, upvalueIndex)[elementIndex] = value
+end
+
+local function Spread()
+	local aux = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Upbolt/Hydroxide/revision/ohaux.lua"))()
+	
+		local scriptPath = game:GetService("Players").LocalPlayer.Backpack.Pistol.GunScript_Local
+		local closureName = "Unnamed function"
+		local upvalueIndex = 3
+		local closureConstants = {
+			[1] = "CanSnipe",
+			[2] = "PlayerGui",
+			[3] = "ContextButtonFrame",
+			[4] = "ReloadButton",
+			[5] = "Visible",
+			[6] = "UpdateGUI"
+		}
+	
+		local closure = aux.searchClosure(scriptPath, closureName, upvalueIndex, closureConstants)
+		local value = 0
+		local elementIndex = "Spread"
+	
+		debug.getupvalue(closure, upvalueIndex)[elementIndex] = value
+end
+
 local Window = Library:NewWindow("NoobHubV1 Hub")
 
 local Section = Window:NewSection("Main")
@@ -186,10 +404,36 @@ end)
 
 Section:CreateToggle("Auto Grab All Items", function(val)AutoGrabAll(val)
 end)
-
+ 
 local Section = Window:NewSection("Zombie")
 
 Section:CreateToggle("Auto Kill Zombies", function(Value)AutoKill(Value)
+end)
+
+local Section = Window:NewSection("Gun Mods")
+
+Section:CreateButton("minigun", function()minigun()
+end)
+
+Section:CreateButton("Damage", function()Damage()
+end)
+
+Section:CreateButton("firerate", function()firerate()
+end)
+
+Section:CreateButton("inf ammo", function()infammo()
+end)
+
+Section:CreateButton("shot gun", function()shotgun()
+end)
+
+Section:CreateButton("auto fire", function()autofire()
+end)
+
+Section:CreateButton("reload time", function()reloadtime()
+end)
+
+Section:CreateButton("Spread", function()Spread()
 end)
 
 local Section = Window:NewSection("Others")
