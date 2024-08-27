@@ -267,7 +267,7 @@ local function infammo()
 		}
 	
 		local closure = aux.searchClosure(scriptPath, closureName, upvalueIndex, closureConstants)
-		local value = 9e9
+		local value = math.huge
 		local elementIndex = "AmmoPerClip"
 	
 		debug.getupvalue(closure, upvalueIndex)[elementIndex] = value
