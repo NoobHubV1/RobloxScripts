@@ -1,7 +1,3 @@
--- Place Check
-if game.PlaceId ~= 13864667823 then
-	if game.PlaceId == 14775231477 or game.PlaceId == 13864661000 then
-
 local Library = loadstring(game:HttpGetAsync(("https://github.com/bloodball/-back-ups-for-libs/raw/main/wizard")))()
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer

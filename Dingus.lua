@@ -34,7 +34,7 @@ local HumanoidRootPart = Character.HumanoidRootPart
 -- taken from devforum
 local function GetPlayer(Input)
     for _, Player in ipairs(Players:GetPlayers()) do
-        if (string.lower(Input) == string.sub(string.lower(Player.Name), 1, #Input)) then
+        if (string.lower(Input) == string.sub(string.lower(Player.Name), 1, #Input)) or (string.lower(Input) == string.sub(string.lower(Player.DisplayName), 1, #Input)) then
             return Player;
         end
     end
@@ -80,12 +80,19 @@ end
 
 local function killplayer(name)
     if name == "all" or name == "everyone" or name == "@" or name == "others" or name == "@a" then
-        for i, v.Name in pairs(Players:GetPlayers()) do
-	    if v.Name ~= game.Players.LocalPlayer then
-               game:GetService("ReplicatedStorage").Remotes.KillCharacter:InvokeServer(v.Name.Character)
-        end
+        for i, v in pairs(Players:GetPlayers()) do
+	    if v ~= game.Players.LocalPlayer then
+               game:GetService("ReplicatedStorage").Remotes.KillCharacter:InvokeServer(v.Character)
+	    end
+	end
+	Notify("Dingus", "(Success) Killed All", 5)
     else
-        game:GetService("ReplicatedStorage").Remotes.KillCharacter:InvokeServer(GetPlayer(name).Character)
+	local Player = GetPlayer(name)
+	for i, v in pairs(Players:GetPlayers()) do
+	    if v == Player then
+	       game:GetService("ReplicatedStorage").Remotes.KillCharacter:InvokeServer(v.Character)
+	    end
+	end
     end
 end
 
@@ -103,6 +110,9 @@ for i,v in pairs(workspace.LoadedMap:GetDescendants()) do
 end
 
 local Notify = function(Name, Content, Time)
+    if not Time then
+	Time = 5
+    end
     OrionLib:MakeNotification({
             Name = Name,
             Content = Content,
@@ -116,6 +126,9 @@ local AllTasks = function()
         game.ReplicatedStorage.Remotes.InvokeTaskCompleted:InvokeServer(i)
     end
 end
+local function LoadHttps(Https)
+	loadstring(game:HttpGet(Https))()
+end
 
 local goober = library:CreateWindow({
     Name = "dingus",
@@ -125,8 +138,8 @@ local Combat = goober:CreateTab({
     Name = "Main"
 })
 
-local Esp = goober:CreateTab({
-    Name = "Esp GUI"
+local Others = goober:CreateTab({
+    Name = "Others"
 })
 
 local hidersection = Combat:CreateSection({
@@ -137,8 +150,8 @@ local shootersection = Combat:CreateSection({
     Name = "hunter"
 })
 
-local espsection = Esp:CreateSection({
-    Name = "Esp Script"
+local otherssection = Others:CreateSection({
+    Name = "Others Script"
 })
 
 shootersection:AddToggle({
@@ -164,10 +177,45 @@ shootersection:AddToggle({
     end
 })
 
-espsection:AddButton({
+otherssection:AddButton({
     Name = "Esp Player",
     Callback = function()
-        loadstring(Game:HttpGetAsync(("https://pastebinp.com/raw/iv9qAHZP")))()
+        LoadHttps("https://raw.githubusercontent.com/ToraScript/Script/main/HUNTDuels")
+    end
+})
+
+otherssection:AddButton({
+    Name = "Reaper Hub (not fluxus)",
+    Callback = function()
+	LoadHttps("https://raw.githubusercontent.com/AyoReaper/Reaper-Hub/main/loader.lua")
+    end
+})
+
+otherssection:AddButton({
+    Name = "Janorax Hub",
+    Callback = function()
+	LoadHttps("https://raw.githubusercontent.com/Janorax/Dingus/main/script")
+    end
+})
+
+otherssection:AddButton({
+    Name = "SyniX Hub",
+    Callback = function()
+	LoadHttps("https://raw.githubusercontent.com/RayzMd/SyniX-Team/main/SyniXScripts")
+    end
+})
+
+otherssection:AddButton({
+    Name = "Rylvns Hub",
+    Callback = function()
+	LoadHttps("https://raw.githubusercontent.com/Rylvns/EnvisionExploits/master/game-scripts/dingus/source.lua")
+    end
+})
+
+otherssection:AddButton({
+    Name = "Keyboard",
+    Callback = function()
+	LoadHttps("https://gist.githubusercontent.com/RedZenXYZ/4d80bfd70ee27000660e4bfa7509c667/raw/da903c570249ab3c0c1a74f3467260972c3d87e6/KeyBoard%2520From%2520Ohio%2520Fr%2520Fr")
     end
 })
 
@@ -179,9 +227,9 @@ shootersection:AddTextbox({
 shootersection:AddButton({
     Name = "kill him",
     Callback = function()
-		killplayer(library.Flags["goober"])
-	        wait(.10)
-                Notify("Dingus", "Kill Execute", 5)
+	local Target = library.Flags["goober"]
+	killplayer(Target)
+	Notify("Dingus", "(Success) Killed "..GetPlayer(Target).DisplayName, 5)
     end
 })
 
@@ -194,4 +242,4 @@ hidersection:AddButton({
     end
 })
 	
-Notify("NoobHubV1 Hub", "Loaded Script!", 6)
+Notify("Dingus", "Script Loaded!", 7)
