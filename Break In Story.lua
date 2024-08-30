@@ -139,23 +139,41 @@ if game.PlaceId ~= 1318971886 then
         local function BefriendCat()
                 RemoteEvents:WaitForChild("Cattery"):FireServer()
         end
+	local function Kill(Player)
+		RemoteEvents:WaitForChild("ToxicDrown"):FireServer(1, Player)
+	end
         local function KillOthersPlayers()
                 for i, v in pairs(game.Players:GetPlayers()) do
-        if v ~= LocalPlayer then
-            RemoteEvents:WaitForChild("ToxicDrown"):FireServer(1, v)
-        end
-    end
+                         if v ~= LocalPlayer then
+                       Kill(v)
+                         end
+                end
         end
         local function KillAllPlayers()
                 for i, v in pairs(game.Players:GetPlayers()) do
-                if v.Name ~= LocalPlayer then
-                    RemoteEvents:WaitForChild("ToxicDrown"):FireServer(1, v)
+                         if v.Name ~= LocalPlayer then
+                            Kill(v)
+		         end
                 end
-            end
         end
         local function IceSlip()
                 RemoteEvents:WaitForChild("IceSlip"):FireServer(LocalPlayer)
         end
+	local function updatePlayerDropdown()
+                local playerNames = {}
+                     for _, otherPlayer in pairs(Players:GetPlayers()) do
+                           table.insert(playerNames, otherPlayer.DisplayName)
+                     end
+                return playerNames
+	end
+	local function getPlayerByName(name)
+                for _, otherPlayer in pairs(Players:GetPlayers()) do
+                      if otherPlayer.DisplayName == name then
+                             return otherPlayer
+                      end
+                end
+        return nil
+	end
         local function Notify(name, content, image, time)
 		OrionLib:MakeNotification({
 			Name = name,
@@ -454,6 +472,20 @@ end)
         local Section = Tab:AddSection({
 		Name = "Kill Players"
 	})
+	Tab:AddDropdown({
+		Name = "Select Player",
+		Default = "",
+	        Options = updatePlayerDropdown(),
+                Callback = function(Player)
+                        SelectedPlayer = Player
+		end
+	})
+	Tab:AddButton({
+		Name = "Kill Player",
+		Callback = function()
+			Kill(getPlayerByName(SelectedPlayer))
+		end	  
+	})
         Tab:AddButton({
 		Name = "Kill Others Players",
 		Callback = function()
@@ -528,6 +560,20 @@ end)
                 end
          })
 
+Players.PlayerAdded:Connect(function()
+	 Tab:UpdateDropdown({
+		Name = "Select Player",
+	        Options = updatePlayerDropdown(),
+         })
+end)
+
+Players.PlayerRemoving:Connect(function()
+	 Tab:UpdateDropdown({
+		Name = "Select Player",
+	        Options = updatePlayerDropdown(),
+         })
+end)
+	
          Notify('Loaded!', "Script Successfully Loaded!\nJoin Our Discord At (https://discord.gg/NoobHubV1) For Support Script, You Execute Script NoobHubV1 Loader", 'rbxassetid://4483345998', 15)
          ScriptLoaded = true
 	 OrionLib:Init()
