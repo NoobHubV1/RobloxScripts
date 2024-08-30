@@ -5,6 +5,7 @@ if game.PlaceId ~= 1701332290 then
 	local ReplicatedStorage = game:GetService("ReplicatedStorage")
 	local NetworkEvents = ReplicatedStorage:WaitForChild("NetworkEvents")
 	local Players = game:GetService("Players")
+	local ScriptLoaded = false
 	local LocalPlayer = Players.LocalPlayer
 
         -- Functions
@@ -30,6 +31,8 @@ if game.PlaceId ~= 1701332290 then
 			end
 	        elseif Name == "me" then
 		        NetworkEvents.RemoteFunction:InvokeServer("HEAL_PLAYER", LocalPlayer, math.huge)
+		else
+			NetworkEvents.RemoteFunction:InvokeServer("HEAL_PLAYER", Name, math.huge)
 		end
 	end
 	local function KillZombies()
@@ -54,6 +57,41 @@ if game.PlaceId ~= 1701332290 then
 	end
 	local LoadHttps = function(Https)
 		spawn(loadstring(Game:HttpGet(Https)))
+	end
+	local function updatePlayerDropdown()
+                local playerNames = {}
+                     for _, otherPlayer in pairs(Players:GetPlayers()) do
+                           table.insert(playerNames, otherPlayer.DisplayName)
+                     end
+                return playerNames
+	end
+	local function getPlayerByName(name)
+                for _, otherPlayer in pairs(Players:GetPlayers()) do
+                      if otherPlayer.DisplayName == name then
+                             return otherPlayer
+                      end
+                end
+        return nil
+	end
+	function U() spawn(function() while getgenv().healme do LoadFuncti(HealPlayer, "me")
+	task.wait()
+	end
+	end)
+	end
+	function C(Player) spawn(function() while getgenv().heal do LoadFuncti(HealPlayer, getPlayerByName(Player))
+	task.wait()
+	end
+	end)
+	end
+	function Y() spawn(function() while getgenv().healothers do LoadFuncti(HealPlayer, "others")
+	task.wait()
+	end
+	end)
+	end
+	function H() spawn(function() while getgenv().healall do LoadFuncti(HealPlayer, "all")
+	task.wait()
+	end
+	end)
 	end
         local function Notify(name, content, image, time)
 		OrionLib:MakeNotification({
@@ -101,8 +139,28 @@ if game.PlaceId ~= 1701332290 then
 		end
 	})
         local Section = Tab:AddSection({
-		Name = "Heal Yourself"
+		Name = "Heal Plr"
 	})
+	Tab:AddDropdown({
+		Name = "Select Player",
+		Default = "",
+	        Options = updatePlayerDropdown(),
+                Callback = function(Value)
+                        SelectedPlayer = Value
+		end
+	})
+	Tab:AddButton({
+		Name = "Heal",
+		Callback = function()
+			LoadFuncti(HealPlayer, getPlayerByName(SelectedPlayer))
+		end
+	})
+	Tab:AddToggle({
+                Name = "Auto Heal",
+                Callback = function(State)
+                        getgenv().heal = State C(SelectedPlayer)
+                end
+        })
         Tab:AddButton({
 		Name = "Heal Yourself",
 		Callback = function()
@@ -110,39 +168,24 @@ if game.PlaceId ~= 1701332290 then
 		end
 	})
         Tab:AddToggle({
-                Name = "Loop Heal Yourself",
+                Name = "Auto Heal Yourself",
                 Callback = function(State)
-                        getgenv().Loop = State
-			   while Loop do
-				   LoadFuncti(HealPlayer, "me")
-			   task.wait()
-			end
+                        getgenv().healme = State U()
                 end
-        })
-	local Section = Tab:AddSection({
-                Name = "Heal Others"
         })
 	Tab:AddButton({
                 Name = "Heal Others",
                 Callback = function()
                         LoadFuncti(HealPlayer, "others")
-			end
                 end
 	})
 	Tab:AddToggle({
-		Name = "Loop Heal Others",
+		Name = "Auto Heal Others",
 		Default = false,
 		Callback = function(State)
-			getgenv().Loop = State
-			   while Loop do
-				   LoadFuncti(HealPlayer, "others")
-			   task.wait()
-			end
+			getgenv().healothers = State Y()
 		end
 	})
-        local Section = Tab:AddSection({
-                Name = "Heal All"
-        })
         Tab:AddButton({
                 Name = "Heal All",
                 Callback = function()
@@ -150,13 +193,9 @@ if game.PlaceId ~= 1701332290 then
                end
          })
          Tab:AddToggle({
-                Name = "Loop Heal All",
+                Name = "Auto Heal All",
                 Callback = function(State)
-                        getgenv().Loop = State
-			   while Loop do
-				   LoadFuncti(HealPlayer, "all")
-			   task.wait()
-			end
+                        getgenv().healall = State H()
                 end
         })
         local Tab = Window:MakeTab({
@@ -243,6 +282,21 @@ end)
                 end
          })
 
-         Notify('Loaded!', "Script Successfully Loaded!\nJoin Our Discord At (https://discord.gg/NoobHubV1) For Support Script, You Execute Script NoobHubV1 Loader", 'rbxassetid://4483345998', 15)
+Players.PlayerAdded:Connect(function()
+	Tab:UpdateDropdown({
+		Name = "Select Player",
+	        Options = updatePlayerDropdown()
+	})
+end)
+
+Players.PlayerRemoving:Connect(function()
+	Tab:UpdateDropdown({
+		Name = "Select Player",
+	        Options = updatePlayerDropdown()
+	})
+end)
+	
+        Notify('Loaded!', "Script Successfully Loaded!\nJoin Our Discord At (https://discord.gg/NoobHubV1) For Support Script, You Execute Script NoobHubV1 Loader", 'rbxassetid://4483345998', 15)
+	ScriptLoaded = true
 	OrionLib:Init()
 end
