@@ -156,7 +156,7 @@ if game.PlaceId ~= 1701332290 then
 		end
 	})
 	Tab:AddToggle({
-                Name = "Auto Heal",
+                Name = "Loop Heal",
                 Callback = function(State)
                         getgenv().heal = State C(SelectedPlayer)
                 end
@@ -168,7 +168,7 @@ if game.PlaceId ~= 1701332290 then
 		end
 	})
         Tab:AddToggle({
-                Name = "Auto Heal Yourself",
+                Name = "Loop Heal Yourself",
                 Callback = function(State)
                         getgenv().healme = State U()
                 end
@@ -180,7 +180,7 @@ if game.PlaceId ~= 1701332290 then
                 end
 	})
 	Tab:AddToggle({
-		Name = "Auto Heal Others",
+		Name = "Loop Heal Others",
 		Default = false,
 		Callback = function(State)
 			getgenv().healothers = State Y()
@@ -193,7 +193,7 @@ if game.PlaceId ~= 1701332290 then
                end
          })
          Tab:AddToggle({
-                Name = "Auto Heal All",
+                Name = "Loop Heal All",
                 Callback = function(State)
                         getgenv().healall = State H()
                 end
