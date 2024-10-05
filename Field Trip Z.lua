@@ -5,35 +5,16 @@ if game.PlaceId ~= 1701332290 then
 	local ReplicatedStorage = game:GetService("ReplicatedStorage")
 	local NetworkEvents = ReplicatedStorage:WaitForChild("NetworkEvents")
 	local Players = game:GetService("Players")
-	local ScriptLoaded = false
+	local ScriptDisabled = false
+	local States = {}
 	local LocalPlayer = Players.LocalPlayer
 
         -- Functions
 	local function GiveItem(Item)
 		NetworkEvents.RemoteFunction:InvokeServer("PICKUP_ITEM", tostring(Item:gsub(" ", "")))
 	end
-	local HealPlayer = function(Name)
-	        if Name == "all" then
-			for i, v in pairs(game.Players:GetPlayers()) do
-                            if v.Name ~= game:GetService("Players").LocalPlayer then
-                    NetworkEvents.RemoteFunction:InvokeServer(
-                        "HEAL_PLAYER",
-                        v,
-                        math.huge
-                    )
-                            end
-		        end
-		elseif Name == "others" then
-			for i, v in pairs(game.Players:GetPlayers()) do
-			    if v ~= game:GetService("Players").LocalPlayer then
-		    NetworkEvents.RemoteFunction:InvokeServer("HEAL_PLAYER", v, math.huge)
-			    end
-			end
-	        elseif Name == "me" then
-		        NetworkEvents.RemoteFunction:InvokeServer("HEAL_PLAYER", LocalPlayer, math.huge)
-		else
-			NetworkEvents.RemoteFunction:InvokeServer("HEAL_PLAYER", Name, math.huge)
-		end
+	local Heal = function(Name)
+		NetworkEvents.RemoteFunction:InvokeServer("HEAL_PLAYER", Name, math.huge)
 	end
 	local function KillZombies()
 		for i, v in pairs(game:GetService("Workspace").NPC:GetChildren()) do
@@ -43,9 +24,6 @@ if game.PlaceId ~= 1701332290 then
                     math.huge
                 )
 		end
-	end
-	local function LoadFuncti(Calling, Functi)
-		Calling(Functi)
 	end
 	local function Noclip(State)
 		LocalPlayer.Character.HumanoidRootPart.CanCollide = State
@@ -139,7 +117,7 @@ if game.PlaceId ~= 1701332290 then
 		end
 	})
         local Section = Tab:AddSection({
-		Name = "Heal Plr"
+		Name = "Heal Player"
 	})
 	Tab:AddDropdown({
 		Name = "Select Player",
@@ -152,50 +130,62 @@ if game.PlaceId ~= 1701332290 then
 	Tab:AddButton({
 		Name = "Heal",
 		Callback = function()
-			LoadFuncti(HealPlayer, getPlayerByName(SelectedPlayer))
+			Heal(getPlayerByName(SelectedPlayer))
 		end
 	})
 	Tab:AddToggle({
                 Name = "Loop Heal",
                 Callback = function(State)
-                        getgenv().heal = State C(SelectedPlayer)
+                        getgenv().loop = State
+			while loop do
+				Heal(getPlayerByName(SelectedPlayer))
+			task.wait()
+			end
                 end
         })
         Tab:AddButton({
 		Name = "Heal Yourself",
 		Callback = function()
-			LoadFuncti(HealPlayer, "me")
+			Heal(LocalPlayer)
 		end
 	})
         Tab:AddToggle({
                 Name = "Loop Heal Yourself",
                 Callback = function(State)
-                        getgenv().healme = State U()
+                        States.loophealme = State
                 end
         })
 	Tab:AddButton({
                 Name = "Heal Others",
                 Callback = function()
-                        LoadFuncti(HealPlayer, "others")
+                        for i,v in pairs(game.Players:GetPlayers()) do
+				if v and v ~= nil and v ~= LocalPlayer then
+					Heal(v)
+				end
+			end
                 end
 	})
 	Tab:AddToggle({
 		Name = "Loop Heal Others",
 		Default = false,
 		Callback = function(State)
-			getgenv().healothers = State Y()
+			States.loophealothers = State
 		end
 	})
         Tab:AddButton({
                 Name = "Heal All",
                 Callback = function()
-                        LoadFuncti(HealPlayer, "all")
+                        for i,v in pairs(game.Players:GetPlayers()) do
+				if v and v ~= nil and v.Name ~= LocalPlayer then
+					Heal(v)
+				end
+			end
                end
          })
          Tab:AddToggle({
                 Name = "Loop Heal All",
                 Callback = function(State)
-                        getgenv().healall = State H()
+                        States.loophealall = State
                 end
         })
         local Tab = Window:MakeTab({
@@ -209,11 +199,7 @@ if game.PlaceId ~= 1701332290 then
         Tab:AddToggle({
                 Name = "Kill Aura",
                 Callback = function(State)
-                        getgenv().Loop = State
-			   while Loop do
-				   LoadFuncti(KillZombies)
-			   task.wait()
-			end
+                        States.autokill = State
                 end
         })
         local Tab = Window:MakeTab({
@@ -227,12 +213,7 @@ if game.PlaceId ~= 1701332290 then
         Tab:AddToggle({
                 Name = "Inf Jump",
                 Callback = function(State)
-                        InfJump = State
-game:GetService("UserInputService").JumpRequest:connect(function()
-	if InfJump then
-		game.Players.LocalPlayer.Character:FindFirstChildOfClass('Humanoid'):ChangeState("Jumping")
- end
-end)
+                        States.InfJump = State
                 end
         })
 	Tab:AddToggle({
@@ -271,14 +252,15 @@ end)
                 end
          })
          local Tab = Window:MakeTab({
-		Name = "Destroy Script",
+		Name = "Unload Script",
 		Icon = "rbxassetid://4483345998",
 		PremiumOnly = false
 	 })
          Tab:AddButton({
-                Name = "Destroy",
+                Name = "Unload Script",
                 Callback = function()
                         OrionLib:Destroy()
+			ScriptDisabled = true
                 end
          })
 
@@ -295,8 +277,43 @@ Players.PlayerRemoving:Connect(function()
 	        Options = updatePlayerDropdown()
 	})
 end)
+
+spawn(function()
+	while wait() do
+		if ScriptDisabled then
+			return
+		end
+		if States.loophealme then
+			Heal(LocalPlayer)
+		end
+		if States.loophealothers then
+			for i,v in pairs(game.Players:GetPlayers()) do
+				if v and v ~= nil and v ~= LocalPlayer then
+					Heal(v)
+				end
+			end
+		end
+		if States.loophealall then
+			for i,v in pairs(game.Players:GetPlayers()) do
+				if v and v ~= nil and v.Name ~= LocalPlayer then
+					Heal(v)
+				end
+			end
+		end
+		if States.autokill then
+			KillZombies()
+		end
+	end
+end)
+
+spawn(function()
+	game:GetService("UserInputService").JumpRequest:Connect(function()
+		if not ScriptDisabled and States.InfJump == true then
+			game.Players.LocalPlayer.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+		end
+	end)
+end)
 	
         Notify('Loaded!', "Script Successfully Loaded!\nJoin Our Discord At (https://discord.gg/NoobHubV1) For Support Script, You Execute Script NoobHubV1 Loader", 'rbxassetid://4483345998', 15)
-	ScriptLoaded = true
 	OrionLib:Init()
 end
