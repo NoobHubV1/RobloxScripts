@@ -8,14 +8,27 @@ local function Loop(State, calling, time)
         end
 end
 
+local GetEmerald = function(Color)
+        local LastP = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Workspace.ChaosEmeralds:FindFirstChild(Color, true).CFrame
+        wait(0.075)
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = LastP
+end
+
 local GetAllEmeralds = function()
-        game.Workspace.ChaosEmeralds.Blue.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-game.Workspace.ChaosEmeralds.Cyan.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-game.Workspace.ChaosEmeralds.Green.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-game.Workspace.ChaosEmeralds.Purple.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-game.Workspace.ChaosEmeralds.Red.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-game.Workspace.ChaosEmeralds.White.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-game.Workspace.ChaosEmeralds.Yellow.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+        GetEmerald("Blue")
+        wait(.15)
+        GetEmerald("Yellow")
+        wait(.15)
+        GetEmerald("Cyan")
+        wait(.15)
+        GetEmerald("Purple")
+        wait(.15)
+        GetEmerald("Green")
+        wait(.15)
+        GetEmerald("White")
+        wait(.15)
+        GetEmerald("Red")
 end
 
 local function GetAllRings()
@@ -24,24 +37,6 @@ if v:IsA('Part') then
 v.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
 end
 end
-end
-
-local GetEmerald = function(Color)
-        if Color == "Blue" then
-                 Workspace.ChaosEmeralds.Blue.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-        elseif Color == "Cyan" then
-                 Workspace.ChaosEmeralds.Cyan.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-        elseif Color == "Green" then
-                 Workspace.ChaosEmeralds.Green.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-        elseif Color == "Purple" then
-                 Workspace.ChaosEmeralds.Purple.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-        elseif Color == "Red" then
-                 Workspace.ChaosEmeralds.Red.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-        elseif Color == "White" then
-                 Workspace.ChaosEmeralds.White.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-        elseif Color == "Yellow" then
-                 Workspace.ChaosEmeralds.Yellow.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-        end
 end
 
 local Window = Library:NewWindow("NoobHubV1 Hub")
