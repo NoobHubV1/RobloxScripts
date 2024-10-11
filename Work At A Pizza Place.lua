@@ -12,8 +12,8 @@ if not (getrawmetatable and getupvalues and setupvalue and (getreg or debug.getr
 	h:Destroy()
 	return
 end
-local settings = {refill_at=0, refill_end=60, deliver_at=24, stay_in_kitchen=true}
-local doCashier,doBoxer,doCook,doSupplier,doDelivery = true,true,true,true,true
+local settings = {refill_at=0, refill_end=60, deliver_at=1, stay_in_kitchen=true}
+local doCashier,doBoxer,doCook,doSupplier,doDelivery = true,true,true,false,true
 if readfile then
 	pcall(function()
 		local new = game:GetService("HttpService"):JSONDecode(readfile("PizzaFarm.txt"))
@@ -532,21 +532,7 @@ local function smoothTP2(cf)
 	workspace.Gravity = oldg
 end
 local function smoothTP(cf)
-    if (cf.p-root.Position).Magnitude > 95 then
-        local btns = workspace.JobButtons:GetChildren()
-        if player:FindFirstChild("House") and player.House.Value then
-            btns[#btns+1] = player.House.Value:FindFirstChild("Marker") 
-        end
-        table.sort(btns,function(a,b) return (a.Position-cf.p).Magnitude < (b.Position-cf.p).Magnitude end)
-        if (btns[1].Position-cf.p).Magnitude < (cf.p-root.Position).Magnitude then
-            game:GetService("ReplicatedStorage").PlayerChannel:FireServer("TeleportToJob", ((btns[1].Name == "Marker") and "House" or btns[1].Name))
-            wait(0.7)
-            if (cf.p-root.Position).Magnitude < 8 then
-                return
-            end
-        end
-    end
-    smoothTP2(cf)
+    root.CFrame = cf
 end
 for _,o in ipairs(workspace.Ovens:GetChildren()) do
 	if ffc(o,"Bottom") then
