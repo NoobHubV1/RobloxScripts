@@ -1,8 +1,7 @@
-game:GetService("StarterGui"):SetCore("SendNotification",{
-                Title = "NoobHubV1 Hub";
-                Text = "Loaded";
-                Duration = 3.5;
-            })
+local msg = Instance.new("Message",workspace)
+msg.Text = "Loaded!"
+wait(1)
+msg:Destroy()
 getupvalues = getupvalues or debug.getupvalues
 setupvalue = setupvalue or debug.setupvalue
 if not (getrawmetatable and getupvalues and setupvalue and (getreg or debug.getregistry)) then
@@ -13,7 +12,8 @@ if not (getrawmetatable and getupvalues and setupvalue and (getreg or debug.getr
 	return
 end
 local settings = {refill_at=0, refill_end=60, deliver_at=1, stay_in_kitchen=true}
-local doCashier,doBoxer,doCook,doSupplier,doDelivery = true,true,true,false,true
+local doCashier,doBoxer,doCook,doSupplier,doDelivery = false,false,false,false,false
+local OrionLib = loadstring(game:HttpGet("https://raw.github.com/NoobHubV1/RobloxScripts/main/OrionLib.lua"))()
 if readfile then
 	pcall(function()
 		local new = game:GetService("HttpService"):JSONDecode(readfile("PizzaFarm.txt"))
@@ -97,7 +97,9 @@ main=Create("Frame",gui,{Name="main", Draggable=true, Active=true, Size=UDim2.ne
 topbar=Create("Frame",main,{Name="topbar", Size=UDim2.new(1,0,0.15,0), BackgroundColor3=Color3.new(0.255,0.255,0.255)})
 closeBtn=Create("TextButton",topbar,{Name="closeBtn", TextWrapped=true, Size=UDim2.new(0.03,0,1,0), TextColor3=Color3.new(1,1,1), Text="X", BackgroundTransparency=1, 
 	Font="GothamSemibold", Position=UDim2.new(0.96,0,0,0), TextSize=14, TextScaled=true, BackgroundColor3=Color3.new(1,1,1)})
-titleLbl=Create("TextLabel",topbar,{Name="titleLbl", TextWrapped=true, Size=UDim2.new(0.5,0,1,0), Text="Pizza Factory", TextSize=14, Font="GothamSemibold", 
+minimumBtn=Create("TextButton",topbar,{Name="minimumBtn", TextWrapped=true, Size=UDim2.new(0.03,0,1,0), TextColor3=Color3.new(1,1,1), Text="=", BackgroundTransparency=1, 
+	Font="GothamSemibold", Position=UDim2.new(0.91,0,0,0), TextSize=14, TextScaled=true, BackgroundColor3=Color3.new(1,1,1)})
+titleLbl=Create("TextLabel",topbar,{Name="titleLbl", TextWrapped=true, Size=UDim2.new(0.5,0,1,0), Text="work at a pizza place", TextSize=14, Font="GothamSemibold", 
 	BackgroundTransparency=1, Position=UDim2.new(0.25,0,0,0), TextColor3=Color3.new(1,1,1), BackgroundColor3=Color3.new(1,1,1)})
 saveBtn=Create("ImageButton",topbar,{Name="saveBtn", Image="rbxassetid://55687833", Size=UDim2.new(0.05,0,1,0), Position=UDim2.new(0.01,0,0,0), BackgroundTransparency=1, BackgroundColor3=Color3.new(), Visible=writefile~=nil})
 settings_1=Create("Frame",main,{Name="settings", BackgroundTransparency=1, Size=UDim2.new(0.97,0,0.75,0), Position=UDim2.new(0.025,0,0.2,0), BackgroundColor3=Color3.new(1,1,1)})
@@ -154,48 +156,67 @@ rightCamBtn=Create("ImageButton",camframe,{Name="rightCamBtn", Image="rbxassetid
 	BackgroundColor3=Color3.new(1,1,1)})
 leftCamBtn=Create("ImageButton",camframe,{Name="leftCamBtn", Image="rbxassetid://144168163", Size=UDim2.new(0.333,0,1,0), BackgroundTransparency=1, BackgroundColor3=Color3.new(1,1,1)})
 centerCamBtn=Create("ImageButton",camframe,{Name="centerCamBtn", Image="rbxassetid://58282192", Size=UDim2.new(0.333,0,1,0), Position=UDim2.new(0.333,0,0,0), BackgroundTransparency=1, BackgroundColor3=Color3.new(1,1,1)})
-creditLbl=Create("TextLabel",main,{Position=UDim2.new(0,0,1,5),Size=UDim2.new(0,100,0,15),BackgroundTransparency=1,TextColor3=Color3.new(1,1,1),Text="by sirelKilla",TextScaled=true,TextStrokeTransparency=.8})
+creditLbl=Create("TextLabel",main,{Position=UDim2.new(0,0,1,5),Size=UDim2.new(0,100,0,15),BackgroundTransparency=1,TextColor3=Color3.new(1,1,1),Text="by NoobHubV1",TextScaled=true,TextStrokeTransparency=.8})
 
+local function Notify(Title, Text, Time)
+	OrionLib:MakeNotification({
+		Name = Title,
+		Content = Text,
+		Image = "rbxassetid://4483345998",
+		Time = Time,
+	})
+end
 local function toggleCashier(bool)
 	if bool~=nil then
 		doCashier=bool
+		Notify("[FEATURE]", "Cashier has been changed to "..tostring(doCashier), 3)
 	else
 		doCashier = not doCashier
+		Notify("[FEATURE]", "Cashier has been changed to "..tostring(doCashier), 3)
 	end
 	cashierSlider:TweenPosition(UDim2.new(doCashier and 0.5 or 0,2,0,2),nil,"Sine",0.1,true)
 end
 local function toggleCook(bool)
 	if bool~=nil then
 		doCook=bool
+		Notify("[FEATURE]", "Cook has been changed to "..tostring(doCook), 3)
 	else
 		doCook = not doCook
+		Notify("[FEATURE]", "Cook has been changed to "..tostring(doCook), 3)
 	end
 	cookSlider:TweenPosition(UDim2.new(doCook and 0.5 or 0,2,0,2),nil,"Sine",0.1,true)
 end
 local function toggleBoxer(bool)
 	if bool~=nil then
 		doBoxer=bool
+		Notify("[FEATURE]", "Boxer has been changed to "..tostring(doBoxer), 3)
 	else
 		doBoxer = not doBoxer
+		Notify("[FEATURE]", "Boxer has been changed to "..tostring(doBoxer), 3)
 	end
 	boxerSlider:TweenPosition(UDim2.new(doBoxer and 0.5 or 0,2,0,2),nil,"Sine",0.1,true)
 end
 local function toggleDelivery(bool)
 	if bool~=nil then
 		doDelivery=bool
+		Notify("[FEATURE]", "Delivery has been changed to "..tostring(doDelivery), 3)
 	else
 		doDelivery = not doDelivery
+		Notify("[FEATURE]", "Delivery has been changed to "..tostring(doDelivery), 3)
 	end
 	deliverySlider:TweenPosition(UDim2.new(doDelivery and 0.5 or 0,2,0,2),nil,"Sine",0.1,true)
 end
 local function toggleSupplier(bool)
 	if bool~=nil then
 		doSupplier=bool
+		Notify("[FEATURE]", "Supplier has been changed to "..tostring(doSupplier), 3)
 	else
 		doSupplier = not doSupplier
+		Notify("[FEATURE]", "Supplier has been changed to "..tostring(doSupplier), 3)
 	end
 	supplierSlider:TweenPosition(UDim2.new(doSupplier and 0.5 or 0,2,0,2),nil,"Sine",0.1,true)
 end
+
 cashierBtn.MouseButton1Click:Connect(toggleCashier)
 cookBtn.MouseButton1Click:Connect(toggleCook)
 boxerBtn.MouseButton1Click:Connect(toggleBoxer)
@@ -271,9 +292,95 @@ end)
 closeBtn.MouseButton1Click:Connect(function()
     gui:Destroy()
     doCashier,doBoxer,doCook,doSupplier,doDelivery = false,false,false,false,false
+    Notify("[FEATURE]", "Script is Unloaded, see you soon!", 4)
 end)
 closeBtn.MouseEnter:Connect(function() closeBtn.TextColor3=Color3.new(.9,0,0) end)
 closeBtn.MouseLeave:Connect(function() closeBtn.TextColor3=Color3.new(1,1,1) end)
+minimumBtn.MouseButton1Click:Connect(function()
+	if main.BackgroundTransparency == 0 then
+		main.BackgroundTransparency = 1
+		main.Size = UDim2.new(0, 350, 0, 100)
+		cashier.Visible = false
+		Label.Visible = false
+		cashierBtn.Visible = false
+		cashierSlider.Visible = false
+		kitchen.Visible = false
+		Label_2.Visible = false
+		deliverAtBox.Visible = false
+		refillEnd.Visible = false
+		refillEndBox.Visible = false
+		Label_3.Visible = false
+		refillAt.Visible = false
+		Label_4.Visible = false
+		refillAtBox.Visible = false
+		supplier.Visible = false
+		Label_5.Visible = false
+		supplierBtn.Visible = false
+		delivery.Visible = false
+		Label_6.Visible = false
+		deliveryBtn.Visible = false
+		deliverySlider.Visible = false
+		boxer.Visible = false
+		boxerLbl.Visible = false
+		boxerBtn.Visible = false
+		boxerSlider.Visible = false
+		cook.Visible = false
+		cookLbl.Visible = false
+		cookBtn.Visible = false
+		cookSlider.Visible = false
+		toggleAll.Visible = false
+		switch.Visible = false
+		allOffBtn.Visible = false
+		allOnBtn.Visible = false
+		toggleAllSlider.Visible = false
+		messageLbl.Visible = false
+		saveBtn.Visible = false
+		creditLbl.Visible = false
+		minimumBtn.Text = "+"
+	elseif main.BackgroundTransparency == 1 then
+		main.BackgroundTransparency = 0
+		main.Size = UDim2.new(0, 350, 0, 100)
+		cashier.Visible = true
+		Label.Visible = true
+		cashierBtn.Visible = true
+		cashierSlider.Visible = true
+		kitchen.Visible = true
+		Label_2.Visible = true
+		deliverAtBox.Visible = true
+		refillEnd.Visible = true
+		refillEndBox.Visible = true
+		Label_3.Visible = true
+		refillAt.Visible = true
+		Label_4.Visible = true
+		refillAtBox.Visible = true
+		supplier.Visible = true
+		Label_5.Visible = true
+		supplierBtn.Visible = true
+		delivery.Visible = true
+		Label_6.Visible = true
+		deliveryBtn.Visible = true
+		deliverySlider.Visible = true
+		boxer.Visible = true
+		boxerLbl.Visible = true
+		boxerBtn.Visible = true
+		boxerSlider.Visible = true
+		cook.Visible = true
+		cookLbl.Visible = true
+		cookBtn.Visible = true
+		cookSlider.Visible = true
+		toggleAll.Visible = true
+		switch.Visible = true
+		allOffBtn.Visible = true
+		allOnBtn.Visible = true
+		toggleAllSlider.Visible = true
+		messageLbl.Visible = true
+		saveBtn.Visible = true
+		creditLbl.Visible = true
+		minimumBtn.Text = "="
+	end
+end)
+minimumBtn.MouseEnter:Connect(function() minimumBtn.TextColor3=Color3.new(.9,0,0) end)
+minimumBtn.MouseLeave:Connect(function() minimumBtn.TextColor3=Color3.new(1,1,1) end)
 saveBtn.MouseButton1Click:Connect(function()
 	if writefile and messageLbl.Visible==false then
 		writefile("PizzaFarm.txt",game:GetService("HttpService"):JSONEncode(settings))
