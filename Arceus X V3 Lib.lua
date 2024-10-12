@@ -528,6 +528,10 @@ function lib:SetIcon(img)
     Logo.Image = img
 end
 
+function lib:Destroy()
+    Arceus:Destroy()
+end
+
 function lib:SetBackgroundColor(r, g ,b)
     Main.BackgroundColor3 = Color3.fromRGB(r, g, b)
     Intro.BackgroundColor3 = Color3.fromRGB(r, g, b)
