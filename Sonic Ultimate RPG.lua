@@ -1,28 +1,34 @@
 local Library = loadstring(Game:HttpGet('https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/wizard'))()
 
 local GetEmerald = function(Color)
-        firetouchinterest(game.Players.LocalPlayer.Character.Head, workspace.ChaosEmeralds:FindFirstChild(Color, true), 0)
+        local LastPosition = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.workspace.ChaosEmeralds:FindFirstChild(Color, true).CFrame
+        task.wait(.02)
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = LastPosition
 end
 
 local GetAllEmeralds = function()
         GetEmerald("Blue")
+        wait(.7)
         GetEmerald("Yellow")
+        wait(.7)
         GetEmerald("Red")
+        wait(.7)
         GetEmerald("Cyan")
+        wait(.7)
         GetEmerald("Purple")
+        wait(.7)
         GetEmerald("White")
+        wait(.7)
         GetEmerald("Green")
 end
 
 local function GetAllRings()
         for i,v in pairs(game:GetService("Workspace").Rings:GetDescendants()) do
-if v:IsA('Part') then
-        local saved = v.CFrame
-        v.CFrame = game.Players.LocalPlayer.Character.Head.CFrame
-        task.wait(0.03)
-        v.CFrame = saved
-end
-end
+                if v:IsA('Part') then
+                        firetouchinterest(game.Players.LocalPlayer.Character.Head, v, 0)
+                end
+        end
 end
 
 local Window = Library:NewWindow("NoobHubV1 Hub")
