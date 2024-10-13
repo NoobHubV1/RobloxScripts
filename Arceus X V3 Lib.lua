@@ -1,7 +1,8 @@
 local lib = {}
+local Notification = loadstring(game:HttpGet("https://raw.githubusercontent.com/FilteringEnabled/FE/main/notificationtest"))();
+local Notify = Notification.Notify;
 
 local Script_Title = "Arceus X <font color=\"rgb(255, 0, 0)\">|</font> Ui Lib"
-
 
 -- Instances:
 local Arceus = Instance.new("ScreenGui")
@@ -530,6 +531,14 @@ end
 
 function lib:Destroy()
     Arceus:Destroy()
+end
+
+function lib:Notify(Title, Text, Time)
+	Notify({
+		 Description = Title;
+		 Title = Text;
+		 Duration = Time;
+	});
 end
 
 function lib:SetBackgroundColor(r, g ,b)
