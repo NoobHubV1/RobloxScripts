@@ -535,8 +535,8 @@ end
 
 function lib:Notify(Title, Text, Time)
 	Notify({
-		 Description = Title;
-		 Title = Text;
+		 Description = Text;
+		 Title = Title;
 		 Duration = Time;
 	});
 end
