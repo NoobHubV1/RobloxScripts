@@ -531,7 +531,7 @@ function lib:Destroy()
     Arceus:Destroy()
 end
 
-function Tween(Obj, Prop, New, Time)
+local function Tween(Obj, Prop, New, Time)
 	if not Time then
 		Time = .5
 	end
@@ -550,19 +550,17 @@ function Tween(Obj, Prop, New, Time)
 
 	TweenService:Create(Obj, info, propertyTable):Play()
 end
-function lib:SetNotification(Title, Text, Time)
+
+local function lib:SetNotification(Text, Dur, Color, Title)
 	task.spawn(function()
-		if not Time then
-			Time = 1.5
+		if not Dur then
+			Dur = 1.5
 		end
 		local Notif = Instance.new("ScreenGui")
 		local Frame_1 = Instance.new("Frame")
 		local TextLabel = Instance.new("TextLabel")
-		Notif.Name = math.random()
-		Notif.Enabled = true
-		Notif.ResetOnSpawn = true
+		Notif.Parent = (game:GetService("CoreGui") or gethui())
 		Notif.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-		Notif.DisplayOrder = 999999999
 		Frame_1.Parent = Notif
 		Frame_1.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 		Frame_1.BackgroundTransparency=1
@@ -575,12 +573,12 @@ function lib:SetNotification(Title, Text, Time)
 		TextLabel.TextTransparency =1
 		TextLabel.Size = UDim2.new(1, 0, 1, 0)
 		TextLabel.Font = Enum.Font.Highway
-		TextLabel.Text = "["..Title.."] "..Text
-		TextLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
+		TextLabel.Text = "["..Title.."] "..Text or "You I'm Gay"
+		TextLabel.TextColor3 = Color or Color3.fromRGB(255, 255, 255)
 		TextLabel.TextSize = 21.000
 		Tween(Frame_1,"BackgroundTransparency",0.350,.5)
 		Tween(TextLabel,"TextTransparency",0,.5)
-		wait(Time+.7)
+		wait(Dur+.7)
 		Tween(Frame_1,"BackgroundTransparency",1,.5)
 		Tween(TextLabel,"TextTransparency",1,.5)
 		wait(.7)
