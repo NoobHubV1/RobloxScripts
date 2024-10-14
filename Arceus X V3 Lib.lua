@@ -44,7 +44,7 @@ local UIAspectRatioConstraint_5 = Instance.new("UIAspectRatioConstraint")
 
 --Properties:
 
-Arceus.Name = "Arceus"
+Arceus.Name = math.random()
 Arceus.Enabled = true
 Arceus.ResetOnSpawn = true
 Arceus.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
@@ -550,14 +550,20 @@ function Tween(Obj, Prop, New, Time)
 
 	TweenService:Create(Obj, info, propertyTable):Play()
 end
-function lib:SetNotification(Text, Color, Title, Time)
+function lib:SetNotification(Title, Text, Time)
 	task.spawn(function()
 		if not Time then
 			Time = 1.5
 		end
+		local Notif = Instance.new("ScreenGui")
 		local Frame_1 = Instance.new("Frame")
 		local TextLabel = Instance.new("TextLabel")
-		Frame_1.Parent = Arceus
+		Notif.Name = math.random()
+		Notif.Enabled = true
+		Notif.ResetOnSpawn = true
+		Notif.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+		Notif.DisplayOrder = 999999999
+		Frame_1.Parent = Notif
 		Frame_1.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 		Frame_1.BackgroundTransparency=1
 		Frame_1.BorderSizePixel = 0
@@ -570,7 +576,7 @@ function lib:SetNotification(Text, Color, Title, Time)
 		TextLabel.Size = UDim2.new(1, 0, 1, 0)
 		TextLabel.Font = Enum.Font.Highway
 		TextLabel.Text = "["..Title.."] "..Text
-		TextLabel.TextColor3 = Color3.fromRGB(Color)
+		TextLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
 		TextLabel.TextSize = 21.000
 		Tween(Frame_1,"BackgroundTransparency",0.350,.5)
 		Tween(TextLabel,"TextTransparency",0,.5)
