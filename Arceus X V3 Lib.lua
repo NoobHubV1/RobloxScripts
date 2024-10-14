@@ -178,7 +178,7 @@ UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.from
 UIGradient.Parent = Toggle
 
 Button.Name = "Button"
-Button.Parent = Arceus
+--Button.Parent = Arceus
 Button.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
 Button.Size = UDim2.new(0.95, 0, 0, 50)
 
