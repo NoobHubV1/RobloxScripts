@@ -121,12 +121,12 @@ Menu.ScrollBarImageColor3 = Color3.fromRGB(255, 255, 255)
 Menu.ScrollBarThickness = Menu.AbsoluteSize.X/25
 
 UIListLayout.Parent = Menu
---UIListLayout.Padding = UDim.new(0.025, 0)
+UIListLayout.Padding = UDim.new(0.025, 0)
 UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 
 Toggle.Name = "Toggle"
 Toggle.Visible = false
---Toggle.Parent = Arceus
+Toggle.Parent = Arceus
 Toggle.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
 Toggle.Size = UDim2.new(0.95, 0, 0, 50)
 
@@ -178,7 +178,7 @@ UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.from
 UIGradient.Parent = Toggle
 
 Button.Name = "Button"
---Button.Parent = Arceus
+Button.Parent = Arceus
 Button.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
 Button.Size = UDim2.new(0.95, 0, 0, 50)
 
@@ -206,8 +206,8 @@ UIGradient_2.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fr
 UIGradient_2.Parent = Button
 
 tab.Name = "Tab"
-tab.Visible = false
---tab.Parent = Arceus
+tab.Visible = true
+tab.Parent = Arceus
 tab.BackgroundTransparency = 1
 tab.Size = UDim2.new(0.95, 0, 0.025, 0)
 
