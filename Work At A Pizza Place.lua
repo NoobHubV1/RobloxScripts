@@ -224,29 +224,57 @@ deliveryBtn.MouseButton1Click:Connect(toggleDelivery)
 supplierBtn.MouseButton1Click:Connect(toggleSupplier)
 allOffBtn.InputBegan:Connect(function()
 	if game:GetService("UserInputService"):IsMouseButtonPressed(Enum.UserInputType.MouseButton1) then
-		toggleCashier(false)
-		toggleCook(false)
-		toggleBoxer(false)
-		toggleDelivery(false)
-		toggleSupplier(false)
-		toggleAllSlider:TweenPosition(UDim2.new(0,0,0,-2),nil,"Sine",0.1,true)
-		wait(1)
-		if toggleAllSlider.Position.X.Scale<.01 then
-			toggleAllSlider:TweenPosition(UDim2.new(0.45,0,0,-2),nil,"Sine",0.1,true)
+		if doCashier or doCook or doBoxer or doDelivery or doSupplier then
+			toggleAllSlider:TweenPosition(UDim2.new(0,0,0,-2),nil,"Sine",0.1,true)
+		end
+		if doCashier then
+			toggleCashier(false)
+		end
+		if doCook then
+		        toggleCook(false)
+		end
+		if doBoxer then
+		        toggleBoxer(false)
+		end
+		if doDelivery then
+		        toggleDelivery(false)
+		end
+		if doSupplier then
+		        toggleSupplier(false)
+		end
+		if not doCashier or not doCook or not doBoxer or not doDelivery or not doSupplier then
+			wait(1)
+		        if toggleAllSlider.Position.X.Scale<.01 then
+			        toggleAllSlider:TweenPosition(UDim2.new(0.45,0,0,-2),nil,"Sine",0.1,true)
+			end
 		end
 	end
 end)
 allOnBtn.InputBegan:Connect(function()
 	if game:GetService("UserInputService"):IsMouseButtonPressed(Enum.UserInputType.MouseButton1) then
-		toggleCashier(true)
-		toggleCook(true)
-		toggleBoxer(true)
-		toggleDelivery(true)
-		toggleSupplier(true)
-		toggleAllSlider:TweenPosition(UDim2.new(0.9,0,0,-2),nil,"Sine",0.1,true)
-		wait(1)
-		if toggleAllSlider.Position.X.Scale>.88 then
-			toggleAllSlider:TweenPosition(UDim2.new(0.45,0,0,-2),nil,"Sine",0.1,true)
+		if not doCashier or not doCook or not doBoxer or not doDelivery or not doSupplier then
+			toggleAllSlider:TweenPosition(UDim2.new(0.9,0,0,-2),nil,"Sine",0.1,true)
+		end
+		if not doCashier then
+			toggleCashier(true)
+		end
+		if not doCook then
+		        toggleCook(true)
+		end
+		if not doBoxer then
+		        toggleBoxer(true)
+		end
+		if not doDelivery then
+		        toggleDelivery(true)
+		end
+		if not doSupplier then
+		        toggleSupplier(true)
+		end
+		if doCashier or doCook or doBoxer or doDelivery or doSupplier then
+			wait(1)
+		        if toggleAllSlider.Position.X.Scale>.88 then
+				toggleAllSlider:TweenPosition(UDim2.new(0.45,0,0,-2),nil,"Sine",0.1,true)
+		        end
 		end
 	end
 end)
