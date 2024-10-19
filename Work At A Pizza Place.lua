@@ -364,6 +364,23 @@ minimumBtn.MouseButton1Click:Connect(function()
 		messageLbl.Visible = false
 		saveBtn.Visible = false
 		creditLbl.Visible = false
+		kitchen.Visible = false
+		cashierSlider.Visible = false
+		settings_1.Visible = false
+		cashier.Visible = false
+		refillEnd.Visible = false
+		refillAt.Visible = false
+		supplier.Visible = false
+		supplierSlider.Visible = false
+		delivery.Visible = false
+		deliverySlider.Visible = false
+		boxer.Visible = false
+		boxerSlider.Visible = false
+		cook.Visible = false
+		cookSlider.Visible = false
+		toggleAll.Visible = false
+		switch.Visible = false
+		toggleAllSlider.Visible = false
 		minimumBtn.Text = "+"
 	elseif main.BackgroundTransparency == 1 then
 		main.BackgroundTransparency = 0
@@ -404,6 +421,23 @@ minimumBtn.MouseButton1Click:Connect(function()
 		messageLbl.Visible = true
 		saveBtn.Visible = true
 		creditLbl.Visible = true
+		kitchen.Visible = true
+		cashierSlider.Visible = true
+		settings_1.Visible = true
+		cashier.Visible = true
+		refillEnd.Visible = true
+		refillAt.Visible = true
+		supplier.Visible = true
+		supplierSlider.Visible = true
+		delivery.Visible = true
+		deliverySlider.Visible = true
+		boxer.Visible = true
+		boxerSlider.Visible = true
+		cook.Visible = true
+		cookSlider.Visible = true
+		toggleAll.Visible = true
+		switch.Visible = true
+		toggleAllSlider.Visible = true
 		minimumBtn.Text = "="
 	end
 end)
