@@ -1,10 +1,84 @@
+print([[
+// Commands list:
+	refresh / re | Refresh Character
+	autorespawn / autore | Auto Refresh Character (if died)
+]])
+
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "ScreenGui"
+ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+ScreenGui.ResetOnSpawn = false
+local TextBox = Instance.new("TextBox",ScreenGui)
+TextBox.Name = "TextBox"
+TextBox.BackgroundColor3 = Color3.fromRGB(172, 172, 172)
+TextBox.BackgroundTransparency = 0.400
+TextBox.Position = UDim2.new(0.0255349874, 0, 0.800595582, 0)
+TextBox.Size = UDim2.new(0, 238, 0, 23)
+TextBox.Font = Enum.Font.SourceSans
+TextBox.PlaceholderText = "Press ; To Enter"
+TextBox.Text = ""
+TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextBox.TextSize = 23.000
+
 local plr,Player = game.Players.LocalPlayer,game.Players.LocalPlayer
 local Prefix = ";"
 local saved = workspace:FindFirstChild("Criminals Spawn").SpawnLocation.CFrame
 local Unloaded = false
 local States = {}
       States.AutoRespawn = true
+      States.DraggableGuis = true
 
+function DragifyGui(Frame,Is)
+	coroutine.wrap(function()
+		local dragToggle = nil
+		local dragSpeed = 5
+		local dragInput = nil
+		local dragStart = nil
+		local dragPos = nil
+		local startPos = nil
+		local function updateInput(input)
+			if not Is then
+				if not States.DraggableGuis then
+					return
+				end
+			end
+			local Delta = input.Position - dragStart
+			local Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + Delta.X, startPos.Y.Scale, startPos.Y.Offset + Delta.Y)
+			game:GetService("TweenService"):Create(Frame, TweenInfo.new(0.30), {Position = Position}):Play()
+		end
+		Frame.InputBegan:Connect(function(input)
+			if not Is then
+				if States.DraggableGuis then
+					if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) and game:GetService("UserInputService"):GetFocusedTextBox() == nil then
+						dragToggle = true
+						dragStart = input.Position
+						startPos = Frame.Position
+						input.Changed:Connect(function()
+							if input.UserInputState == Enum.UserInputState.End then
+								dragToggle = false
+							end
+						end)
+					end
+				end
+			end
+		end)
+		Frame.InputChanged:Connect(function(input)
+			if States.DraggableGuis then
+				if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+					dragInput = input
+				end
+			end
+		end)
+		game:GetService("UserInputService").InputChanged:Connect(function(input)
+			if States.DraggableGuis then
+				if input == dragInput and dragToggle then
+					updateInput(input)
+				end
+			end
+		end)
+	end)()
+end
+DragifyGui(TextBox)
 function swait()
 	game:GetService("RunService").Stepped:Wait()
 end
@@ -207,13 +281,35 @@ function Notif(Title, Text, Time)
   game:GetService("StarterGui"):SetCore("SendNotification", {Title = Title, Text = Text, Duration = Time,})
 end
 
+local ChangeState = function(Type,StateType)
+	local Value = nil
+	if Type and typeof(Type):lower() == "string" and (Type):lower() == "on" then
+		Value = true
+	elseif Type and typeof(Type):lower() == "string" and (Type):lower() == "off" then
+		Value = false
+	elseif typeof(Type):lower() == "boolean" then
+		Value = Type
+	else
+		Value = not States[StateType]
+	end
+	States[StateType] = Value
+	Notif("OK", StateType.." has been changed to "..tostring(Value), 3)
+	return Value
+end
+
 function PC(Message)
   local args = Message:split(" ")
   function Command(Cmd)
     return args[1] == Prefix..Cmd
   end
-  if Command("cmds") then
-    Notif("Notify", "Text", 3)
+  if Command("cmds") or Command("cmd") or Command("commands") then
+    Notif("Notify", "The commands are listed in the console! \n Press F9 to view or chat /console", 3)
+  end
+  if Command("re") or Command("refresh") then
+    Refresh()
+  end
+  if Command("autore") or Command("autorespawn") then
+    ChangeState(args[2],"AutoRespawn")
   end
 end
 
@@ -225,7 +321,7 @@ plr.CharacterAdded:Connect(function(NewCharacter)
 	  NewCharacter:WaitForChild("Head")
 	  NewCharacter:WaitForChild("Humanoid").BreakJointsOnDeath = not States.AutoRespawn
 	  NewCharacter:WaitForChild("Humanoid").Died:Connect(function()
-		  if not Unloaded and States.AutoRespawn == true then
+		  if not Unloaded and States.AutoRespawn then
 		  	Refresh()
 		end
 	end)
