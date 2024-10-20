@@ -23,6 +23,9 @@ print([[
 	notify [on/off] | Notify player join and leave and pick up
 	antifling [on/off] | Activate antifling
 	infjump [ON/OFF] | Infinite jumps
+	ff / forcefield [ON/OFF] | activate forcefield
+	arrest [plr,all] | Arrests the targeted player
+	meleekill [plr,all,team] | Teleports to kill player(s)
 ]])
 
 local ScreenGui = Instance.new("ScreenGui",game.Players.LocalPlayer:WaitForChild("PlayerGui"))
@@ -46,7 +49,7 @@ local plr,Player = game.Players.LocalPlayer,game.Players.LocalPlayer
 local saved = workspace:FindFirstChild("Criminals Spawn").SpawnLocation.CFrame
 local Prefix = ";"
 local Unloaded = false
-local States, BulletTable = {}, {}
+local States = {}
       States.AutoRespawn = true
       States.OldItemMethod = false
       States.AutoGuns = true
@@ -56,24 +59,23 @@ local States, BulletTable = {}, {}
       States.Killaura = false
       States.CopyChat = false
       States.AntiFling = false
-      States.Infjump = false
+      States.ff = false
+      States.loopkillinmates = false
+      States.loopkillguards = false
+      States.loopkillcriminals = false
 local API = {}
       API.Whitelisted = {}
+      API.ArrestOldP = {}
+      API.Loopkilling = {}
 
 function CreateBulletTable(Bullet, Target)
+	local Args = {}
 	for i =1,Bullet do
-		BulletTable[#BulletTable + 1] = {
+		Args[#Args + 1] = {
 			["RayObject"] = Ray.new(Vector3.new(), Vector3.new()),
 			["Hit"] = Target.Character:FindFirstChild("Head"),
 		}
 	end
-end
-
-function FireGun(gun)
-	task.spawn(function()
-		game:GetService("ReplicatedStorage").ShootEvent:FireServer(BulletTable, gun)
-		game:GetService("ReplicatedStorage").ReloadEvent:FireServer(gun)
-	end)
 end
 function swait()
 	game:GetService("RunService").Stepped:Wait()
@@ -116,14 +118,13 @@ end
 
 function MoveTo(Cframe)
 	Cframe = ConvertPosition(Cframe)
-	local Amount = 7
+	local Amount = 1
 	if Player.PlayerGui['Home']['hud']['Topbar']['titleBar'].Title.Text:lower() == "lights out" or Player.PlayerGui.Home.hud.Topbar.titleBar.Title.Text:lower() == "lightsout" then
-		Amount = 13
+		Amount = 1
 	end
 	for i = 1, Amount do
 		UnSit()
 		Player.Character:WaitForChild("HumanoidRootPart").CFrame = Cframe
-		swait()
 	end
 end
 function WaitForRespawn(Cframe,NoForce)
@@ -142,7 +143,6 @@ function WaitForRespawn(Cframe,NoForce)
 					end)
 				end)()
 				NewCharacter:WaitForChild("HumanoidRootPart")
-				Cframe = ConvertPosition(Cframe)
 				local Amount = 10
 				if Player.PlayerGui['Home']['hud']['Topbar']['titleBar'].Title.Text:lower() == "lights out" or Player.PlayerGui.Home.hud.Topbar.titleBar.Title.Text:lower() == "lightsout" then
 					Amount = 16
@@ -274,10 +274,12 @@ end
 function GetGun(Item, Ignore)
 	if States.OldItemMethod == false and not Unloaded then
 		task.spawn(function()
-			workspace:FindFirstChild("Remote")['ItemHandler']:InvokeServer({
-				Position = Player.Character.Head.Position,
-				Parent = workspace.Prison_ITEMS.giver:FindFirstChild(Item, true)
-			})
+			if not plr.Character:FindFirstChild(Item) or not plr.Backpack:FindFirstChild(Item) then
+				workspace:FindFirstChild("Remote")['ItemHandler']:InvokeServer({
+					Position = Player.Character.Head.Position,
+					Parent = workspace.Prison_ITEMS.giver:FindFirstChild(Item, true)
+			        })
+			end
 		end)
 	else
 		if not plr.Character:FindFirstChild(Item) or not plr.Backpack:FindFirstChild(Item) then
@@ -295,10 +297,12 @@ end
 function GetSingle(Item, Ignore)
 	if States.OldItemMethod == false and not Unloaded then
 		task.spawn(function()
-			workspace:FindFirstChild("Remote")['ItemHandler']:InvokeServer({
-				Position = Player.Character.Head.Position,
-				Parent = workspace.Prison_ITEMS.single:FindFirstChild(Item, true)
-			})
+			if not plr.Character:FindFirstChild(Item) or not plr.Backpack:FindFirstChild(Item) then
+				workspace:FindFirstChild("Remote")['ItemHandler']:InvokeServer({
+					Position = Player.Character.Head.Position,
+				        Parent = workspace.Prison_ITEMS.single:FindFirstChild(Item, true)
+			        })
+			end
 		end)
 	else
 		if not plr.Character:FindFirstChild(Item) or not plr.Backpack:FindFirstChild(Item) then
@@ -333,7 +337,10 @@ function KillPlayer(Target,Hit,Failed,DoChange)
 
 	local Gun = Player.Backpack:FindFirstChild("AK-47") or Player.Character:FindFirstChild("AK-47")
 	repeat swait() GetGun("AK-47") Gun = Player.Backpack:FindFirstChild("AK-47") or Player.Character:FindFirstChild("AK-47") until Gun
-	FireGun(Gun)
+	task.spawn(function()
+		game:GetService("ReplicatedStorage").ShootEvent:FireServer(Bullets, Gun)
+		game:GetService("ReplicatedStorage").ReloadEvent:FireServer(Gun)
+	end)
 	coroutine.wrap(function()
 		wait(.7)
 		pcall(function()
@@ -368,13 +375,19 @@ end
 function killall(TeamToKill,Hit)
         if TeamToKill == "all" then
 		local LastTeam = Player.Team
+		local Hits = {}
 		if LastTeam ~= game.Teams.Criminals then
 			ChangeTeam(game.Teams.Criminals)
 		end
 		for i,v in pairs(game.Players:GetPlayers()) do
 			if v and v ~= game.Players.LocalPlayer and not table.find(API.Whitelisted,v) and v ~= nil and v.Team == game.Teams.Inmates or v.Team == game.Teams.Guards then
 				if not v.Character and not v.Character.Head and not v.Character.Humanoid <1 or not v.Character:FindFirstChild("ForceField") then
-					CreateBulletTable(Hit, v)
+					for i =1,Hit do
+					       Hits[#Hits + 1] = {
+							["RayObject"] = Ray.new(Vector3.new(), Vector3.new()),
+							["Hit"] = v.Character:FindFirstChild("Head"),
+						}
+					end
 				end
 			end
 		end
@@ -382,13 +395,22 @@ function killall(TeamToKill,Hit)
 		local Gun = Player.Character:FindFirstChild("AK-47") or Player.Backpack:FindFirstChild("AK-47")
 		repeat task.wait() GetGun("AK-47") Gun = Player.Character:FindFirstChild("AK-47") or Player.Backpack:FindFirstChild("AK-47") until Gun
 
-		FireGun(Gun)
+		task.spawn(function()
+			game:GetService("ReplicatedStorage").ShootEvent:FireServer(Hits, Gun)
+			game:GetService("ReplicatedStorage").ReloadEvent:FireServer(Gun)
+		end)
 		ChangeTeam(game.Teams.Inmates)
 		plr.CharacterAdded:Wait()
+		local Hits = {}
 		for i,v in pairs(game.Teams.Criminals:GetPlayers()) do
 			if v and v ~= game.Players.LocalPlayer and not table.find(API.Whitelisted,v) and v ~= nil then
 				if not v.Character and not v.Character.Head and not v.Character.Humanoid <1 or not v.Character:FindFirstChild("ForceField") then
-					CreateBulletTable(Hit, v)
+					for i =1,Hit do
+					       Hits[#Hits + 1] = {
+							["RayObject"] = Ray.new(Vector3.new(), Vector3.new()),
+							["Hit"] = v.Character:FindFirstChild("Head"),
+						}
+					end
 				end
 			end
 		end
@@ -396,7 +418,10 @@ function killall(TeamToKill,Hit)
 		local Gun = Player.Character:FindFirstChild("AK-47") or Player.Backpack:FindFirstChild("AK-47")
 		repeat task.wait() GetGun("AK-47") Gun = Player.Character:FindFirstChild("AK-47") or Player.Backpack:FindFirstChild("AK-47") until Gun
 
-		FireGun(Gun)
+		task.spawn(function()
+			game:GetService("ReplicatedStorage").ShootEvent:FireServer(Hits, Gun)
+		        game:GetService("ReplicatedStorage").ReloadEvent:FireServer(Gun)
+		end)
 	end
 	if TeamToKill == game.Teams.Inmates or TeamToKill == game.Teams.Guards then
 		if Player.Team ~= game.Teams.Criminals then
@@ -408,15 +433,24 @@ function killall(TeamToKill,Hit)
 			plr.CharacterAdded:Wait()
 		end
 	end
+	local Hits = {}
 	for i,v in pairs(TeamToKill:GetPlayers()) do
-		if v and v~=Player and  not table.find(API.Whitelisted,v) then
-			CreateBulletTable(Hit, v)
+		if v and v~=Player and not table.find(API.Whitelisted,v) and not v.Character.Humanoid.Health == 0 or not v.Character:FindFirstChild("ForceField") then
+			for i =1,Hit do
+				Hits[#Hits + 1] = {
+					["RayObject"] = Ray.new(Vector3.new(), Vector3.new()),
+					["Hit"] = v.Character:FindFirstChild("Head"),
+				}
+			end
 		end
 	end
 	local Gun = Player.Backpack:FindFirstChild("AK-47") or Player.Character:FindFirstChild("AK-47")
 	repeat task.wait() GetGun("AK-47") Gun = Player.Backpack:FindFirstChild("AK-47") or Player.Character:FindFirstChild("AK-47") until Gun
 
-	FireGun(Gun)
+	task.spawn(function()
+		game:GetService("ReplicatedStorage").ShootEvent:FireServer(Hits, Gun)
+		game:GetService("ReplicatedStorage").ReloadEvent:FireServer(Gun)
+	end)
 end
 function AllGuns()
 	local saved = game:GetService("Players").LocalPlayer.Character:GetPrimaryPartCFrame()
@@ -554,8 +588,38 @@ function bring(Target,TeleportTo,MoreTP,DontBreakCar)
 		TextBox.Text = ""
 	end
 end
+function BadArea(Target)
+	local mod = require(game.ReplicatedStorage["Modules_client"]["RegionModule_client"])
+	local a = pcall(function()
+		if mod.findRegion(Target.Character) then
+			mod = mod.findRegion(Target.Character)["Name"]
+		end
+	end)
+	if not a then
+		return
+	end
+	for i, v in pairs(game:GetService("ReplicatedStorage").PermittedRegions:GetChildren()) do
+		if v and mod == v.Value then
+			return false
+		end
+	end
+	return true
+end
 function Chat(msg)
 	game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(msg, "all")
+end
+function MeleeEvent(Targ)
+	game.ReplicatedStorage.meleeEvent:FireServer(Targ)
+end
+function Meleekill(Tar)
+	if not Tar.Character.Humanoid.Health == 0 or not Tar.Character:FindFirstChild("ForceField") then
+		local Orgin = GetPosition()
+		while Tar.Character.Humanoid.Health > 1 do task.wait()
+			MoveTo(Tar.Character.HumanoidRootPart.CFrame)
+			MeleeEvent(Tar)
+		end
+		MoveTo(Orgin)
+	end
 end
 function PC(Message)
   if Unloaded then return end
@@ -792,6 +856,81 @@ function PC(Message)
 		end)
 	end
     end
+    if Command("ff") or Command("forcefield") then
+	ChangeState(args[2],"ff")
+	TextBox.Text = ""
+    end 
+    if Command("arrest") or Command("ar") then
+	if args[2] == "all" then
+		local LastPosition = GetPosition()
+		for i,v in pairs(game:GetService("Players"):GetPlayers()) do
+			if v and v ~= game:GetService("Players").LocalPlayer and not table.find(API.Whitelisted,v) and v.Team == game.Teams.Criminals or (BadArea(v) and v.Team == game.Teams.Inmates) and v.Character.PrimaryPart and v.Character:FindFirstChildOfClass("Humanoid").Health>0 then
+				repeat task.wait()
+					MoveTo(v.Character:GetPrimaryPartCFrame())
+					task.spawn(function()
+						workspace.Remote.arrest:InvokeServer(v.Character.PrimaryPart)
+					end)
+				until v.Character["Head"]:FindFirstChildOfClass("BillboardGui")
+				MoveTo(LastPosition)
+			end
+		end
+		MoveTo(LastPosition)
+		Notif("OK", "Arrested "..args[2], 3)
+	elseif args[2] ~= "all" then
+		local LastPosition = GetPosition()
+		local Target = FindPlayer(args[2])
+		if Target then
+			if Target.Team == game.Teams.Guards or not BadArea(Target) or plr.Character.Humanoid.Health == 0 then
+				return Notif("Error", "Can't arrest this player!", 3)
+			else
+				repeat task.wait()
+					MoveTo(Target.Character.HumanoidRootPart.CFrame)
+						task.spawn(function()
+							workspace.Remote.arrest:InvokeServer(Target.Character.PrimaryPart)
+						end)
+				until Target.Character["Head"]:FindFirstChildOfClass("BillboardGui")
+				Notif("OK", 'Arrested '..Target.DisplayName, 3)
+			end
+		end
+		MoveTo(LastPosition)
+	end
+	TextBox.Text = ""
+    end
+    if Command("meleekill") then
+	if args[2] == "all" then
+		for i,v in pairs(game.Players:GetPlayers()) do
+			if v ~= plr and not table.find(API.Whitelisted,v) then
+				Meleekill(v)
+			end
+		end
+		Notif("OK", "Melee killed "..args[2], 3)
+	elseif args[2] == "inmates" then
+		for i,v in pairs(game.Teams.Inmates:GetPlayers()) do
+			if v ~= plr and not table.find(API.Whitelisted,v) then
+				Meleekill(v)
+			end
+		end
+		Notif("OK", "Melee killed "..args[2], 3)
+	elseif args[2] == "guards" then
+		for i,v in pairs(game.Teams.Guards:GetPlayers()) do
+			if v ~= plr and not table.find(API.Whitelisted,v) then
+				Meleekill(v)
+			end
+		end
+		Notif("OK", "Melee killed "..args[2], 3)
+	elseif args[2] == "criminals" then
+		for i,v in pairs(game.Teams.Criminals:GetPlayers()) do
+			if v ~= plr and not table.find(API.Whitelisted,v) then
+				Meleekill(v)
+			end
+		end
+		Notif("OK", "Melee killed "..args[2], 3)
+	else
+		local Target = FindPlayer(args[2])
+		Meleekill(Target)
+	end
+	TextBox.Text = ""
+    end
 end 
 Player.Chatted:Connect(PC)
 plr.CharacterAdded:Connect(function(NewCharacter)
@@ -826,6 +965,14 @@ plr.CharacterAdded:Connect(function(NewCharacter)
 		end
 	end
     end
+    if States.AutoRespawn and API.ArrestOldP then
+	for i =1,5 do
+		MoveTo(API.ArrestOldP)
+	end
+    end
+    if States.AutoRespawn then
+	API.ArrestOldP = GetPosition()
+    end
 end)
 coroutine.wrap(function()
 	while wait() do
@@ -837,6 +984,10 @@ coroutine.wrap(function()
 					end
 				end
 			end
+		end
+		if States.ff and Unloaded == false then
+			wait(4)
+			ChangeTeam(game.Teams.Guards)
 		end
 	end
 end)()
