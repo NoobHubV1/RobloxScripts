@@ -621,6 +621,14 @@ function Meleekill(Tar)
 		MoveTo(Orgin)
 	end
 end
+function IsTeamCommandCheck(String)
+	for i,v in pairs(game:GetService("Teams"):GetChildren()) do
+		if v and v.Name:lower() == String:lower() then
+			return v
+		end
+	end
+	return nil
+end
 function PC(Message)
   if Unloaded then return end
   local args = Message:split(" ")
@@ -650,21 +658,22 @@ function PC(Message)
     TextBox.Text = ""
   end
   if Command("kill") or Command("oof") or Command("die") then
+    local Team = IsTeamCommandCheck(args[2])
     if args[2] == "all" or args[2] == "everyone" or args[2] == "others" then
 	Notif("OK", "Killed "..args[2], 3)
 	TextBox.Text = ""
 	killall("all",7)
-    elseif args[2] == "inmates" then
+    elseif Team == game.Teams.Inmates then
 	killall(game.Teams.Inmates,7)
-	Notif("OK", "Killed "..args[2], 3)
+	Notif("OK", "Killed inmates", 3)
 	TextBox.Text = ""
-    elseif args[2] == "guards" then
+    elseif Team == game.Teams.Guards then
 	killall(game.Teams.Guards,7)
-	Notif("OK", "Killed "..args[2], 3)
+	Notif("OK", "Killed guards", 3)
 	TextBox.Text = ""
-    elseif args[2] == "criminals" then
+    elseif Team == game.Teams.Criminals then
 	killall(game.Teams.Criminals,7)
-	Notif("OK", "Killed "..args[2], 3)
+	Notif("OK", "Killed criminals", 3)
 	TextBox.Text = ""
     else
         local Target = FindPlayer(args[2])
@@ -764,6 +773,7 @@ function PC(Message)
     end
     if Command("damage") or Command("dmg") then
 	local Bullets = tonumber(args[3])
+	local Team = IsTeamCommandCheck(args[2])
 	if args[2] == "all" or args[2] == "everyone" or args[2] == "others" then
 	        Notif("OK", "damage "..args[2].." "..Bullets, 3)
 		TextBox.Text = ""
@@ -772,25 +782,25 @@ function PC(Message)
 		else
 			Notif("Error", "no Amount found!", 3)
 		end
-	elseif args[2] == "inmates" then
+	elseif Team == game.Teams.Inmates then
 		if Bullets ~= nil then
 			killall(game.Teams.Inmates,Bullets)
-			Notif("OK", "damage "..args[2].." "..Bullets, 3)
+			Notif("OK", "damage inmates "..Bullets, 3)
 			TextBox.Text = ""
 		else
 			Notif("Error", "no Amount found!", 3)
 			TextBox.Text = ""
 		end
-	elseif args[2] == "guards" then
+	elseif Team == game.Teams.Guards then
 		if Bullets ~= nil then
 			killall(game.Teams.Guards,Bullets)
-			Notif("OK", "damage "..args[2].." "..Bullets, 3)
+			Notif("OK", "damage guards "..Bullets, 3)
 			TextBox.Text = ""
 		else
 			Notif("Error", "no Amount found!", 3)
 			TextBox.Text = ""
 		end
-	elseif args[2] == "criminals" then
+	elseif Team == game.Teams.Criminals then
 		if Bullets ~= nil then
 			killall(game.Teams.Criminals,Bullets)
 			Notif("OK", "damage "..args[2].." "..Bullets, 3)
@@ -900,6 +910,7 @@ function PC(Message)
 	TextBox.Text = ""
     end
     if Command("meleekill") or Command("mk") then
+	local Team = IsTeamCommandCheck(args[2])
 	if args[2] == "all" then
 		for i,v in pairs(game.Players:GetPlayers()) do
 			if v ~= plr and not table.find(API.Whitelisted,v) then
@@ -907,27 +918,27 @@ function PC(Message)
 			end
 		end
 		Notif("OK", "Melee killed "..args[2], 3)
-	elseif args[2] == "inmates" then
+	elseif Team == game.Teams.Inmates then
 		for i,v in pairs(game.Teams.Inmates:GetPlayers()) do
 			if v ~= plr and not table.find(API.Whitelisted,v) then
 				Meleekill(v)
 			end
 		end
-		Notif("OK", "Melee killed "..args[2], 3)
-	elseif args[2] == "guards" then
+		Notif("OK", "Melee killed inmates", 3)
+	elseif Team == game.Teams.Guards then
 		for i,v in pairs(game.Teams.Guards:GetPlayers()) do
 			if v ~= plr and not table.find(API.Whitelisted,v) then
 				Meleekill(v)
 			end
 		end
-		Notif("OK", "Melee killed "..args[2], 3)
-	elseif args[2] == "criminals" then
+		Notif("OK", "Melee killed guards", 3)
+	elseif Team == game.Teams.Criminals then
 		for i,v in pairs(game.Teams.Criminals:GetPlayers()) do
 			if v ~= plr and not table.find(API.Whitelisted,v) then
 				Meleekill(v)
 			end
 		end
-		Notif("OK", "Melee killed "..args[2], 3)
+		Notif("OK", "Melee killed criminals", 3)
 	else
 		local Target = FindPlayer(args[2])
 		Meleekill(Target)
