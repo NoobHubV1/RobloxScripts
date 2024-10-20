@@ -1,18 +1,27 @@
 print([[
 // Commands list:
+	unload | Unloaded script
 	refresh / re | Refresh Character
-	autorespawn / autore | Auto Refresh Character (if died)
+	autorespawn / autore [on,off] | Auto Refresh Character (if died)
 	kill [plr,all,team] | Kill a player(s)
 	whitelist [plr] | Whitelisted a player
 	unwhitelist [plr] | Backlisted a player
 	inmate | Change team inmates
 	guard | Change team guards
 	criminal | Change team criminals
+	olditemmethod / oldimethod [ON,OFF] | Teleports to get item
+	prefix [STRING] | prefix new
+	pp | sus
+	bring [plr] | Teleport player to you
+	damage [plr,all,team] [Amount] | Damages a player(s)
+	autoguns / aguns [on,off] | Auto Get All Guns if died
+	autoitems / aitems [on,off] | Auto Get All items if died
+	autoremoveff / autorff [ON,OFF] | Auto Remove forcefield if died
+	autoguard / aguard | Auto Team Guard
 ]])
 
-local ScreenGui = Instance.new("ScreenGui")
+local ScreenGui = Instance.new("ScreenGui",game.Players.LocalPlayer:WaitForChild("PlayerGui"))
 ScreenGui.Name = "ScreenGui"
-ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 ScreenGui.ResetOnSpawn = false
 local TextBox = Instance.new("TextBox",ScreenGui)
 TextBox.Name = "TextBox"
@@ -26,15 +35,20 @@ TextBox.Text = ""
 TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
 TextBox.TextSize = 23.000
 TextBox.ClearTextOnFocus = false
+TextBox.Draggable = true
 
 local plr,Player = game.Players.LocalPlayer,game.Players.LocalPlayer
 local Prefix = ";"
+local PrefixAdmin = ";"
 local saved = workspace:FindFirstChild("Criminals Spawn").SpawnLocation.CFrame
 local Unloaded = false
 local States, BulletTable = {}, {}
       States.AutoRespawn = true
-      States.DraggableGuis = true
       States.OldItemMethod = false
+      States.AutoGuns = true
+      States.AutoItems = false
+      States.AutoRemoveff = false
+      States.Autoguard = false
 local API = {}
       API.Whitelisted = {}
 
@@ -53,58 +67,6 @@ function FireGun(gun)
 		game:GetService("ReplicatedStorage").ReloadEvent:FireServer(gun)
 	end)
 end
-
-function DragifyGui(Frame,Is)
-	coroutine.wrap(function()
-		local dragToggle = nil
-		local dragSpeed = 5
-		local dragInput = nil
-		local dragStart = nil
-		local dragPos = nil
-		local startPos = nil
-		local function updateInput(input)
-			if not Is then
-				if not States.DraggableGuis then
-					return
-				end
-			end
-			local Delta = input.Position - dragStart
-			local Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + Delta.X, startPos.Y.Scale, startPos.Y.Offset + Delta.Y)
-			game:GetService("TweenService"):Create(Frame, TweenInfo.new(0.30), {Position = Position}):Play()
-		end
-		Frame.InputBegan:Connect(function(input)
-			if not Is then
-				if States.DraggableGuis then
-					if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) and game:GetService("UserInputService"):GetFocusedTextBox() == nil then
-						dragToggle = true
-						dragStart = input.Position
-						startPos = Frame.Position
-						input.Changed:Connect(function()
-							if input.UserInputState == Enum.UserInputState.End then
-								dragToggle = false
-							end
-						end)
-					end
-				end
-			end
-		end)
-		Frame.InputChanged:Connect(function(input)
-			if States.DraggableGuis then
-				if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
-					dragInput = input
-				end
-			end
-		end)
-		game:GetService("UserInputService").InputChanged:Connect(function(input)
-			if States.DraggableGuis then
-				if input == dragInput and dragToggle then
-					updateInput(input)
-				end
-			end
-		end)
-	end)()
-end
-DragifyGui(TextBox)
 function swait()
 	game:GetService("RunService").Stepped:Wait()
 end
@@ -448,10 +410,33 @@ function killall(TeamToKill,Hit)
 
 	FireGun(Gun)
 end
-function KillAll()
-	killall("all",7)
-	Notif("OK", "Killed all", 3)
-	TextBox.Text = ""
+function AllGuns()
+	local saved = game:GetService("Players").LocalPlayer.Character:GetPrimaryPartCFrame()
+	if game:GetService("MarketplaceService"):UserOwnsGamePassAsync(plr.UserId, 96651) then
+		GetGun("M4A1", true)
+	end
+	GetGun("AK-47", true)
+	task.spawn(function()
+		GetGun("Remington 870", true)
+	end)
+	GetGun("M9", true)
+	game:GetService("Players").LocalPlayer.Character:SetPrimaryPartCFrame(saved)
+end
+function AllItems()
+        local saved = game:GetService("Players").LocalPlayer.Character:GetPrimaryPartCFrame()
+	if game:GetService("MarketplaceService"):UserOwnsGamePassAsync(plr.UserId, 96651) then
+		GetGun("M4A1", true)
+	end
+	GetGun("AK-47", true)
+	task.spawn(function()
+		API:GetGun("Remington 870", true)
+	end)
+	GetGun("M9", true)
+	pcall(function()
+		API:GetSingle("Hammer", true)
+	end)
+	GetSingle("Crude Knife")
+	game:GetService("Players").LocalPlayer.Character:SetPrimaryPartCFrame(saved)
 end
 function Notif(Title, Text, Time)
   game:GetService("StarterGui"):SetCore("SendNotification", {Title = Title, Text = Text, Duration = Time,})
@@ -471,11 +456,109 @@ local ChangeState = function(Type,StateType)
 	Notif("OK", StateType.." has been changed to "..tostring(Value), 3)
 	return Value
 end
+function bring(Target,TeleportTo,MoreTP,DontBreakCar)
+	if not IsBringing and Target and Target.Character:FindFirstChildOfClass("Humanoid") and Target.Character:FindFirstChildOfClass("Humanoid").Health>0 and Target.Character:FindFirstChildOfClass("Humanoid").Sit == false then
+		if not TeleportTo then
+			TeleportTo = GetPosition()
+		end
+		local Orgin = GetPosition()
+		local CarPad = workspace.Prison_ITEMS.buttons["Car Spawner"]
+		local car = nil
+		local Seat = nil
+		local Failed = false
+		local CheckForBreak = function()
+			if not Target or not Target.Character:FindFirstChildOfClass("Humanoid") or Target.Character:FindFirstChildOfClass("Humanoid").Health<1 or Player.Character:FindFirstChildOfClass("Humanoid").Health<1 then
+				Failed = true
+				return true
+			else
+				return nil
+			end
+		end
 
+		for i,v in pairs(game:GetService("Workspace").CarContainer:GetChildren()) do
+			if v then
+				if v:WaitForChild("Body"):WaitForChild("VehicleSeat").Occupant == nil then
+					car = v
+				end
+			end
+		end
+		if not car then
+			coroutine.wrap(function()
+				if not car then
+					car = game:GetService("Workspace").CarContainer.ChildAdded:Wait()
+				end
+			end)()
+			repeat wait()
+				game:GetService("Players").LocalPlayer.Character:SetPrimaryPartCFrame(CFrame.new(-524, 55, 1777))
+				task.spawn(function()
+					workspace.Remote.ItemHandler:InvokeServer(game:GetService("Workspace").Prison_ITEMS.buttons:GetChildren()[7]["Car Spawner"])
+				end)
+				if CheckForBreak() then
+					break
+				end
+			until car
+		end
+		car:WaitForChild("Body"):WaitForChild("VehicleSeat")
+		car.PrimaryPart = car.Body.VehicleSeat
+		Seat = car.Body.VehicleSeat
+		repeat wait()
+			Seat:Sit(Player.Character:FindFirstChildOfClass("Humanoid"))
+		until Player.Character:FindFirstChildOfClass("Humanoid").Sit == true
+		wait() --// so it doesnt break
+		repeat task.wait()
+			if CheckForBreak() or not Player.Character:FindFirstChildOfClass("Humanoid") or Player.Character:FindFirstChildOfClass("Humanoid").Sit == false then
+				break
+			end
+			car.PrimaryPart = car.Body.VehicleSeat
+			if Target.Character:FindFirstChildOfClass("Humanoid").MoveDirection.Magnitude >0 then
+				car:SetPrimaryPartCFrame(Target.Character:GetPrimaryPartCFrame()*CFrame.new(0,-.2,-6))
+			else
+				car:SetPrimaryPartCFrame(Target.Character:GetPrimaryPartCFrame()*CFrame.new(0,-.2,-5))
+			end
+		until Target.Character:FindFirstChildOfClass("Humanoid").Sit == true
+		if Failed then
+			Notif("OK", "Failed to bring the player!", 3)
+			return
+		end
+		for i =1,10 do
+			car:SetPrimaryPartCFrame(TeleportTo)
+			swait()
+		end
+		wait(.1)
+		task.spawn(function()
+			if not DontBreakCar then
+				repeat task.wait() until Target.Character:FindFirstChildOfClass("Humanoid").Sit == false
+				repeat wait()
+					Seat:Sit(Player.Character:FindFirstChildOfClass("Humanoid"))
+				until Player.Character:FindFirstChildOfClass("Humanoid").Sit == true
+				for i =1,10 do
+					car:SetPrimaryPartCFrame(CFrame.new(0,workspace.FallenPartsDestroyHeight+10,0))
+					swait()
+				end
+				UnSit()
+				MoveTo(Orgin)
+			end
+		end)
+		Notif("OK", "bringing "..Target.DisplayName, 3)
+		TextBox.Text = ""
+	else
+		Notif("Error", "Player has died or is sitting or an unknown error.", 3)
+		TextBox.Text = ""
+	end
+end
+function Chat(msg)
+	game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(msg, "all")
+end
 function PC(Message)
+  if Unloaded then return end
   local args = Message:split(" ")
   function Command(Cmd)
     return args[1] == Prefix..Cmd
+  end
+  if Command("unload") then
+	ScreenGui:Destroy()
+	Unloaded = true
+	Notif("OK", "Script is Unloaded", 3)
   end
   if Command("cmds") or Command("cmd") or Command("commands") then
     Notif("Notify", "The commands are listed in the console! \n Press F9 to view or chat /console", 3)
@@ -540,27 +623,168 @@ function PC(Message)
       TextBox.Text = ""
   end
   if Command("guard") then
-      ChangeTeam(game.Teams.Guards)
-      Notif("OK", "Change team guards", 3)
-      TextBox.Text = ""
+      if not GuardsFull("c") then
+		ChangeTeam(game.Teams.Guards)
+		Notif("OK", "Change team guards", 3)
+		TextBox.Text = ""
+      else
+		Notif("Error", "Guards Full!", 3)
+		TextBox.Text = ""
+      end
   end
   if Command("criminal") then
       ChangeTeam(game.Teams.Criminals)
       Notif("OK", "Change team criminals", 3)
       TextBox.Text = ""
   end
-end
+  if Command("olditemmethod") or Command("oldimethod") then
+      ChangeState(args[2],"OldItemMethod")
+  end
+  if Command("prefix") then
+	local New = args[2]
+	if New and tostring(New) then
+		local Prefixn = tostring(New)
+		Prefix = Prefixn
+		TextBox.PlaceholderText = "Press "..New.." To Enter"
+		Notif("OK", "prefix set to "..New, 3)
+		TextBox.Text = ""
+	else
+		Notif("Error", "no prefix selected?", 3)
+		TextBox.Text = ""
+	end
+   end
+   if Command("pp") then
+	AllGuns()
+	wait(1)
+	for i,v in pairs(Player.Character:GetChildren()) do
+		if v:IsA("Tool") then
+			v.Parent = Player.Backpack
+		end
+	end
+	Player.Backpack.M9.Parent = Player.Character
+	Player.Backpack["AK-47"].Parent = Player.Character
+	Player.Backpack["Remington 870"].Parent = Player.Character
+	wait()
+	Player.Character.M9.GripPos = Vector3.new(0.9, 2, 0)
+	Player.Character["Remington 870"].GripPos = Vector3.new(0.9, 2, 2.1)
+	Player.Character["AK-47"].GripPos = Vector3.new(0.9, 2, 6.4)
+	wait()
+	for i,v in pairs(Player.Character:GetChildren()) do
+		if v:IsA("Tool") then
+			v.Parent = Player.Backpack
+		end
+	end
+	wait()
+	Player.Backpack.M9.Parent = Player.Character
+	Player.Backpack["AK-47"].Parent = Player.Character
+	Player.Backpack["Remington 870"].Parent = Player.Character
+	TextBox.Text = ""
+    end
+    if Command("bring") then
+	local Target = FindPlayer(args[2])
+	if Target then
+	     bring(Target)
+	end
+    end
+    if Command("damage") then
+	local Bullets = tonumber(args[3])
+	if args[2] == "all" or args[2] == "everyone" or args[2] == "others" then
+	        Notif("OK", "damage "..args[2].." "..Bullets, 3)
+		TextBox.Text = ""
+		if Bullets ~= nil then
+			killall("all",Bullets)
+		else
+			Notif("Error", "no Amount found!", 3)
+		end
+	elseif args[2] == "inmates" then
+		if Bullets ~= nil then
+			killall(game.Teams.Inmates,Bullets)
+			Notif("OK", "damage "..args[2].." "..Bullets, 3)
+			TextBox.Text = ""
+		else
+			Notif("Error", "no Amount found!", 3)
+			TextBox.Text = ""
+		end
+	elseif args[2] == "guards" then
+		if Bullets ~= nil then
+			killall(game.Teams.Guards,Bullets)
+			Notif("OK", "damage "..args[2].." "..Bullets, 3)
+			TextBox.Text = ""
+		else
+			Notif("Error", "no Amount found!", 3)
+			TextBox.Text = ""
+		end
+	elseif args[2] == "criminals" then
+		if Bullets ~= nil then
+			killall(game.Teams.Criminals,Bullets)
+			Notif("OK", "damage "..args[2].." "..Bullets, 3)
+			TextBox.Text = ""
+		else
+			Notif("Error", "no Amount found!", 3)
+			TextBox.Text = ""
+		end
+	else
+		local p = FindPlayer(args[2])
+		if Bullets ~= nil then
+			KillPlayer(p,Bullets)
+			Notif("OK", "damage "..p.DisplayName.." "..Bullets, 3)
+			TextBox.Text = ""
+		else
+			Notif("Error", "no Amount found!", 3)
+			TextBox.Text = ""
+		end
+	end
+    end
+    if Command("autoguns") or Command("aguns") then
+	ChangeState(args[2],"AutoGuns")
+	TextBox.Text = ""
+    end
+    if Command("autoitems") or Command("aitems") then
+	ChangeState(args[2],"AutoItems")
+	TextBox.Text = ""
+    end
+    if Command("autoremoveff") or Command("autorff") then
+	ChangeState(args[2],"AutoRemoveff")
+	TextBox.Text = ""
+    end
+    if Command("autoguard") or Command("aguard") then
+	ChangeState(args[2],"Autoguard")
+	TextBox.Text = ""
+    end
+end 
 Player.Chatted:Connect(PC)
 plr.CharacterAdded:Connect(function(NewCharacter)
+    if Unloaded then return end
+    if States.AutoGuns then
+	wait(.5)
+	AllGuns()
+    end
+    if States.AutoItems then
+	wait(.5)
+	AllItems()
+    end
     repeat swait() until NewCharacter
     NewCharacter:WaitForChild("HumanoidRootPart")
-	  NewCharacter:WaitForChild("Head")
-	  NewCharacter:WaitForChild("Humanoid").BreakJointsOnDeath = not States.AutoRespawn
-	  NewCharacter:WaitForChild("Humanoid").Died:Connect(function()
-		  if not Unloaded and States.AutoRespawn then
-		  	Refresh()
-		end
+    NewCharacter:WaitForChild("Head")
+    NewCharacter:WaitForChild("Humanoid").BreakJointsOnDeath = not States.AutoRespawn
+    NewCharacter:WaitForChild("Humanoid").Died:Connect(function()
+	   if not Unloaded and States.AutoRespawn then
+		  Refresh()
+	   end
+    end)
+    if Unloaded then return end
+    if States.AutoRemoveff then
+	pcall(function()
+		NewCharacter:WaitForChild("ForceField"):Destroy()
 	end)
+    end
+    if States.Autoguard then
+	if not GuardsFull("c") then
+		if plr.Team ~= game.Teams.Guards then
+			ChangeTeam(game.Teams.Guards)
+		end
+	end
+    end
 end)
 TextBox.FocusLost:Connect(function(FocusLost)
 	if FocusLost then
@@ -572,4 +796,4 @@ TextBox.FocusLost:Connect(function(FocusLost)
 	end
 end)
 Refresh()
-Notif("Loads", "Loaded Admin Commands", 6)
+Notif("Loads", "Loaded Admin Commands, Chat ;cmds to show commands list", 6)
