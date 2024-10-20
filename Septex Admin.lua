@@ -2,22 +2,27 @@ print([[
 // Commands list:
 	unload | Unloaded script
 	refresh / re | Refresh Character
-	autorespawn / autore [on,off] | Auto Refresh Character (if died)
-	kill [plr,all,team] | Kill a player(s)
+	autorespawn / autore [on/off] | Auto Refresh Character (if died)
+	kill / oof / die [plr,all,team] | Kill a player(s)
 	whitelist [plr] | Whitelisted a player
 	unwhitelist [plr] | Backlisted a player
 	inmate | Change team inmates
 	guard | Change team guards
 	criminal | Change team criminals
-	olditemmethod / oldimethod [ON,OFF] | Teleports to get item
+	olditemmethod / oldimethod [ON/OFF] | Teleports to get item
 	prefix [STRING] | prefix new
 	pp | sus
 	bring [plr] | Teleport player to you
-	damage [plr,all,team] [Amount] | Damages a player(s)
-	autoguns / aguns [on,off] | Auto Get All Guns if died
-	autoitems / aitems [on,off] | Auto Get All items if died
-	autoremoveff / autorff [ON,OFF] | Auto Remove forcefield if died
-	autoguard / aguard | Auto Team Guard
+	damage / dmg [plr,all,team] [Amount] | Damages a player(s)
+	autoguns / aguns [on/off] | Auto Get All Guns if died
+	autoitems / aitems [on/off] | Auto Get All items if died
+	autoremoveff / autorff [ON/OFF] | Auto Remove forcefield if died
+	autoguard / aguard [on/off] | Auto Team Guard
+	killaura [ON/OFF] | Activate kill aura
+	copychat [on/off] | Copy chat Everyone
+	notify [on/off] | Notify player join and leave and pick up
+	antifling [on/off] | Activate antifling
+	infjump [ON/OFF] | Infinite jumps
 ]])
 
 local ScreenGui = Instance.new("ScreenGui",game.Players.LocalPlayer:WaitForChild("PlayerGui"))
@@ -28,7 +33,7 @@ TextBox.Name = "TextBox"
 TextBox.BackgroundColor3 = Color3.fromRGB(172, 172, 172)
 TextBox.BackgroundTransparency = 0.400
 TextBox.Position = UDim2.new(0.0255349874, 0, 0.800595582, 0)
-TextBox.Size = UDim2.new(0, 238, 0, 23)
+TextBox.Size = UDim2.new(0, 278, 0, 33)
 TextBox.Font = Enum.Font.SourceSans
 TextBox.PlaceholderText = "Press ; To Enter"
 TextBox.Text = ""
@@ -38,9 +43,8 @@ TextBox.ClearTextOnFocus = false
 TextBox.Draggable = true
 
 local plr,Player = game.Players.LocalPlayer,game.Players.LocalPlayer
-local Prefix = ";"
-local PrefixAdmin = ";"
 local saved = workspace:FindFirstChild("Criminals Spawn").SpawnLocation.CFrame
+local Prefix = ";"
 local Unloaded = false
 local States, BulletTable = {}, {}
       States.AutoRespawn = true
@@ -49,6 +53,10 @@ local States, BulletTable = {}, {}
       States.AutoItems = false
       States.AutoRemoveff = false
       States.Autoguard = false
+      States.Killaura = false
+      States.CopyChat = false
+      States.AntiFling = false
+      States.Infjump = false
 local API = {}
       API.Whitelisted = {}
 
@@ -552,8 +560,9 @@ end
 function PC(Message)
   if Unloaded then return end
   local args = Message:split(" ")
+  local First = args[1]
   function Command(Cmd)
-    return args[1] == Prefix..Cmd
+    return First == Prefix..Cmd
   end
   if Command("unload") then
 	ScreenGui:Destroy()
@@ -573,7 +582,7 @@ function PC(Message)
     ChangeState(args[2],"AutoRespawn")
     TextBox.Text = ""
   end
-  if Command("kill") then
+  if Command("kill") or Command("oof") or Command("die") then
     if args[2] == "all" or args[2] == "everyone" or args[2] == "others" then
 	Notif("OK", "Killed "..args[2], 3)
 	TextBox.Text = ""
@@ -632,7 +641,7 @@ function PC(Message)
 		TextBox.Text = ""
       end
   end
-  if Command("criminal") then
+  if Command("criminal") or Command("crim") then
       ChangeTeam(game.Teams.Criminals)
       Notif("OK", "Change team criminals", 3)
       TextBox.Text = ""
@@ -686,7 +695,7 @@ function PC(Message)
 	     bring(Target)
 	end
     end
-    if Command("damage") then
+    if Command("damage") or Command("dmg") then
 	local Bullets = tonumber(args[3])
 	if args[2] == "all" or args[2] == "everyone" or args[2] == "others" then
 	        Notif("OK", "damage "..args[2].." "..Bullets, 3)
@@ -748,8 +757,40 @@ function PC(Message)
 	TextBox.Text = ""
     end
     if Command("autoguard") or Command("aguard") then
-	ChangeState(args[2],"Autoguard")
+	if GuardsFull("c") then
+		Notif("Error", "Guards team is full!", 3)
+		TextBox.Text = ""
+	else
+		ChangeState(args[2],"Autoguard")
+		TextBox.Text = ""
+	end
+    end
+    if Command("killaura") then
+	ChangeState(args[2],"Killaura")
 	TextBox.Text = ""
+    end
+    if Command("copychat") then
+	ChangeState(args[2],"CopyChat")
+	TextBox.Text = ""
+    end
+    if Command("notify") then
+	ChangeState(args[2],"Notify")
+	TextBox.Text = ""
+    end
+    if Command("antifling") then
+	ChangeState(args[2],"AntiFling")
+	TextBox.Text = ""
+    end
+    if Command('infjump') then
+	local value = ChangeState(args[2],"Infjump")
+	TextBox.Text = ""
+	if value then
+		game:GetService("UserInputService").JumpRequest:connect(function()
+			if States.Infjump and not Unloaded then
+				game.Players.LocalPlayer.Character.Humanoid:ChangeState("Jumping")
+			end
+		end)
+	end
     end
 end 
 Player.Chatted:Connect(PC)
@@ -786,6 +827,39 @@ plr.CharacterAdded:Connect(function(NewCharacter)
 	end
     end
 end)
+coroutine.wrap(function()
+	while wait() do
+		if States.Killaura and not Unloaded then
+			for i,v in pairs(game.Players:GetPlayers()) do
+				if v and v ~= plr and not table.find(API.Whitelisted,v) then
+					if not v.Character.Humanoid.Health == 0 or not v.Character:FindFirstChild("ForceField") then
+						game.ReplicatedStorage.meleeEvent:FireServer(v)
+					end
+				end
+			end
+		end
+	end
+end)()
+function CopyChat(PLR)
+	PLR.Chatted:Connect(function(msg)
+		if States.CopyChat and Unloaded == false then
+			Chat("["..PLR.DisplayName.."]: "..msg)
+		end
+	end)
+end
+function PickUp(Target)
+	Target.Backpack.ChildAdded:Connect(function(Item)
+		if States.Notify and Unloaded == false then
+			game.StarterGui:SetCore("ChatMakeSystemMessage",  { Text = "[NOTIFY]: "..Target.Name.." Pick Up "..Item.Name, Color = Color3.fromRGB(16, 243, 255), Font = Enum.Font.SourceSansBold, FontSize = Enum.FontSize.Size24 } )
+                end
+        end)
+end
+for i,v in pairs(game.Players:GetPlayers()) do
+	if v ~= plr then
+		CopyChat(v)
+		PickUp(v)
+	end
+end
 TextBox.FocusLost:Connect(function(FocusLost)
 	if FocusLost then
 		if TextBox.Text:sub(1,#Prefix) ~= Prefix then
@@ -795,5 +869,42 @@ TextBox.FocusLost:Connect(function(FocusLost)
 		end
 	end
 end)
+game.Players.PlayerAdded:Connect(function(PLAYER)
+	if States.Notify and Unloaded == false then
+		game.StarterGui:SetCore("ChatMakeSystemMessage",  { Text = "[NOTIFY]: "..PLAYER.Name.." has joined the game!", Color = Color3.fromRGB(16, 243, 255), Font = Enum.Font.SourceSansBold, FontSize = Enum.FontSize.Size24 } )
+	end
+	CopyChat(PLAYER)
+	PickUp(PLAYER)
+end)
+game.Players.PlayerRemoving:Connect(function(PLAYER)
+	if States.Notify and not Unloaded then
+		game.StarterGui:SetCore("ChatMakeSystemMessage",  { Text = "[NOTIFY]: "..PLAYER.Name.." has left the game!", Color = Color3.fromRGB(50, 14, 255), Font = Enum.Font.SourceSansBold, FontSize = Enum.FontSize.Size24 } )
+	end
+	CopyChat(PLAYER)
+	PickUp(PLAYER)
+end)
+function NoCollision(PLR)
+	 if States.AntiFling and not Unloaded and PLR.Character then
+		 for _,x in pairs(PLR.Character:GetDescendants()) do
+			 if x:IsA("BasePart") and not Unloaded and States.AntiFling then
+				 x.CanCollide = false
+			 end
+		 end
+	 end
+ end
+ for _,v in pairs(game.Players:GetPlayers()) do
+	 if v ~= game.Players.LocalPlayer then
+		 local antifling = game:GetService('RunService').Stepped:connect(function()
+			 NoCollision(v)
+		 end)
+	 end
+ end
+ game.Players.PlayerAdded:Connect(function()
+	 if v ~= game.Players.LocalPlayer and antifling then
+		 local antifling = game:GetService('RunService').Stepped:connect(function()
+			NoCollision(v)
+		 end)
+	 end
+ end)
 Refresh()
 Notif("Loads", "Loaded Admin Commands, Chat ;cmds to show commands list", 6)
