@@ -25,7 +25,7 @@ print([[
 	infjump [ON/OFF] | Infinite jumps
 	ff / forcefield [ON/OFF] | activate forcefield
 	arrest [plr,all] | Arrests the targeted player
-	meleekill [plr,all,team] | Teleports to kill player(s)
+	meleekill / mk [plr,all,team] | Teleports to kill player(s)
 ]])
 
 local ScreenGui = Instance.new("ScreenGui",game.Players.LocalPlayer:WaitForChild("PlayerGui"))
@@ -530,8 +530,8 @@ function bring(Target,TeleportTo,MoreTP,DontBreakCar)
 					car = game:GetService("Workspace").CarContainer.ChildAdded:Wait()
 				end
 			end)()
-			repeat wait()
-				game:GetService("Players").LocalPlayer.Character:SetPrimaryPartCFrame(CFrame.new(-524, 55, 1777))
+			repeat task.wait()
+				MoveTo(game:GetService("Workspace").Prison_ITEMS.buttons:GetChildren()[7]["Car Spawner"].CFrame)
 				task.spawn(function()
 					workspace.Remote.ItemHandler:InvokeServer(game:GetService("Workspace").Prison_ITEMS.buttons:GetChildren()[7]["Car Spawner"])
 				end)
@@ -559,7 +559,7 @@ function bring(Target,TeleportTo,MoreTP,DontBreakCar)
 			end
 		until Target.Character:FindFirstChildOfClass("Humanoid").Sit == true
 		if Failed then
-			Notif("OK", "Failed to bring the player!", 3)
+			Notif("Error", "Failed to bring the player!", 3)
 			return
 		end
 		for i =1,10 do
@@ -627,6 +627,9 @@ function PC(Message)
   local First = args[1]
   function Command(Cmd)
     return First == Prefix..Cmd
+  end
+  function NotCommand(Cmd)
+    return First ~= Prefix..Cmd
   end
   if Command("unload") then
 	ScreenGui:Destroy()
@@ -896,7 +899,7 @@ function PC(Message)
 	end
 	TextBox.Text = ""
     end
-    if Command("meleekill") then
+    if Command("meleekill") or Command("mk") then
 	if args[2] == "all" then
 		for i,v in pairs(game.Players:GetPlayers()) do
 			if v ~= plr and not table.find(API.Whitelisted,v) then
@@ -929,6 +932,10 @@ function PC(Message)
 		local Target = FindPlayer(args[2])
 		Meleekill(Target)
 	end
+	TextBox.Text = ""
+    end
+    if NotCommand("unload") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("commands") and NotCommand("re") and NotCommand("refresh") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("inmate") and NotCommand("guard") and NotCommand("crim") and NotCommand("criminal") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("prefix") and NotCommand("pp") and NotCommand("bring") and NotCommand("damage") and NotCommand('dmg') and NotCommand('autoguns') and NotCommand("aguns") and NotCommand('autoitems') and NotCommand('aitems') and NotCommand('autoremoveff') and NotCommand("autorff") and NotCommand('autoguard') and NotCommand('aguard') and NotCommand('killaura') and NotCommand("copychat") and NotCommand("notify") and NotCommand('antifling') and NotCommand('infjump') and NotCommand('ff') and NotCommand('forcefield') and NotCommand('arrest') and NotCommand("ar") and NotCommand('meleekill') and NotCommand('mk') then
+	Notif("Error", "Unknown Cmd", 3)
 	TextBox.Text = ""
     end
 end 
