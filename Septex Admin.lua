@@ -26,6 +26,9 @@ print([[
 	ff / forcefield [ON/OFF] | activate forcefield
 	arrest [plr,all] | Arrests the targeted player
 	meleekill / mk [plr,all,team] | Teleports to kill player(s)
+	tp [plr1,plr2] | Teleports player1 to player2
+	speed / ws [number] | Changed speed to number
+	btools | Get a btools
 ]])
 
 local ScreenGui = Instance.new("ScreenGui",game.Players.LocalPlayer:WaitForChild("PlayerGui"))
@@ -560,6 +563,7 @@ function bring(Target,TeleportTo,MoreTP,DontBreakCar)
 		until Target.Character:FindFirstChildOfClass("Humanoid").Sit == true
 		if Failed then
 			Notif("Error", "Failed to bring the player!", 3)
+			TextBox.Text = ""
 			return
 		end
 		for i =1,10 do
@@ -581,8 +585,6 @@ function bring(Target,TeleportTo,MoreTP,DontBreakCar)
 				MoveTo(Orgin)
 			end
 		end)
-		Notif("OK", "bringing "..Target.DisplayName, 3)
-		TextBox.Text = ""
 	else
 		Notif("Error", "Player has died or is sitting or an unknown error.", 3)
 		TextBox.Text = ""
@@ -630,14 +632,13 @@ function IsTeamCommandCheck(String)
 	return nil
 end
 function PC(Message)
-  if Unloaded then return end
-  local args = Message:split(" ")
+  local args = Message:split(' ')
   local First = args[1]
   function Command(Cmd)
-    return First == Prefix..Cmd
+	return First == Prefix..Cmd
   end
   function NotCommand(Cmd)
-    return First ~= Prefix..Cmd
+	return First ~= Prefix..Cmd
   end
   if Command("unload") then
 	ScreenGui:Destroy()
@@ -769,6 +770,8 @@ function PC(Message)
 	local Target = FindPlayer(args[2])
 	if Target then
 	     bring(Target)
+	     Notif("OK", "bring "..Target.DisplayName, 3)
+	     TextBox.Text = ""
 	end
     end
     if Command("damage") or Command("dmg") then
@@ -945,8 +948,32 @@ function PC(Message)
 	end
 	TextBox.Text = ""
     end
-    if NotCommand("unload") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("commands") and NotCommand("re") and NotCommand("refresh") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("inmate") and NotCommand("guard") and NotCommand("crim") and NotCommand("criminal") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("prefix") and NotCommand("pp") and NotCommand("bring") and NotCommand("damage") and NotCommand('dmg') and NotCommand('autoguns') and NotCommand("aguns") and NotCommand('autoitems') and NotCommand('aitems') and NotCommand('autoremoveff') and NotCommand("autorff") and NotCommand('autoguard') and NotCommand('aguard') and NotCommand('killaura') and NotCommand("copychat") and NotCommand("notify") and NotCommand('antifling') and NotCommand('infjump') and NotCommand('ff') and NotCommand('forcefield') and NotCommand('arrest') and NotCommand("ar") and NotCommand('meleekill') and NotCommand('mk') then
-	Notif("Error", "Unknown Cmd", 3)
+    if Command('tp') then
+	local player1 = FindPlayer(args[2])
+	local player2 = FindPlayer(args[3])
+	if player1 and player2 then
+		bring(player1,player2.Character.HumanoidRootPart.CFrame)
+		Notif("OK", "Teleports "..player1.DisplayName.." to "..player2.DisplayName, 3)
+		TextBox.Text = ""
+	end
+    end
+    if Command("speed") or Command("ws") then
+	local speed = tonumber(args[2])
+	if speed ~= nil then
+		plr.Character.Humanoid.WalkSpeed = speed
+		Notif("OK", "Speed changed to "..speed, 3)
+		TextBox.Text = ""
+	else
+		Notif("Error", "no speed?", 3)
+	end
+    end
+    if Command('btools') then
+	Instance.new("HopperBin",plr.Backpack).BinType = 3
+	Instance.new("HopperBin",plr.Backpack).BinType = 4
+	TextBox.Text = ""
+    end
+    if NotCommand("unload") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("commands") and NotCommand("re") and NotCommand("refresh") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("inmate") and NotCommand("guard") and NotCommand("crim") and NotCommand("criminal") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("prefix") and NotCommand("pp") and NotCommand("bring") and NotCommand("damage") and NotCommand('dmg') and NotCommand('autoguns') and NotCommand("aguns") and NotCommand('autoitems') and NotCommand('aitems') and NotCommand('autoremoveff') and NotCommand("autorff") and NotCommand('autoguard') and NotCommand('aguard') and NotCommand('killaura') and NotCommand("copychat") and NotCommand("notify") and NotCommand('antifling') and NotCommand('infjump') and NotCommand('ff') and NotCommand('forcefield') and NotCommand('arrest') and NotCommand("ar") and NotCommand('meleekill') and NotCommand('mk') and NotCommand('tp') and NotCommand("speed") and NotCommand("ws") and NotCommand('btools') then
+	Notif("Error", "Unknown Command!", 3)
 	TextBox.Text = ""
     end
 end 
