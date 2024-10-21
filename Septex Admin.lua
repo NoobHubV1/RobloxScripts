@@ -29,6 +29,12 @@ print([[
 	tp [plr1,plr2] | Teleports player1 to player2
 	speed / ws [number] | Changed speed to number
 	btools | Get a btools
+	shotgun / rem / remington | Obtain remington 870
+	ak / ak-47 | Obtain ak-47
+	m9 / pistol | Obtain m9
+	m4a1 / m4 | Obtain m4a1
+	guns | Get all guns
+	items | Get all items
 ]])
 
 local ScreenGui = Instance.new("ScreenGui",game.Players.LocalPlayer:WaitForChild("PlayerGui"))
@@ -38,7 +44,7 @@ local TextBox = Instance.new("TextBox",ScreenGui)
 TextBox.Name = "TextBox"
 TextBox.BackgroundColor3 = Color3.fromRGB(172, 172, 172)
 TextBox.BackgroundTransparency = 0.400
-TextBox.Position = UDim2.new(0.0255349874, 0, 0.800595582, 0)
+TextBox.Position = UDim2.new(0.0359953903, 0, 0.128254473, 0)
 TextBox.Size = UDim2.new(0, 278, 0, 33)
 TextBox.Font = Enum.Font.SourceSans
 TextBox.PlaceholderText = "Press ; To Enter"
@@ -55,7 +61,7 @@ local Unloaded = false
 local States = {}
       States.AutoRespawn = true
       States.OldItemMethod = false
-      States.AutoGuns = true
+      States.AutoGuns = false
       States.AutoItems = false
       States.AutoRemoveff = false
       States.Autoguard = false
@@ -63,9 +69,6 @@ local States = {}
       States.CopyChat = false
       States.AntiFling = false
       States.ff = false
-      States.loopkillinmates = false
-      States.loopkillguards = false
-      States.loopkillcriminals = false
 local API = {}
       API.Whitelisted = {}
       API.ArrestOldP = {}
@@ -275,7 +278,10 @@ function Refresh()
   ChangeTeam(plr.Team)
 end
 function GetGun(Item, Ignore)
-	if States.OldItemMethod == false and not Unloaded then
+	if Unloaded then
+		return
+	end
+	if States.OldItemMethod == false then
 		task.spawn(function()
 			if not plr.Character:FindFirstChild(Item) or not plr.Backpack:FindFirstChild(Item) then
 				workspace:FindFirstChild("Remote")['ItemHandler']:InvokeServer({
@@ -298,7 +304,10 @@ function GetGun(Item, Ignore)
 	end
 end
 function GetSingle(Item, Ignore)
-	if States.OldItemMethod == false and not Unloaded then
+	if Unloaded then
+		return 
+	end
+	if States.OldItemMethod == false then
 		task.spawn(function()
 			if not plr.Character:FindFirstChild(Item) or not plr.Backpack:FindFirstChild(Item) then
 				workspace:FindFirstChild("Remote")['ItemHandler']:InvokeServer({
@@ -474,11 +483,11 @@ function AllItems()
 	end
 	GetGun("AK-47", true)
 	task.spawn(function()
-		API:GetGun("Remington 870", true)
+		GetGun("Remington 870", true)
 	end)
 	GetGun("M9", true)
 	pcall(function()
-		API:GetSingle("Hammer", true)
+		GetSingle("Hammer", true)
 	end)
 	GetSingle("Crude Knife")
 	game:GetService("Players").LocalPlayer.Character:SetPrimaryPartCFrame(saved)
@@ -725,6 +734,7 @@ function PC(Message)
   end
   if Command("olditemmethod") or Command("oldimethod") then
       ChangeState(args[2],"OldItemMethod")
+      TextBox.Text = ""
   end
   if Command("prefix") then
 	local New = args[2]
@@ -972,7 +982,44 @@ function PC(Message)
 	Instance.new("HopperBin",plr.Backpack).BinType = 4
 	TextBox.Text = ""
     end
-    if NotCommand("unload") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("commands") and NotCommand("re") and NotCommand("refresh") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("inmate") and NotCommand("guard") and NotCommand("crim") and NotCommand("criminal") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("prefix") and NotCommand("pp") and NotCommand("bring") and NotCommand("damage") and NotCommand('dmg') and NotCommand('autoguns') and NotCommand("aguns") and NotCommand('autoitems') and NotCommand('aitems') and NotCommand('autoremoveff') and NotCommand("autorff") and NotCommand('autoguard') and NotCommand('aguard') and NotCommand('killaura') and NotCommand("copychat") and NotCommand("notify") and NotCommand('antifling') and NotCommand('infjump') and NotCommand('ff') and NotCommand('forcefield') and NotCommand('arrest') and NotCommand("ar") and NotCommand('meleekill') and NotCommand('mk') and NotCommand('tp') and NotCommand("speed") and NotCommand("ws") and NotCommand('btools') then
+    if Command("shotgun") or Command("rem") or Command("remington") then
+	GetGun('Remington 870')
+	Notif("OK", 'Get Remington 870', 3)
+	TextBox.Text = ""
+    end
+    if Command("ak") or Command('ak-47') then
+	GetGun('AK-47')
+	Notif("OK", 'Get AK-47', 3)
+	TextBox.Text = ""
+    end
+    if Command('m9') or Command("pistol") then
+	GetGun('M9')
+	Notif("OK", 'Get M9', 3)
+	TextBox.Text = ""
+    end
+    if Command('guns') then
+	AllGuns()
+	Notif("OK", 'Get all guns', 3)
+	TextBox.Text = ""
+    end
+    if Command("items") then
+	AllItems()
+	Instance.new("HopperBin",plr.Backpack).BinType = 3
+	Instance.new("HopperBin",plr.Backpack).BinType = 4
+	Notif("OK", 'Get all Items', 3)
+	TextBox.Text = ""
+    end
+    if Command('m4') or Command('m4a1') then
+	if not game:GetService("MarketplaceService"):UserOwnsGamePassAsync(plr.UserId, 96651) then
+		Notif("Error", 'Not Gamepass', 3)
+		TextBox.Text = ''
+	else
+		GetGun("M4A1")
+		Notif("OK", "Get M4A1", 3)
+		TextBox.Text = ''
+	end
+    end
+    if NotCommand("unload") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("commands") and NotCommand("re") and NotCommand("refresh") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("inmate") and NotCommand("guard") and NotCommand("crim") and NotCommand("criminal") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("prefix") and NotCommand("pp") and NotCommand("bring") and NotCommand("damage") and NotCommand('dmg') and NotCommand('autoguns') and NotCommand("aguns") and NotCommand('autoitems') and NotCommand('aitems') and NotCommand('autoremoveff') and NotCommand("autorff") and NotCommand('autoguard') and NotCommand('aguard') and NotCommand('killaura') and NotCommand("copychat") and NotCommand("notify") and NotCommand('antifling') and NotCommand('infjump') and NotCommand('ff') and NotCommand('forcefield') and NotCommand('arrest') and NotCommand("ar") and NotCommand('meleekill') and NotCommand('mk') and NotCommand('tp') and NotCommand("speed") and NotCommand("ws") and NotCommand('btools') and NotCommand("shotgun") and NotCommand("rem") and NotCommand("remington") and NotCommand("ak") and NotCommand('ak-47') and NotCommand('m9') and NotCommand('pistol') and NotCommand("guns") and NotCommand("items") and NotCommand('m4') and NotCommand('m4a1') then
 	Notif("Error", "not a valid a command", 3)
 	TextBox.Text = ""
     end
@@ -987,12 +1034,14 @@ end)
 plr.CharacterAdded:Connect(function(NewCharacter)
     if Unloaded then return end
     if States.AutoGuns then
-	wait(.5)
+	wait(.4)
 	AllGuns()
     end
     if States.AutoItems then
-	wait(.5)
+	wait(.4)
 	AllItems()
+	Instance.new("HopperBin",plr.Backpack).BinType = 3
+	Instance.new("HopperBin",plr.Backpack).BinType = 4
     end
     repeat swait() until NewCharacter
     NewCharacter:WaitForChild("HumanoidRootPart")
@@ -1110,3 +1159,4 @@ function NoCollision(PLR)
  end)
 Refresh()
 Notif("Loads", "Loaded Admin Commands, Chat ;cmds to show commands list", 6)
+TextBox:TweenPosition(UDim2.new(0.125, 0, 0.25, 0),"Out","Back",.5)
