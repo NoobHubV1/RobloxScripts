@@ -973,11 +973,17 @@ function PC(Message)
 	TextBox.Text = ""
     end
     if NotCommand("unload") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("commands") and NotCommand("re") and NotCommand("refresh") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("inmate") and NotCommand("guard") and NotCommand("crim") and NotCommand("criminal") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("prefix") and NotCommand("pp") and NotCommand("bring") and NotCommand("damage") and NotCommand('dmg') and NotCommand('autoguns') and NotCommand("aguns") and NotCommand('autoitems') and NotCommand('aitems') and NotCommand('autoremoveff') and NotCommand("autorff") and NotCommand('autoguard') and NotCommand('aguard') and NotCommand('killaura') and NotCommand("copychat") and NotCommand("notify") and NotCommand('antifling') and NotCommand('infjump') and NotCommand('ff') and NotCommand('forcefield') and NotCommand('arrest') and NotCommand("ar") and NotCommand('meleekill') and NotCommand('mk') and NotCommand('tp') and NotCommand("speed") and NotCommand("ws") and NotCommand('btools') then
-	Notif("Error", "Unknown Command!", 3)
+	Notif("Error", "not a valid a command", 3)
 	TextBox.Text = ""
     end
 end 
-Player.Chatted:Connect(PC)
+Player.Chatted:Connect(function(msg)
+	if string.sub(msg,1,1) ~= Prefix then
+		PC(Prefix..msg)
+	else
+		PC(msg)
+	end
+end)
 plr.CharacterAdded:Connect(function(NewCharacter)
     if Unloaded then return end
     if States.AutoGuns then
