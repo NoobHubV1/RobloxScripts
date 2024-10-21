@@ -704,7 +704,7 @@ function IsTeamCommandCheck(String)
 	return nil
 end
 function PC(Message)
-  local args = Message:split(' ')
+  local args = Message:lower():split(' ')
   local First = args[1]
   function Command(Cmd)
 	return First == Prefix..Cmd
@@ -1290,3 +1290,4 @@ function NoCollision(PLR)
 Refresh()
 Notif("Loads", "Loaded Admin Commands, Chat ;cmds to show commands list", 6)
 Frame:TweenPosition(UDim2.new(0.5, 0, 0.899999998, 0)-UDim2.new(0,0,.05,0),"Out","Back",.5)
+Notif('Notify', "Text "..Prefix.."".."?", 3)
