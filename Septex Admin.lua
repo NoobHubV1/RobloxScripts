@@ -20,12 +20,12 @@ print([[
 	autoguard / aguard [on/off] | Auto Team Guard
 	killaura [ON/OFF] | Activate kill aura
 	copychat [on/off] | Copy chat Everyone
-	notify [on/off] | Notify player join and leave and pick up
+	notify [on/off] | Notify player join and leave and pick up and died
 	antifling [on/off] | Activate antifling
 	infjump [ON/OFF] | Infinite jumps
 	ff / forcefield [ON/OFF] | activate forcefield
 	arrest [plr,all] | Arrests the targeted player
-	meleekill / mk [plr,all,team] | Teleports to kill player(s)
+	meleekill / mk / mkill [plr,all,team] | Teleports to kill player(s)
 	tp [plr1,plr2] | Teleports player1 to player2
 	speed / ws [number] | Changed speed to number
 	btools | Get a btools
@@ -35,28 +35,39 @@ print([[
 	m4a1 / m4 | Obtain m4a1
 	guns | Get all guns
 	items | Get all items
+	hammer / ham | Obtain Hammer
+	knife / knive | Obtain Crude Knife
+	food | Obtain Breakfash / Lunch / Dinner
+	drag | draggable the Text Command
 ]])
-
+local Prefix = ';'
 local ScreenGui = Instance.new("ScreenGui",game.Players.LocalPlayer:WaitForChild("PlayerGui"))
 ScreenGui.Name = "ScreenGui"
 ScreenGui.ResetOnSpawn = false
-local TextBox = Instance.new("TextBox",ScreenGui)
+local Frame = Instance.new("Frame",ScreenGui)
+Frame.Name = "Frame"
+Frame.AnchorPoint = Vector2.new(0.5, 0.5)
+Frame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Frame.BackgroundTransparency = 1.000
+Frame.BorderSizePixel = 0
+Frame.Position = UDim2.new(0.5, 0, 0.899999998, 0)
+Frame.Position = Frame.Position+UDim2.new(0,0,1.1,0)
+Frame.Size = UDim2.new(0, 577, 0, 65)
+local TextBox = Instance.new("TextBox",Frame)
 TextBox.Name = "TextBox"
 TextBox.BackgroundColor3 = Color3.fromRGB(172, 172, 172)
 TextBox.BackgroundTransparency = 0.400
 TextBox.Position = UDim2.new(0.0359953903, 0, 0.128254473, 0)
-TextBox.Size = UDim2.new(0, 278, 0, 33)
+TextBox.Size = UDim2.new(0, 519, 0, 46)
 TextBox.Font = Enum.Font.SourceSans
-TextBox.PlaceholderText = "Press ; To Enter"
+TextBox.PlaceholderText = "Press "..Prefix.." To Enter"
 TextBox.Text = ""
 TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
 TextBox.TextSize = 23.000
 TextBox.ClearTextOnFocus = false
-TextBox.Draggable = true
 
 local plr,Player = game.Players.LocalPlayer,game.Players.LocalPlayer
 local saved = workspace:FindFirstChild("Criminals Spawn").SpawnLocation.CFrame
-local Prefix = ";"
 local Unloaded = false
 local States = {}
       States.AutoRespawn = true
@@ -69,11 +80,63 @@ local States = {}
       States.CopyChat = false
       States.AntiFling = false
       States.ff = false
+      States.Notify = false
+      States.DraggableGuis = false
 local API = {}
       API.Whitelisted = {}
       API.ArrestOldP = {}
-      API.Loopkilling = {}
 
+function DragifyGui(Frame,Is)
+	coroutine.wrap(function()
+		local dragToggle = nil
+		local dragSpeed = 5
+		local dragInput = nil
+		local dragStart = nil
+		local dragPos = nil
+		local startPos = nil
+		local function updateInput(input)
+			if not Is then
+				if not States.DraggableGuis then
+					return
+				end
+			end
+			local Delta = input.Position - dragStart
+			local Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + Delta.X, startPos.Y.Scale, startPos.Y.Offset + Delta.Y)
+			game:GetService("TweenService"):Create(Frame, TweenInfo.new(0.30), {Position = Position}):Play()
+		end
+		Frame.InputBegan:Connect(function(input)
+			if not Is then
+				if States.DraggableGuis then
+					if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) and game:GetService("UserInputService"):GetFocusedTextBox() == nil then
+						dragToggle = true
+						dragStart = input.Position
+						startPos = Frame.Position
+						input.Changed:Connect(function()
+							if input.UserInputState == Enum.UserInputState.End then
+								dragToggle = false
+							end
+						end)
+					end
+				end
+			end
+		end)
+		Frame.InputChanged:Connect(function(input)
+			if States.DraggableGuis then
+				if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+					dragInput = input
+				end
+			end
+		end)
+		game:GetService("UserInputService").InputChanged:Connect(function(input)
+			if States.DraggableGuis then
+				if input == dragInput and dragToggle then
+					updateInput(input)
+				end
+			end
+		end)
+	end)()
+end
+DragifyGui(TextBox)
 function CreateBulletTable(Bullet, Target)
 	local Args = {}
 	for i =1,Bullet do
@@ -922,7 +985,7 @@ function PC(Message)
 	end
 	TextBox.Text = ""
     end
-    if Command("meleekill") or Command("mk") then
+    if Command("meleekill") or Command("mk") or Command('mkill') then
 	local Team = IsTeamCommandCheck(args[2])
 	if args[2] == "all" then
 		for i,v in pairs(game.Players:GetPlayers()) do
@@ -1019,18 +1082,77 @@ function PC(Message)
 		TextBox.Text = ''
 	end
     end
-    if NotCommand("unload") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("commands") and NotCommand("re") and NotCommand("refresh") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("inmate") and NotCommand("guard") and NotCommand("crim") and NotCommand("criminal") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("prefix") and NotCommand("pp") and NotCommand("bring") and NotCommand("damage") and NotCommand('dmg') and NotCommand('autoguns') and NotCommand("aguns") and NotCommand('autoitems') and NotCommand('aitems') and NotCommand('autoremoveff') and NotCommand("autorff") and NotCommand('autoguard') and NotCommand('aguard') and NotCommand('killaura') and NotCommand("copychat") and NotCommand("notify") and NotCommand('antifling') and NotCommand('infjump') and NotCommand('ff') and NotCommand('forcefield') and NotCommand('arrest') and NotCommand("ar") and NotCommand('meleekill') and NotCommand('mk') and NotCommand('tp') and NotCommand("speed") and NotCommand("ws") and NotCommand('btools') and NotCommand("shotgun") and NotCommand("rem") and NotCommand("remington") and NotCommand("ak") and NotCommand('ak-47') and NotCommand('m9') and NotCommand('pistol') and NotCommand("guns") and NotCommand("items") and NotCommand('m4') and NotCommand('m4a1') then
-	Notif("Error", "not a valid a command", 3)
+    if Command("hammer") or Command('ham') then
+	GetSingle('Hammer')
+	Notif('OK', 'Get Hammer', 3)
 	TextBox.Text = ""
     end
-end 
-Player.Chatted:Connect(function(msg)
-	if string.sub(msg,1,1) ~= Prefix then
-		PC(Prefix..msg)
-	else
-		PC(msg)
+    if Command('knife') or Command('knive') then
+	GetSingle('Crude Knife')
+	Notif('OK', "Get Crude Knife", 3)
+	TextBox.Text = ""
+    end
+    if Command("food") then
+	if workspace.Prison_ITEMS.giver:FindFirstChild("Breakfast") then
+		GetGun("Breakfast")
+		Notif('OK', 'Get food Breakfast', 3)
+		TextBox.Text = ''
 	end
-end)
+	if workspace.Prison_ITEMS.giver:FindFirstChild("Lunch") then
+		GetGun("Lunch")
+		Notif('OK', 'Get food Lunch', 3)
+		TextBox.Text = ''
+	end
+	if workspace.Prison_ITEMS.giver:FindFirstChild("Dinner") then
+		GetGun("Dinner")
+		Notif('OK', 'Get food Dinner', 3)
+		TextBox.Text = ''
+	end
+	if not workspace.Prison_ITEMS.giver:FindFirstChild("Breakfast") and not workspace.Prison_ITEMS.giver:FindFirstChild("Lunch") and not workspace.Prison_ITEMS.giver:FindFirstChild("Dinner") then
+		Notif('Error', "No Food Found!", 3)
+		TextBox.Text = ''
+	end
+    end
+    if Command("goto") or Command("to") then
+	local Target = FindPlayer(args[2])
+	local TargetPosition = GetPosition(Target)
+	if Target then
+		MoveTo(TargetPosition)
+		Notif('OK', "goto to "..Target.DisplayName, 3)
+		TextBox.Text = ""
+	end
+    end
+    if Command("drag") then
+	ChangeState(args[2],'DraggableGuis')
+	TextBox.Text = ""
+    end
+    if NotCommand("unload") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("commands") and NotCommand("re") and NotCommand("refresh") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("inmate") and NotCommand("guard") and NotCommand("crim") and NotCommand("criminal") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("prefix") and NotCommand("pp") and NotCommand("bring") and NotCommand("damage") and NotCommand('dmg') and NotCommand('autoguns') and NotCommand("aguns") and NotCommand('autoitems') and NotCommand('aitems') and NotCommand('autoremoveff') and NotCommand("autorff") and NotCommand('autoguard') and NotCommand('aguard') and NotCommand('killaura') and NotCommand("copychat") and NotCommand("notify") and NotCommand('antifling') and NotCommand('infjump') and NotCommand('ff') and NotCommand('forcefield') and NotCommand('arrest') and NotCommand("ar") and NotCommand('meleekill') and NotCommand('mk') and NotCommand("mkill") and NotCommand('tp') and NotCommand("speed") and NotCommand("ws") and NotCommand('btools') and NotCommand("shotgun") and NotCommand("rem") and NotCommand("remington") and NotCommand("ak") and NotCommand('ak-47') and NotCommand('m9') and NotCommand('pistol') and NotCommand("guns") and NotCommand("items") and NotCommand('m4') and NotCommand('m4a1') and NotCommand("hammer") and NotCommand('ham') and NotCommand("knife") and NotCommand('knive') and NotCommand("food") and NotCommand("goto") and NotCommand('to') and NotCommand('drag') then
+	if string.sub(Message,1,1) == Prefix or TextBox.Text:sub(1,#Prefix) == Prefix then
+		Notif("Error", Message.." is not a valid command.", 3)
+		TextBox.Text = ""
+	else
+		Notif('Error', Prefix..""..Message.." is not a valid command.", 3)
+		TextBox.Text = ''
+	end
+    end
+end
+function PlayerChatted(chat)
+	if string.sub(chat,1,1) ~= Prefix then
+		PC(Prefix..chat)
+	else
+		PC(chat)
+	end
+end
+function TB(Focus)
+	if Focus and not Unloaded then
+		if TextBox.Text:sub(1,#Prefix) ~= Prefix then
+			PC(Prefix..TextBox.Text)
+		else
+			PC(TextBox.Text)
+		end
+	end
+end
+Player.Chatted:Connect(PlayerChatted)
 plr.CharacterAdded:Connect(function(NewCharacter)
     if Unloaded then return end
     if States.AutoGuns then
@@ -1105,27 +1227,34 @@ function PickUp(Target)
                 end
         end)
 end
+function Died(PLAYER)
+	PLAYER.CharacterAdded:Connect(function(NewChar)
+		repeat swait() until NewChar
+		NewChar:WaitForChild("HumanoidRootPart")
+		NewChar:WaitForChild("Head")
+                NewChar:WaitForChild("Humanoid").BreakJointsOnDeath = not States.Notify
+                NewChar:WaitForChild("Humanoid").Died:Connect(function()
+			if States.Notify and Unloaded == false then
+				game.StarterGui:SetCore("ChatMakeSystemMessage",  { Text = "[NOTIFY]: "..PLAYER.Name.." has died!", Color = Color3.fromRGB(16, 243, 255), Font = Enum.Font.SourceSansBold, FontSize = Enum.FontSize.Size24 } )
+			end
+		end)
+	end)
+end
 for i,v in pairs(game.Players:GetPlayers()) do
 	if v ~= plr then
 		CopyChat(v)
 		PickUp(v)
+		Died(v)
 	end
 end
-TextBox.FocusLost:Connect(function(FocusLost)
-	if FocusLost then
-		if TextBox.Text:sub(1,#Prefix) ~= Prefix then
-			PC(Prefix..TextBox.Text)
-		else
-			PC(TextBox.Text)
-		end
-	end
-end)
+TextBox.FocusLost:Connect(TB)
 game.Players.PlayerAdded:Connect(function(PLAYER)
 	if States.Notify and Unloaded == false then
 		game.StarterGui:SetCore("ChatMakeSystemMessage",  { Text = "[NOTIFY]: "..PLAYER.Name.." has joined the game!", Color = Color3.fromRGB(16, 243, 255), Font = Enum.Font.SourceSansBold, FontSize = Enum.FontSize.Size24 } )
 	end
 	CopyChat(PLAYER)
 	PickUp(PLAYER)
+	Died(PLAYER)
 end)
 game.Players.PlayerRemoving:Connect(function(PLAYER)
 	if States.Notify and not Unloaded then
@@ -1133,6 +1262,7 @@ game.Players.PlayerRemoving:Connect(function(PLAYER)
 	end
 	CopyChat(PLAYER)
 	PickUp(PLAYER)
+	Died(PLAYER)
 end)
 function NoCollision(PLR)
 	 if States.AntiFling and not Unloaded and PLR.Character then
@@ -1159,4 +1289,4 @@ function NoCollision(PLR)
  end)
 Refresh()
 Notif("Loads", "Loaded Admin Commands, Chat ;cmds to show commands list", 6)
-TextBox:TweenPosition(UDim2.new(0.125, 0, 0.25, 0),"Out","Back",.5)
+Frame:TweenPosition(UDim2.new(0.5, 0, 0.899999998, 0)-UDim2.new(0,0,.05,0),"Out","Back",.5)
