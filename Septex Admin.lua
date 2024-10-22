@@ -1,3 +1,6 @@
+if game:FindFirstChild('Septex_Admin') then
+game:GetService("StarterGui"):SetCore("SendNotification", {Title = "Error", Text = "Septex Admin is already executed!", Duration = 7,})
+else
 print([[
 // Commands list:
 	unload | Unloaded script
@@ -39,8 +42,12 @@ print([[
 	knife / knive | Obtain Crude Knife
 	food | Obtain Breakfash / Lunch / Dinner
 	drag | draggable the Text Command
+	autodumpcars / autodeletecars / autonocars | Auto Remove car (if bring)
+	opengate | Open the gate
 ]])
 local Prefix = ';'
+local Folder = Instance.new("Folder",game)
+Folder.Name = "Septex_Admin"
 local ScreenGui = Instance.new("ScreenGui",game.Players.LocalPlayer:WaitForChild("PlayerGui"))
 ScreenGui.Name = "ScreenGui"
 ScreenGui.ResetOnSpawn = false
@@ -53,18 +60,30 @@ Frame.BorderSizePixel = 0
 Frame.Position = UDim2.new(0.5, 0, 0.899999998, 0)
 Frame.Position = Frame.Position+UDim2.new(0,0,1.1,0)
 Frame.Size = UDim2.new(0, 577, 0, 65)
-local TextBox = Instance.new("TextBox",Frame)
+local TextLabel = Instance.new("TextLabel",Frame)
+TextLabel.Name = "TextLabel"
+TextLabel.BackgroundColor3 = Color3.fromRGB(155, 155, 155)
+TextLabel.Position = UDim2.new(0.0200897697, 0, 0.022615375, 0)
+TextLabel.Size = UDim2.new(0.974358976, 0, 0.945454538, 0)
+TextLabel.Text = ""
+TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel.Visible = true
+local TextBox = Instance.new("TextBox",TextLabel)
 TextBox.Name = "TextBox"
-TextBox.BackgroundColor3 = Color3.fromRGB(172, 172, 172)
-TextBox.BackgroundTransparency = 0.400
+TextBox.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextBox.BackgroundTransparency = 1.000
+TextBox.BorderSizePixel = 0
 TextBox.Position = UDim2.new(0.0359953903, 0, 0.128254473, 0)
 TextBox.Size = UDim2.new(0, 519, 0, 46)
 TextBox.Font = Enum.Font.SourceSans
+TextBox.PlaceholderColor3 = Color3.fromRGB(205, 205, 205)
 TextBox.PlaceholderText = "Press "..Prefix.." To Enter"
 TextBox.Text = ""
 TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextBox.TextSize = 23.000
 TextBox.ClearTextOnFocus = false
+TextBox.TextSize = 24.000
+TextBox.TextTransparency = 0.140
+TextBox.TextWrapped = true
 
 local plr,Player = game.Players.LocalPlayer,game.Players.LocalPlayer
 local saved = workspace:FindFirstChild("Criminals Spawn").SpawnLocation.CFrame
@@ -82,6 +101,7 @@ local States = {}
       States.ff = false
       States.Notify = false
       States.DraggableGuis = false
+      States.AutoDumpCars = false
 local API = {}
       API.Whitelisted = {}
       API.ArrestOldP = {}
@@ -136,7 +156,7 @@ function DragifyGui(Frame,Is)
 		end)
 	end)()
 end
-DragifyGui(TextBox)
+DragifyGui(TextLabel)
 function CreateBulletTable(Bullet, Target)
 	local Args = {}
 	for i =1,Bullet do
@@ -187,11 +207,11 @@ end
 
 function MoveTo(Cframe)
 	Cframe = ConvertPosition(Cframe)
-	local Amount = 1
+	local Amount = 5
 	if Player.PlayerGui['Home']['hud']['Topbar']['titleBar'].Title.Text:lower() == "lights out" or Player.PlayerGui.Home.hud.Topbar.titleBar.Title.Text:lower() == "lightsout" then
-		Amount = 1
+		Amount = 10
 	end
-	for i = 1, Amount do
+	for i = 1, Amount do task.wait()
 		UnSit()
 		Player.Character:WaitForChild("HumanoidRootPart").CFrame = Cframe
 	end
@@ -214,9 +234,9 @@ function WaitForRespawn(Cframe,NoForce)
 				NewCharacter:WaitForChild("HumanoidRootPart")
 				local Amount = 10
 				if Player.PlayerGui['Home']['hud']['Topbar']['titleBar'].Title.Text:lower() == "lights out" or Player.PlayerGui.Home.hud.Topbar.titleBar.Title.Text:lower() == "lightsout" then
-					Amount = 16
+					Amount = 15
 				end
-				for i = 1, Amount do
+				for i = 1,Amount do
 					UnSit()
 					NewCharacter:WaitForChild("HumanoidRootPart").CFrame = Cframe
 					swait()
@@ -573,7 +593,7 @@ local ChangeState = function(Type,StateType)
 	Notif("OK", StateType.." has been changed to "..tostring(Value), 3)
 	return Value
 end
-function bring(Target,TeleportTo,MoreTP,DontBreakCar)
+function bring(Target,TeleportTo,MoreTP)
 	if not IsBringing and Target and Target.Character:FindFirstChildOfClass("Humanoid") and Target.Character:FindFirstChildOfClass("Humanoid").Health>0 and Target.Character:FindFirstChildOfClass("Humanoid").Sit == false then
 		if not TeleportTo then
 			TeleportTo = GetPosition()
@@ -644,15 +664,18 @@ function bring(Target,TeleportTo,MoreTP,DontBreakCar)
 		end
 		wait(.1)
 		task.spawn(function()
-			if not DontBreakCar then
-				repeat task.wait() until Target.Character:FindFirstChildOfClass("Humanoid").Sit == false
+			if States.AutoDumpCars and not Unloaded then
+				repeat wait() until Target.Character:FindFirstChildOfClass("Humanoid").Sit == false
 				repeat wait()
 					Seat:Sit(Player.Character:FindFirstChildOfClass("Humanoid"))
 				until Player.Character:FindFirstChildOfClass("Humanoid").Sit == true
 				for i =1,10 do
-					car:SetPrimaryPartCFrame(CFrame.new(0,workspace.FallenPartsDestroyHeight+10,0))
+					car:SetPrimaryPartCFrame(CFrame.new(30, 30, 30))
 					swait()
 				end
+				UnSit()
+				MoveTo(Orgin)
+			elseif not States.AutoDumpCars and Unloaded == false then
 				UnSit()
 				MoveTo(Orgin)
 			end
@@ -703,6 +726,12 @@ function IsTeamCommandCheck(String)
 	end
 	return nil
 end
+function Destroy(parent)
+	parent:Destroy()
+	pcall(function()
+		parent:Remove()
+	end)
+end
 function PC(Message)
   local args = Message:lower():split(' ')
   local First = args[1]
@@ -713,6 +742,7 @@ function PC(Message)
 	return First ~= Prefix..Cmd
   end
   if Command("unload") then
+	Destroy(game:FindFirstChild('Septex_Admin'))
 	ScreenGui:Destroy()
 	Unloaded = true
 	Notif("OK", "Script is Unloaded", 3)
@@ -1126,7 +1156,22 @@ function PC(Message)
 	ChangeState(args[2],'DraggableGuis')
 	TextBox.Text = ""
     end
-    if NotCommand("unload") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("commands") and NotCommand("re") and NotCommand("refresh") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("inmate") and NotCommand("guard") and NotCommand("crim") and NotCommand("criminal") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("prefix") and NotCommand("pp") and NotCommand("bring") and NotCommand("damage") and NotCommand('dmg') and NotCommand('autoguns') and NotCommand("aguns") and NotCommand('autoitems') and NotCommand('aitems') and NotCommand('autoremoveff') and NotCommand("autorff") and NotCommand('autoguard') and NotCommand('aguard') and NotCommand('killaura') and NotCommand("copychat") and NotCommand("notify") and NotCommand('antifling') and NotCommand('infjump') and NotCommand('ff') and NotCommand('forcefield') and NotCommand('arrest') and NotCommand("ar") and NotCommand('meleekill') and NotCommand('mk') and NotCommand("mkill") and NotCommand('tp') and NotCommand("speed") and NotCommand("ws") and NotCommand('btools') and NotCommand("shotgun") and NotCommand("rem") and NotCommand("remington") and NotCommand("ak") and NotCommand('ak-47') and NotCommand('m9') and NotCommand('pistol') and NotCommand("guns") and NotCommand("items") and NotCommand('m4') and NotCommand('m4a1') and NotCommand("hammer") and NotCommand('ham') and NotCommand("knife") and NotCommand('knive') and NotCommand("food") and NotCommand("goto") and NotCommand('to') and NotCommand('drag') then
+    if Command("autodumpcars") or Command("autodeletecars") or Command('autonocars') then
+	ChangeState(args[2],'AutoDumpCars')
+	TextBox.Text = ''
+    end
+    if Command('opengate') then
+	local LastP = GetPosition()
+	local Gate = workspace.Prison_ITEMS.buttons:FindFirstChild("Prison Gate")["Prison Gate"]
+	plr.Character.HumanoidRootPart.CFrame = Gate.CFrame
+	repeat task.wait()
+		workspace.Remote.ItemHandler:InvokeServer(Gate)
+	until Gate
+	MoveTo(LastP)
+	Notif("OK", 'Open the gate', 3)
+	TextBox.Text = ""
+    end
+    if NotCommand("unload") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("commands") and NotCommand("re") and NotCommand("refresh") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("inmate") and NotCommand("guard") and NotCommand("crim") and NotCommand("criminal") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("prefix") and NotCommand("pp") and NotCommand("bring") and NotCommand("damage") and NotCommand('dmg') and NotCommand('autoguns') and NotCommand("aguns") and NotCommand('autoitems') and NotCommand('aitems') and NotCommand('autoremoveff') and NotCommand("autorff") and NotCommand('autoguard') and NotCommand('aguard') and NotCommand('killaura') and NotCommand("copychat") and NotCommand("notify") and NotCommand('antifling') and NotCommand('infjump') and NotCommand('ff') and NotCommand('forcefield') and NotCommand('arrest') and NotCommand("ar") and NotCommand('meleekill') and NotCommand('mk') and NotCommand("mkill") and NotCommand('tp') and NotCommand("speed") and NotCommand("ws") and NotCommand('btools') and NotCommand("shotgun") and NotCommand("rem") and NotCommand("remington") and NotCommand("ak") and NotCommand('ak-47') and NotCommand('m9') and NotCommand('pistol') and NotCommand("guns") and NotCommand("items") and NotCommand('m4') and NotCommand('m4a1') and NotCommand("hammer") and NotCommand('ham') and NotCommand("knife") and NotCommand('knive') and NotCommand("food") and NotCommand("goto") and NotCommand('to') and NotCommand('drag') and NotCommand('autonocars') and NotCommand('autodumpcars') and NotCommand("autodeletecars") and NotCommand('opengate') then
 	if string.sub(Message,1,1) == Prefix or TextBox.Text:sub(1,#Prefix) == Prefix then
 		Notif("Error", Message.." is not a valid command.", 3)
 		TextBox.Text = ""
@@ -1290,4 +1335,4 @@ function NoCollision(PLR)
 Refresh()
 Notif("Loads", "Loaded Admin Commands, Chat ;cmds to show commands list", 6)
 Frame:TweenPosition(UDim2.new(0.5, 0, 0.899999998, 0)-UDim2.new(0,0,.05,0),"Out","Back",.5)
-Notif('Notify', "Text "..Prefix.."".."?", 3)
+end
