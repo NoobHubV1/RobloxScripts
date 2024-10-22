@@ -1,51 +1,8 @@
 if game:FindFirstChild('Septex_Admin') then
 game:GetService("StarterGui"):SetCore("SendNotification", {Title = "Error", Text = "Septex Admin is already executed!", Duration = 7,})
 else
-print([[
-// Commands list:
-	unload | Unloaded script
-	refresh / re | Refresh Character
-	autorespawn / autore [on/off] | Auto Refresh Character (if died)
-	kill / oof / die [plr,all,team] | Kill a player(s)
-	whitelist [plr] | Whitelisted a player
-	unwhitelist [plr] | Backlisted a player
-	inmate | Change team inmates
-	guard | Change team guards
-	criminal | Change team criminals
-	olditemmethod / oldimethod [ON/OFF] | Teleports to get item
-	prefix [STRING] | prefix new
-	pp | sus
-	bring [plr] | Teleport player to you
-	damage / dmg [plr,all,team] [Amount] | Damages a player(s)
-	autoguns / aguns [on/off] | Auto Get All Guns if died
-	autoitems / aitems [on/off] | Auto Get All items if died
-	autoremoveff / autorff [ON/OFF] | Auto Remove forcefield if died
-	autoguard / aguard [on/off] | Auto Team Guard
-	killaura [ON/OFF] | Activate kill aura
-	copychat [on/off] | Copy chat Everyone
-	notify [on/off] | Notify player join and leave and pick up and died
-	antifling [on/off] | Activate antifling
-	infjump [ON/OFF] | Infinite jumps
-	ff / forcefield [ON/OFF] | activate forcefield
-	arrest [plr,all] | Arrests the targeted player
-	meleekill / mk / mkill [plr,all,team] | Teleports to kill player(s)
-	tp [plr1,plr2] | Teleports player1 to player2
-	speed / ws [number] | Changed speed to number
-	btools | Get a btools
-	shotgun / rem / remington | Obtain remington 870
-	ak / ak-47 | Obtain ak-47
-	m9 / pistol | Obtain m9
-	m4a1 / m4 | Obtain m4a1
-	guns | Get all guns
-	items | Get all items
-	hammer / ham | Obtain Hammer
-	knife / knive | Obtain Crude Knife
-	food | Obtain Breakfash / Lunch / Dinner
-	drag | draggable the Text Command
-	autodumpcars / autodeletecars / autonocars | Auto Remove car (if bring)
-	opengate | Open the gate
-]])
 local Prefix = ';'
+local Temp = {}
 local Folder = Instance.new("Folder",game)
 Folder.Name = "Septex_Admin"
 local ScreenGui = Instance.new("ScreenGui",game.Players.LocalPlayer:WaitForChild("PlayerGui"))
@@ -60,6 +17,8 @@ Frame.BorderSizePixel = 0
 Frame.Position = UDim2.new(0.5, 0, 0.899999998, 0)
 Frame.Position = Frame.Position+UDim2.new(0,0,1.1,0)
 Frame.Size = UDim2.new(0, 577, 0, 65)
+local UICorner = Instance.new('UICorner',Frame)
+UICorner.CornerRadius = UDim.new(0, 3)
 local TextLabel = Instance.new("TextLabel",Frame)
 TextLabel.Name = "TextLabel"
 TextLabel.BackgroundColor3 = Color3.fromRGB(155, 155, 155)
@@ -67,7 +26,8 @@ TextLabel.Position = UDim2.new(0.0200897697, 0, 0.022615375, 0)
 TextLabel.Size = UDim2.new(0.974358976, 0, 0.945454538, 0)
 TextLabel.Text = ""
 TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel.Visible = true
+local UICorner = Instance.new("UICorner",TextLabel)
+UICorner.CornerRadius = UDim.new(0, 6)
 local TextBox = Instance.new("TextBox",TextLabel)
 TextBox.Name = "TextBox"
 TextBox.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
@@ -84,6 +44,87 @@ TextBox.ClearTextOnFocus = false
 TextBox.TextSize = 24.000
 TextBox.TextTransparency = 0.140
 TextBox.TextWrapped = true
+Instance.new("UIStroke",TextLabel)
+local Commands = Instance.new("TextLabel",ScreenGui)
+Commands.Name = "Commands"
+Commands.AnchorPoint = Vector2.new(0.5, 0.5)
+Commands.BackgroundColor3 = Color3.fromRGB(58, 58, 58)
+Commands.Position = UDim2.new(0.5, 0, 0.5, 0)
+Commands.Size = UDim2.new(0, 455, 0, 297)
+Commands.Text = ""
+Commands.TextColor3 = Color3.fromRGB(255, 255, 255)
+Commands.Visible = false
+local UICorner_3 = Instance.new('UICorner',Commands)
+UICorner_3.CornerRadius = UDim.new(0, 6)
+Instance.new('UIStroke',Commands)
+local CommandsList = Instance.new("ScrollingFrame",Commands)
+CommandsList.Active = true
+CommandsList.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+CommandsList.BackgroundTransparency = 1.000
+CommandsList.Position = UDim2.new(0, 0, 0.077441074, 0)
+CommandsList.Size = UDim2.new(0, 455, 0, 274)
+CommandsList.ScrollBarThickness = 5
+CommandsList.AutomaticCanvasSize="Y"
+local UIListLayout = Instance.new("UIListLayout",CommandsList)
+UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+UIListLayout.Padding = UDim.new(0, 8)
+local TEMP_CMD = Instance.new("TextLabel",Folder)
+TEMP_CMD.BackgroundColor3 = Color3.fromRGB(72, 72, 72)
+TEMP_CMD.BackgroundTransparency = 0.750
+TEMP_CMD.Size = UDim2.new(0, 455, 0, 14)
+TEMP_CMD.Font = Enum.Font.SourceSans
+TEMP_CMD.Text = "sex"--//yes
+TEMP_CMD.TextColor3 = Color3.fromRGB(255, 255, 255)
+TEMP_CMD.TextSize = 14.000
+SavedCmdsPosition = Commands.Position
+TextLabel_2 = Instance.new("TextLabel")
+UICornera = Instance.new("UICorner")
+UIStroke12 = Instance.new("UIStroke")
+CmdButton = Instance.new("ImageButton")
+
+TextLabel_2.Name = "CmdsIcon"
+TextLabel_2.Parent = Frame
+TextLabel_2.BackgroundColor3 = Color3.fromRGB(58, 58, 58)
+TextLabel_2.Position = UDim2.new(-0.132423401, 0, 0.0226149559, 0)
+TextLabel_2.Size = UDim2.new(0.121672593, 0, 0.945454538, 0)
+TextLabel_2.Text = ""
+TextLabel_2.TextTransparency = 0.030
+TextLabel_2.Visible = true
+
+UICornera.CornerRadius = UDim.new(0, 6)
+UICornera.Parent = TextLabel_2
+
+UIStroke12.Parent = TextLabel_2
+
+CmdButton.Name = "CmdButton"
+CmdButton.Parent = TextLabel_2
+CmdButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+CmdButton.BackgroundTransparency = 1.000
+CmdButton.Position = UDim2.new(0.298999995, 0, 0.27700001, 0)
+CmdButton.Size = UDim2.new(0, 27, 0, 27)
+CmdButton.Image = "rbxassetid://11570802781"
+CmdButton.ImageTransparency = 0.430
+CmdButton.MouseButton1Up:Connect(function()
+	if not Temp.CmdsC then
+		Temp.CmdsC = true
+		if Commands.Visible == false then
+			Commands:TweenPosition(SavedCmdsPosition,"Out","Quart",1)
+			Commands.Visible = true
+		else
+			Commands:TweenPosition(SavedCmdsPosition+UDim2.new(0,0,1,0),"Out","Quart",1)
+			wait(.5)
+			Commands.Visible = false
+		end
+		wait(.7)
+		Temp.CmdsC = false
+	end
+end)
+CmdButton.MouseEnter:Connect(function()
+	CmdButton.ImageColor3 = Color3.new(0.588235, 0.588235, 0.588235)
+end)
+CmdButton.MouseLeave:Connect(function()
+	CmdButton.ImageColor3 = Color3.new(1, 1, 1)
+end)
 
 local plr,Player = game.Players.LocalPlayer,game.Players.LocalPlayer
 local saved = workspace:FindFirstChild("Criminals Spawn").SpawnLocation.CFrame
@@ -105,6 +146,192 @@ local States = {}
 local API = {}
       API.Whitelisted = {}
       API.ArrestOldP = {}
+local CommandsAmount = 0
+
+local CloneTXT = TEMP_CMD:Clone()
+CloneTXT.Text = "kill / oof / die [plr,all,team] | Kill a player(s)"
+CloneTXT.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_2 = TEMP_CMD:Clone()
+CloneTXT_2.Text = "unload | Unload the script"
+CloneTXT_2.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_3 = TEMP_CMD:Clone()
+CloneTXT_3.Text = "bring [plr] | bring the player"
+CloneTXT_3.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_4 = TEMP_CMD:Clone()
+CloneTXT_4.Text = "whitelist / wl | Whitelisted the player"
+CloneTXT_4.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_5 = TEMP_CMD:Clone()
+CloneTXT_5.Text = "unwhitelist / unwl | Blacklisted the player"
+CloneTXT_5.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_6 = TEMP_CMD:Clone()
+CloneTXT_6.Text = "re / refresh | respawn character and save position"
+CloneTXT_6.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_7 = TEMP_CMD:Clone()
+CloneTXT_7.Text = "autore / autorespawn [on/off] | Auto respawn character (if dead) and auto save position"
+CloneTXT_7.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_8 = TEMP_CMD:Clone()
+CloneTXT_8.Text = "inmate | Changed team inmate"
+CloneTXT_8.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_9 = TEMP_CMD:Clone()
+CloneTXT_9.Text = "guard | Changed team guard"
+CloneTXT_9.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_10 = TEMP_CMD:Clone()
+CloneTXT_10.Text = "criminal / crim | Changed team criminal"
+CloneTXT_10.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_11 = TEMP_CMD:Clone()
+CloneTXT_11.Text = "olditemmethod / oldimethod [on,off] | Teleports to get item"
+CloneTXT_11.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_12 = TEMP_CMD:Clone()
+CloneTXT_12.Text = "prefix [NEW PREFIX] | Sets a different prefix"
+CloneTXT_12.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_13 = TEMP_CMD:Clone()
+CloneTXT_13.Text = "pp | sus"
+CloneTXT_13.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_14 = TEMP_CMD:Clone()
+CloneTXT_14.Text = "damage / dmg [plr,all,team] [Amount] | Damages a player(s)"
+CloneTXT_14.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_15 = TEMP_CMD:Clone()
+CloneTXT_15.Text = "autoguns / aguns [ON/OFF] | Auto Get All Guns (if dead)"
+CloneTXT_15.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_16 = TEMP_CMD:Clone()
+CloneTXT_16.Text = "autoitems / aitems [ON/OFF] | Auto Get All Items (if died)"
+CloneTXT_16.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_17 = TEMP_CMD:Clone()
+CloneTXT_17.Text = "autoremoveff / autorff [ON/OFF] | Auto delete forcefield (if dead)"
+CloneTXT_17.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_18 = TEMP_CMD:Clone()
+CloneTXT_18.Text = "allcmds | tells you the amount of commands septex admin has"
+CloneTXT_18.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_19 = TEMP_CMD:Clone()
+CloneTXT_19.Text = "autoguard / aguard [ON/OFF] | Auto Team guard"
+CloneTXT_19.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_20 = TEMP_CMD:Clone()
+CloneTXT_20.Text = "killaura [on/off] | Activate kill aura"
+CloneTXT_20.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_21 = TEMP_CMD:Clone()
+CloneTXT_21.Text = "copychat [on/off] | Copy chat everyone"
+CloneTXT_21.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_22 = TEMP_CMD:Clone()
+CloneTXT_22.Text = "notify [on/off] | Notify player join and leave and pick up and died"
+CloneTXT_22.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_23 = TEMP_CMD:Clone()
+CloneTXT_23.Text = "antifling [ON/OFF] | Activate antifling"
+CloneTXT_23.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_24 = TEMP_CMD:Clone()
+CloneTXT_24.Text = "infjump [ON/OFF] | Infinite jumps"
+CloneTXT_24.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_25 = TEMP_CMD:Clone()
+CloneTXT_25.Text = "forcefield / ff [on/off] | Activate forcefield"
+CloneTXT_25.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_26 = TEMP_CMD:Clone()
+CloneTXT_26.Text = "arrest [plr,all] | Arrests the targeted player"
+CloneTXT_26.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_27 = TEMP_CMD:Clone()
+CloneTXT_27.Text = "meleekill / mk / mkill [plr,all,team] | Teleports to kill player(s)"
+CloneTXT_27.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_28 = TEMP_CMD:Clone()
+CloneTXT_28.Text = "tp [plr1] [plr2] | Teleports player1 to player2"
+CloneTXT_28.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_29 = TEMP_CMD:Clone()
+CloneTXT_29.Text = "speed / ws [number] | Changed speed to number"
+CloneTXT_29.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_30 = TEMP_CMD:Clone()
+CloneTXT_30.Text = "btools | Get a btools"
+CloneTXT_30.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_31 = TEMP_CMD:Clone()
+CloneTXT_31.Text = "shotgun / rem / remington | Obtain remington 870"
+CloneTXT_31.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_32 = TEMP_CMD:Clone()
+CloneTXT_32.Text = "ak / ak-47 | obtain ak-47"
+CloneTXT_32.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_33 = TEMP_CMD:Clone()
+CloneTXT_33.Text = "m9 / pistol | obtain m9"
+CloneTXT_33.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_34 = TEMP_CMD:Clone()
+CloneTXT_34.Text = "m4 / m4a1 | Obtain m4a1"
+CloneTXT_34.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_35 = TEMP_CMD:Clone()
+CloneTXT_35.Text = "guns | Obtain all guns"
+CloneTXT_35.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_36 = TEMP_CMD:Clone()
+CloneTXT_36.Text = "items | Obtain all items"
+CloneTXT_36.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_37 = TEMP_CMD:Clone()
+CloneTXT_37.Text = "hammer / ham | Obtain hammer"
+CloneTXT_37.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_38 = TEMP_CMD:Clone()
+CloneTXT_38.Text = "knife / knive | Obtain Crude Knife"
+CloneTXT_38.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_39 = TEMP_CMD:Clone()
+CloneTXT_39.Text = "food | Obtain Breakfast / Lunch / Dinner"
+CloneTXT_39.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_40 = TEMP_CMD:Clone()
+CloneTXT_40.Text = "drag | draggable the Text Command"
+CloneTXT_40.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_41 = TEMP_CMD:Clone()
+CloneTXT_41.Text = "autodumpcars / autodeletecars / autonocars [on/off] | Auto Remove car (if cmd "..Prefix.."bring)"
+CloneTXT_41.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_42 = TEMP_CMD:Clone()
+CloneTXT_42.Text = "opengate | Open the gate"
+CloneTXT_42.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_43 = TEMP_CMD:Clone()
+CloneTXT_43.Text = "nex / nexus |"
+CloneTXT_43.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_44 = TEMP_CMD:Clone()
+CloneTXT_44.Text = "yard | Teleports to location"
+CloneTXT_44.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_45 = TEMP_CMD:Clone()
+CloneTXT_45.Text = "gas | Teleports to location"
+CloneTXT_45.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_46 = TEMP_CMD:Clone()
+CloneTXT_46.Text = "roof |"
+CloneTXT_46.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
 
 function DragifyGui(Frame,Is)
 	coroutine.wrap(function()
@@ -450,9 +677,7 @@ function KillPlayer(Target,Hit,Failed,DoChange)
 	end
 end
 function FindPlayer(String,IgnoreError)
-	if not String or String == plr or String == "me" then
-		return plr
-	elseif String == "random" then
+	if String == "random" then
 		return game.Players:GetPlayers()[math.random(#game.Players:GetPlayers())]
 	else
 		String = String:gsub("%s+", "")
@@ -743,7 +968,7 @@ function PC(Message)
   end
   if Command("unload") then
 	Destroy(game:FindFirstChild('Septex_Admin'))
-	ScreenGui:Destroy()
+	Destroy(ScreenGui)
 	Unloaded = true
 	Notif("OK", "Script is Unloaded", 3)
   end
@@ -1171,7 +1396,71 @@ function PC(Message)
 	Notif("OK", 'Open the gate', 3)
 	TextBox.Text = ""
     end
-    if NotCommand("unload") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("commands") and NotCommand("re") and NotCommand("refresh") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("inmate") and NotCommand("guard") and NotCommand("crim") and NotCommand("criminal") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("prefix") and NotCommand("pp") and NotCommand("bring") and NotCommand("damage") and NotCommand('dmg') and NotCommand('autoguns') and NotCommand("aguns") and NotCommand('autoitems') and NotCommand('aitems') and NotCommand('autoremoveff') and NotCommand("autorff") and NotCommand('autoguard') and NotCommand('aguard') and NotCommand('killaura') and NotCommand("copychat") and NotCommand("notify") and NotCommand('antifling') and NotCommand('infjump') and NotCommand('ff') and NotCommand('forcefield') and NotCommand('arrest') and NotCommand("ar") and NotCommand('meleekill') and NotCommand('mk') and NotCommand("mkill") and NotCommand('tp') and NotCommand("speed") and NotCommand("ws") and NotCommand('btools') and NotCommand("shotgun") and NotCommand("rem") and NotCommand("remington") and NotCommand("ak") and NotCommand('ak-47') and NotCommand('m9') and NotCommand('pistol') and NotCommand("guns") and NotCommand("items") and NotCommand('m4') and NotCommand('m4a1') and NotCommand("hammer") and NotCommand('ham') and NotCommand("knife") and NotCommand('knive') and NotCommand("food") and NotCommand("goto") and NotCommand('to') and NotCommand('drag') and NotCommand('autonocars') and NotCommand('autodumpcars') and NotCommand("autodeletecars") and NotCommand('opengate') then
+    if Command("allcmds") then
+	Notif("OK", "Septex Admin has "..tostring(CommandsAmount).." commands.", 3)
+	TextBox.Text = ""
+    end
+    if Command('nex') or Command("nexus") then
+	local Position = CFrame.new(918.77, 100, 2379.07)
+	if args[2] then
+		local Target = FindPlayer(args[2])
+		if Target then
+			bring(Target, Position)
+			Notif('OK', "Brought "..Target.DisplayName.." to nexus", 3)
+			TextBox.Text = ""
+		end
+	else
+		MoveTo(Position)
+		Notif("OK", 'Brought '..plr.DisplayName..' to nexus', 3)
+		TextBox.Text = ''
+	end
+    end
+    if Command('yard') then
+	local Position = CFrame.new(791, 98, 2498)
+	if args[2] then
+		local Target = FindPlayer(args[2])
+		if Target then
+			bring(Target, Position)
+			Notif('OK', "Brought "..Target.DisplayName.." to yard", 3)
+			TextBox.Text = ""
+		end
+	else
+		MoveTo(Position)
+		Notif("OK", 'Brought '..plr.DisplayName..' to yard', 3)
+		TextBox.Text = ''
+	end
+    end
+    if Command('gas') then
+	local Position = CFrame.new(-518, 54, 1655)
+	if args[2] then
+		local Target = FindPlayer(args[2])
+		if Target then
+			bring(Target, Position)
+			Notif('OK', "Brought "..Target.DisplayName.." to gas", 3)
+			TextBox.Text = ""
+		end
+	else
+		MoveTo(Position)
+		Notif("OK", 'Brought '..plr.DisplayName..' to gas', 3)
+		TextBox.Text = ''
+	end
+    end
+    if Command("roof") then
+	local Position = CFrame.new(820.6336059570312, 120.48998260498047, 2352.623046875)
+	if args[2] then
+		local Target = FindPlayer(args[2])
+		if Target then
+			bring(Target, Position)
+			Notif('OK', "Brought "..Target.DisplayName.." to roof", 3)
+			TextBox.Text = ""
+		end
+	else
+		MoveTo(Position)
+		Notif("OK", 'Brought '..plr.DisplayName..' to roof', 3)
+		TextBox.Text = ''
+	end
+    end
+    if NotCommand("unload") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("commands") and NotCommand("re") and NotCommand("refresh") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("inmate") and NotCommand("guard") and NotCommand("crim") and NotCommand("criminal") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("prefix") and NotCommand("pp") and NotCommand("bring") and NotCommand("damage") and NotCommand('dmg') and NotCommand('autoguns') and NotCommand("aguns") and NotCommand('autoitems') and NotCommand('aitems') and NotCommand('autoremoveff') and NotCommand("autorff") and NotCommand('autoguard') and NotCommand('aguard') and NotCommand('killaura') and NotCommand("copychat") and NotCommand("notify") and NotCommand('antifling') and NotCommand('infjump') and NotCommand('ff') and NotCommand('forcefield') and NotCommand('arrest') and NotCommand("ar") and NotCommand('meleekill') and NotCommand('mk') and NotCommand("mkill") and NotCommand('tp') and NotCommand("speed") and NotCommand("ws") and NotCommand('btools') and NotCommand("shotgun") and NotCommand("rem") and NotCommand("remington") and NotCommand("ak") and NotCommand('ak-47') and NotCommand('m9') and NotCommand('pistol') and NotCommand("guns") and NotCommand("items") and NotCommand('m4') and NotCommand('m4a1') and NotCommand("hammer") and NotCommand('ham') and NotCommand("knife") and NotCommand('knive') and NotCommand("food") and NotCommand("goto") and NotCommand('to') and NotCommand('drag') and NotCommand('autonocars') and NotCommand('autodumpcars') and NotCommand("autodeletecars") and NotCommand('opengate') and NotCommand("allcmds") and NotCommand('nex') and NotCommand("nexus") and NotCommand('yard') and NotCommand("gas") and NotCommand('roof') then
 	if string.sub(Message,1,1) == Prefix or TextBox.Text:sub(1,#Prefix) == Prefix then
 		Notif("Error", Message.." is not a valid command.", 3)
 		TextBox.Text = ""
@@ -1233,9 +1522,11 @@ plr.CharacterAdded:Connect(function(NewCharacter)
 	end
     end
     if States.AutoRespawn and API.ArrestOldP then
-	for i =1,5 do
+	for i =1,2 do
 		MoveTo(API.ArrestOldP)
 	end
+	wait(.1)
+	API.ArrestOldP = nil
     end
     if States.AutoRespawn then
 	API.ArrestOldP = GetPosition()
