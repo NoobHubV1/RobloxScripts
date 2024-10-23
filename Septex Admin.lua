@@ -1,6 +1,4 @@
-if game:FindFirstChild('Septex_Admin') then
-game:GetService("StarterGui"):SetCore("SendNotification", {Title = "Error", Text = "Septex Admin is already executed!", Duration = 7,})
-else
+if not game:FindFirstChild('Septex_Admin') then
 local Prefix = ';'
 local Temp = {}
 local Folder = Instance.new("Folder",game)
@@ -26,8 +24,8 @@ TextLabel.Position = UDim2.new(0.0200897697, 0, 0.022615375, 0)
 TextLabel.Size = UDim2.new(0.974358976, 0, 0.945454538, 0)
 TextLabel.Text = ""
 TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-local UICorner = Instance.new("UICorner",TextLabel)
-UICorner.CornerRadius = UDim.new(0, 6)
+local UICorner_2 = Instance.new("UICorner",TextLabel)
+UICorner_2.CornerRadius = UDim.new(0, 6)
 local TextBox = Instance.new("TextBox",TextLabel)
 TextBox.Name = "TextBox"
 TextBox.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
@@ -77,27 +75,18 @@ TEMP_CMD.Text = "sex"--//yes
 TEMP_CMD.TextColor3 = Color3.fromRGB(255, 255, 255)
 TEMP_CMD.TextSize = 14.000
 SavedCmdsPosition = Commands.Position
-TextLabel_2 = Instance.new("TextLabel")
-UICornera = Instance.new("UICorner")
-UIStroke12 = Instance.new("UIStroke")
-CmdButton = Instance.new("ImageButton")
-
-TextLabel_2.Name = "CmdsIcon"
-TextLabel_2.Parent = Frame
+local TextLabel_2 = Instance.new("TextLabel",Frame)
+TextLabel_2.Name = "TextLabel_2"
 TextLabel_2.BackgroundColor3 = Color3.fromRGB(58, 58, 58)
 TextLabel_2.Position = UDim2.new(-0.132423401, 0, 0.0226149559, 0)
 TextLabel_2.Size = UDim2.new(0.121672593, 0, 0.945454538, 0)
 TextLabel_2.Text = ""
 TextLabel_2.TextTransparency = 0.030
-TextLabel_2.Visible = true
-
-UICornera.CornerRadius = UDim.new(0, 6)
-UICornera.Parent = TextLabel_2
-
-UIStroke12.Parent = TextLabel_2
-
+local UICorner_4 = Instance.new('UICorner',TextLabel_2)
+UICorner_4.CornerRadius = UDim.new(0, 6)
+Instance.new("UIStroke",TextLabel_2)
+local CmdButton = Instance.new("ImageButton",TextLabel_2)
 CmdButton.Name = "CmdButton"
-CmdButton.Parent = TextLabel_2
 CmdButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 CmdButton.BackgroundTransparency = 1.000
 CmdButton.Position = UDim2.new(0.298999995, 0, 0.27700001, 0)
@@ -332,7 +321,17 @@ local CloneTXT_46 = TEMP_CMD:Clone()
 CloneTXT_46.Text = "roof |"
 CloneTXT_46.Parent = CommandsList
 CommandsAmount = CommandsAmount + 1
-
+local CloneTXT_47 = TEMP_CMD:Clone()
+CloneTXT_47.Text = "respawn / res | Respawn Character and not save position"
+CloneTXT_47.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_48 = TEMP_CMD:Clone()
+CloneTXT_48.Text = "getplayer [all,team] | tells you the server to player(s)"
+CloneTXT_48.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+function Title(Text)
+	return Player.PlayerGui['Home']['hud']['Topbar']['titleBar'].Title.Text:lower() == Text
+end
 function DragifyGui(Frame,Is)
 	coroutine.wrap(function()
 		local dragToggle = nil
@@ -460,7 +459,7 @@ function WaitForRespawn(Cframe,NoForce)
 				end)()
 				NewCharacter:WaitForChild("HumanoidRootPart")
 				local Amount = 10
-				if Player.PlayerGui['Home']['hud']['Topbar']['titleBar'].Title.Text:lower() == "lights out" or Player.PlayerGui.Home.hud.Topbar.titleBar.Title.Text:lower() == "lightsout" then
+				if Title("lights out") then
 					Amount = 15
 				end
 				for i = 1,Amount do
@@ -1348,22 +1347,22 @@ function PC(Message)
 	TextBox.Text = ""
     end
     if Command("food") then
-	if workspace.Prison_ITEMS.giver:FindFirstChild("Breakfast") then
+	if Title("Breakfast") then
 		GetGun("Breakfast")
 		Notif('OK', 'Get food Breakfast', 3)
 		TextBox.Text = ''
 	end
-	if workspace.Prison_ITEMS.giver:FindFirstChild("Lunch") then
+	if Title('Lunch') then
 		GetGun("Lunch")
 		Notif('OK', 'Get food Lunch', 3)
 		TextBox.Text = ''
 	end
-	if workspace.Prison_ITEMS.giver:FindFirstChild("Dinner") then
+	if Title("Dinner") then
 		GetGun("Dinner")
 		Notif('OK', 'Get food Dinner', 3)
 		TextBox.Text = ''
 	end
-	if not workspace.Prison_ITEMS.giver:FindFirstChild("Breakfast") and not workspace.Prison_ITEMS.giver:FindFirstChild("Lunch") and not workspace.Prison_ITEMS.giver:FindFirstChild("Dinner") then
+	if not Title('Breakfast') and not Title("Lunch") and not Title('Dinner') then
 		Notif('Error', "No Food Found!", 3)
 		TextBox.Text = ''
 	end
@@ -1460,8 +1459,65 @@ function PC(Message)
 		TextBox.Text = ''
 	end
     end
-    if NotCommand("unload") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("commands") and NotCommand("re") and NotCommand("refresh") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("inmate") and NotCommand("guard") and NotCommand("crim") and NotCommand("criminal") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("prefix") and NotCommand("pp") and NotCommand("bring") and NotCommand("damage") and NotCommand('dmg') and NotCommand('autoguns') and NotCommand("aguns") and NotCommand('autoitems') and NotCommand('aitems') and NotCommand('autoremoveff') and NotCommand("autorff") and NotCommand('autoguard') and NotCommand('aguard') and NotCommand('killaura') and NotCommand("copychat") and NotCommand("notify") and NotCommand('antifling') and NotCommand('infjump') and NotCommand('ff') and NotCommand('forcefield') and NotCommand('arrest') and NotCommand("ar") and NotCommand('meleekill') and NotCommand('mk') and NotCommand("mkill") and NotCommand('tp') and NotCommand("speed") and NotCommand("ws") and NotCommand('btools') and NotCommand("shotgun") and NotCommand("rem") and NotCommand("remington") and NotCommand("ak") and NotCommand('ak-47') and NotCommand('m9') and NotCommand('pistol') and NotCommand("guns") and NotCommand("items") and NotCommand('m4') and NotCommand('m4a1') and NotCommand("hammer") and NotCommand('ham') and NotCommand("knife") and NotCommand('knive') and NotCommand("food") and NotCommand("goto") and NotCommand('to') and NotCommand('drag') and NotCommand('autonocars') and NotCommand('autodumpcars') and NotCommand("autodeletecars") and NotCommand('opengate') and NotCommand("allcmds") and NotCommand('nex') and NotCommand("nexus") and NotCommand('yard') and NotCommand("gas") and NotCommand('roof') then
-	if string.sub(Message,1,1) == Prefix or TextBox.Text:sub(1,#Prefix) == Prefix then
+    if Command('respawn') or Command("res") then
+	if plr.Team == game.Teams.Inmates then
+		workspace.Remote.TeamEvent:FireServer("Bright orange")
+	elseif plr.Team == game.Teams.Guards then
+		if GuardsFull("b") then
+			workspace.Remote.TeamEvent:FireServer("Bright orange")
+			plr.CharacterAdded:Wait()
+			repeat wait()
+				workspace.Remote.TeamEvent:FireServer("Bright blue")
+			until plr.Team == game.Teams.Guards
+		else
+			workspace.Remote.TeamEvent:FireServer("Bright blue")
+		end
+	elseif plr.Team == game.Teams.Criminals then
+		if not GuardsFull("c") then
+			workspace.Remote.TeamEvent:FireServer("Bright blue")
+			plr.CharacterAdded:Wait()
+			repeat task.wait()
+				plr.Character.Head.CanCollide = false
+				task.pcall(function()
+					workspace["Criminals Spawn"].SpawnLocation.CFrame = plr.Character.Head.CFrame
+				end)
+			until plr.Team == game.Teams.Criminals
+			workspace["Criminals Spawn"].SpawnLocation.CFrame = saved
+		else
+			workspace.Remote.TeamEvent:FireServer("Bright orange")
+			plr.CharacterAdded:Wait()
+			repeat task.wait()
+				plr.Character.Head.CanCollide = false
+				task.pcall(function()
+					workspace["Criminals Spawn"].SpawnLocation.CFrame = plr.Character.Head.CFrame
+				end)
+			until plr.Team == game.Teams.Criminals
+			workspace["Criminals Spawn"].SpawnLocation.CFrame = saved
+		end
+	elseif plr.Team == game.Teams.Neutral then
+		workspace.Remote.TeamEvent:FireServer("Medium stone grey")
+	end
+	Notif("OK", 'Respawnes Character', 3)
+	TextBox.Text = ""
+    end
+    if Command('getplayer') then
+	local Team = IsTeamCommandCheck(args[2])
+	if args[2] == "all" then
+		Notif("OK", 'the server has '..#game.Players:GetPlayers()..' players.', 3)
+	        TextBox.Text = ''
+	elseif Team == game.Teams.Inmates then
+		Notif("OK", 'the team inmates has '..#game.Teams.Inmates:GetPlayers()..' players.', 3)
+	        TextBox.Text = ""
+	elseif Team == game.Teams.Guards then
+		Notif("OK", 'the team guards has '..#game.Teams.Guards:GetPlayers()..' players.', 3)
+	        TextBox.Text = ''
+	elseif Team == game.Teams.Criminals then
+		Notif("OK", 'the team criminals has '..#game.Teams.Criminals:GetPlayers()..' players.', 3)
+	        TextBox.Text = ""
+	end
+    end
+    if NotCommand("unload") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("commands") and NotCommand("re") and NotCommand("refresh") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("inmate") and NotCommand("guard") and NotCommand("crim") and NotCommand("criminal") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("prefix") and NotCommand("pp") and NotCommand("bring") and NotCommand("damage") and NotCommand('dmg') and NotCommand('autoguns') and NotCommand("aguns") and NotCommand('autoitems') and NotCommand('aitems') and NotCommand('autoremoveff') and NotCommand("autorff") and NotCommand('autoguard') and NotCommand('aguard') and NotCommand('killaura') and NotCommand("copychat") and NotCommand("notify") and NotCommand('antifling') and NotCommand('infjump') and NotCommand('ff') and NotCommand('forcefield') and NotCommand('arrest') and NotCommand("ar") and NotCommand('meleekill') and NotCommand('mk') and NotCommand("mkill") and NotCommand('tp') and NotCommand("speed") and NotCommand("ws") and NotCommand('btools') and NotCommand("shotgun") and NotCommand("rem") and NotCommand("remington") and NotCommand("ak") and NotCommand('ak-47') and NotCommand('m9') and NotCommand('pistol') and NotCommand("guns") and NotCommand("items") and NotCommand('m4') and NotCommand('m4a1') and NotCommand("hammer") and NotCommand('ham') and NotCommand("knife") and NotCommand('knive') and NotCommand("food") and NotCommand("goto") and NotCommand('to') and NotCommand('drag') and NotCommand('autonocars') and NotCommand('autodumpcars') and NotCommand("autodeletecars") and NotCommand('opengate') and NotCommand("allcmds") and NotCommand('nex') and NotCommand("nexus") and NotCommand('yard') and NotCommand("gas") and NotCommand('roof') and NotCommand("respawn") and NotCommand('res') and NotCommand("getplayer") then
+	if string.sub(Message,1) == Prefix or TextBox.Text:sub(1,#Prefix) == Prefix and TextBox.Text:sub(1,#Prefix) ~= nil and string.sub(Message,1) ~= nil then
 		Notif("Error", Message.." is not a valid command.", 3)
 		TextBox.Text = ""
 	else
@@ -1470,23 +1526,11 @@ function PC(Message)
 	end
     end
 end
-function PlayerChatted(chat)
-	if string.sub(chat,1,1) ~= Prefix then
-		PC(Prefix..chat)
-	else
-		PC(chat)
+Player.Chatted:Connect(function(msg)
+	if string.sub(msg,1) == Prefix then
+		PC(msg)
 	end
-end
-function TB(Focus)
-	if Focus and not Unloaded then
-		if TextBox.Text:sub(1,#Prefix) ~= Prefix then
-			PC(Prefix..TextBox.Text)
-		else
-			PC(TextBox.Text)
-		end
-	end
-end
-Player.Chatted:Connect(PlayerChatted)
+end)
 plr.CharacterAdded:Connect(function(NewCharacter)
     if Unloaded then return end
     if States.AutoGuns then
@@ -1583,7 +1627,15 @@ for i,v in pairs(game.Players:GetPlayers()) do
 		Died(v)
 	end
 end
-TextBox.FocusLost:Connect(TB)
+TextBox.FocusLost:Connect(function(Key)
+	if Key and Unloaded == false then
+		if TextBox.Text:sub(1,#Prefix) ~= Prefix then
+			PC(Prefix..TextBox.Text)
+		else
+			PC(TextBox.Text)
+		end
+	end
+end)
 game.Players.PlayerAdded:Connect(function(PLAYER)
 	if States.Notify and Unloaded == false then
 		game.StarterGui:SetCore("ChatMakeSystemMessage",  { Text = "[NOTIFY]: "..PLAYER.Name.." has joined the game!", Color = Color3.fromRGB(16, 243, 255), Font = Enum.Font.SourceSansBold, FontSize = Enum.FontSize.Size24 } )
@@ -1626,4 +1678,6 @@ function NoCollision(PLR)
 Refresh()
 Notif("Loads", "Loaded Admin Commands, Chat ;cmds to show commands list", 6)
 Frame:TweenPosition(UDim2.new(0.5, 0, 0.899999998, 0)-UDim2.new(0,0,.05,0),"Out","Back",.5)
+else
+game:GetService("StarterGui"):SetCore("SendNotification", {Title = "Error", Text = "Septex Admin is already executed!", Duration = 7,})
 end
