@@ -123,7 +123,7 @@ local States = {}
       States.OldItemMethod = false
       States.AutoGuns = false
       States.AutoItems = false
-      States.AutoRemoveff = false
+      States.AutoRemoveff = true
       States.Autoguard = false
       States.Killaura = false
       States.CopyChat = false
@@ -132,6 +132,8 @@ local States = {}
       States.Notify = false
       States.DraggableGuis = false
       States.AutoDumpCars = false
+      States.Notify = false
+      States.ChatNotify = false
 local API = {}
       API.Whitelisted = {}
       API.ArrestOldP = {}
@@ -222,7 +224,7 @@ CloneTXT_21.Text = "copychat [on/off] | Copy chat everyone"
 CloneTXT_21.Parent = CommandsList
 CommandsAmount = CommandsAmount + 1
 local CloneTXT_22 = TEMP_CMD:Clone()
-CloneTXT_22.Text = "notify [on/off] | Notify player join and leave and pick up and died"
+CloneTXT_22.Text = "notify [on/off] | Notify player join and leave and pick up and died and respawn!"
 CloneTXT_22.Parent = CommandsList
 CommandsAmount = CommandsAmount + 1
 local CloneTXT_23 = TEMP_CMD:Clone()
@@ -328,6 +330,14 @@ CommandsAmount = CommandsAmount + 1
 local CloneTXT_48 = TEMP_CMD:Clone()
 CloneTXT_48.Text = "getplayer [all,team] | tells you the server to player(s)"
 CloneTXT_48.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_49 = TEMP_CMD:Clone()
+CloneTXT_49.Text = "noclip [ON/OFF] | Go through walls"
+CloneTXT_49.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_50 = TEMP_CMD:Clone()
+CloneTXT_50.Text = "chatnotify [on/off] | Chat everyone player joined and left and pick up and died and respawn!"
+CloneTXT_50.Parent = CommandsList
 CommandsAmount = CommandsAmount + 1
 function Title(Text)
 	return Player.PlayerGui['Home']['hud']['Topbar']['titleBar'].Title.Text:lower() == Text
@@ -1516,8 +1526,28 @@ function PC(Message)
 	        TextBox.Text = ""
 	end
     end
-    if NotCommand("unload") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("commands") and NotCommand("re") and NotCommand("refresh") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("inmate") and NotCommand("guard") and NotCommand("crim") and NotCommand("criminal") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("prefix") and NotCommand("pp") and NotCommand("bring") and NotCommand("damage") and NotCommand('dmg') and NotCommand('autoguns') and NotCommand("aguns") and NotCommand('autoitems') and NotCommand('aitems') and NotCommand('autoremoveff') and NotCommand("autorff") and NotCommand('autoguard') and NotCommand('aguard') and NotCommand('killaura') and NotCommand("copychat") and NotCommand("notify") and NotCommand('antifling') and NotCommand('infjump') and NotCommand('ff') and NotCommand('forcefield') and NotCommand('arrest') and NotCommand("ar") and NotCommand('meleekill') and NotCommand('mk') and NotCommand("mkill") and NotCommand('tp') and NotCommand("speed") and NotCommand("ws") and NotCommand('btools') and NotCommand("shotgun") and NotCommand("rem") and NotCommand("remington") and NotCommand("ak") and NotCommand('ak-47') and NotCommand('m9') and NotCommand('pistol') and NotCommand("guns") and NotCommand("items") and NotCommand('m4') and NotCommand('m4a1') and NotCommand("hammer") and NotCommand('ham') and NotCommand("knife") and NotCommand('knive') and NotCommand("food") and NotCommand("goto") and NotCommand('to') and NotCommand('drag') and NotCommand('autonocars') and NotCommand('autodumpcars') and NotCommand("autodeletecars") and NotCommand('opengate') and NotCommand("allcmds") and NotCommand('nex') and NotCommand("nexus") and NotCommand('yard') and NotCommand("gas") and NotCommand('roof') and NotCommand("respawn") and NotCommand('res') and NotCommand("getplayer") then
-	if string.sub(Message,1) == Prefix or TextBox.Text:sub(1,#Prefix) == Prefix and TextBox.Text:sub(1,#Prefix) ~= nil and string.sub(Message,1) ~= nil then
+    if Command("noclip") then
+	local value = ChangeState(args[2],"Noclip")
+	if value then
+		while wait() do
+			if States.Noclip and Player.Character and not Unloaded then
+				for i,v in pairs(Player.Character:GetDescendants()) do
+					if v:IsA"BasePart" and not Unloaded and States.Noclip then
+						v.CanCollide = false
+					end
+				end
+			end
+		end
+	end
+	plr.Character.Humanoid:ChangeState("Jumping")
+	TextBox.Text = ''
+    end
+    if Command('chatnotify') then
+	ChangeState(args[2],"ChatNotify")
+	TextBox.Text = ""
+    end
+    if NotCommand("unload") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("commands") and NotCommand("re") and NotCommand("refresh") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("inmate") and NotCommand("guard") and NotCommand("crim") and NotCommand("criminal") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("prefix") and NotCommand("pp") and NotCommand("bring") and NotCommand("damage") and NotCommand('dmg') and NotCommand('autoguns') and NotCommand("aguns") and NotCommand('autoitems') and NotCommand('aitems') and NotCommand('autoremoveff') and NotCommand("autorff") and NotCommand('autoguard') and NotCommand('aguard') and NotCommand('killaura') and NotCommand("copychat") and NotCommand("notify") and NotCommand('antifling') and NotCommand('infjump') and NotCommand('ff') and NotCommand('forcefield') and NotCommand('arrest') and NotCommand("ar") and NotCommand('meleekill') and NotCommand('mk') and NotCommand("mkill") and NotCommand('tp') and NotCommand("speed") and NotCommand("ws") and NotCommand('btools') and NotCommand("shotgun") and NotCommand("rem") and NotCommand("remington") and NotCommand("ak") and NotCommand('ak-47') and NotCommand('m9') and NotCommand('pistol') and NotCommand("guns") and NotCommand("items") and NotCommand('m4') and NotCommand('m4a1') and NotCommand("hammer") and NotCommand('ham') and NotCommand("knife") and NotCommand('knive') and NotCommand("food") and NotCommand("goto") and NotCommand('to') and NotCommand('drag') and NotCommand('autonocars') and NotCommand('autodumpcars') and NotCommand("autodeletecars") and NotCommand('opengate') and NotCommand("allcmds") and NotCommand('nex') and NotCommand("nexus") and NotCommand('yard') and NotCommand("gas") and NotCommand('roof') and NotCommand("respawn") and NotCommand('res') and NotCommand("getplayer") and NotCommand('noclip') and NotCommand("chatnotify") then
+	if string.sub(Message,1) == Prefix or TextBox.Text:sub(1,#Prefix) == Prefix then
 		Notif("Error", Message.." is not a valid command.", 3)
 		TextBox.Text = ""
 	else
@@ -1605,6 +1635,9 @@ function PickUp(Target)
 		if States.Notify and Unloaded == false then
 			game.StarterGui:SetCore("ChatMakeSystemMessage",  { Text = "[NOTIFY]: "..Target.Name.." Pick Up "..Item.Name, Color = Color3.fromRGB(16, 243, 255), Font = Enum.Font.SourceSansBold, FontSize = Enum.FontSize.Size24 } )
                 end
+		if States.ChatNotify and not Unloaded == true then
+			Chat(Target.Name.." Pick Up "..Item.Name)
+		end
         end)
 end
 function Died(PLAYER)
@@ -1617,7 +1650,20 @@ function Died(PLAYER)
 			if States.Notify and Unloaded == false then
 				game.StarterGui:SetCore("ChatMakeSystemMessage",  { Text = "[NOTIFY]: "..PLAYER.Name.." has died!", Color = Color3.fromRGB(16, 243, 255), Font = Enum.Font.SourceSansBold, FontSize = Enum.FontSize.Size24 } )
 			end
+			if States.ChatNotify and Unloaded == false then
+				Chat(PLAYER.Name.." has died!")
+			end
 		end)
+	end)
+end
+function Respawn(PLAYER)
+	PLAYER.CharacterAdded:Connect(function()
+		if States.Notify and Unloaded == false then
+			game.StarterGui:SetCore("ChatMakeSystemMessage",  { Text = "[NOTIFY]: "..PLAYER.Name.." has respawn!", Color = Color3.fromRGB(50, 14, 255), Font = Enum.Font.SourceSansBold, FontSize = Enum.FontSize.Size24 } )
+		end
+		if States.ChatNotify and not Unloaded then
+			Chat(PLAYER.Name.." has respawn!")
+		end
 	end)
 end
 for i,v in pairs(game.Players:GetPlayers()) do
@@ -1625,6 +1671,7 @@ for i,v in pairs(game.Players:GetPlayers()) do
 		CopyChat(v)
 		PickUp(v)
 		Died(v)
+		Respawn(v)
 	end
 end
 TextBox.FocusLost:Connect(function(Key)
@@ -1640,17 +1687,25 @@ game.Players.PlayerAdded:Connect(function(PLAYER)
 	if States.Notify and Unloaded == false then
 		game.StarterGui:SetCore("ChatMakeSystemMessage",  { Text = "[NOTIFY]: "..PLAYER.Name.." has joined the game!", Color = Color3.fromRGB(16, 243, 255), Font = Enum.Font.SourceSansBold, FontSize = Enum.FontSize.Size24 } )
 	end
+	if States.ChatNotify and not Unloaded then
+		Chat(PLAYER.Name.." has joined the game!")
+	end
 	CopyChat(PLAYER)
 	PickUp(PLAYER)
 	Died(PLAYER)
+	Respawn(PLAYER)
 end)
 game.Players.PlayerRemoving:Connect(function(PLAYER)
 	if States.Notify and not Unloaded then
 		game.StarterGui:SetCore("ChatMakeSystemMessage",  { Text = "[NOTIFY]: "..PLAYER.Name.." has left the game!", Color = Color3.fromRGB(50, 14, 255), Font = Enum.Font.SourceSansBold, FontSize = Enum.FontSize.Size24 } )
 	end
+	if States.ChatNotify and not Unloaded then
+		Chat(PLAYER.Name.." has left the game!")
+	end
 	CopyChat(PLAYER)
 	PickUp(PLAYER)
 	Died(PLAYER)
+	Respawn(PLAYER)
 end)
 function NoCollision(PLR)
 	 if States.AntiFling and not Unloaded and PLR.Character then
