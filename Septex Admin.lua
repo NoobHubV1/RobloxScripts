@@ -176,7 +176,7 @@ CloneTXT_9.Text = "guard | Changed team guard"
 CloneTXT_9.Parent = CommandsList
 CommandsAmount = CommandsAmount + 1
 local CloneTXT_10 = TEMP_CMD:Clone()
-CloneTXT_10.Text = "criminal / crim | Changed team criminal"
+CloneTXT_10.Text = "criminal / crim [ME,PLAYER] | Changed player to team criminal"
 CloneTXT_10.Parent = CommandsList
 CommandsAmount = CommandsAmount + 1
 local CloneTXT_11 = TEMP_CMD:Clone()
@@ -308,7 +308,7 @@ CloneTXT_42.Text = "opengate | Open the gate"
 CloneTXT_42.Parent = CommandsList
 CommandsAmount = CommandsAmount + 1
 local CloneTXT_43 = TEMP_CMD:Clone()
-CloneTXT_43.Text = "nex / nexus |"
+CloneTXT_43.Text = "nex / nexus"
 CloneTXT_43.Parent = CommandsList
 CommandsAmount = CommandsAmount + 1
 local CloneTXT_44 = TEMP_CMD:Clone()
@@ -320,7 +320,7 @@ CloneTXT_45.Text = "gas | Teleports to location"
 CloneTXT_45.Parent = CommandsList
 CommandsAmount = CommandsAmount + 1
 local CloneTXT_46 = TEMP_CMD:Clone()
-CloneTXT_46.Text = "roof |"
+CloneTXT_46.Text = "roof"
 CloneTXT_46.Parent = CommandsList
 CommandsAmount = CommandsAmount + 1
 local CloneTXT_47 = TEMP_CMD:Clone()
@@ -338,6 +338,22 @@ CommandsAmount = CommandsAmount + 1
 local CloneTXT_50 = TEMP_CMD:Clone()
 CloneTXT_50.Text = "chatnotify [on/off] | Chat everyone player joined and left and pick up and died and respawn!"
 CloneTXT_50.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_51 = TEMP_CMD:Clone()
+CloneTXT_51.Text = "view [player] | Watches the selected target"
+CloneTXT_51.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_52 = TEMP_CMD:Clone()
+CloneTXT_52.Text = "unview | Unwatches the selected target"
+CloneTXT_52.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_53 = TEMP_CMD:Clone()
+CloneTXT_53.Text = "cmds | Toggles commands gui"
+CloneTXT_53.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_54 = TEMP_CMD:Clone()
+CloneTXT_54.Text = "rejoin / rj | rejoins the same server (UNLOADS SCRIPT)"
+CloneTXT_54.Parent = CommandsList
 CommandsAmount = CommandsAmount + 1
 function Title(Text)
 	return Player.PlayerGui['Home']['hud']['Topbar']['titleBar'].Title.Text:lower() == Text
@@ -393,15 +409,8 @@ function DragifyGui(Frame,Is)
 	end)()
 end
 DragifyGui(TextLabel)
-function CreateBulletTable(Bullet, Target)
-	local Args = {}
-	for i =1,Bullet do
-		Args[#Args + 1] = {
-			["RayObject"] = Ray.new(Vector3.new(), Vector3.new()),
-			["Hit"] = Target.Character:FindFirstChild("Head"),
-		}
-	end
-end
+DragifyGui(Commands)
+DragifyGui(TextLabel_2)
 function swait()
 	game:GetService("RunService").Stepped:Wait()
 end
@@ -649,13 +658,21 @@ function GetSingle(Item, Ignore)
 	end
 end
 function KillPlayer(Target,Hit,Failed,DoChange)
-	local Bullets = CreateBulletTable(Hit, Target)
+	local Hits = {}
+	for i =1,Hit do
+		Hits[#Hits + 1] = {
+			["RayObject"] = Ray.new(Vector3.new(), Vector3.new()),
+			["Hit"] = Target.Character:FindFirstChild("Head"),
+		}
+	end
 	if not Target or not Target.Character or not Target.Character:FindFirstChildOfClass("Humanoid") or Target.Character:FindFirstChildOfClass("Humanoid").Health <1 then
 		return
 	end
 	repeat swait() until not Target.Character:FindFirstChildOfClass("ForceField")
 	local CurrentTeam = nil
+	local Gun = Player.Backpack:FindFirstChild("AK-47") or Player.Character:FindFirstChild("AK-47")
 	if Target.Team == Player.Team then
+		repeat task.wait() GetGun("AK-47") Gun = Player.Backpack:FindFirstChild("AK-47") or Player.Character:FindFirstChild("AK-47") until Gun
 		if Target.Team~= game.Teams.Criminals then
 			CurrentTeam = Player.Team
 			ChangeTeam(game.Teams.Criminals,true)
@@ -663,13 +680,12 @@ function KillPlayer(Target,Hit,Failed,DoChange)
 			CurrentTeam = Player.Team
 			ChangeTeam(game.Teams.Inmates,true)
 			plr.CharacterAdded:Wait()
+			repeat task.wait() GetGun("AK-47") Gun = Player.Backpack:FindFirstChild("AK-47") or Player.Character:FindFirstChild("AK-47") until Gun
 		end
 	end
 
-	local Gun = Player.Backpack:FindFirstChild("AK-47") or Player.Character:FindFirstChild("AK-47")
-	repeat swait() GetGun("AK-47") Gun = Player.Backpack:FindFirstChild("AK-47") or Player.Character:FindFirstChild("AK-47") until Gun
 	task.spawn(function()
-		game:GetService("ReplicatedStorage").ShootEvent:FireServer(Bullets, Gun)
+		game:GetService("ReplicatedStorage").ShootEvent:FireServer(Hits, Gun)
 		game:GetService("ReplicatedStorage").ReloadEvent:FireServer(Gun)
 	end)
 	coroutine.wrap(function()
@@ -705,6 +721,8 @@ function killall(TeamToKill,Hit)
         if TeamToKill == "all" then
 		local LastTeam = Player.Team
 		local Hits = {}
+		local Gun = Player.Backpack:FindFirstChild("AK-47") or Player.Character:FindFirstChild("AK-47")
+		repeat task.wait() GetGun("AK-47") Gun = Player.Backpack:FindFirstChild("AK-47") or Player.Character:FindFirstChild("AK-47") until Gun
 		if LastTeam ~= game.Teams.Criminals then
 			ChangeTeam(game.Teams.Criminals)
 		end
@@ -721,7 +739,6 @@ function killall(TeamToKill,Hit)
 			end
 		end
 
-		local Gun = Player.Character:FindFirstChild("AK-47") or Player.Backpack:FindFirstChild("AK-47")
 		repeat task.wait() GetGun("AK-47") Gun = Player.Character:FindFirstChild("AK-47") or Player.Backpack:FindFirstChild("AK-47") until Gun
 
 		task.spawn(function()
@@ -730,6 +747,7 @@ function killall(TeamToKill,Hit)
 		end)
 		ChangeTeam(game.Teams.Inmates)
 		plr.CharacterAdded:Wait()
+		repeat task.wait() GetGun("AK-47") Gun = Player.Backpack:FindFirstChild("AK-47") or Player.Character:FindFirstChild("AK-47") until Gun
 		local Hits = {}
 		for i,v in pairs(game.Teams.Criminals:GetPlayers()) do
 			if v and v ~= game.Players.LocalPlayer and not table.find(API.Whitelisted,v) and v ~= nil then
@@ -743,25 +761,25 @@ function killall(TeamToKill,Hit)
 				end
 			end
 		end
-			
-		local Gun = Player.Character:FindFirstChild("AK-47") or Player.Backpack:FindFirstChild("AK-47")
-		repeat task.wait() GetGun("AK-47") Gun = Player.Character:FindFirstChild("AK-47") or Player.Backpack:FindFirstChild("AK-47") until Gun
-
 		task.spawn(function()
 			game:GetService("ReplicatedStorage").ShootEvent:FireServer(Hits, Gun)
 		        game:GetService("ReplicatedStorage").ReloadEvent:FireServer(Gun)
 		end)
 	end
 	if TeamToKill == game.Teams.Inmates or TeamToKill == game.Teams.Guards then
+		repeat task.wait() GetGun("AK-47") Gun = Player.Backpack:FindFirstChild("AK-47") or Player.Character:FindFirstChild("AK-47") until Gun
 		if Player.Team ~= game.Teams.Criminals then
 			ChangeTeam(game.Teams.Criminals)
 		end
 	elseif TeamToKill == game.Teams.Criminals then
+		repeat task.wait() GetGun("AK-47") Gun = Player.Backpack:FindFirstChild("AK-47") or Player.Character:FindFirstChild("AK-47") until Gun
 		if Player.Team ~= game.Teams.Inmates then
 			ChangeTeam(game.Teams.Inmates)
 			plr.CharacterAdded:Wait()
+			repeat task.wait() GetGun("AK-47") Gun = Player.Backpack:FindFirstChild("AK-47") or Player.Character:FindFirstChild("AK-47") until Gun
 		end
 	end
+	local Gun = Player.Backpack:FindFirstChild("AK-47") or Player.Character:FindFirstChild("AK-47")
 	local Hits = {}
 	for i,v in pairs(TeamToKill:GetPlayers()) do
 		if v and v~=Player and not table.find(API.Whitelisted,v) and not v.Character.Humanoid.Health == 0 or not v.Character:FindFirstChild("ForceField") then
@@ -773,9 +791,7 @@ function killall(TeamToKill,Hit)
 			end
 		end
 	end
-	local Gun = Player.Backpack:FindFirstChild("AK-47") or Player.Character:FindFirstChild("AK-47")
-	repeat task.wait() GetGun("AK-47") Gun = Player.Backpack:FindFirstChild("AK-47") or Player.Character:FindFirstChild("AK-47") until Gun
-
+	
 	task.spawn(function()
 		game:GetService("ReplicatedStorage").ShootEvent:FireServer(Hits, Gun)
 		game:GetService("ReplicatedStorage").ReloadEvent:FireServer(Gun)
@@ -967,6 +983,7 @@ function Destroy(parent)
 	end)
 end
 function PC(Message)
+  if Unloaded then return end
   local args = Message:lower():split(' ')
   local First = args[1]
   function Command(Cmd)
@@ -1055,9 +1072,29 @@ function PC(Message)
       end
   end
   if Command("criminal") or Command("crim") then
-      ChangeTeam(game.Teams.Criminals)
-      Notif("OK", "Change team criminals", 3)
-      TextBox.Text = ""
+      local Position = CFrame.new(-922.3338012695312, 94.4225082397461, 2130.9111328125)
+      if args[2] then
+		local Target = FindPlayer(args[2])
+		if Target then
+			if Target.Team ~= game.Teams.Criminals then
+				bring(Target, Position)
+				Notif("OK", 'Made '..Target.DisplayName..' criminal.', 3)
+				TextBox.Text = ''
+			else
+				Notif("Error", 'Player has criminal!', 3)
+				TextBox.Text = ""
+			end
+		end
+	else
+		if plr.Team ~= game.Teams.Criminals then
+			ChangeTeam(game.Teams.Criminals)
+			Notif("OK", 'Made '..Player.DisplayName..' criminal.', 3)
+			TextBox.Text = ''
+		else
+			--
+			TextBox.Text = ""
+		end
+	end
   end
   if Command("olditemmethod") or Command("oldimethod") then
       ChangeState(args[2],"OldItemMethod")
@@ -1546,7 +1583,57 @@ function PC(Message)
 	ChangeState(args[2],"ChatNotify")
 	TextBox.Text = ""
     end
-    if NotCommand("unload") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("commands") and NotCommand("re") and NotCommand("refresh") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("inmate") and NotCommand("guard") and NotCommand("crim") and NotCommand("criminal") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("prefix") and NotCommand("pp") and NotCommand("bring") and NotCommand("damage") and NotCommand('dmg') and NotCommand('autoguns') and NotCommand("aguns") and NotCommand('autoitems') and NotCommand('aitems') and NotCommand('autoremoveff') and NotCommand("autorff") and NotCommand('autoguard') and NotCommand('aguard') and NotCommand('killaura') and NotCommand("copychat") and NotCommand("notify") and NotCommand('antifling') and NotCommand('infjump') and NotCommand('ff') and NotCommand('forcefield') and NotCommand('arrest') and NotCommand("ar") and NotCommand('meleekill') and NotCommand('mk') and NotCommand("mkill") and NotCommand('tp') and NotCommand("speed") and NotCommand("ws") and NotCommand('btools') and NotCommand("shotgun") and NotCommand("rem") and NotCommand("remington") and NotCommand("ak") and NotCommand('ak-47') and NotCommand('m9') and NotCommand('pistol') and NotCommand("guns") and NotCommand("items") and NotCommand('m4') and NotCommand('m4a1') and NotCommand("hammer") and NotCommand('ham') and NotCommand("knife") and NotCommand('knive') and NotCommand("food") and NotCommand("goto") and NotCommand('to') and NotCommand('drag') and NotCommand('autonocars') and NotCommand('autodumpcars') and NotCommand("autodeletecars") and NotCommand('opengate') and NotCommand("allcmds") and NotCommand('nex') and NotCommand("nexus") and NotCommand('yard') and NotCommand("gas") and NotCommand('roof') and NotCommand("respawn") and NotCommand('res') and NotCommand("getplayer") and NotCommand('noclip') and NotCommand("chatnotify") then
+    if Command("view") then
+	local Target = FindPlayer(args[2])
+	if Target then
+		if API.ViewingPlayer then
+			API.ViewingPlayer = nil
+			wait(.4)
+		end
+		API.ViewingPlayer = Target
+		task.spawn(function()
+			while wait(.1) do
+				pcall(function()
+					workspace.CurrentCamera.CameraSubject = Target.Character:FindFirstChildOfClass("Humanoid")
+				end)
+				if not Target or not API.ViewingPlayer or Unloaded then
+					workspace.CurrentCamera.CameraSubject = game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+					break
+				end
+			end
+		end)
+	Notif("OK", 'Viewing '..Target.DisplayName, 3)
+	TextBox.Text = ''
+	end
+    end
+    if Command('unview') then
+	API.ViewingPlayer = nil
+	workspace.CurrentCamera.CameraSubject = plr.Character.Humanoid
+	Notif("OK", 'Unviewing', 3)
+	TextBox.Text = ""
+    end
+    if Command("cmds") then
+	if not Temp.CmdsC then
+		Temp.CmdsC = true
+		if Commands.Visible == false then
+			Commands.Position = Commands.Position + UDim2.new(0, 0, 1, 0)
+			wait(.1)
+			Commands:TweenPosition(SavedCmdsPosition, "Out", "Sine", 1)
+			Commands.Visible = true
+		else
+			Commands:TweenPosition(SavedCmdsPosition + UDim2.new(0, 0, 1, 0), "Out", "Quart", 1)
+			wait(.5)
+			Commands.Visible = false
+		end
+		wait(.7)
+		Temp.CmdsC = false
+	end
+	TextBox.Text = ''
+    end
+    if Command('rejoin') or Command("rj") then
+	game:GetService("TeleportService"):Teleport(game.PlaceId)
+    end
+    if NotCommand("unload") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("commands") and NotCommand("re") and NotCommand("refresh") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("inmate") and NotCommand("guard") and NotCommand("crim") and NotCommand("criminal") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("prefix") and NotCommand("pp") and NotCommand("bring") and NotCommand("damage") and NotCommand('dmg') and NotCommand('autoguns') and NotCommand("aguns") and NotCommand('autoitems') and NotCommand('aitems') and NotCommand('autoremoveff') and NotCommand("autorff") and NotCommand('autoguard') and NotCommand('aguard') and NotCommand('killaura') and NotCommand("copychat") and NotCommand("notify") and NotCommand('antifling') and NotCommand('infjump') and NotCommand('ff') and NotCommand('forcefield') and NotCommand('arrest') and NotCommand("ar") and NotCommand('meleekill') and NotCommand('mk') and NotCommand("mkill") and NotCommand('tp') and NotCommand("speed") and NotCommand("ws") and NotCommand('btools') and NotCommand("shotgun") and NotCommand("rem") and NotCommand("remington") and NotCommand("ak") and NotCommand('ak-47') and NotCommand('m9') and NotCommand('pistol') and NotCommand("guns") and NotCommand("items") and NotCommand('m4') and NotCommand('m4a1') and NotCommand("hammer") and NotCommand('ham') and NotCommand("knife") and NotCommand('knive') and NotCommand("food") and NotCommand("goto") and NotCommand('to') and NotCommand('drag') and NotCommand('autonocars') and NotCommand('autodumpcars') and NotCommand("autodeletecars") and NotCommand('opengate') and NotCommand("allcmds") and NotCommand('nex') and NotCommand("nexus") and NotCommand('yard') and NotCommand("gas") and NotCommand('roof') and NotCommand("respawn") and NotCommand('res') and NotCommand("getplayer") and NotCommand('noclip') and NotCommand("chatnotify") and NotCommand('view') and NotCommand("unview") and NotCommand('cmds') and NotCommand("rejoin") and NotCommand('rj') then
 	if string.sub(Message,1) == Prefix or TextBox.Text:sub(1,#Prefix) == Prefix then
 		Notif("Error", Message.." is not a valid command.", 3)
 		TextBox.Text = ""
@@ -1556,19 +1643,15 @@ function PC(Message)
 	end
     end
 end
-Player.Chatted:Connect(function(msg)
-	if string.sub(msg,1) == Prefix then
-		PC(msg)
-	end
-end)
+Player.Chatted:Connect(PC)
 plr.CharacterAdded:Connect(function(NewCharacter)
     if Unloaded then return end
     if States.AutoGuns then
-	wait(.4)
+	wait(.25)
 	AllGuns()
     end
     if States.AutoItems then
-	wait(.4)
+	wait(.25)
 	AllItems()
 	Instance.new("HopperBin",plr.Backpack).BinType = 3
 	Instance.new("HopperBin",plr.Backpack).BinType = 4
