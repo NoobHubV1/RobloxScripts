@@ -136,7 +136,6 @@ local States = {}
       States.ChatNotify = false
 local API = {}
       API.Whitelisted = {}
-      API.ArrestOldP = {}
 local CommandsAmount = 0
 
 local CloneTXT = TEMP_CMD:Clone()
@@ -1261,8 +1260,17 @@ function PC(Message)
 	end
     end
     if Command("ff") or Command("forcefield") then
-	ChangeState(args[2],"ff")
+	local value = ChangeState(args[2],"ff")
 	TextBox.Text = ""
+	if value then
+		while wait() do
+			if Unloaded then return end
+			if not plr.Character:FindFirstChild'ForceField' and States.ff then
+				wait()
+				Refresh()
+			end
+		end
+	end
     end 
     if Command("arrest") or Command("ar") then
 	if args[2] == "all" then
@@ -1270,7 +1278,7 @@ function PC(Message)
 		for i,v in pairs(game:GetService("Players"):GetPlayers()) do
 			if v and v ~= game:GetService("Players").LocalPlayer and not table.find(API.Whitelisted,v) and v.Team == game.Teams.Criminals or (BadArea(v) and v.Team == game.Teams.Inmates) and v.Character.PrimaryPart and v.Character:FindFirstChildOfClass("Humanoid").Health>0 then
 				repeat task.wait()
-					MoveTo(v.Character:GetPrimaryPartCFrame())
+					game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character:GetPrimaryPartCFrame()
 					task.spawn(function()
 						workspace.Remote.arrest:InvokeServer(v.Character.PrimaryPart)
 					end)
@@ -1683,14 +1691,8 @@ function PC(Message)
 	TextBox.Text = ''
     end
     if Command("antisit") then
-	local value = ChangeState(args[2],"AntiSit")
-	if value then
-		while wait() do
-			if plr.Character.Humanoid.Sit then
-				plr.Character.Humanoid:ChangeState("Jumping")
-			end
-		end
-	end
+	ChangeState(args[2],"Antisit")
+	TextBox.Text = ""
     end
     if NotCommand("unload") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("commands") and NotCommand("re") and NotCommand("refresh") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("inmate") and NotCommand("guard") and NotCommand("crim") and NotCommand("criminal") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("prefix") and NotCommand("pp") and NotCommand("bring") and NotCommand("damage") and NotCommand('dmg') and NotCommand('autoguns') and NotCommand("aguns") and NotCommand('autoitems') and NotCommand('aitems') and NotCommand('autoremoveff') and NotCommand("autorff") and NotCommand('autoguard') and NotCommand('aguard') and NotCommand('killaura') and NotCommand("copychat") and NotCommand("notify") and NotCommand('antifling') and NotCommand('infjump') and NotCommand('ff') and NotCommand('forcefield') and NotCommand('arrest') and NotCommand("ar") and NotCommand('meleekill') and NotCommand('mk') and NotCommand("mkill") and NotCommand('tp') and NotCommand("speed") and NotCommand("ws") and NotCommand('btools') and NotCommand("shotgun") and NotCommand("rem") and NotCommand("remington") and NotCommand("ak") and NotCommand('ak-47') and NotCommand('m9') and NotCommand('pistol') and NotCommand("guns") and NotCommand("items") and NotCommand('m4') and NotCommand('m4a1') and NotCommand("hammer") and NotCommand('ham') and NotCommand("knife") and NotCommand('knive') and NotCommand("food") and NotCommand("goto") and NotCommand('to') and NotCommand('drag') and NotCommand('autonocars') and NotCommand('autodumpcars') and NotCommand("autodeletecars") and NotCommand('opengate') and NotCommand("allcmds") and NotCommand('nex') and NotCommand("nexus") and NotCommand('yard') and NotCommand("gas") and NotCommand('roof') and NotCommand("respawn") and NotCommand('res') and NotCommand("getplayer") and NotCommand('noclip') and NotCommand("chatnotify") and NotCommand('view') and NotCommand("unview") and NotCommand('cmds') and NotCommand("rejoin") and NotCommand('rj') and NotCommand("doorsdestroy") and NotCommand('nodoors') and NotCommand("removecars") and NotCommand('nocars') and NotCommand("dumpcars") and NotCommand('antisit') then
 	if string.sub(Message,1) == Prefix or TextBox.Text:sub(1,#Prefix) == Prefix then
@@ -1737,20 +1739,11 @@ plr.CharacterAdded:Connect(function(NewCharacter)
 		end
 	end
     end
-    if States.AutoRespawn and API.ArrestOldP then
-	for i =1,2 do
-		MoveTo(API.ArrestOldP)
-	end
-	wait(.1)
-	API.ArrestOldP = nil
-    end
-    if States.AutoRespawn then
-	API.ArrestOldP = GetPosition()
-    end
 end)
 coroutine.wrap(function()
 	while wait() do
-		if States.Killaura and not Unloaded then
+		if Unloaded then return end
+		if States.Killaura then
 			for i,v in pairs(game.Players:GetPlayers()) do
 				if v and v ~= plr and not table.find(API.Whitelisted,v) then
 					if not v.Character.Humanoid.Health == 0 or not v.Character:FindFirstChild("ForceField") then
@@ -1759,9 +1752,8 @@ coroutine.wrap(function()
 				end
 			end
 		end
-		if States.ff and Unloaded == false then
-			wait(4)
-			ChangeTeam(game.Teams.Guards)
+		if plr.Character.Humanoid.Sit and States.Antisit then
+			game.Players.LocalPlayer.Character.Humanoid:ChangeState'Jumping'
 		end
 	end
 end)()
