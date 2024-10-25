@@ -139,8 +139,10 @@ local States = {}
       States.ArrestAura = false
       States.Infjump = false
       States.AntiTouch = false
+      States.DoorsDestroy = false
 local API = {}
       API.Whitelisted = {}
+      API.LoopmKilling = {}
 local CommandsAmount = 0
 local Killcool1 = false
 
@@ -387,6 +389,18 @@ CommandsAmount = CommandsAmount + 1
 local CloneTXT_61 = TEMP_CMD:Clone()
 CloneTXT_61.Text = "arrestaura [on/off] | Arrests anyone close to you"
 CloneTXT_61.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_62 = TEMP_CMD:Clone()
+CloneTXT_62.Text = "antitouch [on/off] | Kills anyone who touches you"
+CloneTXT_62.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_63 = TEMP_CMD:Clone()
+CloneTXT_63.Text = "meleelk / mlk [plr,all,team] | Auto teleports to kill player(s)"
+CloneTXT_63.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_64 = TEMP_CMD:Clone()
+CloneTXT_64.Text = "unmeleelk / unmlk [plr,all,team] | Stopped auto teleports to kill player(s)"
+CloneTXT_64.Parent = CommandsList
 CommandsAmount = CommandsAmount + 1
 function Title(Text)
 	return Player.PlayerGui['Home']['hud']['Topbar']['titleBar'].Title.Text:lower() == Text
@@ -996,11 +1010,13 @@ end
 function Meleekill(Tar)
 	if not Tar.Character.Humanoid.Health == 0 or not Tar.Character:FindFirstChild("ForceField") then
 		local Orgin = GetPosition()
-		while Tar.Character.Humanoid.Health > 1 do task.wait()
-			MoveTo(Tar.Character.HumanoidRootPart.CFrame)
+		repeat task.wait()
+			UnSit()
+			plr.Character.HumanoidRootPart.CFrame = Tar.Character.HumanoidRootPart.CFrame
 			MeleeEvent(Tar)
-		end
-		MoveTo(Orgin)
+		until Tar.Character.Humanoid.Health < 5
+		UnSit()
+		GetPart(plr).CFrame = Orgin
 	end
 end
 function IsTeamCommandCheck(String)
@@ -1741,7 +1757,105 @@ function PC(Message)
 	ChangeState(args[2],'ArrestAura')
 	TextBox.Text = ""
     end
-    if NotCommand("unload") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("commands") and NotCommand("re") and NotCommand("refresh") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("inmate") and NotCommand("guard") and NotCommand("crim") and NotCommand("criminal") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("prefix") and NotCommand("pp") and NotCommand("bring") and NotCommand("damage") and NotCommand('dmg') and NotCommand('autoguns') and NotCommand("aguns") and NotCommand('autoitems') and NotCommand('aitems') and NotCommand('autoremoveff') and NotCommand("autorff") and NotCommand('autoguard') and NotCommand('aguard') and NotCommand('killaura') and NotCommand("copychat") and NotCommand("notify") and NotCommand('antifling') and NotCommand('infjump') and NotCommand('ff') and NotCommand('forcefield') and NotCommand('arrest') and NotCommand("ar") and NotCommand('meleekill') and NotCommand('mk') and NotCommand("mkill") and NotCommand('tp') and NotCommand("speed") and NotCommand("ws") and NotCommand('btools') and NotCommand("shotgun") and NotCommand("rem") and NotCommand("remington") and NotCommand("ak") and NotCommand('ak-47') and NotCommand('m9') and NotCommand('pistol') and NotCommand("guns") and NotCommand("items") and NotCommand('m4') and NotCommand('m4a1') and NotCommand("hammer") and NotCommand('ham') and NotCommand("knife") and NotCommand('knive') and NotCommand("food") and NotCommand("goto") and NotCommand('to') and NotCommand('drag') and NotCommand('autonocars') and NotCommand('autodumpcars') and NotCommand("autodeletecars") and NotCommand('opengate') and NotCommand("allcmds") and NotCommand('nex') and NotCommand("nexus") and NotCommand('yard') and NotCommand("gas") and NotCommand('roof') and NotCommand("respawn") and NotCommand('res') and NotCommand("getplayer") and NotCommand('noclip') and NotCommand("chatnotify") and NotCommand('view') and NotCommand("unview") and NotCommand('cmds') and NotCommand("rejoin") and NotCommand('rj') and NotCommand("doorsdestroy") and NotCommand('nodoors') and NotCommand("removecars") and NotCommand('nocars') and NotCommand("dumpcars") and NotCommand('antisit') and NotCommand("antitase") and NotCommand('notase') and NotCommand("clickkill") and NotCommand'clickarrest' and NotCommand("arrestaura") then
+    if Command"antitouch" then
+	ChangeState(args[2],"AntiTouch")
+	TextBox.Text = ''
+    end
+    if Command("meleelk") or Command('mlk') then
+	local Team = IsTeamCommandCheck(args[2])
+	if args[2] == "all" or args[2] == "everyone" or args[2] == "others" then
+		Notif("OK", 'Melee loopkill '..args[2], 3)
+		TextBox.Text = ""
+		API.MeleeLoopAll = true
+	elseif Team == game.Teams.Inmates then
+		Notif("OK", 'Melee loopkill inmates', 3)
+		TextBox.Text = ''
+		API.MeleeLoopInmates = true
+	elseif Team == game.Teams.Guards then
+		Notif("OK", 'Melee loopkill guards', 3)
+		TextBox.Text = ''
+		API.MeleeLoopGuards = true
+	elseif Team == game.Teams.Criminals then
+		Notif("OK", 'Melee loopkill criminals', 3)
+		TextBox.Text = ''
+		API.MeleeLoopCrims = true
+	else
+		local Player = FindPlayer(args[2])
+		if not table.find(API.LoopmKilling,Player.Name) then
+			table.insert(API.LoopmKilling, Player.Name)
+			Notif("OK", "Melee loopkill "..Player.DisplayName, 3)
+		else
+			Notif("Error", 'Player is already getting loop killed!', 3)
+		end
+	end
+	while wait(.7) do
+		if API.MeleeLoopAll then
+			for i,v in pairs(game.Players:GetPlayers()) do
+				if v ~= plr and not table.find(API.Whitelisted,v) then
+					if not v.Character.Humanoid.Health == 0 or not v.Character:FindFirstChild('ForceField') then
+						Meleekill(v)
+					end
+				end
+			end
+		end
+		if API.MeleeLoopInmates then
+			for i,v in pairs(game.Teams.Inmates:GetPlayers()) do
+				if v ~= plr and not table.find(API.Whitelisted,v) then
+					if not v.Character.Humanoid.Health == 0 or not v.Character:FindFirstChild('ForceField') then
+						Meleekill(v)
+					end
+				end
+			end
+		end
+		if API.MeleeLoopGuards then
+			for i,v in pairs(game.Teams.Guards:GetPlayers()) do
+				if v ~= plr and not table.find(API.Whitelisted,v) then
+					if not v.Character.Humanoid.Health == 0 or not v.Character:FindFirstChild('ForceField') then
+						Meleekill(v)
+					end
+				end
+			end
+		end
+		if API.MeleeLoopCrims then
+			for i,v in pairs(game.Teams.Criminals:GetPlayers()) do
+				if v ~= plr and not table.find(API.Whitelisted,v) then
+					if not v.Character.Humanoid.Health == 0 or not v.Character:FindFirstChild('ForceField') then
+						Meleekill(v)
+					end
+				end
+			end
+		end
+	end
+    end
+    if Command("unmeleelk") or Command('unmlk') then
+	local Team = IsTeamCommandCheck(args[2])
+	if args[2] == "all" or args[2] == "everyone" or args[2] == "others" then
+		Notif("OK", 'Stopped Melee loopkill '..args[2], 3)
+		TextBox.Text = ""
+		API.MeleeLoopAll = false
+	elseif Team == game.Teams.Inmates then
+		Notif("OK", 'Stopped Melee loopkill inmates', 3)
+		TextBox.Text = ''
+		API.MeleeLoopInmates = false
+	elseif Team == game.Teams.Guards then
+		Notif("OK", 'Stopped Melee loopkill guards', 3)
+		TextBox.Text = ''
+		API.MeleeLoopGuards = false
+	elseif Team == game.Teams.Criminals then
+		Notif("OK", 'Stopped Melee loopkill criminals', 3)
+		TextBox.Text = ''
+		API.MeleeLoopCrims = false
+	else
+		local Player = FindPlayer(args[2])
+		if table.find(API.LoopmKilling,Player.Name) then
+			table.remove(API.LoopmKilling,table.find(API.LoopmKilling,Player.Name))
+			Notif("OK", 'Stopped Melee loopkill '..Player.DisplayName, 3)
+		else
+			Notif("Error", 'Player is not melee loopkill!', 3)
+		end
+	end
+    end
+    if NotCommand("unload") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("commands") and NotCommand("re") and NotCommand("refresh") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("inmate") and NotCommand("guard") and NotCommand("crim") and NotCommand("criminal") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("prefix") and NotCommand("pp") and NotCommand("bring") and NotCommand("damage") and NotCommand('dmg') and NotCommand('autoguns') and NotCommand("aguns") and NotCommand('autoitems') and NotCommand('aitems') and NotCommand('autoremoveff') and NotCommand("autorff") and NotCommand('autoguard') and NotCommand('aguard') and NotCommand('killaura') and NotCommand("copychat") and NotCommand("notify") and NotCommand('antifling') and NotCommand('infjump') and NotCommand('ff') and NotCommand('forcefield') and NotCommand('arrest') and NotCommand("ar") and NotCommand('meleekill') and NotCommand('mk') and NotCommand("mkill") and NotCommand('tp') and NotCommand("speed") and NotCommand("ws") and NotCommand('btools') and NotCommand("shotgun") and NotCommand("rem") and NotCommand("remington") and NotCommand("ak") and NotCommand('ak-47') and NotCommand('m9') and NotCommand('pistol') and NotCommand("guns") and NotCommand("items") and NotCommand('m4') and NotCommand('m4a1') and NotCommand("hammer") and NotCommand('ham') and NotCommand("knife") and NotCommand('knive') and NotCommand("food") and NotCommand("goto") and NotCommand('to') and NotCommand('drag') and NotCommand('autonocars') and NotCommand('autodumpcars') and NotCommand("autodeletecars") and NotCommand('opengate') and NotCommand("allcmds") and NotCommand('nex') and NotCommand("nexus") and NotCommand('yard') and NotCommand("gas") and NotCommand('roof') and NotCommand("respawn") and NotCommand('res') and NotCommand("getplayer") and NotCommand('noclip') and NotCommand("chatnotify") and NotCommand('view') and NotCommand("unview") and NotCommand('cmds') and NotCommand("rejoin") and NotCommand('rj') and NotCommand("doorsdestroy") and NotCommand('nodoors') and NotCommand("removecars") and NotCommand('nocars') and NotCommand("dumpcars") and NotCommand('antisit') and NotCommand("antitase") and NotCommand('notase') and NotCommand("clickkill") and NotCommand'clickarrest' and NotCommand("arrestaura") and NotCommand('antitouch') and NotCommand("meleelk") and NotCommand('mlk') and NotCommand("unmeleelk") and NotCommand('unmlk') then
 	if string.sub(Message,1) == Prefix or TextBox.Text:sub(1,#Prefix) == Prefix then
 		Notif("Error", Message.." is not a valid command.", 3)
 		TextBox.Text = ""
@@ -1853,6 +1967,16 @@ coroutine.wrap(function()
 		end
 	end
 end)()
+spawn(function()
+	while wait(.7) do
+		for i,v in pairs(API.LoopmKilling) do
+			if v and game.Players:FindFirstChild(v) then
+				local Target = game.Players:FindFirstChild(v)
+				Meleekill(Target)
+			end
+		end
+	end
+end)
 function CopyChat(PLR)
 	PLR.Chatted:Connect(function(msg)
 		if States.CopyChat and Unloaded == false then
@@ -1954,5 +2078,4 @@ Notif("Loads", "Loaded Admin Commands, Chat ;cmds to show commands list", 6)
 Frame:TweenPosition(UDim2.new(0.5, 0, 0.899999998, 0)-UDim2.new(0,0,.05,0),"Out","Back",.5)
 else
 game:GetService("StarterGui"):SetCore("SendNotification", {Title = "Error", Text = "Septex Admin is already executed!", Duration = 7,})
-end
- 
+end 
