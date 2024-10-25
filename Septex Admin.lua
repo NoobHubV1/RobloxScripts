@@ -134,9 +134,15 @@ local States = {}
       States.AutoDumpCars = false
       States.Notify = false
       States.ChatNotify = false
+      States.AntiTase = false
+      States.ClickArrest = false
+      States.ClickKill = false
 local API = {}
       API.Whitelisted = {}
+      API.Admins = {}
 local CommandsAmount = 0
+local StringArgsLower = true
+local Killcool1 = false
 
 local CloneTXT = TEMP_CMD:Clone()
 CloneTXT.Text = "kill / oof / die [plr,all,team] | Kill a player(s)"
@@ -365,6 +371,18 @@ CommandsAmount = CommandsAmount + 1
 local CloneTXT_57 = TEMP_CMD:Clone()
 CloneTXT_57.Text = "antisit [on/off] | Activate antisit"
 CloneTXT_57.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_58 = TEMP_CMD:Clone()
+CloneTXT_58.Text = "antitase / notase [on/off] | Activate taser bypass"
+CloneTXT_58.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_59 = TEMP_CMD:Clone()
+CloneTXT_59.Text = "clickkill [on/off] | click on someone to kill them"
+CloneTXT_59.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_60 = TEMP_CMD:Clone()
+CloneTXT_60.Text = "clickarrest [on/off] | click on someone to arrest them"
+CloneTXT_60.Parent = CommandsList
 CommandsAmount = CommandsAmount + 1
 function Title(Text)
 	return Player.PlayerGui['Home']['hud']['Topbar']['titleBar'].Title.Text:lower() == Text
@@ -997,13 +1015,12 @@ function Destroy(parent)
 end
 function PC(Message)
   if Unloaded then return end
-  local args = Message:lower():split(' ')
-  local First = args[1]
+  local args = Message:lower():split' '
   function Command(Cmd)
-	return First == Prefix..Cmd
+	return args[1] == Prefix..Cmd
   end
   function NotCommand(Cmd)
-	return First ~= Prefix..Cmd
+	return args[1] ~= Prefix..Cmd
   end
   if Command("unload") then
 	Destroy(game:FindFirstChild('Septex_Admin'))
@@ -1694,7 +1711,28 @@ function PC(Message)
 	ChangeState(args[2],"Antisit")
 	TextBox.Text = ""
     end
-    if NotCommand("unload") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("commands") and NotCommand("re") and NotCommand("refresh") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("inmate") and NotCommand("guard") and NotCommand("crim") and NotCommand("criminal") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("prefix") and NotCommand("pp") and NotCommand("bring") and NotCommand("damage") and NotCommand('dmg') and NotCommand('autoguns') and NotCommand("aguns") and NotCommand('autoitems') and NotCommand('aitems') and NotCommand('autoremoveff') and NotCommand("autorff") and NotCommand('autoguard') and NotCommand('aguard') and NotCommand('killaura') and NotCommand("copychat") and NotCommand("notify") and NotCommand('antifling') and NotCommand('infjump') and NotCommand('ff') and NotCommand('forcefield') and NotCommand('arrest') and NotCommand("ar") and NotCommand('meleekill') and NotCommand('mk') and NotCommand("mkill") and NotCommand('tp') and NotCommand("speed") and NotCommand("ws") and NotCommand('btools') and NotCommand("shotgun") and NotCommand("rem") and NotCommand("remington") and NotCommand("ak") and NotCommand('ak-47') and NotCommand('m9') and NotCommand('pistol') and NotCommand("guns") and NotCommand("items") and NotCommand('m4') and NotCommand('m4a1') and NotCommand("hammer") and NotCommand('ham') and NotCommand("knife") and NotCommand('knive') and NotCommand("food") and NotCommand("goto") and NotCommand('to') and NotCommand('drag') and NotCommand('autonocars') and NotCommand('autodumpcars') and NotCommand("autodeletecars") and NotCommand('opengate') and NotCommand("allcmds") and NotCommand('nex') and NotCommand("nexus") and NotCommand('yard') and NotCommand("gas") and NotCommand('roof') and NotCommand("respawn") and NotCommand('res') and NotCommand("getplayer") and NotCommand('noclip') and NotCommand("chatnotify") and NotCommand('view') and NotCommand("unview") and NotCommand('cmds') and NotCommand("rejoin") and NotCommand('rj') and NotCommand("doorsdestroy") and NotCommand('nodoors') and NotCommand("removecars") and NotCommand('nocars') and NotCommand("dumpcars") and NotCommand('antisit') then
+    if Command('antitase') or Command("notase") then
+	local value = ChangeState(args[2],"AntiTase")
+	TextBox.Text = ''
+	if value then
+		for i,v in pairs(getconnections(workspace:WaitForChild("Remote").tazePlayer.OnClientEvent)) do
+			v:Disable()
+		end
+	elseif not value then
+		for i,v in pairs(getconnections(workspace:WaitForChild("Remote").tazePlayer.OnClientEvent)) do
+			v:Enable()
+		end
+	end
+    end
+    if Command('clickkill') then
+	ChangeState(args[2],"ClickKill")
+	TextBox.Text = ""
+    end
+    if Command("clickarrest") then
+	ChangeState(args[2],"ClickArrest")
+	TextBox.Text = ''
+    end
+    if NotCommand("unload") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("commands") and NotCommand("re") and NotCommand("refresh") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("inmate") and NotCommand("guard") and NotCommand("crim") and NotCommand("criminal") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("prefix") and NotCommand("pp") and NotCommand("bring") and NotCommand("damage") and NotCommand('dmg') and NotCommand('autoguns') and NotCommand("aguns") and NotCommand('autoitems') and NotCommand('aitems') and NotCommand('autoremoveff') and NotCommand("autorff") and NotCommand('autoguard') and NotCommand('aguard') and NotCommand('killaura') and NotCommand("copychat") and NotCommand("notify") and NotCommand('antifling') and NotCommand('infjump') and NotCommand('ff') and NotCommand('forcefield') and NotCommand('arrest') and NotCommand("ar") and NotCommand('meleekill') and NotCommand('mk') and NotCommand("mkill") and NotCommand('tp') and NotCommand("speed") and NotCommand("ws") and NotCommand('btools') and NotCommand("shotgun") and NotCommand("rem") and NotCommand("remington") and NotCommand("ak") and NotCommand('ak-47') and NotCommand('m9') and NotCommand('pistol') and NotCommand("guns") and NotCommand("items") and NotCommand('m4') and NotCommand('m4a1') and NotCommand("hammer") and NotCommand('ham') and NotCommand("knife") and NotCommand('knive') and NotCommand("food") and NotCommand("goto") and NotCommand('to') and NotCommand('drag') and NotCommand('autonocars') and NotCommand('autodumpcars') and NotCommand("autodeletecars") and NotCommand('opengate') and NotCommand("allcmds") and NotCommand('nex') and NotCommand("nexus") and NotCommand('yard') and NotCommand("gas") and NotCommand('roof') and NotCommand("respawn") and NotCommand('res') and NotCommand("getplayer") and NotCommand('noclip') and NotCommand("chatnotify") and NotCommand('view') and NotCommand("unview") and NotCommand('cmds') and NotCommand("rejoin") and NotCommand('rj') and NotCommand("doorsdestroy") and NotCommand('nodoors') and NotCommand("removecars") and NotCommand('nocars') and NotCommand("dumpcars") and NotCommand('antisit') and NotCommand("antitase") and NotCommand('notase') and NotCommand("clickkill") and NotCommand'clickarrest' then
 	if string.sub(Message,1) == Prefix or TextBox.Text:sub(1,#Prefix) == Prefix then
 		Notif("Error", Message.." is not a valid command.", 3)
 		TextBox.Text = ""
@@ -1708,11 +1746,11 @@ Player.Chatted:Connect(PC)
 plr.CharacterAdded:Connect(function(NewCharacter)
     if Unloaded then return end
     if States.AutoGuns then
-	wait(.25)
+	wait(.3)
 	AllGuns()
     end
     if States.AutoItems then
-	wait(.25)
+	wait(.3)
 	AllItems()
 	Instance.new("HopperBin",plr.Backpack).BinType = 3
 	Instance.new("HopperBin",plr.Backpack).BinType = 4
@@ -1740,10 +1778,30 @@ plr.CharacterAdded:Connect(function(NewCharacter)
 	end
     end
 end)
+plr:GetMouse().Button1Up:Connect(function()
+	local Target = plr:GetMouse().Target
+	if Killcool1 then return end
+	if States.ClickArrest or States.ClickKill then
+		if Target and Target.Parent and Target.Parent:FindFirstChildOfClass("Humanoid") and game:GetService("Players"):FindFirstChild(Target.Parent.Name) or game:GetService("Players"):FindFirstChild(Target.Parent.Parent.Name) then
+			local TargetModelPlr = game:GetService("Players"):FindFirstChild(Target.Parent.Name) or game:GetService("Players"):FindFirstChild(Target.Parent.Parent.Name)
+			if States.ClickArrest then
+				if TargetModelPlr.Team ~= game:GetService("Teams").Guards then
+					local ohInstance1 = Target
+					workspace.Remote.arrest:InvokeServer(ohInstance1)
+				end
+			end
+			if States.ClickKill then
+				KillPlayer(TargetModelPlr,8)
+				Killcool1 = true
+				wait(.6)
+				Killcool1 = false
+			end
+		end
+	end
+end)
 coroutine.wrap(function()
 	while wait() do
-		if Unloaded then return end
-		if States.Killaura then
+		if States.Killaura and not Unloaded then
 			for i,v in pairs(game.Players:GetPlayers()) do
 				if v and v ~= plr and not table.find(API.Whitelisted,v) then
 					if not v.Character.Humanoid.Health == 0 or not v.Character:FindFirstChild("ForceField") then
@@ -1752,7 +1810,7 @@ coroutine.wrap(function()
 				end
 			end
 		end
-		if plr.Character.Humanoid.Sit and States.Antisit then
+		if plr.Character.Humanoid.Sit and States.Antisit and not Unloaded then
 			game.Players.LocalPlayer.Character.Humanoid:ChangeState'Jumping'
 		end
 	end
@@ -1870,3 +1928,4 @@ Frame:TweenPosition(UDim2.new(0.5, 0, 0.899999998, 0)-UDim2.new(0,0,.05,0),"Out"
 else
 game:GetService("StarterGui"):SetCore("SendNotification", {Title = "Error", Text = "Septex Admin is already executed!", Duration = 7,})
 end
+ 
