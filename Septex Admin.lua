@@ -1315,9 +1315,10 @@ function PC(Message)
 		if Target then
 			if Target.Team == game.Teams.Guards or not BadArea(Target) or plr.Character.Humanoid.Health == 0 then
 				return Notif("Error", "Can't arrest this player!", 3)
-			else
+			end
+			if Target.Team == game.Teams.Criminals or (Target.Team == game.Teams.Inmates and BadArea(Target)) and not Target.Character.Humanoid.Health > 0 then
 				repeat task.wait()
-					MoveTo(Target.Character.HumanoidRootPart.CFrame)
+					game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Target.Character.HumanoidRootPart.CFrame
 						task.spawn(function()
 							workspace.Remote.arrest:InvokeServer(Target.Character.PrimaryPart)
 						end)
