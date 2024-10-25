@@ -1,6 +1,5 @@
 if not game:FindFirstChild('Septex_Admin') then
 local Prefix = ';'
-local Temp = {}
 local Folder = Instance.new("Folder",game)
 Folder.Name = "Septex_Admin"
 local ScreenGui = Instance.new("ScreenGui",game.Players.LocalPlayer:WaitForChild("PlayerGui"))
@@ -138,10 +137,11 @@ local States = {}
       States.ClickArrest = false
       States.ClickKill = false
       States.ArrestAura = false
+      States.Infjump = false
+      States.AntiTouch = false
 local API = {}
       API.Whitelisted = {}
 local CommandsAmount = 0
-local StringArgsLower = true
 local Killcool1 = false
 
 local CloneTXT = TEMP_CMD:Clone()
@@ -1838,6 +1838,19 @@ coroutine.wrap(function()
 				end
 			end)
 		end
+		if States.AntiTouch and Unloaded == false then
+			pcall(function()
+				for i,v in pairs(game.Players:GetPlayers()) do
+					if v ~= Player then
+						if (v.Character.HumanoidRootPart.Position - plr.Character.HumanoidRootPart.Position).magnitude <2.3 and v.Character.Humanoid.Health >0 and not table.find(API.Whitelisted,v) then
+							task.spawn(function()
+								game:GetService("ReplicatedStorage").meleeEvent:FireServer(v)
+							end)
+						end
+					end
+				end
+			end)
+		end
 	end
 end)()
 function CopyChat(PLR)
@@ -1883,12 +1896,22 @@ function Respawn(PLAYER)
 		end
 	end)
 end
+function NoCollide(PLR)
+	if States.AntiFling and not Unloaded and PLR.Character then
+		for _,x in pairs(PLR.Character:GetDescendants()) do
+			if x:IsA("BasePart") and not Unloaded and States.AntiFling then
+				x.CanCollide = false
+			end
+		end
+	end
+end
 for i,v in pairs(game.Players:GetPlayers()) do
 	if v ~= plr then
 		CopyChat(v)
 		PickUp(v)
 		Died(v)
 		Respawn(v)
+		NoCollide(v)
 	end
 end
 TextBox.FocusLost:Connect(function(Key)
@@ -1911,6 +1934,7 @@ game.Players.PlayerAdded:Connect(function(PLAYER)
 	PickUp(PLAYER)
 	Died(PLAYER)
 	Respawn(PLAYER)
+	NoCollide(PLAYER)
 end)
 game.Players.PlayerRemoving:Connect(function(PLAYER)
 	if States.Notify and not Unloaded then
@@ -1923,30 +1947,8 @@ game.Players.PlayerRemoving:Connect(function(PLAYER)
 	PickUp(PLAYER)
 	Died(PLAYER)
 	Respawn(PLAYER)
+	NoCollide(PLAYER)
 end)
-function NoCollision(PLR)
-	if States.AntiFling and not Unloaded and PLR.Character then
-		for _,x in pairs(PLR.Character:GetDescendants()) do
-			if x:IsA("BasePart") and not Unloaded and States.AntiFling then
-				x.CanCollide = false
-			end
-		end
-	end
- end
- for _,v in pairs(game.Players:GetPlayers()) do
-	 if v ~= game.Players.LocalPlayer then
-		 local antifling = game:GetService('RunService').Stepped:connect(function()
-			 NoCollision(v)
-		 end)
-	 end
- end
- game.Players.PlayerAdded:Connect(function()
-	 if v ~= game.Players.LocalPlayer and antifling then
-		 local antifling = game:GetService('RunService').Stepped:connect(function()
-			NoCollision(v)
-		 end)
-	 end
- end)
 Refresh()
 Notif("Loads", "Loaded Admin Commands, Chat ;cmds to show commands list", 6)
 Frame:TweenPosition(UDim2.new(0.5, 0, 0.899999998, 0)-UDim2.new(0,0,.05,0),"Out","Back",.5)
