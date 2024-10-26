@@ -1069,8 +1069,17 @@ function PC(Message)
 	Notif("OK", "Script is Unloaded", 3)
   end
   if Command("cmds") or Command("cmd") or Command("commands") then
-    Notif("Notify", "The commands are listed in the console! \n Press F9 to view or chat /console", 3)
-    TextBox.Text = ""
+    if Commands.Visible == false then
+	Commands.Position = Commands.Position + UDim2.new(0, 0, 1, 0)
+	wait(.1)
+	Commands:TweenPosition(SavedCmdsPosition, "Out", "Sine", 1)
+	Commands.Visible = true
+    else
+	Commands:TweenPosition(SavedCmdsPosition + UDim2.new(0, 0, 1, 0), "Out", "Quart", 1)
+	wait(.5)
+	Commands.Visible = false
+    end
+    TextBox.Text = ''
   end
   if Command("re") or Command("refresh") then
     Refresh()
@@ -1692,24 +1701,6 @@ function PC(Message)
 	Notif("OK", 'Unviewing', 3)
 	TextBox.Text = ""
     end
-    if Command("cmds") then
-	if not Temp.CmdsC then
-		Temp.CmdsC = true
-		if Commands.Visible == false then
-			Commands.Position = Commands.Position + UDim2.new(0, 0, 1, 0)
-			wait(.1)
-			Commands:TweenPosition(SavedCmdsPosition, "Out", "Sine", 1)
-			Commands.Visible = true
-		else
-			Commands:TweenPosition(SavedCmdsPosition + UDim2.new(0, 0, 1, 0), "Out", "Quart", 1)
-			wait(.5)
-			Commands.Visible = false
-		end
-		wait(.7)
-		Temp.CmdsC = false
-	end
-	TextBox.Text = ''
-    end
     if Command('rejoin') or Command("rj") then
 	game:GetService("TeleportService"):Teleport(game.PlaceId)
     end
@@ -1990,7 +1981,7 @@ function PC(Message)
 		TextBox.Text = ""
 	end
     end
-    if NotCommand("unload") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("commands") and NotCommand("re") and NotCommand("refresh") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("inmate") and NotCommand("guard") and NotCommand("crim") and NotCommand("criminal") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("prefix") and NotCommand("pp") and NotCommand("bring") and NotCommand("damage") and NotCommand('dmg') and NotCommand('autoguns') and NotCommand("aguns") and NotCommand('autoitems') and NotCommand('aitems') and NotCommand('autoremoveff') and NotCommand("autorff") and NotCommand('autoguard') and NotCommand('aguard') and NotCommand('killaura') and NotCommand("copychat") and NotCommand("notify") and NotCommand('antifling') and NotCommand('infjump') and NotCommand('ff') and NotCommand('forcefield') and NotCommand('arrest') and NotCommand("ar") and NotCommand('meleekill') and NotCommand('mk') and NotCommand("mkill") and NotCommand('tp') and NotCommand("speed") and NotCommand("ws") and NotCommand('btools') and NotCommand("shotgun") and NotCommand("rem") and NotCommand("remington") and NotCommand("ak") and NotCommand('ak-47') and NotCommand('m9') and NotCommand('pistol') and NotCommand("guns") and NotCommand("items") and NotCommand('m4') and NotCommand('m4a1') and NotCommand("hammer") and NotCommand('ham') and NotCommand("knife") and NotCommand('knive') and NotCommand("food") and NotCommand("goto") and NotCommand('to') and NotCommand('drag') and NotCommand('autonocars') and NotCommand('autodumpcars') and NotCommand("autodeletecars") and NotCommand('opengate') and NotCommand("allcmds") and NotCommand('nex') and NotCommand("nexus") and NotCommand('yard') and NotCommand("gas") and NotCommand('roof') and NotCommand("respawn") and NotCommand('res') and NotCommand("getplayer") and NotCommand('noclip') and NotCommand("chatnotify") and NotCommand('view') and NotCommand("unview") and NotCommand('cmds') and NotCommand("rejoin") and NotCommand('rj') and NotCommand("doorsdestroy") and NotCommand('nodoors') and NotCommand("removecars") and NotCommand('nocars') and NotCommand("dumpcars") and NotCommand('antisit') and NotCommand("antitase") and NotCommand('notase') and NotCommand("clickkill") and NotCommand'clickarrest' and NotCommand("arrestaura") and NotCommand('antitouch') and NotCommand("meleelk") and NotCommand('mlk') and NotCommand("unmeleelk") and NotCommand('unmlk') and NotCommand("cbase") and NotCommand('crimbase') and NotCommand"car" and NotCommand('loopcrim') and NotCommand("loopcriminal") and NotCommand("unloopcrim") and NotCommand('unloopcriminal') then
+    if NotCommand("unload") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("commands") and NotCommand("re") and NotCommand("refresh") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("inmate") and NotCommand("guard") and NotCommand("crim") and NotCommand("criminal") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("prefix") and NotCommand("pp") and NotCommand("bring") and NotCommand("damage") and NotCommand('dmg') and NotCommand('autoguns') and NotCommand("aguns") and NotCommand('autoitems') and NotCommand('aitems') and NotCommand('autoremoveff') and NotCommand("autorff") and NotCommand('autoguard') and NotCommand('aguard') and NotCommand('killaura') and NotCommand("copychat") and NotCommand("notify") and NotCommand('antifling') and NotCommand('infjump') and NotCommand('ff') and NotCommand('forcefield') and NotCommand('arrest') and NotCommand("ar") and NotCommand('meleekill') and NotCommand('mk') and NotCommand("mkill") and NotCommand('tp') and NotCommand("speed") and NotCommand("ws") and NotCommand('btools') and NotCommand("shotgun") and NotCommand("rem") and NotCommand("remington") and NotCommand("ak") and NotCommand('ak-47') and NotCommand('m9') and NotCommand('pistol') and NotCommand("guns") and NotCommand("items") and NotCommand('m4') and NotCommand('m4a1') and NotCommand("hammer") and NotCommand('ham') and NotCommand("knife") and NotCommand('knive') and NotCommand("food") and NotCommand("goto") and NotCommand('to') and NotCommand('drag') and NotCommand('autonocars') and NotCommand('autodumpcars') and NotCommand("autodeletecars") and NotCommand('opengate') and NotCommand("allcmds") and NotCommand('nex') and NotCommand("nexus") and NotCommand('yard') and NotCommand("gas") and NotCommand('roof') and NotCommand("respawn") and NotCommand('res') and NotCommand("getplayer") and NotCommand('noclip') and NotCommand("chatnotify") and NotCommand('view') and NotCommand("unview") and NotCommand("rejoin") and NotCommand('rj') and NotCommand("doorsdestroy") and NotCommand('nodoors') and NotCommand("removecars") and NotCommand('nocars') and NotCommand("dumpcars") and NotCommand('antisit') and NotCommand("antitase") and NotCommand('notase') and NotCommand("clickkill") and NotCommand'clickarrest' and NotCommand("arrestaura") and NotCommand('antitouch') and NotCommand("meleelk") and NotCommand('mlk') and NotCommand("unmeleelk") and NotCommand('unmlk') and NotCommand("cbase") and NotCommand('crimbase') and NotCommand"car" and NotCommand('loopcrim') and NotCommand("loopcriminal") and NotCommand("unloopcrim") and NotCommand('unloopcriminal') then
 	if string.sub(Message,1) == Prefix or TextBox.Text:sub(1,#Prefix) == Prefix then
 		Notif("Error", Message.." is not a valid command.", 3)
 		TextBox.Text = ""
