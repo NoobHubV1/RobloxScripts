@@ -1,6 +1,5 @@
 if not game:FindFirstChild('Septex_Admin') then
 local Prefix = ';'
-local Temp = {}
 local Folder = Instance.new("Folder",game)
 Folder.Name = "Septex_Admin"
 local ScreenGui = Instance.new("ScreenGui",game.Players.LocalPlayer:WaitForChild("PlayerGui"))
@@ -94,18 +93,13 @@ CmdButton.Size = UDim2.new(0, 27, 0, 27)
 CmdButton.Image = "rbxassetid://11570802781"
 CmdButton.ImageTransparency = 0.430
 CmdButton.MouseButton1Up:Connect(function()
-	if not Temp.CmdsC then
-		Temp.CmdsC = true
-		if Commands.Visible == false then
-			Commands:TweenPosition(SavedCmdsPosition,"Out","Quart",1)
-			Commands.Visible = true
-		else
-			Commands:TweenPosition(SavedCmdsPosition+UDim2.new(0,0,1,0),"Out","Quart",1)
-			wait(.5)
-			Commands.Visible = false
-		end
-		wait(.7)
-		Temp.CmdsC = false
+	if Commands.Visible == false then
+		Commands:TweenPosition(SavedCmdsPosition,"Out","Quart",1)
+		Commands.Visible = true
+	else
+		Commands:TweenPosition(SavedCmdsPosition+UDim2.new(0,0,1,0),"Out","Quart",1)
+		wait(.5)
+		Commands.Visible = false
 	end
 end)
 CmdButton.MouseEnter:Connect(function()
@@ -148,9 +142,11 @@ local States = {}
       States.Infjump = false
       States.AntiTouch = false
       States.DoorsDestroy = false
+      States.LoopCrim = false
 local API = {}
       API.Whitelisted = {}
       API.LoopmKilling = {}
+      API.LoopCrim = {}
 local CommandsAmount = 0
 local Killcool1 = false
 
@@ -417,6 +413,14 @@ CommandsAmount = CommandsAmount + 1
 local CloneTXT_66 = TEMP_CMD:Clone()
 CloneTXT_66.Text = "car | Brings a car to you"
 CloneTXT_66.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_67 = TEMP_CMD:Clone()
+CloneTXT_67.Text = "loopcrim / loopcriminal [me,player] | Auto make player a criminal team."
+CloneTXT_67.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_68 = TEMP_CMD:Clone()
+CloneTXT_68.Text = "unloopcrim / unloopcriminal [me,player] | Stopped auto make player a criminal team."
+CloneTXT_68.Parent = CommandsList
 CommandsAmount = CommandsAmount + 1
 function Title(Text)
 	return Player.PlayerGui['Home']['hud']['Topbar']['titleBar'].Title.Text:lower() == Text
@@ -1920,9 +1924,73 @@ function PC(Message)
 				end
 			until Done
 		end)
+	  Notif("OK", 'Spawner new car to you location', 3)
 	  TextBox.Text = ""
     end
-    if NotCommand("unload") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("commands") and NotCommand("re") and NotCommand("refresh") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("inmate") and NotCommand("guard") and NotCommand("crim") and NotCommand("criminal") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("prefix") and NotCommand("pp") and NotCommand("bring") and NotCommand("damage") and NotCommand('dmg') and NotCommand('autoguns') and NotCommand("aguns") and NotCommand('autoitems') and NotCommand('aitems') and NotCommand('autoremoveff') and NotCommand("autorff") and NotCommand('autoguard') and NotCommand('aguard') and NotCommand('killaura') and NotCommand("copychat") and NotCommand("notify") and NotCommand('antifling') and NotCommand('infjump') and NotCommand('ff') and NotCommand('forcefield') and NotCommand('arrest') and NotCommand("ar") and NotCommand('meleekill') and NotCommand('mk') and NotCommand("mkill") and NotCommand('tp') and NotCommand("speed") and NotCommand("ws") and NotCommand('btools') and NotCommand("shotgun") and NotCommand("rem") and NotCommand("remington") and NotCommand("ak") and NotCommand('ak-47') and NotCommand('m9') and NotCommand('pistol') and NotCommand("guns") and NotCommand("items") and NotCommand('m4') and NotCommand('m4a1') and NotCommand("hammer") and NotCommand('ham') and NotCommand("knife") and NotCommand('knive') and NotCommand("food") and NotCommand("goto") and NotCommand('to') and NotCommand('drag') and NotCommand('autonocars') and NotCommand('autodumpcars') and NotCommand("autodeletecars") and NotCommand('opengate') and NotCommand("allcmds") and NotCommand('nex') and NotCommand("nexus") and NotCommand('yard') and NotCommand("gas") and NotCommand('roof') and NotCommand("respawn") and NotCommand('res') and NotCommand("getplayer") and NotCommand('noclip') and NotCommand("chatnotify") and NotCommand('view') and NotCommand("unview") and NotCommand('cmds') and NotCommand("rejoin") and NotCommand('rj') and NotCommand("doorsdestroy") and NotCommand('nodoors') and NotCommand("removecars") and NotCommand('nocars') and NotCommand("dumpcars") and NotCommand('antisit') and NotCommand("antitase") and NotCommand('notase') and NotCommand("clickkill") and NotCommand'clickarrest' and NotCommand("arrestaura") and NotCommand('antitouch') and NotCommand("meleelk") and NotCommand('mlk') and NotCommand("unmeleelk") and NotCommand('unmlk') and NotCommand("cbase") and NotCommand('crimbase') and NotCommand"car" then
+    if Command('loopcrim') or Command("loopcriminal") then
+	if args[2] and args[2] ~= nil and args[2] ~= plr and args[2] ~= "" then
+		local Player = FindPlayer(args[2])
+		if Player then
+			if not table.find(API.LoopCrim,Player.Name) then
+				table.insert(API.LoopCrim, Player.Name)
+				Notif("OK", "Auto make "..Player.DisplayName.." criminal.", 3)
+				TextBox.Text = ''
+			else
+				Notif("Error", 'Player is already loop criminal!', 3)
+				TextBox.Text = ""
+			end
+		end
+	else
+		States.LoopCrim = true
+		Notif("OK", 'Auto make '..plr.DisplayName..' criminal.', 3)
+		TextBox.Text = ''
+		plr.CharacterAdded:Connect(function(NewCharacter)
+			if States.LoopCrim and Unloaded == false then
+				if plr.Team == game.Teams.Inmates then
+					repeat task.wait()
+						NewCharacter.Head.CanCollide = false
+						workspace["Criminals Spawn"].SpawnLocation.CFrame = NewCharacter.Head.CFrame
+					until plr.Team == game.Teams.Criminals
+					workspace["Criminals Spawn"].SpawnLocation.CFrame = saved
+				elseif plr.Team == game.Teams.Guards then
+					pcall(function()
+					repeat task.wait() until game:GetService("Players").LocalPlayer.Character
+						game:GetService("Players").LocalPlayer.Character:WaitForChild("HumanoidRootPart")
+
+						WaitForRespawn(Pos or GetPosition(),NoForce)
+					end)
+					repeat task.wait()
+						NewCharacter.Head.CanCollide = false
+						workspace["Criminals Spawn"].SpawnLocation.CFrame = NewCharacter.Head.CFrame
+					until plr.Team == game.Teams.Criminals
+					workspace["Criminals Spawn"].SpawnLocation.CFrame = saved
+				elseif plr.Team == game.Teams.Criminals then
+					--
+				end
+			end
+		end)
+	end
+    end
+    if Command('unloopcrim') or Command("unloopcriminal") then
+	if args[2] and args[2] ~= nil and args[2] ~= plr and args[2] ~= '' then
+		local Player = FindPlayer(args[2])
+		if Player then
+			if table.find(API.LoopCrim,Player.Name) then
+				table.remove(API.LoopCrim,table.find(API.LoopCrim,Player.Name))
+				Notif("OK", 'Stopped auto make '..Player.DisplayName..' criminal.', 3)
+				TextBox.Text = ""
+			else
+				Notif("Error", 'Player is not loop criminal!', 3)
+				TextBox.Text = ''
+			end
+		end
+	else
+		States.LoopCrim = false
+		Notif("OK", 'Stopped auto make '..plr.DisplayName..' criminal.', 3)
+		TextBox.Text = ""
+	end
+    end
+    if NotCommand("unload") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("commands") and NotCommand("re") and NotCommand("refresh") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("inmate") and NotCommand("guard") and NotCommand("crim") and NotCommand("criminal") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("prefix") and NotCommand("pp") and NotCommand("bring") and NotCommand("damage") and NotCommand('dmg') and NotCommand('autoguns') and NotCommand("aguns") and NotCommand('autoitems') and NotCommand('aitems') and NotCommand('autoremoveff') and NotCommand("autorff") and NotCommand('autoguard') and NotCommand('aguard') and NotCommand('killaura') and NotCommand("copychat") and NotCommand("notify") and NotCommand('antifling') and NotCommand('infjump') and NotCommand('ff') and NotCommand('forcefield') and NotCommand('arrest') and NotCommand("ar") and NotCommand('meleekill') and NotCommand('mk') and NotCommand("mkill") and NotCommand('tp') and NotCommand("speed") and NotCommand("ws") and NotCommand('btools') and NotCommand("shotgun") and NotCommand("rem") and NotCommand("remington") and NotCommand("ak") and NotCommand('ak-47') and NotCommand('m9') and NotCommand('pistol') and NotCommand("guns") and NotCommand("items") and NotCommand('m4') and NotCommand('m4a1') and NotCommand("hammer") and NotCommand('ham') and NotCommand("knife") and NotCommand('knive') and NotCommand("food") and NotCommand("goto") and NotCommand('to') and NotCommand('drag') and NotCommand('autonocars') and NotCommand('autodumpcars') and NotCommand("autodeletecars") and NotCommand('opengate') and NotCommand("allcmds") and NotCommand('nex') and NotCommand("nexus") and NotCommand('yard') and NotCommand("gas") and NotCommand('roof') and NotCommand("respawn") and NotCommand('res') and NotCommand("getplayer") and NotCommand('noclip') and NotCommand("chatnotify") and NotCommand('view') and NotCommand("unview") and NotCommand('cmds') and NotCommand("rejoin") and NotCommand('rj') and NotCommand("doorsdestroy") and NotCommand('nodoors') and NotCommand("removecars") and NotCommand('nocars') and NotCommand("dumpcars") and NotCommand('antisit') and NotCommand("antitase") and NotCommand('notase') and NotCommand("clickkill") and NotCommand'clickarrest' and NotCommand("arrestaura") and NotCommand('antitouch') and NotCommand("meleelk") and NotCommand('mlk') and NotCommand("unmeleelk") and NotCommand('unmlk') and NotCommand("cbase") and NotCommand('crimbase') and NotCommand"car" and NotCommand('loopcrim') and NotCommand("loopcriminal") and NotCommand("unloopcrim") and NotCommand('unloopcriminal') then
 	if string.sub(Message,1) == Prefix or TextBox.Text:sub(1,#Prefix) == Prefix then
 		Notif("Error", Message.." is not a valid command.", 3)
 		TextBox.Text = ""
@@ -1990,7 +2058,7 @@ plr:GetMouse().Button1Up:Connect(function()
 	end
 end)
 coroutine.wrap(function()
-	while wait() do
+	while wait() do -- fast loop
 		if States.Killaura and not Unloaded then
 			for i,v in pairs(game.Players:GetPlayers()) do
 				if v and v ~= plr and not table.find(API.Whitelisted,v) then
@@ -2035,12 +2103,32 @@ coroutine.wrap(function()
 	end
 end)()
 spawn(function()
-	while wait(.7) do
+	while wait(.7) do -- slow loop
 		for i,v in pairs(API.LoopmKilling) do
 			if v and game.Players:FindFirstChild(v) then
 				local Target = game.Players:FindFirstChild(v)
 				Meleekill(Target)
 			end
+		end
+		for i,v in pairs(API.LoopCrim) do
+			if v and game.Players:FindFirstChild(v) then
+				local Target = game.Players:FindFirstChild(v)
+				if Target.Team ~= game.Teams.Criminals then
+					bring(Target, CFrame.new(-922.3338012695312, 94.4225082397461, 2130.9111328125))
+				end
+			end
+		end
+		if States.loopkillall then
+			killall("all",8)
+		end
+		if States.loopkillinmates then
+			killall(game.Teams.Inmates,8)
+		end
+		if States.loopkillguards then
+			killall(game.Teams.Guards,8)
+		end
+		if States.loopkillcriminals then
+			killall(game.Teams.Criminals,8)
 		end
 	end
 end)
