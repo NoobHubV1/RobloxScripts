@@ -18,6 +18,15 @@ local GetPlayer = function(Name)
         local GetPlayers = Players:GetPlayers()
         if table.find(GetPlayers,Player) then table.remove(GetPlayers,table.find(GetPlayers,Player)) end
         return GetPlayers[math.random(#GetPlayers)]
+    elseif Name == "inmates" then
+        InmatesBool = true
+        return
+    elseif Name == "guards" then
+        GuardsBool = true
+        return
+    elseif Name == "criminals" then
+        CriminalsBool = true
+        return
     elseif Name ~= "random" and Name ~= "all" and Name ~= "others" then
         for _,x in next, Players:GetPlayers() do
             if x ~= Player then
