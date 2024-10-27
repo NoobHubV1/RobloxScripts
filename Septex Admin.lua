@@ -109,13 +109,13 @@ CmdButton.MouseLeave:Connect(function()
 	CmdButton.ImageColor3 = Color3.new(1, 1, 1)
 end)
 local TextLabel = Instance.new("TextLabel",Commands)
-TextLabel.Name = "TextLabel"
-TextLabel.BackgroundColor3 = Color3.fromRGB(155, 155, 155)
+TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel.BackgroundTransparency = 1.000
 TextLabel.Size = UDim2.new(0, 455, 0, 17)
-TextLabel.Text = "Commands"
-TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel.Font = Enum.Font.SourceSans
+TextLabel.Text = "Commands List"
+TextLabel.TextColor3 = Color3.fromRGB(234, 234, 234)
 TextLabel.TextSize = 17.000
-
 local plr,Player = game.Players.LocalPlayer,game.Players.LocalPlayer
 local saved = workspace:FindFirstChild("Criminals Spawn").SpawnLocation.CFrame
 local Unloaded = false
@@ -145,6 +145,7 @@ local States = {}
       States.DoorsDestroy = false
       States.LoopCrim = false
       States.SilentAim = true
+      States.DoorsDestroy = false
 local API = {}
       API.Whitelisted = {}
       API.LoopmKilling = {}
