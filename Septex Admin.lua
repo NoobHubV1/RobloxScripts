@@ -2529,13 +2529,26 @@ function NoCollide(PLR)
 		end
 	end
 end
+for _,v in pairs(game.Players:GetPlayers()) do
+	 if v ~= game.Players.LocalPlayer then
+		 local antifling = game:GetService('RunService').Stepped:connect(function()
+			 NoCollide(v)
+		 end)
+	 end
+ end
+ game.Players.PlayerAdded:Connect(function()
+	 if v ~= game.Players.LocalPlayer and antifling then
+		 local antifling = game:GetService('RunService').Stepped:connect(function()
+			NoCollide(v)
+		 end)
+	 end
+ end)
 for i,v in pairs(game.Players:GetPlayers()) do
 	if v ~= plr then
 		CopyChat(v)
 		PickUp(v)
 		Died(v)
 		Respawn(v)
-		NoCollide(v)
 	end
 end
 TextBox.FocusLost:Connect(function(Key)
@@ -2558,7 +2571,6 @@ game.Players.PlayerAdded:Connect(function(PLAYER)
 	PickUp(PLAYER)
 	Died(PLAYER)
 	Respawn(PLAYER)
-	NoCollide(PLAYER)
 end)
 game.Players.PlayerRemoving:Connect(function(PLAYER)
 	if States.Notify and not Unloaded then
@@ -2571,7 +2583,6 @@ game.Players.PlayerRemoving:Connect(function(PLAYER)
 	PickUp(PLAYER)
 	Died(PLAYER)
 	Respawn(PLAYER)
-	NoCollide(PLAYER)
 end)
 Refresh()
 Notif("Loads", "Loaded Admin Commands, Chat ;cmds to show commands list", 6)
