@@ -1,3 +1,4 @@
+if game.PlaceId == 155615604 then
 if not game:FindFirstChild('Septex_Admin') then
 local Prefix = ';'
 local Folder = Instance.new("Folder",game)
@@ -422,6 +423,14 @@ local CloneTXT_68 = TEMP_CMD:Clone()
 CloneTXT_68.Text = "unloopcrim / unloopcriminal [me,player] | Stopped auto make player a criminal team."
 CloneTXT_68.Parent = CommandsList
 CommandsAmount = CommandsAmount + 1
+local CloneTXT_69 = TEMP_CMD:Clone()
+CloneTXT_69.Text = "tase [plr,all,team] | Taser the player(s)."
+CloneTXT_69.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_70 = TEMP_CMD:Clone()
+CloneTXT_70.Text = "void [plr] | Teleports player to a void"
+CloneTXT_70.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
 function Title(Text)
 	return Player.PlayerGui['Home']['hud']['Topbar']['titleBar'].Title.Text:lower() == Text
 end
@@ -544,9 +553,9 @@ function WaitForRespawn(Cframe,NoForce)
 					end)
 				end)()
 				NewCharacter:WaitForChild("HumanoidRootPart")
-				local Amount = 10
+				local Amount = 7
 				if Title("lights out") then
-					Amount = 15
+					Amount = 12
 				end
 				for i = 1,Amount do
 					UnSit()
@@ -679,10 +688,12 @@ function GetGun(Item, Ignore)
 	if States.OldItemMethod == false then
 		task.spawn(function()
 			if not plr.Character:FindFirstChild(Item) or not plr.Backpack:FindFirstChild(Item) then
-				workspace:FindFirstChild("Remote")['ItemHandler']:InvokeServer({
-					Position = Player.Character.Head.Position,
-					Parent = workspace.Prison_ITEMS.giver:FindFirstChild(Item, true)
-			        })
+				repeat task.wait()
+					workspace:FindFirstChild("Remote")['ItemHandler']:InvokeServer({
+						Position = Player.Character.Head.Position,
+						Parent = workspace.Prison_ITEMS.giver:FindFirstChild(Item, true)
+			                })
+				until plr.Character:FindFirstChild(Item) or plr.Backpack:FindFirstChild(Item)
 			end
 		end)
 	else
@@ -706,10 +717,12 @@ function GetSingle(Item, Ignore)
 	if States.OldItemMethod == false then
 		task.spawn(function()
 			if not plr.Character:FindFirstChild(Item) or not plr.Backpack:FindFirstChild(Item) then
-				workspace:FindFirstChild("Remote")['ItemHandler']:InvokeServer({
-					Position = Player.Character.Head.Position,
-				        Parent = workspace.Prison_ITEMS.single:FindFirstChild(Item, true)
-			        })
+				repeat task.wait()
+					workspace:FindFirstChild("Remote")['ItemHandler']:InvokeServer({
+						Position = Player.Character.Head.Position,
+				                Parent = workspace.Prison_ITEMS.single:FindFirstChild(Item, true)
+			                })
+				until plr.Character:FindFirstChild(Item) or plr.Backpack:FindFirstChild(Item)
 			end
 		end)
 	else
@@ -741,7 +754,6 @@ function KillPlayer(Target,Hit,Failed,DoChange)
 	local CurrentTeam = nil
 	local Gun = Player.Backpack:FindFirstChild("AK-47") or Player.Character:FindFirstChild("AK-47")
 	if Target.Team == Player.Team then
-		repeat task.wait() GetGun("AK-47") Gun = Player.Backpack:FindFirstChild("AK-47") or Player.Character:FindFirstChild("AK-47") until Gun
 		if Target.Team~= game.Teams.Criminals then
 			CurrentTeam = Player.Team
 			ChangeTeam(game.Teams.Criminals,true)
@@ -749,10 +761,9 @@ function KillPlayer(Target,Hit,Failed,DoChange)
 			CurrentTeam = Player.Team
 			ChangeTeam(game.Teams.Inmates,true)
 			plr.CharacterAdded:Wait()
-			repeat task.wait() GetGun("AK-47") Gun = Player.Backpack:FindFirstChild("AK-47") or Player.Character:FindFirstChild("AK-47") until Gun
 		end
 	end
-
+	GetGun("AK-47")
 	task.spawn(function()
 		game:GetService("ReplicatedStorage").ShootEvent:FireServer(Hits, Gun)
 		game:GetService("ReplicatedStorage").ReloadEvent:FireServer(Gun)
@@ -791,7 +802,6 @@ function killall(TeamToKill,Hit)
 		local LastTeam = Player.Team
 		local Hits = {}
 		local Gun = Player.Backpack:FindFirstChild("AK-47") or Player.Character:FindFirstChild("AK-47")
-		repeat task.wait() GetGun("AK-47") Gun = Player.Backpack:FindFirstChild("AK-47") or Player.Character:FindFirstChild("AK-47") until Gun
 		if LastTeam ~= game.Teams.Criminals then
 			ChangeTeam(game.Teams.Criminals)
 		end
@@ -807,16 +817,14 @@ function killall(TeamToKill,Hit)
 				end
 			end
 		end
-
-		repeat task.wait() GetGun("AK-47") Gun = Player.Character:FindFirstChild("AK-47") or Player.Backpack:FindFirstChild("AK-47") until Gun
-
+		GetGun("AK-47")
 		task.spawn(function()
 			game:GetService("ReplicatedStorage").ShootEvent:FireServer(Hits, Gun)
 			game:GetService("ReplicatedStorage").ReloadEvent:FireServer(Gun)
 		end)
 		ChangeTeam(game.Teams.Inmates)
 		plr.CharacterAdded:Wait()
-		repeat task.wait() GetGun("AK-47") Gun = Player.Backpack:FindFirstChild("AK-47") or Player.Character:FindFirstChild("AK-47") until Gun
+		GetGun'AK-47'
 		local Hits = {}
 		for i,v in pairs(game.Teams.Criminals:GetPlayers()) do
 			if v and v ~= game.Players.LocalPlayer and not table.find(API.Whitelisted,v) and v ~= nil then
@@ -836,18 +844,16 @@ function killall(TeamToKill,Hit)
 		end)
 	end
 	if TeamToKill == game.Teams.Inmates or TeamToKill == game.Teams.Guards then
-		repeat task.wait() GetGun("AK-47") Gun = Player.Backpack:FindFirstChild("AK-47") or Player.Character:FindFirstChild("AK-47") until Gun
 		if Player.Team ~= game.Teams.Criminals then
 			ChangeTeam(game.Teams.Criminals)
 		end
 	elseif TeamToKill == game.Teams.Criminals then
-		repeat task.wait() GetGun("AK-47") Gun = Player.Backpack:FindFirstChild("AK-47") or Player.Character:FindFirstChild("AK-47") until Gun
 		if Player.Team ~= game.Teams.Inmates then
 			ChangeTeam(game.Teams.Inmates)
 			plr.CharacterAdded:Wait()
-			repeat task.wait() GetGun("AK-47") Gun = Player.Backpack:FindFirstChild("AK-47") or Player.Character:FindFirstChild("AK-47") until Gun
 		end
 	end
+	GetGun('AK-47')
 	local Gun = Player.Backpack:FindFirstChild("AK-47") or Player.Character:FindFirstChild("AK-47")
 	local Hits = {}
 	for i,v in pairs(TeamToKill:GetPlayers()) do
@@ -1032,7 +1038,7 @@ function Meleekill(Tar)
 		local Orgin = GetPosition()
 		repeat task.wait()
 			UnSit()
-			plr.Character.HumanoidRootPart.CFrame = Tar.Character.HumanoidRootPart.CFrame
+			GetPart(plr).CFrame = Tar.Character.HumanoidRootPart.CFrame
 			MeleeEvent(Tar)
 		until Tar.Character.Humanoid.Health < 5
 		UnSit()
@@ -1052,6 +1058,79 @@ function Destroy(parent)
 	pcall(function()
 		parent:Remove()
 	end)
+end
+function Tase(Targ)
+	local Oldt = Player.Team
+	if Oldt ~= game.Teams.Guards then
+		ChangeTeam(game.Teams.Guards)
+		plr.CharacterAdded:Wait()
+	end
+	repeat task.wait() until Player.Backpack:FindFirstChild("Taser")
+	local ohTable1 = {
+		[1] = {
+		["RayObject"] = Ray.new(Vector3.new(), Vector3.new()),
+		["Distance"] = 0,
+		["Cframe"] = CFrame.new(),
+		["Hit"] = Targ.Character.Head
+		}
+	}
+	local ohInstance2 = game:GetService("Players").LocalPlayer.Backpack.Taser
+
+	game:GetService("ReplicatedStorage").ShootEvent:FireServer(ohTable1, ohInstance2)
+	task.spawn(function()
+		game:GetService("ReplicatedStorage").ReloadEvent:FireServer(game:GetService("Players").LocalPlayer.Backpack.Taser)
+	end)
+	ChangeTeam(Oldt)
+end
+function TaseTeam(Team)
+	local Oldt = Player.Team
+	if Oldt ~= game.Teams.Guards then
+		ChangeTeam(game.Teams.Guards)
+		plr.CharacterAdded:Wait()
+	end
+	repeat task.wait() until Player.Backpack:FindFirstChild("Taser")
+	local ohTable1 = {}
+	for i,v in pairs(game:GetService("Players"):GetPlayers()) do
+		if v and v~= Player and v.Team ~= game.Teams.Guards and v.Team == Team then
+			table.insert(ohTable1, {
+				["RayObject"] = Ray.new(Vector3.new(), Vector3.new()),
+				["Distance"] = -1,
+				["Cframe"] = CFrame.new(),
+				["Hit"] = v.Character.Head
+			})
+		end
+	end
+	local ohInstance2 = game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("Taser") or game:GetService("Players").LocalPlayer.Character:FindFirstChild("Taser")
+	game:GetService("ReplicatedStorage").ShootEvent:FireServer(ohTable1, ohInstance2)
+	task.spawn(function()
+		game:GetService("ReplicatedStorage").ReloadEvent:FireServer(game:GetService("Players").LocalPlayer.Backpack.Taser)
+	end)
+	ChangeTeam(Oldt)
+end
+function TaseAll()
+	local Oldt = Player.Team
+	if Oldt ~= game.Teams.Guards then
+		ChangeTeam(game.Teams.Guards)
+		plr.CharacterAdded:Wait()
+	end
+	repeat task.wait() until Player.Backpack:FindFirstChild("Taser")
+	local ohTable1 = {}
+	for i,v in pairs(game:GetService("Players"):GetPlayers()) do
+		if v and v~= Player and v.Team ~= game.Teams.Guards and not table.find(API.Whitelisted,v) then
+			table.insert(ohTable1, {
+				["RayObject"] = Ray.new(Vector3.new(), Vector3.new()),
+				["Distance"] = -1,
+				["Cframe"] = CFrame.new(),
+				["Hit"] = v.Character.Head
+			})
+		end
+	end
+	local ohInstance2 = game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("Taser") or game:GetService("Players").LocalPlayer.Character:FindFirstChild("Taser")
+	game:GetService("ReplicatedStorage").ShootEvent:FireServer(ohTable1, ohInstance2)
+	task.spawn(function()
+		game:GetService("ReplicatedStorage").ReloadEvent:FireServer(game:GetService("Players").LocalPlayer.Backpack.Taser)
+	end)
+	ChangeTeam(Oldt)
 end
 function PC(Message)
   if Unloaded then return end
@@ -1194,7 +1273,7 @@ function PC(Message)
    end
    if Command("pp") then
 	AllGuns()
-	wait(1)
+	wait(.5)
 	for i,v in pairs(Player.Character:GetChildren()) do
 		if v:IsA("Tool") then
 			v.Parent = Player.Backpack
@@ -1358,9 +1437,6 @@ function PC(Message)
 		local LastPosition = GetPosition()
 		local Target = FindPlayer(args[2])
 		if Target then
-			if Target.Team == game.Teams.Guards or not BadArea(Target) or plr.Character.Humanoid.Health == 0 then
-				return Notif("Error", "Can't arrest this player!", 3)
-			end
 			if Target.Team == game.Teams.Criminals or (Target.Team == game.Teams.Inmates and BadArea(Target)) and not Target.Character.Humanoid.Health > 0 then
 				repeat task.wait()
 					game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Target.Character.HumanoidRootPart.CFrame
@@ -1369,6 +1445,10 @@ function PC(Message)
 						end)
 				until Target.Character["Head"]:FindFirstChildOfClass("BillboardGui")
 				Notif("OK", 'Arrested '..Target.DisplayName, 3)
+				TextBox.Text = ''
+			end
+			if Target.Team == game.Teams.Guards or not BadArea(Target) or plr.Character.Humanoid.Health == 0 then
+				return Notif("Error", "Can't arrest this player!", 3)
 			end
 		end
 		MoveTo(LastPosition)
@@ -1981,14 +2061,43 @@ function PC(Message)
 		TextBox.Text = ""
 	end
     end
-    if NotCommand("unload") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("commands") and NotCommand("re") and NotCommand("refresh") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("inmate") and NotCommand("guard") and NotCommand("crim") and NotCommand("criminal") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("prefix") and NotCommand("pp") and NotCommand("bring") and NotCommand("damage") and NotCommand('dmg') and NotCommand('autoguns') and NotCommand("aguns") and NotCommand('autoitems') and NotCommand('aitems') and NotCommand('autoremoveff') and NotCommand("autorff") and NotCommand('autoguard') and NotCommand('aguard') and NotCommand('killaura') and NotCommand("copychat") and NotCommand("notify") and NotCommand('antifling') and NotCommand('infjump') and NotCommand('ff') and NotCommand('forcefield') and NotCommand('arrest') and NotCommand("ar") and NotCommand('meleekill') and NotCommand('mk') and NotCommand("mkill") and NotCommand('tp') and NotCommand("speed") and NotCommand("ws") and NotCommand('btools') and NotCommand("shotgun") and NotCommand("rem") and NotCommand("remington") and NotCommand("ak") and NotCommand('ak-47') and NotCommand('m9') and NotCommand('pistol') and NotCommand("guns") and NotCommand("items") and NotCommand('m4') and NotCommand('m4a1') and NotCommand("hammer") and NotCommand('ham') and NotCommand("knife") and NotCommand('knive') and NotCommand("food") and NotCommand("goto") and NotCommand('to') and NotCommand('drag') and NotCommand('autonocars') and NotCommand('autodumpcars') and NotCommand("autodeletecars") and NotCommand('opengate') and NotCommand("allcmds") and NotCommand('nex') and NotCommand("nexus") and NotCommand('yard') and NotCommand("gas") and NotCommand('roof') and NotCommand("respawn") and NotCommand('res') and NotCommand("getplayer") and NotCommand('noclip') and NotCommand("chatnotify") and NotCommand('view') and NotCommand("unview") and NotCommand("rejoin") and NotCommand('rj') and NotCommand("doorsdestroy") and NotCommand('nodoors') and NotCommand("removecars") and NotCommand('nocars') and NotCommand("dumpcars") and NotCommand('antisit') and NotCommand("antitase") and NotCommand('notase') and NotCommand("clickkill") and NotCommand'clickarrest' and NotCommand("arrestaura") and NotCommand('antitouch') and NotCommand("meleelk") and NotCommand('mlk') and NotCommand("unmeleelk") and NotCommand('unmlk') and NotCommand("cbase") and NotCommand('crimbase') and NotCommand"car" and NotCommand('loopcrim') and NotCommand("loopcriminal") and NotCommand("unloopcrim") and NotCommand('unloopcriminal') then
-	if string.sub(Message,1) == Prefix or TextBox.Text:sub(1,#Prefix) == Prefix then
-		Notif("Error", Message.." is not a valid command.", 3)
+    if Command("tase") then
+	local Team = IsTeamCommandCheck(args[2])
+	if args[2] == "all" or args[2] == "everyone" or args[2] == "others" then
+		TaseAll()
+		Notif("OK", 'Tase the '..args[2], 3)
+		TextBox.Text = ''
+	elseif Team == game.Teams.Inmates then
+		TaseTeam(game.Teams.Inmates)
+		Notif("OK", 'Tase the inmates.', 3)
+		TextBox.Text = ""
+	elseif Team == game.Teams.Criminals then
+		TaseTeam(game.Teams.Criminals)
+		Notif("OK", 'Tase the criminals.', 3)
 		TextBox.Text = ""
 	else
-		Notif('Error', Prefix..""..Message.." is not a valid command.", 3)
-		TextBox.Text = ''
+		local Target = FindPlayer(args[2])
+		if Target then
+			Tase(Target)
+			Notif("OK", 'Tase the '..Target.DisplayName, 3)
+			TextBox.Text = ""
+		end
 	end
+    end
+    if Command('void') then
+	local Player = FindPlayer(args[2])
+	if Player then
+		if Player.Character.Humanoid.Health == 0 or Player.Character.Humanoid.Sit then
+			return Notif("Error", 'Player has died or is sitting or an unknown error.', 3)
+		elseif not Player.Character.Humanoid.Health == 0 or not Player.Character.Humanoid.Sit then
+			bring(Player, CFrame.new(7^7, 7^7, 7^7),nil)
+			Notif("OK", 'Brought '..Player.DisplayName..' to void', 3)
+			TextBox.Text = ''
+		end
+	end
+    end
+    if NotCommand("unload") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("commands") and NotCommand("re") and NotCommand("refresh") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("inmate") and NotCommand("guard") and NotCommand("crim") and NotCommand("criminal") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("prefix") and NotCommand("pp") and NotCommand("bring") and NotCommand("damage") and NotCommand('dmg') and NotCommand('autoguns') and NotCommand("aguns") and NotCommand('autoitems') and NotCommand('aitems') and NotCommand('autoremoveff') and NotCommand("autorff") and NotCommand('autoguard') and NotCommand('aguard') and NotCommand('killaura') and NotCommand("copychat") and NotCommand("notify") and NotCommand('antifling') and NotCommand('infjump') and NotCommand('ff') and NotCommand('forcefield') and NotCommand('arrest') and NotCommand("ar") and NotCommand('meleekill') and NotCommand('mk') and NotCommand("mkill") and NotCommand('tp') and NotCommand("speed") and NotCommand("ws") and NotCommand('btools') and NotCommand("shotgun") and NotCommand("rem") and NotCommand("remington") and NotCommand("ak") and NotCommand('ak-47') and NotCommand('m9') and NotCommand('pistol') and NotCommand("guns") and NotCommand("items") and NotCommand('m4') and NotCommand('m4a1') and NotCommand("hammer") and NotCommand('ham') and NotCommand("knife") and NotCommand('knive') and NotCommand("food") and NotCommand("goto") and NotCommand('to') and NotCommand('drag') and NotCommand('autonocars') and NotCommand('autodumpcars') and NotCommand("autodeletecars") and NotCommand('opengate') and NotCommand("allcmds") and NotCommand('nex') and NotCommand("nexus") and NotCommand('yard') and NotCommand("gas") and NotCommand('roof') and NotCommand("respawn") and NotCommand('res') and NotCommand("getplayer") and NotCommand('noclip') and NotCommand("chatnotify") and NotCommand('view') and NotCommand("unview") and NotCommand("rejoin") and NotCommand('rj') and NotCommand("doorsdestroy") and NotCommand('nodoors') and NotCommand("removecars") and NotCommand('nocars') and NotCommand("dumpcars") and NotCommand('antisit') and NotCommand("antitase") and NotCommand('notase') and NotCommand("clickkill") and NotCommand'clickarrest' and NotCommand("arrestaura") and NotCommand('antitouch') and NotCommand("meleelk") and NotCommand('mlk') and NotCommand("unmeleelk") and NotCommand('unmlk') and NotCommand("cbase") and NotCommand('crimbase') and NotCommand"car" and NotCommand('loopcrim') and NotCommand("loopcriminal") and NotCommand("unloopcrim") and NotCommand('unloopcriminal') and NotCommand("tase") and NotCommand'void' then
+	Notif("Error", 'not a valid command.', 3)
     end
 end
 Player.Chatted:Connect(PC)
@@ -2225,3 +2334,6 @@ Frame:TweenPosition(UDim2.new(0.5, 0, 0.899999998, 0)-UDim2.new(0,0,.05,0),"Out"
 else
 game:GetService("StarterGui"):SetCore("SendNotification", {Title = "Error", Text = "Septex Admin is already executed!", Duration = 7,})
 end 
+else
+game:GetService("StarterGui"):SetCore("SendNotification", {Title = "Septex Admin", Text = 'Error game not support', Duration = 3,})
+end
