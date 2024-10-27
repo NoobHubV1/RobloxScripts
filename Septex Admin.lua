@@ -150,6 +150,7 @@ local API = {}
       API.Whitelisted = {}
       API.LoopmKilling = {}
       API.LoopCrim = {}
+      API.ArrestOldP = {}
 local CommandsAmount = 0
 local Killcool1 = false
 
@@ -524,7 +525,7 @@ end
 function GetPart(Target)
 	game:GetService("Players").LocalPlayer.Character:WaitForChild("HumanoidRootPart")
 
-	return Target.Character:FindFirstChild("HumanoidRootPart") or Target.Character:FindFirstChild("Head")
+	return Target.Character:FindFirstChild("HumanoidRootPart") or Target.Character:FindFirstChild("Head") or Target.Character:FindFirstChildOfClass("Humanoid")
 end
 function GetPosition(Player)
 	game:GetService("Players").LocalPlayer.Character:WaitForChild("HumanoidRootPart")
@@ -977,7 +978,7 @@ function bring(Target,TeleportTo,MoreTP)
 		car:WaitForChild("Body"):WaitForChild("VehicleSeat")
 		car.PrimaryPart = car.Body.VehicleSeat
 		Seat = car.Body.VehicleSeat
-		repeat wait()
+		repeat task.wait()
 			Seat:Sit(Player.Character:FindFirstChildOfClass("Humanoid"))
 		until Player.Character:FindFirstChildOfClass("Humanoid").Sit == true
 		wait() --// so it doesnt break
@@ -997,9 +998,8 @@ function bring(Target,TeleportTo,MoreTP)
 			TextBox.Text = ""
 			return
 		end
-		for i =1,10 do
+		for i =1,10 do task.wait()
 			car:SetPrimaryPartCFrame(TeleportTo)
-			swait()
 		end
 		wait(.1)
 		task.spawn(function()
@@ -1455,11 +1455,11 @@ function PC(Message)
 		for i,v in pairs(game:GetService("Players"):GetPlayers()) do
 			if v and v ~= game:GetService("Players").LocalPlayer and not table.find(API.Whitelisted,v) and v.Team == game.Teams.Criminals or (BadArea(v) and v.Team == game.Teams.Inmates) and v.Character.PrimaryPart and v.Character:FindFirstChildOfClass("Humanoid").Health>0 then
 				repeat task.wait()
-					game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character:GetPrimaryPartCFrame()
+					game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame
 					task.spawn(function()
 						workspace.Remote.arrest:InvokeServer(v.Character.PrimaryPart)
 					end)
-				until v.Character["Head"]:FindFirstChildOfClass("BillboardGui")
+				until v.Character["Head"]:FindFirstChildOfClass("BillboardGui") or v.Character.Humanoid.Health == 0
 				MoveTo(LastPosition)
 			end
 		end
@@ -1469,7 +1469,7 @@ function PC(Message)
 		local LastPosition = GetPosition()
 		local Target = FindPlayer(args[2])
 		if Target then
-			if Target.Team == game.Teams.Criminals or (Target.Team == game.Teams.Inmates and BadArea(Target)) and not Target.Character.Humanoid.Health > 0 then
+			if Target.Team ~= game.Teams.Guards or BadArea(Target) or not Target.Character.Humanoid.Health > 0 then
 				repeat task.wait()
 					game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Target.Character.HumanoidRootPart.CFrame
 						task.spawn(function()
@@ -1478,9 +1478,9 @@ function PC(Message)
 				until Target.Character["Head"]:FindFirstChildOfClass("BillboardGui")
 				Notif("OK", 'Arrested '..Target.DisplayName, 3)
 				TextBox.Text = ''
-			end
-			if Target.Team == game.Teams.Guards or not BadArea(Target) or plr.Character.Humanoid.Health == 0 then
-				return Notif("Error", "Can't arrest this player!", 3)
+			elseif Target.Team == game.Teams.Guards or not BadArea(Target) or Target.Character.Humanoid.Health > 0 then
+				Notif("Error", "Can't arrest this player!", 3)
+				TextBox.Text = ""
 			end
 		end
 		MoveTo(LastPosition)
@@ -1520,6 +1520,7 @@ function PC(Message)
 	else
 		local Target = FindPlayer(args[2])
 		Meleekill(Target)
+		Notif("OK", 'Melee killed '..Target.DisplayName, 3)
 	end
 	TextBox.Text = ""
     end
@@ -2154,7 +2155,7 @@ function PC(Message)
 			TextBox.Text = ''
 		elseif not game.Players.LocalPlayer.Backpack:FindFirstChild("Key card") or not workspace.Prison_ITEMS.single:FindFirstChild("Key card") or not API:GuardsFull("c") then
 		ChangeTeam(game.Teams.Guards)
-		repeat wait(.5)
+		repeat wait(.3)
 			Player.Character:FindFirstChildOfClass("Humanoid"):ChangeState(15)
 			if States.AutoRespawn then
 				States.AutoRespawn = false
