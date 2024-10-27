@@ -25,8 +25,8 @@ TextLabel.Text = ""
 TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 local UICorner_2 = Instance.new("UICorner",TextLabel)
 UICorner_2.CornerRadius = UDim.new(0, 6)
-local TextBox = Instance.new("TextBox",TextLabel)
-TextBox.Name = "TextBox"
+local TextBox = Instance.new("TextBox",Frame)
+TextBox.Name = "CommandBar"
 TextBox.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 TextBox.BackgroundTransparency = 1.000
 TextBox.BorderSizePixel = 0
@@ -47,7 +47,7 @@ Commands.Name = "Commands"
 Commands.AnchorPoint = Vector2.new(0.5, 0.5)
 Commands.BackgroundColor3 = Color3.fromRGB(58, 58, 58)
 Commands.Position = UDim2.new(0.5, 0, 0.5, 0)
-Commands.Size = UDim2.new(0, 455, 0, 297)
+Commands.Size = UDim2.new(0, 455, 0, 357)
 Commands.Text = ""
 Commands.TextColor3 = Color3.fromRGB(255, 255, 255)
 Commands.Visible = false
@@ -508,7 +508,7 @@ function DragifyGui(Frame,Is)
 		end)
 	end)()
 end
-DragifyGui(TextLabel)
+DragifyGui(Frame)
 DragifyGui(Commands)
 DragifyGui(TextLabel_2)
 function swait()
