@@ -151,7 +151,7 @@ local API = {}
       API.Whitelisted = {}
       API.LoopmKilling = {}
       API.LoopCrim = {}
-      API.KillAuras = {}
+      API.LoopFling = {}
 local CommandsAmount = 0
 local Killcool1 = false
 
@@ -454,6 +454,14 @@ CommandsAmount = CommandsAmount + 1
 local CloneTXT_75 = TEMP_CMD:Clone()
 CloneTXT_75.Text = "anticrash [on/off] | Tries to stop simple crashes (DOESNT WORK WITH SEPTEX ADMIN CRASH)"
 CloneTXT_75.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_76 = TEMP_CMD:Clone()
+CloneTXT_76.Text = "loopfling / lfling [plr,all,team] | LoopFling the player(s)"
+CloneTXT_76.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_77 = TEMP_CMD:Clone()
+CloneTXT_77.Text = "unloopfling / unlfling [plr,all,team] | Stopped LoopFling the player(s)"
+CloneTXT_77.Parent = CommandsList
 CommandsAmount = CommandsAmount + 1
 function Title(Text)
 	return Player.PlayerGui['Home']['hud']['Topbar']['titleBar'].Title.Text:lower() == Text
@@ -2037,7 +2045,7 @@ function PC(Message)
 	  TextBox.Text = ""
     end
     if Command('loopcrim') or Command("loopcriminal") then
-	if args[2] and args[2] ~= nil and args[2] ~= plr and args[2] ~= "" then
+	if args[2] or args[2] ~= nil or args[2] ~= plr or args[2] ~= "" then
 		local Player = FindPlayer(args[2])
 		if Player then
 			if not table.find(API.LoopCrim,Player.Name) then
@@ -2049,7 +2057,7 @@ function PC(Message)
 				TextBox.Text = ""
 			end
 		end
-	else
+	elseif not args[2] or args == nil or args[2] == plr or args[2] == "" then
 		States.LoopCrim = true
 		Notif("OK", 'Auto make '..plr.DisplayName..' criminal.', 3)
 		TextBox.Text = ''
@@ -2081,7 +2089,7 @@ function PC(Message)
 	end
     end
     if Command('unloopcrim') or Command("unloopcriminal") then
-	if args[2] and args[2] ~= nil and args[2] ~= plr and args[2] ~= '' then
+	if args[2] or args[2] ~= nil or args[2] ~= plr or args[2] ~= '' then
 		local Player = FindPlayer(args[2])
 		if Player then
 			if table.find(API.LoopCrim,Player.Name) then
@@ -2191,7 +2199,7 @@ function PC(Message)
 	end
     end
     if Command'addnuke' or Command("nuke") then
-	if args[2] and args[2] ~= nil and args[2] ~= '' then
+	if args[2] or args[2] ~= nil or args[2] ~= '' or args[2] ~= plr then
 		local Target = FindPlayer(args[2])
 		if Target then
 			Chat("!!!A NUKE HAS BEEN PLACED ON "..Target.Name.." KILLING HIM WILL GET EVERYONE DEAD!!!")
@@ -2266,7 +2274,103 @@ function PC(Message)
 		end)
 	end
     end
-    if NotCommand("unload") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("commands") and NotCommand("re") and NotCommand("refresh") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("inmate") and NotCommand("guard") and NotCommand("crim") and NotCommand("criminal") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("prefix") and NotCommand("pp") and NotCommand("bring") and NotCommand("damage") and NotCommand('dmg') and NotCommand('autoguns') and NotCommand("aguns") and NotCommand('autoitems') and NotCommand('aitems') and NotCommand('autoremoveff') and NotCommand("autorff") and NotCommand('autoguard') and NotCommand('aguard') and NotCommand"killaura" and NotCommand("copychat") and NotCommand("notify") and NotCommand('antifling') and NotCommand('infjump') and NotCommand('ff') and NotCommand('forcefield') and NotCommand('arrest') and NotCommand("ar") and NotCommand('meleekill') and NotCommand('mk') and NotCommand("mkill") and NotCommand('tp') and NotCommand("speed") and NotCommand("ws") and NotCommand('btools') and NotCommand("shotgun") and NotCommand("rem") and NotCommand("remington") and NotCommand("ak") and NotCommand('ak-47') and NotCommand('m9') and NotCommand('pistol') and NotCommand("guns") and NotCommand("items") and NotCommand('m4') and NotCommand('m4a1') and NotCommand("hammer") and NotCommand('ham') and NotCommand("knife") and NotCommand('knive') and NotCommand("food") and NotCommand("goto") and NotCommand('to') and NotCommand('drag') and NotCommand('autonocars') and NotCommand('autodumpcars') and NotCommand("autodeletecars") and NotCommand('opengate') and NotCommand("allcmds") and NotCommand('nex') and NotCommand("nexus") and NotCommand('yard') and NotCommand("gas") and NotCommand('roof') and NotCommand("respawn") and NotCommand('res') and NotCommand("getplayer") and NotCommand('noclip') and NotCommand("chatnotify") and NotCommand('view') and NotCommand("unview") and NotCommand("rejoin") and NotCommand('rj') and NotCommand("doorsdestroy") and NotCommand('nodoors') and NotCommand("removecars") and NotCommand('nocars') and NotCommand("dumpcars") and NotCommand('antisit') and NotCommand("antitase") and NotCommand('notase') and NotCommand("clickkill") and NotCommand'clickarrest' and NotCommand("arrestaura") and NotCommand('antitouch') and NotCommand("meleelk") and NotCommand('mlk') and NotCommand("unmeleelk") and NotCommand('unmlk') and NotCommand("cbase") and NotCommand('crimbase') and NotCommand"car" and NotCommand('loopcrim') and NotCommand("loopcriminal") and NotCommand("unloopcrim") and NotCommand('unloopcriminal') and NotCommand("tase") and NotCommand'void' and NotCommand("silentaim") and NotCommand('saim') and NotCommand("keycard") and NotCommand('key') and NotCommand("givekey") and NotCommand'addnuke' and NotCommand("nuke") and NotCommand("fling") and NotCommand('anticrash') then
+    if Command('loopfling') or Command("lfling") then
+	local Team = IsTeamCommandCheck(args[2])
+	if args[2] == "all" then
+		States.LoopFlingAll = true
+		Notif("OK", 'LoopFling All', 3)
+		TextBox.Text = ""
+	elseif Team == game.Teams.Inmates then
+		States.LoopFlingInmates = true
+		Notif("OK", 'LoopFling Inmates', 3)
+		TextBox.Text = ''
+	elseif Team == game.Teams.Guards then
+		States.LoopFlingGuards = true
+		Notif("OK", 'LoopFling Guards', 3)
+		TextBox.Text = ""
+	elseif Team == game.Teams.Criminals then
+		States.LoopFlingCriminals = true
+		Notif("OK", 'LoopFling Criminals', 3)
+		TextBox.Text = ''
+	elseif args[2] ~= "all" and Team ~= game.Teams.Inmates and Team ~= game.Teams.Guards and Team ~= game.Teams.Criminals then
+		local Player = FindPlayer(args[2])
+		if Player then
+			if not table.find(API.LoopFling,Player.Name) then
+				table.insert(API.LoopFling, Player.Name)
+				Notif("OK", "LoopFling "..Player.DisplayName, 3)
+				TextBox.Text = ''
+			else
+				Notif("Error", 'Player is already loop fling!', 3)
+				TextBox.Text = ""
+			end
+		end
+	end
+    end
+    if Command('loopfling') or Command("lfling") then
+	local Team = IsTeamCommandCheck(args[2])
+	if args[2] == "all" then
+		States.LoopFlingAll = true
+		Notif("OK", 'LoopFling All', 3)
+		TextBox.Text = ""
+	elseif Team == game.Teams.Inmates then
+		States.LoopFlingInmates = true
+		Notif("OK", 'LoopFling Inmates', 3)
+		TextBox.Text = ''
+	elseif Team == game.Teams.Guards then
+		States.LoopFlingGuards = true
+		Notif("OK", 'LoopFling Guards', 3)
+		TextBox.Text = ""
+	elseif Team == game.Teams.Criminals then
+		States.LoopFlingCriminals = true
+		Notif("OK", 'LoopFling Criminals', 3)
+		TextBox.Text = ''
+	elseif args[2] ~= "all" and Team ~= game.Teams.Inmates and Team ~= game.Teams.Guards and Team ~= game.Teams.Criminals then
+		local Player = FindPlayer(args[2])
+		if Player then
+			if not table.find(API.LoopFling,Player.Name) then
+				table.insert(API.LoopFling, Player.Name)
+				Notif("OK", "LoopFling "..Player.DisplayName, 3)
+				TextBox.Text = ''
+			else
+				Notif("Error", 'Player is already loop fling!', 3)
+				TextBox.Text = ""
+			end
+		end
+	end
+    end
+    if Command('unloopfling') or Command("unlfling") then
+	local Team = IsTeamCommandCheck(args[2])
+	if args[2] == "all" then
+		States.LoopFlingAll = false
+		Notif("OK", 'Stopped LoopFling All', 3)
+		TextBox.Text = ""
+	elseif Team == game.Teams.Inmates then
+		States.LoopFlingInmates = false
+		Notif("OK", 'Stopped LoopFling Inmates', 3)
+		TextBox.Text = ''
+	elseif Team == game.Teams.Guards then
+		States.LoopFlingGuards = false
+		Notif("OK", 'Stopped LoopFling Guards', 3)
+		TextBox.Text = ""
+	elseif Team == game.Teams.Criminals then
+		States.LoopFlingCriminals = false
+		Notif("OK", 'Stopped LoopFling Criminals', 3)
+		TextBox.Text = ''
+	elseif args[2] ~= "all" and Team ~= game.Teams.Inmates and Team ~= game.Teams.Guards and Team ~= game.Teams.Criminals then
+		local Player = FindPlayer(args[2])
+		if Player then
+			if table.find(API.LoopFling,Player.Name) then
+				table.remove(API.LoopFling,table.find(API.LoopFling,Player.Name))
+				Notif("OK", "Stopped LoopFling "..Player.DisplayName, 3)
+				TextBox.Text = ''
+			else
+				Notif("Error", 'Player is not already loop fling!', 3)
+				TextBox.Text = ""
+			end
+		end
+	end
+    end
+    if NotCommand("unload") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("commands") and NotCommand("re") and NotCommand("refresh") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("inmate") and NotCommand("guard") and NotCommand("crim") and NotCommand("criminal") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("prefix") and NotCommand("pp") and NotCommand("bring") and NotCommand("damage") and NotCommand('dmg') and NotCommand('autoguns') and NotCommand("aguns") and NotCommand('autoitems') and NotCommand('aitems') and NotCommand('autoremoveff') and NotCommand("autorff") and NotCommand('autoguard') and NotCommand('aguard') and NotCommand"killaura" and NotCommand("copychat") and NotCommand("notify") and NotCommand('antifling') and NotCommand('infjump') and NotCommand('ff') and NotCommand('forcefield') and NotCommand('arrest') and NotCommand("ar") and NotCommand('meleekill') and NotCommand('mk') and NotCommand("mkill") and NotCommand('tp') and NotCommand("speed") and NotCommand("ws") and NotCommand('btools') and NotCommand("shotgun") and NotCommand("rem") and NotCommand("remington") and NotCommand("ak") and NotCommand('ak-47') and NotCommand('m9') and NotCommand('pistol') and NotCommand("guns") and NotCommand("items") and NotCommand('m4') and NotCommand('m4a1') and NotCommand("hammer") and NotCommand('ham') and NotCommand("knife") and NotCommand('knive') and NotCommand("food") and NotCommand("goto") and NotCommand('to') and NotCommand('drag') and NotCommand('autonocars') and NotCommand('autodumpcars') and NotCommand("autodeletecars") and NotCommand('opengate') and NotCommand("allcmds") and NotCommand('nex') and NotCommand("nexus") and NotCommand('yard') and NotCommand("gas") and NotCommand('roof') and NotCommand("respawn") and NotCommand('res') and NotCommand("getplayer") and NotCommand('noclip') and NotCommand("chatnotify") and NotCommand('view') and NotCommand("unview") and NotCommand("rejoin") and NotCommand('rj') and NotCommand("doorsdestroy") and NotCommand('nodoors') and NotCommand("removecars") and NotCommand('nocars') and NotCommand("dumpcars") and NotCommand('antisit') and NotCommand("antitase") and NotCommand('notase') and NotCommand("clickkill") and NotCommand'clickarrest' and NotCommand("arrestaura") and NotCommand('antitouch') and NotCommand("meleelk") and NotCommand('mlk') and NotCommand("unmeleelk") and NotCommand('unmlk') and NotCommand("cbase") and NotCommand('crimbase') and NotCommand"car" and NotCommand('loopcrim') and NotCommand("loopcriminal") and NotCommand("unloopcrim") and NotCommand('unloopcriminal') and NotCommand("tase") and NotCommand'void' and NotCommand("silentaim") and NotCommand('saim') and NotCommand("keycard") and NotCommand('key') and NotCommand("givekey") and NotCommand'addnuke' and NotCommand("nuke") and NotCommand("fling") and NotCommand('anticrash') and NotCommand("loopfling") and NotCommand('lfling') and NotCommand("unloopfling") and NotCommand('unlfling') then
 	Notif("Error", 'not a valid command.', 3)
     end
 end
@@ -2373,7 +2477,7 @@ coroutine.wrap(function()
 	end
 end)()
 spawn(function()
-	while wait(.7) do -- slow loop
+	while wait(.8) do -- slow loop
 		for i,v in pairs(API.LoopmKilling) do
 			if v and game.Players:FindFirstChild(v) then
 				local Target = game.Players:FindFirstChild(v)
@@ -2387,6 +2491,23 @@ spawn(function()
 					bring(Target, CFrame.new(-922.3338012695312, 94.4225082397461, 2130.9111328125))
 				end
 			end
+		end
+		for i,v in pairs(API.LoopFling) do
+			if v and game.Players:FindFirstChild(v) then
+				SkidFling(game.Players:FindFirstChild(v))
+			end
+		end
+		if States.LoopFlingAll then
+			SkidFling("all")
+		end
+		if States.LoopFlingInmates then
+			SkidFling'inmates'
+		end
+		if States.LoopFlingGuards then
+			SkidFling'guards'
+		end
+		if States.LoopFlingCriminals then
+			SkidFling'criminals'
 		end
 	end
 end)
