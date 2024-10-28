@@ -147,6 +147,7 @@ local States = {}
       States.SilentAim = false
       States.DoorsDestroy = false
       States.anticrash = false
+      States.OneShot = false
 local API = {}
       API.Whitelisted = {}
       API.LoopmKilling = {}
@@ -463,6 +464,20 @@ local CloneTXT_77 = TEMP_CMD:Clone()
 CloneTXT_77.Text = "unloopfling / unlfling [plr,all,team] | Stopped LoopFling the player(s)"
 CloneTXT_77.Parent = CommandsList
 CommandsAmount = CommandsAmount + 1
+local CloneTXT_78 = TEMP_CMD:Clone()
+CloneTXT_78.Text = "oneshot [ON/OFF] | Make a gun to oneshot"
+CloneTXT_78.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+function CreateBulletTable(Bullet, PartAndPlr)
+	local Args = {}
+	for i =1,Bullet do
+		Args[#Args + 1] = {
+			["RayObject"] = Ray.new(Vector3.new(), Vector3.new()),
+			["Hit"] = PartAndPlr,
+		}
+	end
+	return Args
+end
 function Title(Text)
 	return Player.PlayerGui['Home']['hud']['Topbar']['titleBar'].Title.Text:lower() == Text
 end
@@ -768,13 +783,7 @@ function GetSingle(Item, Ignore)
 	end
 end
 function KillPlayer(Target,Hit,Failed,DoChange)
-	local Hits = {}
-	for i =1,Hit do
-		Hits[#Hits + 1] = {
-			["RayObject"] = Ray.new(Vector3.new(), Vector3.new()),
-			["Hit"] = Target.Character:FindFirstChild("Head"),
-		}
-	end
+	Bullets = CreateBulletTable(Hit, Target.Character:FindFirstChild("Head"))
 	if not Target or not Target.Character or not Target.Character:FindFirstChildOfClass("Humanoid") or Target.Character:FindFirstChildOfClass("Humanoid").Health <1 then
 		return
 	end
@@ -793,7 +802,7 @@ function KillPlayer(Target,Hit,Failed,DoChange)
 	end
 	repeat task.wait() GetGun("AK-47") Gun = Player.Backpack:FindFirstChild("AK-47") or Player.Character:FindFirstChild("AK-47") until Gun
 	task.spawn(function()
-		game:GetService("ReplicatedStorage").ShootEvent:FireServer(Hits, Gun)
+		game:GetService("ReplicatedStorage").ShootEvent:FireServer(Bullets, Gun)
 		game:GetService("ReplicatedStorage").ReloadEvent:FireServer(Gun)
 	end)
 	coroutine.wrap(function()
@@ -1065,7 +1074,7 @@ function Meleekill(Tar)
 		local Orgin = GetPosition()
 		repeat task.wait()
 			UnSit()
-			GetPart(plr).CFrame = Tar.Character.HumanoidRootPart.CFrame
+			GetPart(plr).CFrame = GetPart(Tar).CFrame
 			MeleeEvent(Tar)
 		until Tar.Character.Humanoid.Health < 5
 		UnSit()
@@ -2215,7 +2224,7 @@ function PC(Message)
 			wait(1.5)
 			Chat("LAUNCHING IN 1")
 			wait(.2)
-			killall("all",8)
+			killall("all",7)
 			Notif("OK", 'Nuke from '..Target.DisplayName..' has been removed.', 3)
 		end
 	else
@@ -2232,7 +2241,7 @@ function PC(Message)
 		wait(1.5)
 		Chat("LAUNCHING IN 1")
 		wait(.2)
-		killall("all",8)
+		killall("all",7)
 		Notif("OK", 'Nuke from '..Player.DisplayName..' has been removed.', 3)
 	end
     end
@@ -2306,38 +2315,6 @@ function PC(Message)
 		end
 	end
     end
-    if Command('loopfling') or Command("lfling") then
-	local Team = IsTeamCommandCheck(args[2])
-	if args[2] == "all" then
-		States.LoopFlingAll = true
-		Notif("OK", 'LoopFling All', 3)
-		TextBox.Text = ""
-	elseif Team == game.Teams.Inmates then
-		States.LoopFlingInmates = true
-		Notif("OK", 'LoopFling Inmates', 3)
-		TextBox.Text = ''
-	elseif Team == game.Teams.Guards then
-		States.LoopFlingGuards = true
-		Notif("OK", 'LoopFling Guards', 3)
-		TextBox.Text = ""
-	elseif Team == game.Teams.Criminals then
-		States.LoopFlingCriminals = true
-		Notif("OK", 'LoopFling Criminals', 3)
-		TextBox.Text = ''
-	elseif args[2] ~= "all" and Team ~= game.Teams.Inmates and Team ~= game.Teams.Guards and Team ~= game.Teams.Criminals then
-		local Player = FindPlayer(args[2])
-		if Player then
-			if not table.find(API.LoopFling,Player.Name) then
-				table.insert(API.LoopFling, Player.Name)
-				Notif("OK", "LoopFling "..Player.DisplayName, 3)
-				TextBox.Text = ''
-			else
-				Notif("Error", 'Player is already loop fling!', 3)
-				TextBox.Text = ""
-			end
-		end
-	end
-    end
     if Command('unloopfling') or Command("unlfling") then
 	local Team = IsTeamCommandCheck(args[2])
 	if args[2] == "all" then
@@ -2370,7 +2347,11 @@ function PC(Message)
 		end
 	end
     end
-    if NotCommand("unload") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("commands") and NotCommand("re") and NotCommand("refresh") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("inmate") and NotCommand("guard") and NotCommand("crim") and NotCommand("criminal") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("prefix") and NotCommand("pp") and NotCommand("bring") and NotCommand("damage") and NotCommand('dmg') and NotCommand('autoguns') and NotCommand("aguns") and NotCommand('autoitems') and NotCommand('aitems') and NotCommand('autoremoveff') and NotCommand("autorff") and NotCommand('autoguard') and NotCommand('aguard') and NotCommand"killaura" and NotCommand("copychat") and NotCommand("notify") and NotCommand('antifling') and NotCommand('infjump') and NotCommand('ff') and NotCommand('forcefield') and NotCommand('arrest') and NotCommand("ar") and NotCommand('meleekill') and NotCommand('mk') and NotCommand("mkill") and NotCommand('tp') and NotCommand("speed") and NotCommand("ws") and NotCommand('btools') and NotCommand("shotgun") and NotCommand("rem") and NotCommand("remington") and NotCommand("ak") and NotCommand('ak-47') and NotCommand('m9') and NotCommand('pistol') and NotCommand("guns") and NotCommand("items") and NotCommand('m4') and NotCommand('m4a1') and NotCommand("hammer") and NotCommand('ham') and NotCommand("knife") and NotCommand('knive') and NotCommand("food") and NotCommand("goto") and NotCommand('to') and NotCommand('drag') and NotCommand('autonocars') and NotCommand('autodumpcars') and NotCommand("autodeletecars") and NotCommand('opengate') and NotCommand("allcmds") and NotCommand('nex') and NotCommand("nexus") and NotCommand('yard') and NotCommand("gas") and NotCommand('roof') and NotCommand("respawn") and NotCommand('res') and NotCommand("getplayer") and NotCommand('noclip') and NotCommand("chatnotify") and NotCommand('view') and NotCommand("unview") and NotCommand("rejoin") and NotCommand('rj') and NotCommand("doorsdestroy") and NotCommand('nodoors') and NotCommand("removecars") and NotCommand('nocars') and NotCommand("dumpcars") and NotCommand('antisit') and NotCommand("antitase") and NotCommand('notase') and NotCommand("clickkill") and NotCommand'clickarrest' and NotCommand("arrestaura") and NotCommand('antitouch') and NotCommand("meleelk") and NotCommand('mlk') and NotCommand("unmeleelk") and NotCommand('unmlk') and NotCommand("cbase") and NotCommand('crimbase') and NotCommand"car" and NotCommand('loopcrim') and NotCommand("loopcriminal") and NotCommand("unloopcrim") and NotCommand('unloopcriminal') and NotCommand("tase") and NotCommand'void' and NotCommand("silentaim") and NotCommand('saim') and NotCommand("keycard") and NotCommand('key') and NotCommand("givekey") and NotCommand'addnuke' and NotCommand("nuke") and NotCommand("fling") and NotCommand('anticrash') and NotCommand("loopfling") and NotCommand('lfling') and NotCommand("unloopfling") and NotCommand('unlfling') then
+    if Command'oneshot' then
+	ChangeState(args[2],"OneShot")
+	TextBox.Text = ''
+    end
+    if NotCommand("unload") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("commands") and NotCommand("re") and NotCommand("refresh") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("inmate") and NotCommand("guard") and NotCommand("crim") and NotCommand("criminal") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("prefix") and NotCommand("pp") and NotCommand("bring") and NotCommand("damage") and NotCommand('dmg') and NotCommand('autoguns') and NotCommand("aguns") and NotCommand('autoitems') and NotCommand('aitems') and NotCommand('autoremoveff') and NotCommand("autorff") and NotCommand('autoguard') and NotCommand('aguard') and NotCommand"killaura" and NotCommand("copychat") and NotCommand("notify") and NotCommand('antifling') and NotCommand('infjump') and NotCommand('ff') and NotCommand('forcefield') and NotCommand('arrest') and NotCommand("ar") and NotCommand('meleekill') and NotCommand('mk') and NotCommand("mkill") and NotCommand('tp') and NotCommand("speed") and NotCommand("ws") and NotCommand('btools') and NotCommand("shotgun") and NotCommand("rem") and NotCommand("remington") and NotCommand("ak") and NotCommand('ak-47') and NotCommand('m9') and NotCommand('pistol') and NotCommand("guns") and NotCommand("items") and NotCommand('m4') and NotCommand('m4a1') and NotCommand("hammer") and NotCommand('ham') and NotCommand("knife") and NotCommand('knive') and NotCommand("food") and NotCommand("goto") and NotCommand('to') and NotCommand('drag') and NotCommand('autonocars') and NotCommand('autodumpcars') and NotCommand("autodeletecars") and NotCommand('opengate') and NotCommand("allcmds") and NotCommand('nex') and NotCommand("nexus") and NotCommand('yard') and NotCommand("gas") and NotCommand('roof') and NotCommand("respawn") and NotCommand('res') and NotCommand("getplayer") and NotCommand('noclip') and NotCommand("chatnotify") and NotCommand('view') and NotCommand("unview") and NotCommand("rejoin") and NotCommand('rj') and NotCommand("doorsdestroy") and NotCommand('nodoors') and NotCommand("removecars") and NotCommand('nocars') and NotCommand("dumpcars") and NotCommand('antisit') and NotCommand("antitase") and NotCommand('notase') and NotCommand("clickkill") and NotCommand'clickarrest' and NotCommand("arrestaura") and NotCommand('antitouch') and NotCommand("meleelk") and NotCommand('mlk') and NotCommand("unmeleelk") and NotCommand('unmlk') and NotCommand("cbase") and NotCommand('crimbase') and NotCommand"car" and NotCommand('loopcrim') and NotCommand("loopcriminal") and NotCommand("unloopcrim") and NotCommand('unloopcriminal') and NotCommand("tase") and NotCommand'void' and NotCommand("silentaim") and NotCommand('saim') and NotCommand("keycard") and NotCommand('key') and NotCommand("givekey") and NotCommand'addnuke' and NotCommand("nuke") and NotCommand("fling") and NotCommand('anticrash') and NotCommand("loopfling") and NotCommand('lfling') and NotCommand("unloopfling") and NotCommand('unlfling') and NotCommand("oneshot") then
 	Notif("Error", 'not a valid command.', 3)
     end
 end
@@ -2415,19 +2396,36 @@ plr:GetMouse().Button1Up:Connect(function()
 	if Killcool1 then return end
 	if States.ClickArrest or States.ClickKill then
 		if Target and Target.Parent and Target.Parent:FindFirstChildOfClass("Humanoid") and game:GetService("Players"):FindFirstChild(Target.Parent.Name) or game:GetService("Players"):FindFirstChild(Target.Parent.Parent.Name) then
-			local TargetModelPlr = game:GetService("Players"):FindFirstChild(Target.Parent.Name) or game:GetService("Players"):FindFirstChild(Target.Parent.Parent.Name)
+			local TargetModelPlr = game:GetService("Players"):FindFirstChild(Target.Parent.Name)
 			if States.ClickArrest then
-				if TargetModelPlr.Team ~= game:GetService("Teams").Guards then
-					local ohInstance1 = Target
-					workspace.Remote.arrest:InvokeServer(ohInstance1)
+				if TargetModelPlr.Team == game.Teams.Criminals or (BadArea(TargetModelPlr) and TargetModelPlr.Team == game.Teams.Inmates) and not TargetModelPlr.Character.Humanoid.Health >0 then
+					local Position = GetPosition()
+					repeat task.wait()
+						game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = TargetModelPlr.Character.HumanoidRootPart.CFrame
+						task.spawn(function()
+							workspace.Remote.arrest:InvokeServer(TargetModelPlr.Character.PrimaryPart)
+						end)
+					until TargetModelPlr.Character["Head"]:FindFirstChildOfClass("BillboardGui")
+					MoveTo(Position)
 				end
 			end
 			if States.ClickKill then
-				KillPlayer(TargetModelPlr,8)
+				KillPlayer(TargetModelPlr,7)
 				Killcool1 = true
 				wait(.6)
 				Killcool1 = false
 			end
+		end
+	end
+end)
+plr:GetMouse().Button1Up:Connect(function()
+	local target = plr:GetMouse().Target
+	if not Unloaded and target and target.Parent:FindFirstChildOfClass("Humanoid") and game:GetService("Players"):FindFirstChild(target.Parent.Name) and States.OneShot then
+		local Vic = game:GetService("Players"):FindFirstChild(target.Parent.Name)
+		local Gun = plr.Character:FindFirstChildOfClass("Tool")
+		if Gun and Gun:FindFirstChildOfClass("ModuleScript") and Vic and Vic.Team ~= plr.Team then
+			Bullets = CreateBulletTable(7, Vic.Character:FindFirstChild("Head"))
+			game:GetService("ReplicatedStorage").ShootEvent:FireServer(Bullets, Gun)
 		end
 	end
 end)
