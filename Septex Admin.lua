@@ -2375,10 +2375,12 @@ function PC(Message)
 		if States.Disconnect and not Unloaded then
 			local Guns = plr.Character:FindFirstChild('Remington 870') or plr.Backpack:FindFirstChild("Remington 870")
 			GetGun("Remington 870")
-			Create = CreateBulletTable(150, Player.Character.Head)
-			task.spawn(function()
-				game.ReplicatedStorage.ShootEvent:FireServer(Create, Guns)
-			end)
+			if Guns then
+				Create = CreateBulletTable(10, Player.Character.Head))
+				task.spawn(function()
+					game.ReplicatedStorage.ShootEvent:FireServer(Create, Guns)
+				end)
+			end
 		end
 	end
     end
