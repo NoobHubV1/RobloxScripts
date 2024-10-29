@@ -2376,7 +2376,7 @@ function PC(Message)
 			local Guns = plr.Character:FindFirstChild('Remington 870') or plr.Backpack:FindFirstChild("Remington 870")
 			GetGun("Remington 870")
 			if Guns then
-				Create = CreateBulletTable(10, Player.Character.Head))
+				Create = CreateBulletTable(10, Player.Character.Head)
 				task.spawn(function()
 					game.ReplicatedStorage.ShootEvent:FireServer(Create, Guns)
 				end)
