@@ -701,7 +701,15 @@ local function smoothTP2(cf)
 	workspace.Gravity = oldg
 end
 local function smoothTP(cf)
-    root.CFrame = cf
+	local cf0 = (cf-cf.p) + root.Position + Vector3.new(0,4,0)
+	local diff = cf.p - root.Position
+	for i=0,diff.Magnitude,3 do
+		humanoid.Sit=false
+		root.CFrame = cf0 + diff.Unit * i
+		root.Velocity,root.RotVelocity=Vector3.new(),Vector3.new()
+		wait()
+	end
+	root.CFrame = cf
 end
 for _,o in ipairs(workspace.Ovens:GetChildren()) do
 	if ffc(o,"Bottom") then
