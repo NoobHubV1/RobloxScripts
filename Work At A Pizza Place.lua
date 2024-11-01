@@ -712,11 +712,11 @@ end
 local function smoothTP(cf)
 	local cf0 = (cf-cf.p) + root.Position + Vector3.new(0,4,0)
 	local diff = cf.p - root.Position
-	for i=0,diff.Magnitude,3.5 do
+	for i=0,diff.Magnitude,1.5 do
 		humanoid.Sit=false
 		root.CFrame = cf0 + diff.Unit * i
 		root.Velocity,root.RotVelocity=Vector3.new(),Vector3.new()
-		wait()
+		task.wait()
 	end
 	root.CFrame = cf
 end
@@ -854,7 +854,7 @@ local function tryCook()
 end
 wait(1)
 --//main loop
-while wait(.5) do
+while wait(.4) do
 	for zz=1,3 do
 		local c,order = FindFirstCustomer()
 		if doCashier and c and order then
@@ -1030,7 +1030,7 @@ while wait(.5) do
 								wait(0.1)
 							end
 							if not doSupplier then break end
-							root.CFrame = btn.CFrame + Vector3.new(0,3,0)
+							smoothTP(btn.CFrame + Vector3.new(0,3,0))
 							wait(0.1)
 							realc=realc+1
 						end
