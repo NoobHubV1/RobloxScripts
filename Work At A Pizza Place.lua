@@ -93,12 +93,14 @@ Create = function(class,parent,props)
 	return new
 end
 gui=Create("ScreenGui",game.CoreGui,{Name="Farm", ZIndexBehavior="Sibling"})
-main=Create("Frame",gui,{Name="main", Draggable=true, Active=true, Size=UDim2.new(0,350,0,100), Position=UDim2.new(.335,0,0.02,0), BackgroundColor3=Color3.new(0.098,0.098,0.098)})
+main=Create("Frame",gui,{Name="main", Draggable=false, Active=true, Size=UDim2.new(0,350,0,100), Position=UDim2.new(.335,0,0.02,0), BackgroundColor3=Color3.new(0.098,0.098,0.098)})
 topbar=Create("Frame",main,{Name="topbar", Size=UDim2.new(1,0,0.15,0), BackgroundColor3=Color3.new(0.255,0.255,0.255)})
 closeBtn=Create("TextButton",topbar,{Name="closeBtn", TextWrapped=true, Size=UDim2.new(0.03,0,1,0), TextColor3=Color3.new(1,1,1), Text="X", BackgroundTransparency=1, 
 	Font="GothamSemibold", Position=UDim2.new(0.96,0,0,0), TextSize=14, TextScaled=true, BackgroundColor3=Color3.new(1,1,1)})
 minimumBtn=Create("TextButton",topbar,{Name="minimumBtn", TextWrapped=true, Size=UDim2.new(0.03,0,1,0), TextColor3=Color3.new(1,1,1), Text="=", BackgroundTransparency=1, 
 	Font="GothamSemibold", Position=UDim2.new(0.91,0,0,0), TextSize=14, TextScaled=true, BackgroundColor3=Color3.new(1,1,1)})
+draggableBtn=Create("TextButton",topbar,{Name="draggableBtn", TextWrapped=true, Size=UDim2.new(0.03,0,1,0), TextColor3=Color3.new(1,1,1), Text="drag", BackgroundTransparency=1, 
+	Font="GothamSemibold", Position=UDim2.new(0.86,0,0,0), TextSize=14, TextScaled=true, BackgroundColor3=Color3.new(1,1,1)})
 titleLbl=Create("TextLabel",topbar,{Name="titleLbl", TextWrapped=true, Size=UDim2.new(0.5,0,1,0), Text="work at a pizza place", TextSize=14, Font="GothamSemibold", 
 	BackgroundTransparency=1, Position=UDim2.new(0.25,0,0,0), TextColor3=Color3.new(1,1,1), BackgroundColor3=Color3.new(1,1,1)})
 saveBtn=Create("ImageButton",topbar,{Name="saveBtn", Image="rbxassetid://55687833", Size=UDim2.new(0.05,0,1,0), Position=UDim2.new(0.01,0,0,0), BackgroundTransparency=1, BackgroundColor3=Color3.new(), Visible=writefile~=nil})
@@ -361,7 +363,6 @@ minimumBtn.MouseButton1Click:Connect(function()
 		allOffBtn.Visible = false
 		allOnBtn.Visible = false
 		toggleAllSlider.Visible = false
-		messageLbl.Visible = false
 		creditLbl.Visible = false
 		kitchen.Visible = false
 		cashierSlider.Visible = false
@@ -440,6 +441,17 @@ minimumBtn.MouseButton1Click:Connect(function()
 end)
 minimumBtn.MouseEnter:Connect(function() minimumBtn.TextColor3=Color3.new(.9,0,0) end)
 minimumBtn.MouseLeave:Connect(function() minimumBtn.TextColor3=Color3.new(1,1,1) end)
+draggableBtn.MouseButton1Click:Connect(function()
+	if not main.Draggable then
+		main.Draggable = true
+		draggableBtn.Text = "off"
+	else
+		main.Draggable = false
+		draggableBtn.Text = "drag"
+	end
+end)
+draggableBtn.MouseEnter:Connect(function() draggableBtn.TextColor3=Color3.new(.9,0,0) end)
+draggableBtn.MouseLeave:Connect(function() draggableBtn.TextColor3=Color3.new(1,1,1) end)
 saveBtn.MouseButton1Click:Connect(function()
 	if writefile and messageLbl.Visible==false then
 		writefile("PizzaFarm.txt",game:GetService("HttpService"):JSONEncode(settings))
@@ -700,7 +712,7 @@ end
 local function smoothTP(cf)
 	local cf0 = (cf-cf.p) + root.Position + Vector3.new(0,4,0)
 	local diff = cf.p - root.Position
-	for i=0,diff.Magnitude,4 do
+	for i=0,diff.Magnitude,3.5 do
 		humanoid.Sit=false
 		root.CFrame = cf0 + diff.Unit * i
 		root.Velocity,root.RotVelocity=Vector3.new(),Vector3.new()
@@ -842,14 +854,7 @@ local function tryCook()
 end
 wait(1)
 --//main loop
-while gui.Parent do
-	wait(.9)
-	humanoid.Sit = false
-	if RNG:NextInteger(1,20)==1 then
-        game:GetService("VirtualInputManager"):SendKeyEvent(true,"Z",false,game)
-        wait()
-        game:GetService("VirtualInputManager"):SendKeyEvent(false,"Z",false,game)
-	end
+while wait(.5) do
 	for zz=1,3 do
 		local c,order = FindFirstCustomer()
 		if doCashier and c and order then
