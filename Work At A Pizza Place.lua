@@ -700,7 +700,7 @@ end
 local function smoothTP(cf)
 	local cf0 = (cf-cf.p) + root.Position + Vector3.new(0,4,0)
 	local diff = cf.p - root.Position
-	for i=0,diff.Magnitude,3.5 do
+	for i=0,diff.Magnitude,4 do
 		humanoid.Sit=false
 		root.CFrame = cf0 + diff.Unit * i
 		root.Velocity,root.RotVelocity=Vector3.new(),Vector3.new()
@@ -843,7 +843,7 @@ end
 wait(1)
 --//main loop
 while gui.Parent do
-	wait(.5)
+	wait(.9)
 	humanoid.Sit = false
 	if RNG:NextInteger(1,20)==1 then
         game:GetService("VirtualInputManager"):SendKeyEvent(true,"Z",false,game)
