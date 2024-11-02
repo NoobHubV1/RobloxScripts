@@ -3,30 +3,26 @@ local Library = loadstring(Game:HttpGet('https://raw.githubusercontent.com/blood
 local GetEmerald = function(Color)
         local LastPosition = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.workspace.ChaosEmeralds:FindFirstChild(Color, true).CFrame
-        task.wait(.02)
+        task.wait(.1)
         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = LastPosition
 end
 
 local GetAllEmeralds = function()
-        GetEmerald("Blue")
-        wait(.7)
-        GetEmerald("Yellow")
-        wait(.7)
-        GetEmerald("Red")
-        wait(.7)
-        GetEmerald("Cyan")
-        wait(.7)
-        GetEmerald("Purple")
-        wait(.7)
-        GetEmerald("White")
-        wait(.7)
-        GetEmerald("Green")
+        for i,v in pairs(game.workspace.ChaosEmeralds:GetChildren()) do
+                local Oldc = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame
+                task.wait(.1)
+                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Oldc
+        end
 end
 
 local function GetAllRings()
         for i,v in pairs(game:GetService("Workspace").Rings:GetDescendants()) do
                 if v:IsA('Part') then
-                        firetouchinterest(game.Players.LocalPlayer.Character.Head, v, 0)
+                        local LastP = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+                        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame
+                        task.wait(.1)
+                        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = LastP
                 end
         end
 end
