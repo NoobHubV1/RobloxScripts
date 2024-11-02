@@ -725,7 +725,25 @@ for _,o in ipairs(workspace.Ovens:GetChildren()) do
 		o.Bottom.CanTouch = false
 	end
 end
-local function tryCook()
+wait(1)
+--//main loop
+while wait(.2) do
+	for zz=1,3 do
+		local c,order = FindFirstCustomer()
+		if doCashier and c and order then
+			local reg = 3
+			if c.Head.Position.X < 50 then
+			    reg = 2
+			elseif c.Head.Position.X < 70 then
+			    reg = 1
+			end
+			if (root.Position-Vector3.new(50.30, 3.80, 83.24)).magnitude>9 then smoothTP(CFrame.new(50.30, 3.80, 83.24)) wait(.1) end
+			network:FireServer("OrderComplete", c, order, workspace["Register"..reg])
+			wait(0.3)
+		else
+			break
+		end
+	end
 	for zz=1,18 do
 		local order = getOrders()[1]
 		local topping
@@ -851,27 +869,6 @@ local function tryCook()
 			break
 		end
 	end
-end
-wait(1)
---//main loop
-while wait(.4) do
-	for zz=1,3 do
-		local c,order = FindFirstCustomer()
-		if doCashier and c and order then
-			local reg = 3
-			if c.Head.Position.X < 50 then
-			    reg = 2
-			elseif c.Head.Position.X < 70 then
-			    reg = 1
-			end
-			if (root.Position-Vector3.new(50.30, 3.80, 83.24)).magnitude>9 then smoothTP(CFrame.new(50.30, 3.80, 83.24)) wait(.1) end
-			network:FireServer("OrderComplete", c, order, workspace["Register"..reg])
-			wait(0.3)
-		else
-			break
-		end
-	end
-	tryCook()
 	for zz=1,7 do
 		if doBoxer then
 			local didsomething = false
