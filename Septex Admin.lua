@@ -492,6 +492,14 @@ local CloneTXT_84 = TEMP_CMD:Clone()
 CloneTXT_84.Text = "jeff | Jeff the killer npc (rejoin to disable)"
 CloneTXT_84.Parent = CommandsList
 CommandsAmount = CommandsAmount + 1
+local CloneTXT_85 = TEMP_CMD:Clone()
+CloneTXT_85.Text = "grabknife | Cool script [REJOIN TO STOP]"
+CloneTXT_85.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
+local CloneTXT_86 = TEMP_CMD:Clone()
+CloneTXT_86.Text = "antishield [ON/OFF] | Deletes other peoples shields"
+CloneTXT_86.Parent = CommandsList
+CommandsAmount = CommandsAmount + 1
 function CreateBulletTable(Bullet, PartAndPlr)
 	local Args = {}
 	for i =1,Bullet do
@@ -624,9 +632,9 @@ function WaitForRespawn(Cframe,NoForce)
 					end)
 				end)()
 				NewCharacter:WaitForChild("HumanoidRootPart")
-				local Amount = 7
+				local Amount = 10
 				if Title("lights out") then
-					Amount = 12
+					Amount = 15
 				end
 				for i = 1,Amount do
 					UnSit()
@@ -638,7 +646,7 @@ function WaitForRespawn(Cframe,NoForce)
 			Cframe = nil
 		end)
 		task.spawn(function()
-			wait(2)
+			wait(1)
 			if a then
 				a:Disconnect()
 			end
@@ -1234,6 +1242,7 @@ function PC(Message)
   if Command("unload") then
 	Destroy(game:FindFirstChild('Septex_Admin'))
 	Destroy(ScreenGui)
+	Destroy(game:FindFirstChild("..."))
 	Unloaded = true
 	Notif("OK", "Script is Unloaded", 3)
   end
@@ -2565,8 +2574,171 @@ function PC(Message)
 					end
 				end)
 			end)
+			TextBox.Text = ''
     end
-    if NotCommand("unload") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("commands") and NotCommand("re") and NotCommand("refresh") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("inmate") and NotCommand("guard") and NotCommand("crim") and NotCommand("criminal") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("prefix") and NotCommand("pp") and NotCommand("bring") and NotCommand("damage") and NotCommand('dmg') and NotCommand('autoguns') and NotCommand("aguns") and NotCommand('autoitems') and NotCommand('aitems') and NotCommand('autoremoveff') and NotCommand("autorff") and NotCommand('autoguard') and NotCommand('aguard') and NotCommand"killaura" and NotCommand("copychat") and NotCommand("notify") and NotCommand('antifling') and NotCommand('infjump') and NotCommand('ff') and NotCommand('forcefield') and NotCommand('arrest') and NotCommand("ar") and NotCommand('meleekill') and NotCommand('mk') and NotCommand("mkill") and NotCommand('tp') and NotCommand("speed") and NotCommand("ws") and NotCommand('btools') and NotCommand("shotgun") and NotCommand("rem") and NotCommand("remington") and NotCommand("ak") and NotCommand('ak-47') and NotCommand('m9') and NotCommand('pistol') and NotCommand("guns") and NotCommand("items") and NotCommand('m4') and NotCommand('m4a1') and NotCommand("hammer") and NotCommand('ham') and NotCommand("knife") and NotCommand('knive') and NotCommand("food") and NotCommand("goto") and NotCommand('to') and NotCommand('drag') and NotCommand('autonocars') and NotCommand('autodumpcars') and NotCommand("autodeletecars") and NotCommand('opengate') and NotCommand("allcmds") and NotCommand('nex') and NotCommand("nexus") and NotCommand('yard') and NotCommand("gas") and NotCommand('roof') and NotCommand("respawn") and NotCommand('res') and NotCommand("getplayer") and NotCommand('noclip') and NotCommand("chatnotify") and NotCommand('view') and NotCommand("unview") and NotCommand("rejoin") and NotCommand('rj') and NotCommand("doorsdestroy") and NotCommand('nodoors') and NotCommand("removecars") and NotCommand('nocars') and NotCommand("dumpcars") and NotCommand('antisit') and NotCommand("antitase") and NotCommand('notase') and NotCommand("clickkill") and NotCommand'clickarrest' and NotCommand("arrestaura") and NotCommand('antitouch') and NotCommand("meleelk") and NotCommand('mlk') and NotCommand("unmeleelk") and NotCommand('unmlk') and NotCommand("cbase") and NotCommand('crimbase') and NotCommand"car" and NotCommand('loopcrim') and NotCommand("loopcriminal") and NotCommand("unloopcrim") and NotCommand('unloopcriminal') and NotCommand("tase") and NotCommand'void' and NotCommand("silentaim") and NotCommand('saim') and NotCommand("keycard") and NotCommand('key') and NotCommand("givekey") and NotCommand'addnuke' and NotCommand("nuke") and NotCommand("fling") and NotCommand('anticrash') and NotCommand("loopfling") and NotCommand('lfling') and NotCommand("unloopfling") and NotCommand('unlfling') and NotCommand("oneshot") and NotCommand('crash') and NotCommand("crashserver") and NotCommand('servercrash') and NotCommand("svcrash") and NotCommand('uncrash') and NotCommand("uncrashserver") and NotCommand('unservercrash') and NotCommand("unsvcrash") and NotCommand("espamlag") and NotCommand('elag') and NotCommand("opendoors") and NotCommand('loopopendoors') and NotCommand("jeff") then
+    if Command("grabknife") then
+	task.spawn(function()
+				GetSingle("Crude Knife")
+				repeat task.wait() until game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("Crude Knife")
+				game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("Crude Knife").Parent = game:GetService("Players").LocalPlayer.Character
+				local Player = game:GetService("Players").LocalPlayer
+				local Character = Player.Character
+				local Crude = Player.Backpack:FindFirstChild("Crude Knife") or Player.Character:FindFirstChild("Crude Knife")
+				local OldPosition = Crude.Grip
+				local PlayingAnimations = {}
+				local Target = nil
+				Player.CharacterAdded:Connect(function(a)
+					a:WaitForChild("Humanoid")
+					Character = a
+					wait(.7)
+					GetSingle("Crude Knife")
+					repeat task.wait() until game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("Crude Knife")
+					game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("Crude Knife").Parent = game:GetService("Players").LocalPlayer.Character
+					Crude= Player.Backpack:FindFirstChild("Crude Knife") or Player.Character:FindFirstChild("Crude Knife")
+					Crude.Equipped:connect(function()
+						task.wait(0.4)
+						for _,Animation in pairs(Character.Humanoid:GetPlayingAnimationTracks()) do
+							if string.find(Animation.Animation.AnimationId, "182393478") then
+								Animation:Stop()
+							end
+						end
+					end)
+				end)
+				local Mouse = Player:GetMouse()
+				local function StopAnimations()
+					for i,v in pairs(PlayingAnimations) do
+						if v then
+							v:Stop()
+						end
+					end
+				end
+				local function SetPos(New,New2,IsSlashing)
+					Crude.Parent = Player.Backpack
+					Crude.Grip = New2
+					Crude.Grip *= New
+					Crude.Parent = Player.Character
+					if IsSlashing then
+						task.spawn(function()
+							game:GetService("ReplicatedStorage").meleeEvent:FireServer(Target)
+						end)
+					end
+				end
+				local function Idle()
+					StopAnimations()
+					Crude.Parent = Player.Backpack
+					Crude.Grip = OldPosition
+					Crude.Parent = Player.Character
+				end
+				Crude.Equipped:connect(function()
+					task.wait(0.4)
+					for _,Animation in pairs(Character.Humanoid:GetPlayingAnimationTracks()) do
+						if string.find(Animation.Animation.AnimationId, "182393478") then
+							Animation:Stop()
+						end
+					end
+				end)
+				local function Holding()
+					local a = Instance.new("Animation")
+					a.AnimationId = "rbxassetid://175676962"
+					a = game.Players.LocalPlayer.Character.Humanoid:LoadAnimation(a)
+					a:Play()
+					a:AdjustSpeed(0)
+					table.insert(PlayingAnimations, a)
+					SetPos(CFrame.new(1.4,-2.1,0.5),CFrame.new(1.5,0,0)*CFrame.Angles(0, 0, math.rad(-90)))
+				end
+				local function Slash()
+					StopAnimations()
+					local a = Instance.new("Animation")
+					a.AnimationId = "rbxassetid://175676962"
+					a = game.Players.LocalPlayer.Character.Humanoid:LoadAnimation(a)
+					a:Play()
+					a:AdjustSpeed(0)
+					table.insert(PlayingAnimations, a)
+					SetPos(CFrame.new(1.4,-2.1,0.5),CFrame.new(1.5,0,0)*CFrame.Angles(0, 0, math.rad(-90)),true)
+					task.wait()
+					SetPos(CFrame.new(1.3,-2.1,0.5),CFrame.new(1.5,0,0)*CFrame.Angles(0, 0, math.rad(-90)))
+					task.wait()
+					SetPos(CFrame.new(1.2,-2.1,0.5),CFrame.new(1.5,0,0)*CFrame.Angles(0, 0, math.rad(-90)))
+					task.wait()
+					SetPos(CFrame.new(1.1,-2.1,0.5),CFrame.new(1.5,0,0)*CFrame.Angles(0, 0, math.rad(-90)))
+					task.wait()
+					SetPos(CFrame.new(1,-2.1,0.5),CFrame.new(1.5,0,0)*CFrame.Angles(0, 0, math.rad(-90)))
+					task.wait()
+					SetPos(CFrame.new(0.9,-2.1,0.5),CFrame.new(1.5,0,0)*CFrame.Angles(0, 0, math.rad(-90)),true)
+					task.wait()
+					SetPos(CFrame.new(0.8,-2.1,0.5),CFrame.new(1.5,0,0)*CFrame.Angles(0, 0, math.rad(-90)))
+					task.wait()
+					SetPos(CFrame.new(0.7,-2.1,0.5),CFrame.new(1.5,0,0)*CFrame.Angles(0, 0, math.rad(-90)),true)
+					task.wait()
+					SetPos(CFrame.new(0.6,-2.1,0.5),CFrame.new(1.5,0,0)*CFrame.Angles(0, 0, math.rad(-90)))
+					task.wait()
+					SetPos(CFrame.new(0.5,-2.1,0.5),CFrame.new(1.5,0,0)*CFrame.Angles(0, 0, math.rad(-90)),true)
+					task.wait()
+					SetPos(CFrame.new(0.4,-2.1,0.5),CFrame.new(1.5,0,0)*CFrame.Angles(0, 0, math.rad(-90)),true)
+					task.wait()
+					SetPos(CFrame.new(0.3,-2.1,0.5),CFrame.new(1.5,0,0)*CFrame.Angles(0, 0, math.rad(-90)))
+					task.wait()
+					SetPos(CFrame.new(0.1,-2.1,0.5),CFrame.new(1.5,0,0)*CFrame.Angles(0, 0, math.rad(-90)),true)
+					task.wait()
+					SetPos(CFrame.new(0,-2.1,0.5),CFrame.new(1.5,0,0)*CFrame.Angles(0, 0, math.rad(-90)),true)
+					task.wait()
+					SetPos(CFrame.new(-.1,-2.1,0.5),CFrame.new(1.5,0,0)*CFrame.Angles(0, 0, math.rad(-90)),true)
+					task.wait()
+					SetPos(CFrame.new(-.2,-2.1,0.5),CFrame.new(1.5,0,0)*CFrame.Angles(0, 0, math.rad(-90)))
+					task.wait()
+					SetPos(CFrame.new(-.3,-2.1,0.5),CFrame.new(1.5,0,0)*CFrame.Angles(0, 0, math.rad(-90)),true)
+					task.wait()
+					SetPos(CFrame.new(-.4,-2.1,0.5),CFrame.new(1.5,0,0)*CFrame.Angles(0, 0, math.rad(-90)))
+					task.wait()
+					SetPos(CFrame.new(-.5,-2.1,0.5),CFrame.new(1.5,0,0)*CFrame.Angles(0, 0, math.rad(-90)),true)
+					task.wait()
+					SetPos(CFrame.new(-.6,-2.1,0.5),CFrame.new(1.5,0,0)*CFrame.Angles(0, 0, math.rad(-90)),true)
+					task.wait()
+					SetPos(CFrame.new(-.7,-2.1,0.5),CFrame.new(1.5,0,0)*CFrame.Angles(0, 0, math.rad(-90)),true)
+					task.wait()
+					SetPos(CFrame.new(-.8,-2.1,0.5),CFrame.new(1.5,0,0)*CFrame.Angles(0, 0, math.rad(-90)),true)
+					task.wait()
+					wait(.5)
+					StopAnimations()
+					Idle()
+				end
+				Mouse.Button1Up:Connect(function()
+					if not Target then
+						for i,v in pairs(game:GetService("Players"):GetPlayers()) do
+							if v and v~=Player then
+								if (Character:GetPrimaryPartCFrame().Position-v.Character:GetPrimaryPartCFrame().Position).Magnitude <10 and v.Character:FindFirstChildOfClass("Humanoid").Health>1 then
+									if not Target then
+										Target = v
+										Holding()
+										break
+									end
+								end
+							end
+						end
+					end
+				end)
+				game:GetService("RunService").Stepped:Connect(function()
+					if Target and Target.Character:FindFirstChildOfClass("Humanoid") and Target.Character:FindFirstChildOfClass("Humanoid").Health>1 then
+						Character:SetPrimaryPartCFrame(Target.Character:GetPrimaryPartCFrame()*CFrame.new(0,0,1.1))
+					end
+				end)
+				game:GetService("UserInputService").InputEnded:Connect(function(a,b)
+					if not b then
+						if a.KeyCode == Enum.KeyCode.E and Target then
+							Slash()
+							wait(.5)
+							Target = nil
+						end
+					end
+				end)
+			end)
+			TextBox.Text = ""
+    end
+    if Command('antishield') then
+	ChangeState(args[2],"AntiShield")
+	TextBox.Text = ''
+    end
+    if NotCommand("unload") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("commands") and NotCommand("re") and NotCommand("refresh") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("inmate") and NotCommand("guard") and NotCommand("crim") and NotCommand("criminal") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("prefix") and NotCommand("pp") and NotCommand("bring") and NotCommand("damage") and NotCommand('dmg') and NotCommand('autoguns') and NotCommand("aguns") and NotCommand('autoitems') and NotCommand('aitems') and NotCommand('autoremoveff') and NotCommand("autorff") and NotCommand('autoguard') and NotCommand('aguard') and NotCommand"killaura" and NotCommand("copychat") and NotCommand("notify") and NotCommand('antifling') and NotCommand('infjump') and NotCommand('ff') and NotCommand('forcefield') and NotCommand('arrest') and NotCommand("ar") and NotCommand('meleekill') and NotCommand('mk') and NotCommand("mkill") and NotCommand('tp') and NotCommand("speed") and NotCommand("ws") and NotCommand('btools') and NotCommand("shotgun") and NotCommand("rem") and NotCommand("remington") and NotCommand("ak") and NotCommand('ak-47') and NotCommand('m9') and NotCommand('pistol') and NotCommand("guns") and NotCommand("items") and NotCommand('m4') and NotCommand('m4a1') and NotCommand("hammer") and NotCommand('ham') and NotCommand("knife") and NotCommand('knive') and NotCommand("food") and NotCommand("goto") and NotCommand('to') and NotCommand('drag') and NotCommand('autonocars') and NotCommand('autodumpcars') and NotCommand("autodeletecars") and NotCommand('opengate') and NotCommand("allcmds") and NotCommand('nex') and NotCommand("nexus") and NotCommand('yard') and NotCommand("gas") and NotCommand('roof') and NotCommand("respawn") and NotCommand('res') and NotCommand("getplayer") and NotCommand('noclip') and NotCommand("chatnotify") and NotCommand('view') and NotCommand("unview") and NotCommand("rejoin") and NotCommand('rj') and NotCommand("doorsdestroy") and NotCommand('nodoors') and NotCommand("removecars") and NotCommand('nocars') and NotCommand("dumpcars") and NotCommand('antisit') and NotCommand("antitase") and NotCommand('notase') and NotCommand("clickkill") and NotCommand'clickarrest' and NotCommand("arrestaura") and NotCommand('antitouch') and NotCommand("meleelk") and NotCommand('mlk') and NotCommand("unmeleelk") and NotCommand('unmlk') and NotCommand("cbase") and NotCommand('crimbase') and NotCommand"car" and NotCommand('loopcrim') and NotCommand("loopcriminal") and NotCommand("unloopcrim") and NotCommand('unloopcriminal') and NotCommand("tase") and NotCommand'void' and NotCommand("silentaim") and NotCommand('saim') and NotCommand("keycard") and NotCommand('key') and NotCommand("givekey") and NotCommand'addnuke' and NotCommand("nuke") and NotCommand("fling") and NotCommand('anticrash') and NotCommand("loopfling") and NotCommand('lfling') and NotCommand("unloopfling") and NotCommand('unlfling') and NotCommand("oneshot") and NotCommand('crash') and NotCommand("crashserver") and NotCommand('servercrash') and NotCommand("svcrash") and NotCommand('uncrash') and NotCommand("uncrashserver") and NotCommand('unservercrash') and NotCommand("unsvcrash") and NotCommand("espamlag") and NotCommand('elag') and NotCommand("opendoors") and NotCommand('loopopendoors') and NotCommand("jeff") and NotCommand('grabknife') and NotCommand("antishield") then
 	Notif("Error", 'not a valid command.', 3)
     end
 end
@@ -2574,7 +2746,7 @@ Player.Chatted:Connect(function(chat)
 	if not game:FindFirstChild'...' then
 		Instance.new('Folder',game).Name = '...'
 		PC(chat)
-		wait(.6)
+		wait(.5)
 		Destroy(game:FindFirstChild("..."))
 	end
 end)
@@ -2693,6 +2865,13 @@ coroutine.wrap(function()
 					end
 				end
 			end)
+		end
+		if States.AntiShield then
+			for i,v in pairs(game:GetService("Players"):GetPlayers()) do
+				if v and v.Character and v:FindFirstChild("Torso") and v:FindFirstChild("Torso"):FindFirstChild("ShieldFolder") then
+					v.Torso:FindFirstChild("ShieldFolder"):Destroy()
+				end
+			end
 		end
 	end
 end)()
@@ -2868,7 +3047,7 @@ function NoCollide(PLR)
 				x.CanCollide = false
 			end
 		end
-	end
+	en.d
 end
 for _,v in pairs(game.Players:GetPlayers()) do
 	 if v ~= game.Players.LocalPlayer then
