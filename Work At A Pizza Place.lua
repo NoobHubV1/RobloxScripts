@@ -987,7 +987,6 @@ while wait(.2) do
 			delTick = tick()
 		end
 	end
-	tryCook()
 	if doSupplier then
 		local refill=false
 		for s,c in pairs(supplyCounts) do
