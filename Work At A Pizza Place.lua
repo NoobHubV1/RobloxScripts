@@ -93,7 +93,7 @@ Create = function(class,parent,props)
 	return new
 end
 gui=Create("ScreenGui",game.CoreGui,{Name="Farm", ZIndexBehavior="Sibling"})
-main=Create("Frame",gui,{Name="main", Draggable=false, Active=true, Size=UDim2.new(0,350,0,100), Position=UDim2.new(.335,0,0.02,0), BackgroundColor3=Color3.new(0.098,0.098,0.098)})
+main=Create("Frame",gui,{Name="main", Active=true, Size=UDim2.new(0,350,0,100), Position=UDim2.new(.335,0,0.02,0), BackgroundColor3=Color3.new(0.098,0.098,0.098)})
 topbar=Create("Frame",main,{Name="topbar", Size=UDim2.new(1,0,0.15,0), BackgroundColor3=Color3.new(0.255,0.255,0.255)})
 closeBtn=Create("TextButton",topbar,{Name="closeBtn", TextWrapped=true, Size=UDim2.new(0.03,0,1,0), TextColor3=Color3.new(1,1,1), Text="X", BackgroundTransparency=1, 
 	Font="GothamSemibold", Position=UDim2.new(0.96,0,0,0), TextSize=14, TextScaled=true, BackgroundColor3=Color3.new(1,1,1)})
@@ -218,6 +218,57 @@ local function toggleSupplier(bool)
 	end
 	supplierSlider:TweenPosition(UDim2.new(doSupplier and 0.5 or 0,2,0,2),nil,"Sine",0.1,true)
 end
+local function DragifyGui(Frame,Is)
+	coroutine.wrap(function()
+		local dragToggle = nil
+		local dragSpeed = 5
+		local dragInput = nil
+		local dragStart = nil
+		local dragPos = nil
+		local startPos = nil
+		local function updateInput(input)
+			if not Is then
+				if not DraggableGuis then
+					return
+				end
+			end
+			local Delta = input.Position - dragStart
+			local Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + Delta.X, startPos.Y.Scale, startPos.Y.Offset + Delta.Y)
+			game:GetService("TweenService"):Create(Frame, TweenInfo.new(0.30), {Position = Position}):Play()
+		end
+		Frame.InputBegan:Connect(function(input)
+			if not Is then
+				if DraggableGuis then
+					if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) and game:GetService("UserInputService"):GetFocusedTextBox() == nil then
+						dragToggle = true
+						dragStart = input.Position
+						startPos = Frame.Position
+						input.Changed:Connect(function()
+							if input.UserInputState == Enum.UserInputState.End then
+								dragToggle = false
+							end
+						end)
+					end
+				end
+			end
+		end)
+		Frame.InputChanged:Connect(function(input)
+			if DraggableGuis then
+				if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+					dragInput = input
+				end
+			end
+		end)
+		game:GetService("UserInputService").InputChanged:Connect(function(input)
+			if DraggableGuis then
+				if input == dragInput and dragToggle then
+					updateInput(input)
+				end
+			end
+		end)
+	end)()
+end
+DragifyGui(main)
 
 cashierBtn.MouseButton1Click:Connect(toggleCashier)
 cookBtn.MouseButton1Click:Connect(toggleCook)
@@ -442,11 +493,11 @@ end)
 minimumBtn.MouseEnter:Connect(function() minimumBtn.TextColor3=Color3.new(.9,0,0) end)
 minimumBtn.MouseLeave:Connect(function() minimumBtn.TextColor3=Color3.new(1,1,1) end)
 draggableBtn.MouseButton1Click:Connect(function()
-	if not main.Draggable then
-		main.Draggable = true
+	if not DraggableGuis then
+		DraggableGuis = true
 		draggableBtn.Text = "off"
 	else
-		main.Draggable = false
+		DraggableGuis = false
 		draggableBtn.Text = "drag"
 	end
 end)
@@ -725,9 +776,8 @@ for _,o in ipairs(workspace.Ovens:GetChildren()) do
 		o.Bottom.CanTouch = false
 	end
 end
-wait(1)
 --//main loop
-while wait(.2) do
+while wait(.4) do
 	for zz=1,3 do
 		local c,order = FindFirstCustomer()
 		if doCashier and c and order then
@@ -1084,7 +1134,7 @@ while wait(.2) do
 					end
 				end
 			end
-			--smoothTP(oldcf)
+			smoothTP(oldcf)
 		end
 	end
 end
