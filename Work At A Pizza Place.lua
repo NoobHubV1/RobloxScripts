@@ -1,7 +1,3 @@
-local msg = Instance.new("Message",workspace)
-msg.Text = "Loaded!"
-wait(1)
-msg:Destroy()
 getupvalues = getupvalues or debug.getupvalues
 setupvalue = setupvalue or debug.setupvalue
 if not (getrawmetatable and getupvalues and setupvalue and (getreg or debug.getregistry)) then
@@ -1046,7 +1042,6 @@ while wait(.4) do
 			end
 		end
 		if refill then
-			local oldcf = root.CFrame
 			local waiting = false
 			local waitingTick = 0
 			local lastBox
@@ -1134,7 +1129,6 @@ while wait(.4) do
 					end
 				end
 			end
-			smoothTP(oldcf)
 		end
 	end
 end
