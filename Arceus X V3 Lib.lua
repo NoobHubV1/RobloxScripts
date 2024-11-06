@@ -464,7 +464,7 @@ function lib:AddButton(name, funct, ...)
 	return newBut
 end
 
-function lib:AddComboBox(text, options, funct, ...) -- ADD CUSTOM ELEMENT INSTEAD
+function lib:AddDropdown(text, options, funct, ...) -- ADD CUSTOM ELEMENT INSTEAD
 	local newCombo = ComboBox:Clone()
 	local enabled = false
 	local elems = {}
