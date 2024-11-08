@@ -635,11 +635,6 @@ function lib:SetTheme(theme)
 		error("Theme not found.")
 	end
 end
-lib:MakeNotification({
-	Name = "Notify",
-	Content = "Text",
-	Time = 7
-})
 -- INIT
 
 Main:TweenPosition(
@@ -660,3 +655,5 @@ Logo:TweenSizeAndPosition(
 
 task.wait(1.5)
 TweenService:Create(Intro, TweenInfo.new(1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {BackgroundTransparency = 1}):Play()
+
+return lib
