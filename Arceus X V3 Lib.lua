@@ -320,7 +320,6 @@ UIAspectRatioConstraint_5.Parent = Img_2
 
 local TweenService = game:GetService("TweenService")
 local Notification = loadstring(Game:HttpGet("https://raw.githubusercontent.com/NoobHubV1/NoobHubV1/main/Notification%20Lib.lua"))()
-local DraggableGuis = true
 Close.MouseButton1Click:Connect(function()
 	Logo.Active = true
 	TweenService:Create(Intro, TweenInfo.new(0.25, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {BackgroundTransparency = 0}):Play()
@@ -594,7 +593,7 @@ function lib:SetTheme(theme)
 	end
 end
 
-function DragifyGui(Frame,Is)
+function DragifyGui(Frame)
 	coroutine.wrap(function()
 		local dragToggle = nil
 		local dragSpeed = 5
@@ -603,43 +602,30 @@ function DragifyGui(Frame,Is)
 		local dragPos = nil
 		local startPos = nil
 		local function updateInput(input)
-			if not Is then
-				if not DraggableGuis then
-					return
-				end
-			end
 			local Delta = input.Position - dragStart
 			local Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + Delta.X, startPos.Y.Scale, startPos.Y.Offset + Delta.Y)
 			game:GetService("TweenService"):Create(Frame, TweenInfo.new(0.30), {Position = Position}):Play()
 		end
 		Frame.InputBegan:Connect(function(input)
-			if not Is then
-				if DraggableGuis then
-					if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) and game:GetService("UserInputService"):GetFocusedTextBox() == nil then
-						dragToggle = true
-						dragStart = input.Position
-						startPos = Frame.Position
-						input.Changed:Connect(function()
-							if input.UserInputState == Enum.UserInputState.End then
-								dragToggle = false
-							end
-						end)
+			if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) and game:GetService("UserInputService"):GetFocusedTextBox() == nil then
+				dragToggle = true
+				dragStart = input.Position
+				startPos = Frame.Position
+				input.Changed:Connect(function()
+					if input.UserInputState == Enum.UserInputState.End then
+						dragToggle = false
 					end
-				end
+				end)
 			end
 		end)
 		Frame.InputChanged:Connect(function(input)
-			if DraggableGuis then
-				if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
-					dragInput = input
-				end
+			if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+				dragInput = input
 			end
 		end)
 		game:GetService("UserInputService").InputChanged:Connect(function(input)
-			if DraggableGuis then
-				if input == dragInput and dragToggle then
-					updateInput(input)
-				end
+			if input == dragInput and dragToggle then
+				updateInput(input)
 			end
 		end)
 	end)()
