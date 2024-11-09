@@ -1,6 +1,4 @@
-if game.PlaceId ~= 155615604 and game:FindFirstChild("Septex_Admin") then
-	return game:GetService("StarterGui"):SetCore("SendNotification",{Title = "Septex Admin",Text = "Septex admin is already executed or game not support",Duration = 7})
-end
+if game.PlaceId == 155615604 and not game:FindFirstChild("Septex_Admin") then
 print([[
   // Commands List:
          unload | Unload the script
@@ -20,9 +18,7 @@ print([[
 	 damage / dmg [plr,all,team] [number] | damages a player(s)
 	 autodumpcars / autoremovecars / autonocars [on/off] | Auto Dump Cars if command ";bring"
 	 criminal / crim / makecrim [plr] | Make crim player
-	 view [player] | View the player
-	 unview [player] | Stopped view player
-  \\
+\\
 ]])
 local States = {}
       States.AutoRespawn = true
@@ -39,7 +35,7 @@ local Prefix = ";"
 local saved = workspace["Criminals Spawn"].SpawnLocation.CFrame
 local bgp = game:GetService("MarketplaceService"):UserOwnsGamePassAsync(plr.UserId, 96651)
 local CommandsAmount = 0
-CommandsAmount = CommandsAmount + 19
+CommandsAmount = CommandsAmount + 17
 function Create(class,parent,props)
   local new = Instance.new(class)
   for i,v in next, props do
@@ -48,6 +44,7 @@ function Create(class,parent,props)
   new.Parent = parent
   return new
 end
+Folder = Create("Folder",game,{Name = "Septex_Admin"})
 ScreenGui = Create("ScreenGui",plr.PlayerGui,{Name = "ScreenGui", ResetOnSpawn = false})
 TextBox = Create("TextBox",ScreenGui,{Name = "TextBox", BackgroundColor3 = Color3.fromRGB(172, 172, 172), BackgroundTransparency = 0.400, Position = UDim2.new(0.0255349874, 0, 0.800595582, 0), Size = UDim2.new(0, 278, 0, 33), Font = "SourceSans", PlaceholderText = "Press "..Prefix.." To Enter", Text = "", TextColor3 = Color3.fromRGB(255, 255, 255), TextSize = 23.000, Draggable = true, ClearTextOnFocus = false})
 function API:Notif(name, content, color, time)
@@ -83,12 +80,8 @@ end
 function API:FindPlayer(String,IgnoreError)
 	if not String or String == plr or String == "me" then
 		return plr
-	if String == "random" then
-		local random = game.Players:GetPlayers()[math.random(#game.Players:GetPlayers())]
-		if random == game.Players.LocalPlayer then
-			return
-		end
-		return random
+	elseif String == "random" then
+		return game.Players:GetPlayers()[math.random(#game.Players:GetPlayers())]
 	else
 		String = String:gsub("%s+", "")
 		for _, v in pairs(game:GetService("Players"):GetPlayers()) do
@@ -617,6 +610,8 @@ function PlayerChatted(Message)
   end
   if Command("unload") then
     API:Destroy(ScreenGui)
+    API:Destroy(game:FindFirstChild("Septex_Admin"))
+    workspace.CurrentCamera.CameraSubject = plr.Character
     Unloaded = true
     API:Notif("Unload", 'Script is unloaded', Color3.fromRGB(55, 155, 255), 5)
   end
@@ -781,25 +776,7 @@ function PlayerChatted(Message)
 		end
 	end
   end
-  if Command("view") then
-	local Player = API:FindPlayer(args[2])
-	if not table.find(API.ViewingPlayer, Player.Name) then
-		table.insert(API.ViewingPlayer, Player.Name)
-		API:Notif("OK", 'Viewing '..Player.DisplayName, Color3.fromRGB(0, 255, 0), 3)
-	else
-		API:Notif("Error", 'Player is already viewing!', Color3.fromRGB(255, 0, 0), 3)
-	end
-  end
-  if Command("unview") then
-	local Player = API:FindPlayer(args[2])
-	if table.find(API.ViewingPlayer, Player.Name) then
-		table.remove(API.ViewingPlayer,table.find(API.ViewingPlayer, Player.Name))
-		API:Notif("OK", 'Stopped viewing '..Player.DisplayName, Color3.fromRGB(0, 255, 0), 3)
-	else
-		API:Notif("Error", 'Player is not already viewing!', Color3.fromRGB(255, 0, 0), 3)
-	end
-  end
-  if NotCommand("unload") and NotCommand("prefix") and NotCommand("allcmds") and NotCommand('re') and NotCommand("refresh") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("inmate") and NotCommand("in") and NotCommand("guard") and NotCommand("gu") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("autoremoveff") and NotCommand("autorff") and NotCommand("killaura") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("damage") and NotCommand("dmg") and NotCommand("autodumpcars") and NotCommand("autoremovecars") and NotCommand('autonocars') and NotCommand("crim") and NotCommand("criminal") and NotCommand("makecrim") and NotCommand("view") and NotCommand("unview") then
+  if NotCommand("unload") and NotCommand("prefix") and NotCommand("allcmds") and NotCommand('re') and NotCommand("refresh") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("inmate") and NotCommand("in") and NotCommand("guard") and NotCommand("gu") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("autoremoveff") and NotCommand("autorff") and NotCommand("killaura") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("damage") and NotCommand("dmg") and NotCommand("autodumpcars") and NotCommand("autoremovecars") and NotCommand('autonocars') and NotCommand("crim") and NotCommand("criminal") and NotCommand("makecrim") then
     API:Notif("Error", 'Not a valid command.', Color3.fromRGB(255, 0, 0), 3)
   end
 end
@@ -831,12 +808,6 @@ plr.CharacterAdded:Connect(function(NewChar)
       NewChar:WaitForChild("ForceField"):Destroy()
     end
 end)
--- main loop
-spawn(function()
-	while wait() do -- fast loop
-		-- 
-	end
-end)
 TextBox.FocusLost:Connect(function(EnterKey)
     if EnterKey and not Unloaded then
       if TextBox.Text:sub(1,#Prefix) ~= Prefix then
@@ -851,3 +822,6 @@ end)
 API:Notif("Loads", 'Loaded Admin Commands.', Color3.fromRGB(255, 0, 0), 10)
 API:Refresh()
 Cooldown = false
+else
+	game:GetService("StarterGui"):SetCore("SendNotification",{Title = "Septex Admin",Text = "Septex admin is already executed or game not support",Duration = 7})
+end
