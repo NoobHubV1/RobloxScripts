@@ -38,6 +38,9 @@ print([[
 	 autoitems / aitems [ON/OFF] | Auto get all items
 	 loopcrim [plr] | Auto make criminal player
 	 unloopcrim [player] | Stopped make criminal player
+	 respawn | Respawn Character and not save position
+	 opengate | Opened the gate
+	 car | Brings a car to you
 \\
 ]])
 local States = {}
@@ -962,7 +965,81 @@ function PlayerChatted(Message)
 		API:Notif("OK", 'Stopped auto make '..Player.DisplayName..' criminal.', Color3.fromRGB(255, 0, 0), 3)
 	end
   end
-  if NotCommand("unload") and NotCommand("prefix") and NotCommand("allcmds") and NotCommand('re') and NotCommand("refresh") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("inmate") and NotCommand("in") and NotCommand("guard") and NotCommand("gu") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("autoremoveff") and NotCommand("autorff") and NotCommand("killaura") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("damage") and NotCommand("dmg") and NotCommand("autodumpcars") and NotCommand("autoremovecars") and NotCommand('autonocars') and NotCommand("crim") and NotCommand("criminal") and NotCommand("makecrim") and NotCommand("antisit") and NotCommand("infjump") and NotCommand("bring") and NotCommand("void") and NotCommand("view") and NotCommand("unview") and NotCommand("copychat") and NotCommand("antifling") and NotCommand("goto") and NotCommand("to") and NotCommand("shotgun") and NotCommand("remington") and NotCommand("rem") and NotCommand("ak-47") and NotCommand('ak') and NotCommand("m9") and NotCommand("pistol") and NotCommand("hammer") and NotCommand("ham") and NotCommand("knife") and NotCommand("knive") and NotCommand("guns") and NotCommand("items") and NotCommand("autoguns") and NotCommand("aguns") and NotCommand("autoitems") and NotCommand("aitems") and NotCommand('loopcrim') and NotCommand("unloopcrim") then
+  if Command("respawn") then
+	if Player.Team == game.Teams.Guards then
+			if API:GuardsFull("b") then
+				workspace.Remote.TeamEvent:FireServer("Bright orange")
+				plr.CharacterAdded:Wait()
+				repeat task.wait()
+					workspace.Remote.TeamEvent:FireServer("Bright blue")
+				until plr.Team == game.Teams.Guards
+			else
+				workspace.Remote.TeamEvent:FireServer("Bright blue")
+			end
+		elseif Player.Team == game.Teams.Inmates then
+			workspace.Remote.TeamEvent:FireServer("Bright orange")
+		elseif Player.Team == game.Teams.Criminals then
+			if not API:GuardsFull("c") then
+				workspace.Remote.TeamEvent:FireServer("Bright blue")
+				plr.CharacterAdded:Wait()
+				repeat task.wait()
+					plr.Character.Head.CanCollide = false
+					workspace["Criminals Spawn"].SpawnLocation.CFrame = plr.Character.Head.CFrame
+				until plr.Team == game.Teams.Criminals
+				workspace["Criminals Spawn"].SpawnLocation.CFrame = saved
+			else
+				workspace.Remote.TeamEvent:FireServer("Bright orange")
+				plr.CharacterAdded:Wait()
+				repeat task.wait()
+					plr.Character.Head.CanCollide = false
+					workspace["Criminals Spawn"].SpawnLocation.CFrame = plr.Character.Head.CFrame
+				until plr.Team == game.Teams.Criminals
+				workspace["Criminals Spawn"].SpawnLocation.CFrame = saved
+			end
+		end
+  end
+  if Command("opengate") then
+	local OldPos = game:GetService("Players").LocalPlayer.Character:GetPrimaryPartCFrame()
+	repeat task.wait()
+                plr.Character.HumanoidRootPart.CFrame = game.Workspace.Prison_ITEMS.buttons["Prison Gate"]["Prison Gate"].CFrame
+                pcall(function()
+	                workspace.Remote.ItemHandler:InvokeServer(workspace.Prison_ITEMS.buttons["Prison Gate"]["Prison Gate"])
+                end)
+	until workspace.Prison_ITEMS.buttons["Prison Gate"]["Prison Gate"]
+	API:MoveTo(OldPos)
+  end
+  if Command("car") then
+	pcall(function()
+			local OldPos = game:GetService("Players").LocalPlayer.Character:GetPrimaryPartCFrame()
+			game:GetService("Players").LocalPlayer.Character:SetPrimaryPartCFrame(CFrame.new(-910, 95, 2157))
+			wait()
+			local car = nil
+			task.spawn(function()
+				car = game:GetService("Workspace").CarContainer.ChildAdded:Wait()
+			end)
+			repeat wait(.1)
+				local ohInstance1 = game:GetService("Workspace").Prison_ITEMS.buttons:GetChildren()[8]["Car Spawner"]
+				workspace.Remote.ItemHandler:InvokeServer(ohInstance1)
+			until car
+			repeat task.wait() until car:FindFirstChild("RWD") and car:FindFirstChild("Body") and car:FindFirstChild("Body"):FindFirstChild("VehicleSeat")
+			car.PrimaryPart = car.RWD
+			game:GetService("Players").LocalPlayer.Character:SetPrimaryPartCFrame(OldPos)
+			wait(.05)
+			local Done = false
+			car.Body.VehicleSeat:Sit(game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid"))
+			repeat 
+
+				game:GetService("RunService").RenderStepped:Wait()
+				car:SetPrimaryPartCFrame(OldPos)
+				game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame =CFrame.new(car.Body.VehicleSeat.Position)
+				car.Body.VehicleSeat:Sit(game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid"))
+				if game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid").Sit == true then
+					Done = true
+				end
+			until Done
+		end)
+  end
+  if NotCommand("unload") and NotCommand("prefix") and NotCommand("allcmds") and NotCommand('re') and NotCommand("refresh") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("inmate") and NotCommand("in") and NotCommand("guard") and NotCommand("gu") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("autoremoveff") and NotCommand("autorff") and NotCommand("killaura") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("damage") and NotCommand("dmg") and NotCommand("autodumpcars") and NotCommand("autoremovecars") and NotCommand('autonocars') and NotCommand("crim") and NotCommand("criminal") and NotCommand("makecrim") and NotCommand("antisit") and NotCommand("infjump") and NotCommand("bring") and NotCommand("void") and NotCommand("view") and NotCommand("unview") and NotCommand("copychat") and NotCommand("antifling") and NotCommand("goto") and NotCommand("to") and NotCommand("shotgun") and NotCommand("remington") and NotCommand("rem") and NotCommand("ak-47") and NotCommand('ak') and NotCommand("m9") and NotCommand("pistol") and NotCommand("hammer") and NotCommand("ham") and NotCommand("knife") and NotCommand("knive") and NotCommand("guns") and NotCommand("items") and NotCommand("autoguns") and NotCommand("aguns") and NotCommand("autoitems") and NotCommand("aitems") and NotCommand('loopcrim') and NotCommand("unloopcrim") and NotCommand("respawn") and NotCommand("opengate") and NotCommand("car") then
     API:Notif("Error", 'Not a valid command.', Color3.fromRGB(255, 0, 0), 3)
   end
 end
@@ -1040,6 +1117,9 @@ coroutine.wrap(function()
 				end
 			end
 		end
+		if not plr.Character:FindFirstChild("ForceField") and States.ff and Unloaded == false then
+			API:Refresh()
+		end
 	end
 end)()
 spawn(function()
@@ -1096,3 +1176,4 @@ Cooldown = false
 else
 	game:GetService("StarterGui"):SetCore("SendNotification",{Title = "Septex Admin",Text = "Septex admin is already executed or game not support",Duration = 7})
 end
+ 
