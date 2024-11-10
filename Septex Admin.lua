@@ -45,6 +45,7 @@ print([[
 	 forcefield / ff [on/off] | Activate forcefield
 	 speed / ws [number] | changed speed to (number)
 	 tp [player1] [player2] | Teleports (player1) To (player2)
+	 givekey | Gets a keycard
 \\
 ]])
 local States = {}
@@ -58,7 +59,7 @@ local States = {}
       States.AutoGuns = false
       States.AutoItems = false
       States.CopyChat = false
-      States.AntiFling = true
+      States.AntiFling = false
       States.ArrestAura = false
       States.LoopCrim = false
       States.ff = false
@@ -82,6 +83,7 @@ end
 Folder = Create("Folder",game,{Name = "Septex_Admin"})
 ScreenGui = Create("ScreenGui",plr.PlayerGui,{Name = "ScreenGui", ResetOnSpawn = false})
 TextBox = Create("TextBox",ScreenGui,{Name = "TextBox", BackgroundColor3 = Color3.fromRGB(172, 172, 172), BackgroundTransparency = 0.400, Position = UDim2.new(0.0255349874, 0, 0.800595582, 0), Size = UDim2.new(0, 278, 0, 33), Font = "SourceSans", PlaceholderText = "Press "..Prefix.." To Enter", Text = "", TextColor3 = Color3.fromRGB(255, 255, 255), TextSize = 23.000, Draggable = true, ClearTextOnFocus = false})
+TextButton = Create("TextButton",TextBox,{Name = "TextButton", BackgroundColor3 = Color3.fromRGB(0, 255, 255), BorderSizePixel = 0, Size = UDim2.new(0, 30, 0, 30), Font = Enum.Font.SourceSans, Text = "Not Cooldown", Visible = true, TextColor3 = Color3.fromRGB(255, 255, 255), TextSize = 15.000})
 function API:Notif(name, content, color, time)
   lib:MakeNotification({
       Name = name,
@@ -92,9 +94,6 @@ function API:Notif(name, content, color, time)
 end
 function API:swait()
 	game:GetService("RunService").Stepped:Wait()
-end
-function API:sconnect(func)
-	game:GetService("RunService").Stepped:Connect(func)
 end
 function API:Destroy(parent)
   parent:Destroy()
@@ -165,10 +164,7 @@ function API:Loop(Times, calling)
 end
 function API:MoveTo(Cframe)
 	Cframe = API:ConvertPosition(Cframe)
-	local Amount = 7
-	if Player.PlayerGui['Home']['hud']['Topbar']['titleBar'].Title.Text:lower() == "lights out" or Player.PlayerGui.Home.hud.Topbar.titleBar.Title.Text:lower() == "lightsout" then
-		Amount = 13
-	end
+	local Amount = 5
 	for i = 1, Amount do
 		API:UnSit()
 		Player.Character:WaitForChild("HumanoidRootPart").CFrame = Cframe
@@ -318,7 +314,9 @@ function API:GuardsFull(a)
   end
 end
 function API:UnSit()
-  game.Players.LocalPlayer.Character.Humanoid.Sit = false
+  if plr.Character.Humanoid.Sit then
+	game.Players.LocalPlayer.Character.Humanoid.Sit = false
+  end
 end
 function API:Refresh()
   API:ChangeTeam(plr.Team)
@@ -640,15 +638,15 @@ function API:BadArea(player)
 	end
 	return true
 end
-function API:Arrest(Tar)
-	local Attempts = 0
+function API:MKILL(PLR)
+	local OldPos = API:GetPosition()
 	repeat task.wait()
-		Attempts = Attempts + 1
-		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Tar.Character.HumanoidRootPart.CFrame
-		task.spawn(function()
-			workspace.Remote.arrest:InvokeServer(Tar.Character.PrimaryPart)
+		plr.Character.HumanoidRootPart.CFrame = PLR.Character.HumanoidRootPart.CFrame
+		pcall(function()
+			game.ReplicatedStorage.meleeEvent:FireServer(PLR)
 		end)
-	until Tar.Character.Head["HandcuffedGui"] or Attempts > 200
+	until PLR.Character.Humanoid.Health > 0 or PLR.Character:FindFirstChild("ForceField")
+	API:MoveTo(OldPos)
 end
 function PlayerChatted(Message)
   if Unloaded then return end
@@ -664,6 +662,7 @@ function PlayerChatted(Message)
     API:Destroy(game:FindFirstChild("Septex_Admin"))
     workspace.CurrentCamera.CameraSubject = plr.Character
     Unloaded = true
+    Cooldown = false
     API:Notif("Unload", 'Script is unloaded', Color3.fromRGB(55, 155, 255), 5)
   end
   if Command("prefix") then
@@ -1072,7 +1071,53 @@ function PlayerChatted(Message)
 		API:Notif("OK", 'Teleports '..player1.DisplayName..' to '..player2.DisplayName, Color3.fromRGB(0, 255, 0), 3)
 	end
   end
-  if NotCommand("unload") and NotCommand("prefix") and NotCommand("allcmds") and NotCommand('re') and NotCommand("refresh") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("inmate") and NotCommand("in") and NotCommand("guard") and NotCommand("gu") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("autoremoveff") and NotCommand("autorff") and NotCommand("killaura") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("damage") and NotCommand("dmg") and NotCommand("autodumpcars") and NotCommand("autoremovecars") and NotCommand('autonocars') and NotCommand("crim") and NotCommand("criminal") and NotCommand("makecrim") and NotCommand("antisit") and NotCommand("infjump") and NotCommand("bring") and NotCommand("void") and NotCommand("view") and NotCommand("unview") and NotCommand("copychat") and NotCommand("antifling") and NotCommand("goto") and NotCommand("to") and NotCommand("shotgun") and NotCommand("remington") and NotCommand("rem") and NotCommand("ak-47") and NotCommand('ak') and NotCommand("m9") and NotCommand("pistol") and NotCommand("m4a1") and NotCommand('m4') and NotCommand("hammer") and NotCommand("ham") and NotCommand("knife") and NotCommand("knive") and NotCommand("guns") and NotCommand("items") and NotCommand("autoguns") and NotCommand("aguns") and NotCommand("autoitems") and NotCommand("aitems") and NotCommand('loopcrim') and NotCommand("unloopcrim") and NotCommand("respawn") and NotCommand("opengate") and NotCommand("car") and NotCommand("forcefield") and NotCommand("ff") and NotCommand("speed") and NotCommand("ws") and NotCommand("tp") then
+  if Command('givekey') or Command("keycard") or Command("key") then
+	local OldT = Player.Team
+	if plr.Character:FindFirstChild("Key card") or plr.Backpack:FindFirstChild("Key card") then
+		return API:Notif("Error", "You already have a keycard!", Color3.fromRGB(255, 0, 0), 3)
+	elseif API:GuardsFull("c") then
+		API:Notif("Error", 'Guards team is full!', Color3.fromRGB(255, 0, 0), 3)
+		return
+	elseif workspace.Prison_ITEMS.single:FindFirstChild("Key card") then
+		repeat task.wait()
+			local a =pcall(function()
+				local Key = workspace.Prison_ITEMS.single["Key card"]
+				game.Workspace.Remote["ItemHandler"]:InvokeServer({
+					Position = Player.Character.Head.Position,
+					Parent = Key
+				})
+			end)
+		until plr.Backpack:FindFirstChild("Key card")
+		API:Notif("OK", 'Obtain keycard', Color3.fromRGB(0, 255, 0), 3)
+	elseif not game.Players.LocalPlayer.Backpack:FindFirstChild("Key card") or not workspace.Prison_ITEMS.single:FindFirstChild("Key card") or not API:GuardsFull("c") then
+		API:ChangeTeam(game.Teams.Guards)
+		repeat wait(.3)
+			Player.Character:FindFirstChildOfClass("Humanoid"):ChangeState(15)
+			if States.AutoRespawn then
+				States.AutoRespawn = false
+			end
+			wait(.1)
+			API:Refresh()
+		until game:GetService("Workspace")["Prison_ITEMS"].single:FindFirstChild("Key card")
+		if game:GetService("Workspace")["Prison_ITEMS"].single:FindFirstChild("Key card") then
+			if Player.Team ~= OldT then
+				API:ChangeTeam(OldT)
+				repeat task.wait() until Player.Team == OldT
+			end
+			wait()
+			repeat task.wait()
+				local a =pcall(function()
+					local Key = workspace.Prison_ITEMS.single["Key card"]
+					game.Workspace.Remote["ItemHandler"]:InvokeServer({
+						Position = Player.Character.Head.Position,
+						Parent = Key
+					})
+				end)
+			until plr.Backpack:FindFirstChild("Key card")
+		end
+	end
+  end
+  if NotCommand("unload") and NotCommand("prefix") and NotCommand("allcmds") and NotCommand('re') and NotCommand("refresh") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("inmate") and NotCommand("in") and NotCommand("guard") and NotCommand("gu") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("autoremoveff") and NotCommand("autorff") and NotCommand("killaura") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("damage") and NotCommand("dmg") and NotCommand("autodumpcars") and NotCommand("autoremovecars") and NotCommand('autonocars') and NotCommand("crim") and NotCommand("criminal") and NotCommand("makecrim") and NotCommand("antisit") and NotCommand("infjump") and NotCommand("bring") and NotCommand("void") and NotCommand("view") and NotCommand("unview") and NotCommand("copychat") and NotCommand("antifling") and NotCommand("goto") and NotCommand("to") and NotCommand("shotgun") and NotCommand("remington") and NotCommand("rem") and NotCommand("ak-47") and NotCommand('ak') and NotCommand("m9") and NotCommand("pistol") and NotCommand("m4a1") and NotCommand('m4') and NotCommand("hammer") and NotCommand("ham") and NotCommand("knife") and NotCommand("knive") and NotCommand("guns") and NotCommand("items") and NotCommand("autoguns") and NotCommand("aguns") and NotCommand("autoitems") and NotCommand("aitems") and NotCommand('loopcrim') and NotCommand("unloopcrim") and NotCommand("respawn") and NotCommand("opengate") and NotCommand("car") and NotCommand("forcefield") and NotCommand("ff") and NotCommand("speed") and NotCommand("ws") and NotCommand("tp") and NotCommand("givekey") and NotCommand("keycard") and NotCommand("key") then
     API:Notif("Error", 'Not a valid command.', Color3.fromRGB(255, 0, 0), 3)
   end
 end
@@ -1083,7 +1128,7 @@ game.Players.LocalPlayer.Chatted:Connect(function(chat)
 			Cooldown = true
 			PlayerChatted(chat)
 			wait(.5)
-			for i = 1,6 do task.wait()
+			for i = 1,4 do task.wait()
 				Cooldown = false
 			end
 		end
@@ -1124,6 +1169,9 @@ TextBox.FocusLost:Connect(function(EnterKey)
       end
     end
 end)
+TextButton.MouseButton1Click:Connect(function()
+	Cooldown = false
+end)
 coroutine.wrap(function()
 	game:FindService("UserInputService").JumpRequest:Connect(function()
 		if States.InfJump and Unloaded == false then
@@ -1156,7 +1204,17 @@ coroutine.wrap(function()
 	end
 end)()
 spawn(function()
-	while wait(.65) do -- slow loop
+	while wait(.3) do -- medium loop
+		if Cooldown then
+			TextButton.Visible = true
+		end
+		if not Cooldown then
+			TextButton.Visible = false
+		end
+	end
+end)
+spawn(function()
+	while wait(.6) do -- slow loop
 		for i,v in pairs(API.LoopCrim) do
 			if v and game.Players:FindFirstChild(v) then
 				local Target = game.Players:FindFirstChild(v)
