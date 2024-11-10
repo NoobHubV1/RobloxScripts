@@ -18,6 +18,26 @@ print([[
 	 damage / dmg [plr,all,team] [number] | damages a player(s)
 	 autodumpcars / autoremovecars / autonocars [on/off] | Auto Dump Cars if command ";bring"
 	 criminal / crim / makecrim [plr] | Make crim player
+	 antisit [on/off] | Activate antisit
+	 infjump [ON/OFF] | Infinite Jumps
+	 bring [PLAYER] | Bringing player
+	 void [plr] | Teleports player to void
+	 view [player] | Viewing player
+	 unview | Stopped viewing player
+	 copychat [on/off] | Copying chat everyone
+	 antifling [ON/OFF] | Activate antifling
+	 goto / to [PLAYER] | Teleports to player
+	 shotgun / remington / rem | Get remington 870
+	 ak-47 / ak | Get ak-47
+	 m9 / pistol | Get m9
+	 hammer / ham | Get hammer
+	 knife / knive | Get crude knife
+	 guns | Get all guns
+	 items | Get all items
+	 autoguns / aguns [on/off] | Auto get all guns
+	 autoitems / aitems [ON/OFF] | Auto get all items
+	 loopcrim [plr] | Auto make criminal player
+	 unloopcrim [player] | Stopped make criminal player
 \\
 ]])
 local States = {}
@@ -26,16 +46,23 @@ local States = {}
       States.KillAura = false
       States.OldItemMethod = false
       States.AutoDumpCars = false
+      States.AntiSit = false
+      States.InfJump = false
+      States.AutoGuns = false
+      States.AutoItems = false
+      States.CopyChat = false
+      States.AntiFling = true
+      States.ArrestAura = false
+      States.LoopCrim = false
 local API = {}
       API.Whitelisted = {}
+      API.LoopCrim = {}
 local lib = loadstring(Game:HttpGet('https://raw.githubusercontent.com/NoobHubV1/NoobHubV1/main/Notification%20Lib.lua'))()
 local plr, Player = game.Players.LocalPlayer, game.Players.LocalPlayer
 local Unloaded = false
 local Prefix = ";"
 local saved = workspace["Criminals Spawn"].SpawnLocation.CFrame
 local bgp = game:GetService("MarketplaceService"):UserOwnsGamePassAsync(plr.UserId, 96651)
-local CommandsAmount = 0
-CommandsAmount = CommandsAmount + 17
 function Create(class,parent,props)
   local new = Instance.new(class)
   for i,v in next, props do
@@ -57,6 +84,9 @@ function API:Notif(name, content, color, time)
 end
 function API:swait()
 	game:GetService("RunService").Stepped:Wait()
+end
+function API:sconnect(func)
+	game:GetService("RunService").Stepped:Connect(func)
 end
 function API:Destroy(parent)
   parent:Destroy()
@@ -339,16 +369,19 @@ end
 function API:GetGun(Item, Ignore)
 	if States.OldItemMethod == false and not Unloaded then
 		task.spawn(function()
-			workspace:FindFirstChild("Remote")['ItemHandler']:InvokeServer({
-				Position = Player.Character.Head.Position,
-				Parent = workspace.Prison_ITEMS.giver:FindFirstChild(Item, true)
-			})
+			if not plr.Character:FindFirstChild(Item) or not plr.Backpack:FindFirstChild(Item) then
+				workspace:FindFirstChild("Remote")['ItemHandler']:InvokeServer({
+					Position = Player.Character.Head.Position,
+					Parent = workspace.Prison_ITEMS.giver:FindFirstChild(Item, true)
+				})
+			end
 		end)
 	elseif States.OldItemMethod and not Unloaded then
 		if not plr.Character:FindFirstChild(Item) or not plr.Backpack:FindFirstChild(Item) then
 			local LastPosition = API:GetPosition()
-			game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Workspace.Prison_ITEMS.giver:FindFirstChild(Item).ITEMPICKUP.CFrame
 			repeat task.wait()
+				API:UnSit()
+				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Workspace.Prison_ITEMS.giver:FindFirstChild(Item).ITEMPICKUP.CFrame
 				coroutine.wrap(function()
 					workspace.Remote.ItemHandler:InvokeServer(workspace.Prison_ITEMS.giver:FindFirstChild(Item).ITEMPICKUP)
 				end)()
@@ -368,8 +401,9 @@ function API:GetSingle(Item, Ignore)
 	elseif States.OldItemMethod and not Unloaded then
 		if not plr.Character:FindFirstChild(Item) or not plr.Backpack:FindFirstChild(Item) then
 			local LastPosition = API:GetPosition()
-			game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Workspace.Prison_ITEMS.single:FindFirstChild(Item).ITEMPICKUP.CFrame
 			repeat task.wait()
+				API:UnSit()
+				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Workspace.Prison_ITEMS.giver:FindFirstChild(Item).ITEMPICKUP.CFrame
 				coroutine.wrap(function()
 					workspace.Remote.ItemHandler:InvokeServer(workspace.Prison_ITEMS.single:FindFirstChild(Item).ITEMPICKUP)
 				end)()
@@ -472,41 +506,23 @@ function IsTeamCommandCheck(String)
 end
 function API:AllGuns()
 	if bgp then
-		repeat wait()
-			API:GetGun("M4A1")
-		until plr.Character:FindFirstChild("M4A1") or plr.Backpack:FindFirstChild("M4A1")
+		API:GetGun("M4A1")
 	end
-	repeat wait()
-		API:GetGun("Remington 870")
-	until plr.Character:FindFirstChild("Remington 870") or plr.Backpack:FindFirstChild("Remington 870")
-	repeat wait()
-		API:GetGun('AK-47')
-	until plr.Character:FindFirstChild("AK-47") or plr.Backpack:FindFirstChild("AK-47")
-	repeat wait()
-		API:GetGun("M9")
-	until plr.Character:FindFirstChild("M9") or plr.Backpack:FindFirstChild("M9")
+	API:GetGun("Remington 870")
+	API:GetGun('AK-47')
+	API:GetGun("M9")
 end
 function API:AllItems()
 	if bgp then
-		repeat wait()
-			API:GetGun("M4A1")
-		until plr.Character:FindFirstChild("M4A1") or plr.Backpack:FindFirstChild("M4A1")
+		API:GetGun("M4A1")
 	end
-	repeat wait()
-		API:GetGun("Remington 870")
-	until plr.Character:FindFirstChild("Remington 870") or plr.Backpack:FindFirstChild("Remington 870")
-	repeat wait()
-		API:GetGun('AK-47')
-	until plr.Character:FindFirstChild("AK-47") or plr.Backpack:FindFirstChild("AK-47")
-	repeat wait()
-		API:GetGun("M9")
-	until plr.Character:FindFirstChild("M9") or plr.Backpack:FindFirstChild("M9")
-	repeat wait()
-		API:GetSingle("Hammer")
-	until plr.Character:FindFirstChild("Hammer") or plr.Backpack:FindFirstChild("Hammer")
-	repeat wait()
-		API:GetSingle("Crude Knife")
-	until plr.Character:FindFirstChild("Crude Knife") or plr.Backpack:FindFirstChild("Crude Knife")
+	API:GetGun("Remington 870")
+	API:GetGun("AK-47")
+	API:GetGun("M9")
+	API:GetSingle("Hammer")
+	API:GetSingle("Crude Knife")
+	Instance.new("HopperBin",plr.Backpack).BinType = 3
+	Instance.new("HopperBin",plr.Backpack).BinType = 4
 end
 function API:bring(Target,TeleportTo,MoreTP,DontBreakCar)
 	if not IsBringing and Target and Target.Character:FindFirstChildOfClass("Humanoid") and Target.Character:FindFirstChildOfClass("Humanoid").Health>0 and Target.Character:FindFirstChildOfClass("Humanoid").Sit == false then
@@ -599,6 +615,33 @@ function API:bring(Target,TeleportTo,MoreTP,DontBreakCar)
 		API:Notif("Error", 'Player has died or is sitting or an unknown error.', Color3.fromRGB(255, 0, 0), 3)
 	end
 end
+function API:BadArea(Player)
+	local mod = require(game.ReplicatedStorage["Modules_client"]["RegionModule_client"])
+	local a = pcall(function()
+		if mod.findRegion(Player.Character) then
+			mod = mod.findRegion(Player.Character)["Name"]
+		end
+	end)
+	if not a then
+		return
+	end
+	for i, v in pairs(game:GetService("ReplicatedStorage").PermittedRegions:GetChildren()) do
+		if v and mod == v.Value then
+			return false
+		end
+	end
+	return true
+end
+function API:Arrest(Tar)
+	local Attempts = 0
+	repeat task.wait()
+		Attempts = Attempts + 1
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Tar.Character.HumanoidRootPart.CFrame
+		task.spawn(function()
+			workspace.Remote.arrest:InvokeServer(Tar.Character.PrimaryPart)
+		end)
+	until Tar.Character.Head["HandcuffedGui"] or Attempts > 200
+end
 function PlayerChatted(Message)
   if Unloaded then return end
   local args = Message:split(" ")
@@ -623,9 +666,6 @@ function PlayerChatted(Message)
       TextBox.PlaceholderText = "Press "..NewPrefix.." To Enter"
       API:Notif("OK", 'prefix set to '..NewPrefix, Color3.fromRGB(0, 255, 0), 3)
     end
-  end
-  if Command("allcmds") then
-    API:Notif("Cmds", 'Septex Admin has '..tostring(CommandsAmount)..' commands.', Color3.fromRGB(0, 0, 205), 3)
   end
   if Command("re") or Command("refresh") then
     API:Refresh()
@@ -776,24 +816,181 @@ function PlayerChatted(Message)
 		end
 	end
   end
-  if NotCommand("unload") and NotCommand("prefix") and NotCommand("allcmds") and NotCommand('re') and NotCommand("refresh") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("inmate") and NotCommand("in") and NotCommand("guard") and NotCommand("gu") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("autoremoveff") and NotCommand("autorff") and NotCommand("killaura") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("damage") and NotCommand("dmg") and NotCommand("autodumpcars") and NotCommand("autoremovecars") and NotCommand('autonocars') and NotCommand("crim") and NotCommand("criminal") and NotCommand("makecrim") then
+  if Command("antisit") then
+	ChangeState(args[2],"AntiSit")
+  end
+  if Command("infjump") then
+	ChangeState(args[2],"InfJump")
+  end
+  if Command("bring") then
+	local Target = API:FindPlayer(args[2])
+	if Target then
+		API:bring(Target)
+		API:Notif("OK", 'Brought '..Target.DisplayName..' To You', Color3.fromRGB(0, 255, 0), 3)
+	end
+  end
+  if Command("void") then
+	local Target = API:FindPlayer(args[2])
+	if Target then
+		API:bring(Target, CFrame.new(7^7, 7^7, 7^7))
+		API:Notif("OK", 'Brought '..Target.DisplayName..' To Void', Color3.fromRGB(0, 255, 0), 3)
+	end
+  end
+  if Command("view") then
+	local Player = API:FindPlayer(args[2])
+	if Player then
+		if API.ViewingPlayer  then
+			API.ViewingPlayer = nil
+			wait(.2)
+		end
+		API.ViewingPlayer = Player
+		API:Notif("OK", 'Viewing '..Player.DisplayName, Color3.fromRGB(0, 255, 0), 3)
+		task.spawn(function()
+			while wait() do
+				pcall(function()
+					workspace.CurrentCamera.CameraSubject = Player.Character:FindFirstChildOfClass("Humanoid")
+				end)
+				if not Player or not API.ViewingPlayer or Unloaded then
+					workspace.CurrentCamera.CameraSubject = game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+					break
+				end
+			end
+		end)
+	end
+  end
+  if Command("unview") then
+	API.ViewingPlayer = nil
+	wait()
+	workspace.CurrentCamera.CameraSubject = plr.Character
+	API:Notif("OK", 'Stopped viewing player', Color3.fromRGB(0, 255, 0), 3)
+  end
+  if Command("copychat") then
+	ChangeState(args[2],"CopyChat")
+  end
+  if Command("antifling") then
+	ChangeState(args[2],"AntiFling")
+  end
+  if Command("goto") or Command("to") then
+	local PLR = API:FindPlayer(args[2])
+	local Position = API:GetPosition(PLR)
+	if PLR and Position then
+		API:MoveTo(Position)
+	end
+  end
+  if Command("shotgun") or Command("remington") or Command('rem') then
+	API:GetGun("Remington 870")
+	API:Notif("OK", 'Obtain remington 870', Color3.fromRGB(0, 255, 0), 3)
+  end
+  if Command("ak-47") or Command('ak') then
+	API:GetGun("AK-47")
+	API:Notif("OK", 'Obtain ak-47', Color3.fromRGB(0, 255, 0), 3)
+  end
+  if Command("m9") or Command("pistol") then
+	API:GetGun("M9")
+	API:Notif("OK", 'Obtain m9', Color3.fromRGB(0, 255, 0), 3)
+  end
+  if Command("hammer") or Command("ham") then
+	API:GetSingle("Hammer")
+	API:Notif("OK", 'Obtain hammer', Color3.fromRGB(0, 255, 0), 3)
+  end
+  if Command("knife") or Command("knive") then
+	API:GetGun("Crude Knife")
+	API:Notif("OK", 'Obtain crude knife', Color3.fromRGB(0, 255, 0), 3)
+  end
+  if Command("guns") then
+	API:AllGuns()
+	API:Notif("OK", 'Obtain all guns', Color3.fromRGB(0, 255, 0), 3)
+  end
+  if Command("items") then
+	API:AllItems()
+	API:Notif("OK", 'Obtain all items', Color3.fromRGB(0, 255, 0), 3)
+  end
+  if Command("autoguns") or Command("aguns") then
+	ChangeState(args[2],"AutoGuns")
+  end
+  if Command("autoitems") or Command("aitems") then
+	ChangeState(args[2],'AutoItems')
+  end
+  if Command("loopcrim") then
+	if args[2] and args[2] ~= plr then
+		local Player = API:FindPlayer(args[2])
+		if not table.find(API.LoopCrim, Player.Name) then
+			table.insert(API.LoopCrim, Player.Name)
+			API:Notif("OK", 'Auto make '..Player.DisplayName..' criminal.', Color3.fromRGB(0, 255, 0), 3)
+		else
+			API:Notif("OK", 'Player is already auto criminal.', Color3.fromRGB(255, 0, 0), 3)
+		end
+	else
+		States.LoopCrim = true
+		API:Notif("OK", 'Auto make '..Player.DisplayName..' criminal.', Color3.fromRGB(0, 255, 0), 3)
+		plr.CharacterAdded:Connect(function()
+			if States.LoopCrim and Unloaded == false then
+				if plr.Team == game.Teams.Inmates then
+					repeat task.wait()
+						plr.Character.Head.CanCollide = false
+						workspace["Criminals Spawn"].SpawnLocation.CFrame = plr.Character.Head.CFrame
+					until plr.Team == game.Teams.Criminals
+					workspace["Criminals Spawn"].SpawnLocation.CFrame = saved
+				elseif plr.Team == game.Teams.Guards then
+					pcall(function()
+					repeat task.wait() until game:GetService("Players").LocalPlayer.Character
+						game:GetService("Players").LocalPlayer.Character:WaitForChild("HumanoidRootPart")
+					
+						API:WaitForRespawn(Pos or API:GetPosition(),NoForce)
+					end)
+					repeat task.wait()
+						plr.Character.Head.CanCollide = false
+						workspace["Criminals Spawn"].SpawnLocation.CFrame = plr.Character.Head.CFrame
+					until plr.Team == game.Teams.Criminals
+					workspace["Criminals Spawn"].SpawnLocation.CFrame = saved
+				end
+			end
+		end)
+	end
+  end
+  if Command("unloopcrim") then
+	if args[2] and args[2] ~= plr then
+		local Player = API:FindPlayer(args[2])
+		if table.find(API.LoopCrim, Player.Name) then
+			table.remove(API.LoopCrim,table.find(API.LoopCrim, Player.Name))
+			API:Notif("OK", 'Stopped auto make '..Player.DisplayName..' criminal.', Color3.fromRGB(0, 255, 0), 3)
+		else
+			API:Notif("OK", 'Player is not already auto criminal.', Color3.fromRGB(255, 0, 0), 3)
+		end
+	else
+		States.LoopCrim = false
+		API:Notif("OK", 'Stopped auto make '..Player.DisplayName..' criminal.', Color3.fromRGB(255, 0, 0), 3)
+	end
+  end
+  if NotCommand("unload") and NotCommand("prefix") and NotCommand("allcmds") and NotCommand('re') and NotCommand("refresh") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("inmate") and NotCommand("in") and NotCommand("guard") and NotCommand("gu") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("autoremoveff") and NotCommand("autorff") and NotCommand("killaura") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("damage") and NotCommand("dmg") and NotCommand("autodumpcars") and NotCommand("autoremovecars") and NotCommand('autonocars') and NotCommand("crim") and NotCommand("criminal") and NotCommand("makecrim") and NotCommand("antisit") and NotCommand("infjump") and NotCommand("bring") and NotCommand("void") and NotCommand("view") and NotCommand("unview") and NotCommand("copychat") and NotCommand("antifling") and NotCommand("goto") and NotCommand("to") and NotCommand("shotgun") and NotCommand("remington") and NotCommand("rem") and NotCommand("ak-47") and NotCommand('ak') and NotCommand("m9") and NotCommand("pistol") and NotCommand("hammer") and NotCommand("ham") and NotCommand("knife") and NotCommand("knive") and NotCommand("guns") and NotCommand("items") and NotCommand("autoguns") and NotCommand("aguns") and NotCommand("autoitems") and NotCommand("aitems") and NotCommand('loopcrim') and NotCommand("unloopcrim") then
     API:Notif("Error", 'Not a valid command.', Color3.fromRGB(255, 0, 0), 3)
   end
 end
 local Cooldown = true
 game.Players.LocalPlayer.Chatted:Connect(function(chat)
 	if not Cooldown then
-		Cooldown = true
-		wait(.1)
-		PlayerChatted(chat)
+		for i = 1,5 do task.wait()
+			Cooldown = true
+		end
+		if chat:sub(1,#Prefix) == Prefix then
+			PlayerChatted(chat)
+		end
 		wait(.5)
-		for i = 1,3 do
+		for i = 1,5 do task.wait()
 			Cooldown = false
 		end
 	end
 end)
 plr.CharacterAdded:Connect(function(NewChar)
     if Unloaded then return end
+    if States.AutoGuns then
+	wait(.35)
+	API:AllGuns()
+    end
+    if States.AutoItems then
+	wait(.35)
+	API:AllItems()
+    end
     repeat API:swait() until NewChar
     NewChar:WaitForChild('Head')
     NewChar:WaitForChild("HumanoidRootPart")
@@ -818,6 +1015,80 @@ TextBox.FocusLost:Connect(function(EnterKey)
         TextBox.Text = ""
       end
     end
+end)
+coroutine.wrap(function()
+	game:FindService("UserInputService").JumpRequest:Connect(function()
+		if States.InfJump and Unloaded == false then
+			game:FindService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState("Jumping")
+		end
+	end)
+	-- main loop
+	while wait() do -- fast loop
+		if plr.Character.Humanoid.Sit and States.AntiSit and not Unloaded then
+			plr.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+		end
+		if States.ArrestAura and Unloaded == false then
+			for i,v in pairs(game.Players:GetPlayers()) do
+				if v ~= plr and not table.find(API.Whitelisted,v) then
+					if v.Team == game.Teams.Criminals or (API:BadArea(v) and v.Team == game.Teams.Inmates) then
+						if (v.Character.HumanoidRootPart.Position-plr.Character.HumanoidRootPart.Position).magnitude > 30 and not v.Character.Humanoid.Health > 0 then
+							for i = 1,2 do
+								workspace.Remote.arrest:InvokeServer(v.Character.PrimaryPart)
+							end
+						end
+					end
+				end
+			end
+		end
+	end
+end)()
+spawn(function()
+	while wait(.65) do -- slow loop
+		for i,v in pairs(API.LoopCrim) do
+			if v and game.Players:FindFirstChild(v) then
+				local Target = game.Players:FindFirstChild(v)
+				if Target.Team ~= game.Teams.Criminals then
+					API:bring(Target, saved)
+				end
+			end
+		end
+	end
+end)
+function CopyChat(Target)
+	Target.Chatted:Connect(function(msg)
+		if States.CopyChat and not Unloaded then
+			API:Chat("["..Target.DisplayName.."]: "..msg)
+		end
+	end)
+end
+function NoCollide(PLR)
+	 if States.AntiFling and not Unloaded and PLR.Character then
+		 for _,x in pairs(PLR.Character:GetDescendants()) do
+			 if x:IsA("BasePart") and not Unloaded and States.AntiFling then
+				 x.CanCollide = false
+			 end
+		 end
+	 end
+ end
+for i,v in pairs(game.Players:GetPlayers()) do
+	if v ~= plr then
+		CopyChat(v)
+		game:FindService("RunService").Stepped:Connect(function()
+			NoCollide(v)
+		end)
+	end
+end
+game.Players.PlayerAdded:Connect(function(Add)
+	CopyChat(Add)
+	game:FindService("RunService").Stepped:Connect(function()
+		NoCollide(Add)
+	end)
+end)
+game.Players.PlayerRemoving:Connect(function(Remove)
+	CopyChat(Remove)
+	game:FindService("RunService").Stepped:Connect(function()
+		NoCollide(Remove)
+	end)
 end)
 API:Notif("Loads", 'Loaded Admin Commands.', Color3.fromRGB(255, 0, 0), 10)
 API:Refresh()
