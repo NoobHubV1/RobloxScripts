@@ -45,7 +45,7 @@ print([[
 	 forcefield / ff [on/off] | Activate forcefield
 	 speed / ws [number] | changed speed to (number)
 	 tp [player1] [player2] | Teleports (player1) To (player2)
-	 givekey | Gets a keycard
+	 givekey / key / keycard | Gets a keycard
 \\
 ]])
 local States = {}
