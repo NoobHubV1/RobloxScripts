@@ -30,6 +30,7 @@ print([[
 	 shotgun / remington / rem | Get remington 870
 	 ak-47 / ak | Get ak-47
 	 m9 / pistol | Get m9
+	 m4a1 / m4 | Get m4a1
 	 hammer / ham | Get hammer
 	 knife / knive | Get crude knife
 	 guns | Get all guns
@@ -41,6 +42,9 @@ print([[
 	 respawn | Respawn Character and not save position
 	 opengate | Opened the gate
 	 car | Brings a car to you
+	 forcefield / ff [on/off] | Activate forcefield
+	 speed / ws [number] | changed speed to (number)
+	 tp [player1] [player2] | Teleports (player1) To (player2)
 \\
 ]])
 local States = {}
@@ -57,6 +61,7 @@ local States = {}
       States.AntiFling = true
       States.ArrestAura = false
       States.LoopCrim = false
+      States.ff = false
 local API = {}
       API.Whitelisted = {}
       API.LoopCrim = {}
@@ -618,11 +623,11 @@ function API:bring(Target,TeleportTo,MoreTP,DontBreakCar)
 		API:Notif("Error", 'Player has died or is sitting or an unknown error.', Color3.fromRGB(255, 0, 0), 3)
 	end
 end
-function API:BadArea(Player)
+function API:BadArea(player)
 	local mod = require(game.ReplicatedStorage["Modules_client"]["RegionModule_client"])
 	local a = pcall(function()
-		if mod.findRegion(Player.Character) then
-			mod = mod.findRegion(Player.Character)["Name"]
+		if mod.findRegion(player.Character) then
+			mod = mod.findRegion(player.Character)["Name"]
 		end
 	end)
 	if not a then
@@ -892,6 +897,14 @@ function PlayerChatted(Message)
 	API:GetGun("M9")
 	API:Notif("OK", 'Obtain m9', Color3.fromRGB(0, 255, 0), 3)
   end
+  if Command("m4a1") or Command("m4") then
+	if not bgp then
+		API:Notif("Error", 'Not Gamepass!', Color3.fromRGB(255, 0, 0), 3)
+	else
+		API:GetGun("M4A1")
+		API:Notif("OK", 'Obtain m4a1', Color3.fromRGB(0, 255, 0), 3)
+	end
+  end
   if Command("hammer") or Command("ham") then
 	API:GetSingle("Hammer")
 	API:Notif("OK", 'Obtain hammer', Color3.fromRGB(0, 255, 0), 3)
@@ -1024,7 +1037,7 @@ function PlayerChatted(Message)
 			repeat task.wait() until car:FindFirstChild("RWD") and car:FindFirstChild("Body") and car:FindFirstChild("Body"):FindFirstChild("VehicleSeat")
 			car.PrimaryPart = car.RWD
 			game:GetService("Players").LocalPlayer.Character:SetPrimaryPartCFrame(OldPos)
-			wait(.05)
+			wait(.1)
 			local Done = false
 			car.Body.VehicleSeat:Sit(game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid"))
 			repeat 
@@ -1039,22 +1052,40 @@ function PlayerChatted(Message)
 			until Done
 		end)
   end
-  if NotCommand("unload") and NotCommand("prefix") and NotCommand("allcmds") and NotCommand('re') and NotCommand("refresh") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("inmate") and NotCommand("in") and NotCommand("guard") and NotCommand("gu") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("autoremoveff") and NotCommand("autorff") and NotCommand("killaura") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("damage") and NotCommand("dmg") and NotCommand("autodumpcars") and NotCommand("autoremovecars") and NotCommand('autonocars') and NotCommand("crim") and NotCommand("criminal") and NotCommand("makecrim") and NotCommand("antisit") and NotCommand("infjump") and NotCommand("bring") and NotCommand("void") and NotCommand("view") and NotCommand("unview") and NotCommand("copychat") and NotCommand("antifling") and NotCommand("goto") and NotCommand("to") and NotCommand("shotgun") and NotCommand("remington") and NotCommand("rem") and NotCommand("ak-47") and NotCommand('ak') and NotCommand("m9") and NotCommand("pistol") and NotCommand("hammer") and NotCommand("ham") and NotCommand("knife") and NotCommand("knive") and NotCommand("guns") and NotCommand("items") and NotCommand("autoguns") and NotCommand("aguns") and NotCommand("autoitems") and NotCommand("aitems") and NotCommand('loopcrim') and NotCommand("unloopcrim") and NotCommand("respawn") and NotCommand("opengate") and NotCommand("car") then
+  if Command("forcefield") or Command("ff") then
+	ChangeState(args[2],"ff")
+  end
+  if Command("speed") or Command("ws") then
+	local number = tonumber(args[2])
+	if number ~= nil then
+		plr.Character.Humanoid.WalkSpeed = number
+		API:Notif("OK", 'Changed speed to '..number, Color3.fromRGB(0, 255, 0), 3)
+	else
+		API:Notif("Error", 'Not Speed', Color3.fromRGB(255, 0, 0), 3)
+	end
+  end
+  if Command("tp") then
+	local player1 = API:FindPlayer(args[2])
+	local player2 = API:FindPlayer(args[3])
+	if player1 and player2 then
+		API:bring(player1, player2.Character.HumanoidRootPart.CFrame)
+		API:Notif("OK", 'Teleports '..player1.DisplayName..' to '..player2.DisplayName, Color3.fromRGB(0, 255, 0), 3)
+	end
+  end
+  if NotCommand("unload") and NotCommand("prefix") and NotCommand("allcmds") and NotCommand('re') and NotCommand("refresh") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("inmate") and NotCommand("in") and NotCommand("guard") and NotCommand("gu") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("autoremoveff") and NotCommand("autorff") and NotCommand("killaura") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("damage") and NotCommand("dmg") and NotCommand("autodumpcars") and NotCommand("autoremovecars") and NotCommand('autonocars') and NotCommand("crim") and NotCommand("criminal") and NotCommand("makecrim") and NotCommand("antisit") and NotCommand("infjump") and NotCommand("bring") and NotCommand("void") and NotCommand("view") and NotCommand("unview") and NotCommand("copychat") and NotCommand("antifling") and NotCommand("goto") and NotCommand("to") and NotCommand("shotgun") and NotCommand("remington") and NotCommand("rem") and NotCommand("ak-47") and NotCommand('ak') and NotCommand("m9") and NotCommand("pistol") and NotCommand("m4a1") and NotCommand('m4') and NotCommand("hammer") and NotCommand("ham") and NotCommand("knife") and NotCommand("knive") and NotCommand("guns") and NotCommand("items") and NotCommand("autoguns") and NotCommand("aguns") and NotCommand("autoitems") and NotCommand("aitems") and NotCommand('loopcrim') and NotCommand("unloopcrim") and NotCommand("respawn") and NotCommand("opengate") and NotCommand("car") and NotCommand("forcefield") and NotCommand("ff") and NotCommand("speed") and NotCommand("ws") and NotCommand("tp") then
     API:Notif("Error", 'Not a valid command.', Color3.fromRGB(255, 0, 0), 3)
   end
 end
 local Cooldown = true
 game.Players.LocalPlayer.Chatted:Connect(function(chat)
-	if not Cooldown then
-		for i = 1,5 do task.wait()
+	if chat:sub(1,#Prefix) == Prefix then
+		if not Cooldown then
 			Cooldown = true
-		end
-		if chat:sub(1,#Prefix) == Prefix then
 			PlayerChatted(chat)
-		end
-		wait(.5)
-		for i = 1,5 do task.wait()
-			Cooldown = false
+			wait(.5)
+			for i = 1,6 do task.wait()
+				Cooldown = false
+			end
 		end
 	end
 end)
@@ -1101,10 +1132,11 @@ coroutine.wrap(function()
 	end)
 	-- main loop
 	while wait() do -- fast loop
-		if plr.Character.Humanoid.Sit and States.AntiSit and not Unloaded then
+		if Unloaded then return end
+		if plr.Character.Humanoid.Sit and States.AntiSit then
 			plr.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
 		end
-		if States.ArrestAura and Unloaded == false then
+		if States.ArrestAura then
 			for i,v in pairs(game.Players:GetPlayers()) do
 				if v ~= plr and not table.find(API.Whitelisted,v) then
 					if v.Team == game.Teams.Criminals or (API:BadArea(v) and v.Team == game.Teams.Inmates) then
@@ -1117,7 +1149,8 @@ coroutine.wrap(function()
 				end
 			end
 		end
-		if not plr.Character:FindFirstChild("ForceField") and States.ff and Unloaded == false then
+		if not plr.Character:FindFirstChild("ForceField") and States.ff then
+			wait(.1)
 			API:Refresh()
 		end
 	end
@@ -1176,4 +1209,3 @@ Cooldown = false
 else
 	game:GetService("StarterGui"):SetCore("SendNotification",{Title = "Septex Admin",Text = "Septex admin is already executed or game not support",Duration = 7})
 end
- 
