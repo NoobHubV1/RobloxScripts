@@ -53,6 +53,10 @@ print([[
 	 noclip [ON/OFF] | Go throught walls
 	 shootback / antishoot [on/off] | Kills anyone who shoots you
 	 doors [on/off] | Deletes doors
+	 oneshot [ON/OFF] | Makes a gun oneshot
+	 anticrash [on/off] | Tries to stop simple crashes (DOESNT WORK WITH SEPTEX ADMIN CRASH)
+	 lagspike | Freezes everyones screen for some seconds
+	 pp | sus
 \\
 ]])
 local States = {}
@@ -77,6 +81,8 @@ local States = {}
       States.noclip = false
       States.ShootBack = false
       States.DoorsDestroy = false
+      States.OneShot = false
+      States.anticrash = false
 local API = {}
       API.Whitelisted = {}
       API.LoopCrim = {}
@@ -96,7 +102,7 @@ function Create(class,parent,props)
 end
 Folder = Create("Folder",game,{Name = "Septex_Admin"})
 ScreenGui = Create("ScreenGui",plr.PlayerGui,{Name = 'ScreenGui', ResetOnSpawn = false})
-TextBox = Create("TextBox",ScreenGui,{Name = "TextBox", BackgroundColor3 = Color3.fromRGB(172, 172, 172), BackgroundTransparency = 0.300, Position = UDim2.new(0.0255349874, 0, 0.800595582, 0), Size = UDim2.new(0, 278, 0, 33), Font = "SourceSans", PlaceholderText = "Press "..Prefix.." To Enter", Text = "", TextColor3 = Color3.fromRGB(255, 255, 255), TextSize = 23.000, Draggable = true, ClearTextOnFocus = false})
+TextBox = Create("TextBox",ScreenGui,{Name = "TextBox", BackgroundColor3 = Color3.fromRGB(172, 172, 172), BackgroundTransparency = 0.200, Position = UDim2.new(0.0255349874, 0, 0.800595582, 0), Size = UDim2.new(0, 278, 0, 33), Font = "SourceSans", PlaceholderText = "Press "..Prefix.." To Enter", Text = "", TextColor3 = Color3.fromRGB(255, 255, 255), TextSize = 23.000, Draggable = true, ClearTextOnFocus = false})
 function API:Notif(name, content, color, time)
   Notification:MakeNotification({
       Name = name,
@@ -1146,6 +1152,10 @@ function PlayerChatted(Message)
 					})
 				end)
 			until plr.Backpack:FindFirstChild("Key card")
+			if not States.AutoRespawn then
+				States.AutoRespawn = true
+			end
+			API:Notif("OK", 'Obtain keycard', Color3.fromRGB(0, 255, 0), 3)
 		end
 	end
   end
@@ -1182,7 +1192,76 @@ function PlayerChatted(Message)
 		game.Lighting.Doors.Parent = workspace
 	end
   end
-  if NotCommand("unload") and NotCommand("prefix") and NotCommand('re') and NotCommand("refresh") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("inmate") and NotCommand("in") and NotCommand("guard") and NotCommand("gu") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("autoremoveff") and NotCommand("autorff") and NotCommand("killaura") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("damage") and NotCommand("dmg") and NotCommand("autodumpcars") and NotCommand("autoremovecars") and NotCommand('autonocars') and NotCommand("crim") and NotCommand("criminal") and NotCommand("makecrim") and NotCommand("antisit") and NotCommand("infjump") and NotCommand("bring") and NotCommand("void") and NotCommand("view") and NotCommand("unview") and NotCommand("copychat") and NotCommand("antifling") and NotCommand("goto") and NotCommand("to") and NotCommand("shotgun") and NotCommand("remington") and NotCommand("rem") and NotCommand("ak-47") and NotCommand('ak') and NotCommand("m9") and NotCommand("pistol") and NotCommand("m4a1") and NotCommand('m4') and NotCommand("hammer") and NotCommand("ham") and NotCommand("knife") and NotCommand("knive") and NotCommand("guns") and NotCommand("items") and NotCommand("autoguns") and NotCommand("aguns") and NotCommand("autoitems") and NotCommand("aitems") and NotCommand('loopcrim') and NotCommand("unloopcrim") and NotCommand("respawn") and NotCommand("opengate") and NotCommand("car") and NotCommand("forcefield") and NotCommand("ff") and NotCommand("speed") and NotCommand("ws") and NotCommand("tp") and NotCommand("givekey") and NotCommand("keycard") and NotCommand("key") and NotCommand("antitase") and NotCommand("antishield") and NotCommand("autoguard") and NotCommand("aguard") and NotCommand("silentaim") and NotCommand("saim") and NotCommand("noclip") and NotCommand("shootback") and NotCommand("antishoot") and NotCommand("doors") then
+  if Command("oneshot") then
+	ChangeState(args[2],"OneShot")
+  end
+  if Command("anticrash") then
+	local value = ChangeState(args[2],"anticrash")
+	if value then
+		pcall(function()
+			game:GetService("Players").LocalPlayer.PlayerScripts.ClientGunReplicator.Disabled = true
+		end)
+	else
+		pcall(function()
+			game:GetService("Players").LocalPlayer.PlayerScripts.ClientGunReplicator.Disabled = true
+		end)
+	end
+  end
+  if Command("lagspike") then
+	local a = game:GetService("RunService").Stepped:Connect(function()
+		pcall(function()
+			plr.Character:Destroy()
+		end)
+	end)
+	local a2 = plr.CharacterAdded:Connect(function(a)
+		pcall(function()
+			a:Destroy()
+		end)
+		pcall(function()
+			plr.Character:Destroy()
+		end)
+	end)
+	for i =1,2500 do
+		task.spawn(function()
+			workspace.Remote.TeamEvent:FireServer("Bright orange")
+		end)
+	end
+	wait(1)
+	a:Disconnect()
+	a2:Disconnect()
+	wait(.5)
+	task.spawn(function()
+		workspace.Remote.TeamEvent:FireServer("Bright orange")
+	end)
+	wait(.1)
+	API:Notif("OK", 'Freezes everyone', Color3.fromRGB(0, 255, 0), 3)
+  end
+  if Command("pp") then
+	API:AllGuns()
+	for i,v in pairs(Player.Character:GetChildren()) do
+		if v:IsA("Tool") then
+			v.Parent = Player.Backpack
+		end
+	end
+	Player.Backpack.M9.Parent = Player.Character
+	Player.Backpack["AK-47"].Parent = Player.Character
+	Player.Backpack["Remington 870"].Parent = Player.Character
+	wait()
+	Player.Character.M9.GripPos = Vector3.new(0.9, 2, 0)
+	Player.Character["Remington 870"].GripPos = Vector3.new(0.9, 2, 2.1)
+	Player.Character["AK-47"].GripPos = Vector3.new(0.9, 2, 6.4)
+	wait()
+	for i,v in pairs(Player.Character:GetChildren()) do
+		if v:IsA("Tool") then
+			v.Parent = Player.Backpack
+		end
+	end
+	wait()
+	Player.Backpack.M9.Parent = Player.Character
+	Player.Backpack["AK-47"].Parent = Player.Character
+	Player.Backpack["Remington 870"].Parent = Player.Character
+  end
+  if NotCommand("unload") and NotCommand("prefix") and NotCommand('re') and NotCommand("refresh") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("inmate") and NotCommand("in") and NotCommand("guard") and NotCommand("gu") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("autoremoveff") and NotCommand("autorff") and NotCommand("killaura") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("damage") and NotCommand("dmg") and NotCommand("autodumpcars") and NotCommand("autoremovecars") and NotCommand('autonocars') and NotCommand("crim") and NotCommand("criminal") and NotCommand("makecrim") and NotCommand("antisit") and NotCommand("infjump") and NotCommand("bring") and NotCommand("void") and NotCommand("view") and NotCommand("unview") and NotCommand("copychat") and NotCommand("antifling") and NotCommand("goto") and NotCommand("to") and NotCommand("shotgun") and NotCommand("remington") and NotCommand("rem") and NotCommand("ak-47") and NotCommand('ak') and NotCommand("m9") and NotCommand("pistol") and NotCommand("m4a1") and NotCommand('m4') and NotCommand("hammer") and NotCommand("ham") and NotCommand("knife") and NotCommand("knive") and NotCommand("guns") and NotCommand("items") and NotCommand("autoguns") and NotCommand("aguns") and NotCommand("autoitems") and NotCommand("aitems") and NotCommand('loopcrim') and NotCommand("unloopcrim") and NotCommand("respawn") and NotCommand("opengate") and NotCommand("car") and NotCommand("forcefield") and NotCommand("ff") and NotCommand("speed") and NotCommand("ws") and NotCommand("tp") and NotCommand("givekey") and NotCommand("keycard") and NotCommand("key") and NotCommand("antitase") and NotCommand("antishield") and NotCommand("autoguard") and NotCommand("aguard") and NotCommand("silentaim") and NotCommand("saim") and NotCommand("noclip") and NotCommand("shootback") and NotCommand("antishoot") and NotCommand("doors") and NotCommand("oneshot") and NotCommand("anticrash") and NotCommand("lagspike") and NotCommand("pp") then
     API:Notif("Error", 'Not a valid command.', Color3.fromRGB(255, 0, 0), 3)
   end
 end
@@ -1193,14 +1272,13 @@ game.Players.LocalPlayer.Chatted:Connect(function(chat)
 			Cooldown = true
 			PlayerChatted(chat)
 			wait(.4)
-			for i = 1,4 do task.wait()
+			for i = 1,5 do task.wait()
 				Cooldown = false
 			end
 		end
 	end
 end)
 plr.CharacterAdded:Connect(function(NewChar)
-    if Unloaded then return end
     repeat API:swait() until NewChar
     NewChar:WaitForChild('Head')
     NewChar:WaitForChild("HumanoidRootPart")
@@ -1510,6 +1588,92 @@ end
 coroutine.wrap(function()
 	game:GetService("ReplicatedStorage"):WaitForChild("ReplicateEvent").OnClientEvent:Connect(ReplicationEventFunction)
 end)()
+plr:GetMouse().Button1Up:Connect(function()
+	local target = plr:GetMouse().Target
+	if not Unloaded and target and target.Parent:FindFirstChildOfClass("Humanoid") and game:GetService("Players"):FindFirstChild(target.Parent.Name) and States.OneShot then
+		local Vic = game:GetService("Players"):FindFirstChild(target.Parent.Name)
+		local Gun = plr.Character:FindFirstChildOfClass("Tool")
+		if Gun and Gun:FindFirstChildOfClass("ModuleScript") and Vic and Vic.Team ~= plr.Team then
+			local Bullets = API:CreateBulletTable(20, Vic.Character:FindFirstChild("Head") or Vic.Character:FindFirstChildOfClass("Part"))
+			game:GetService("ReplicatedStorage").ShootEvent:FireServer(Bullets, Gun)
+		end
+	end
+end)
+pcall(function()
+	local BulletCoolDown = false
+	Temp.GunHandler =game:GetService("ReplicatedStorage"):WaitForChild("ReplicateEvent").OnClientEvent:connect(function(Amount, Value)
+		if not States.anticrash then
+			return
+		end
+		if #Amount <70 and not BulletCoolDown then
+			BulletCoolDown =true
+			for i = 1, #Amount do
+				local Bullet = Instance.new("Part", workspace.CurrentCamera)
+				Bullet.Name = "RayPart"
+				Bullet.Material = Enum.Material.Neon
+				Bullet.Anchored = true
+				Bullet.CanCollide = false
+				Bullet.Transparency = 0.5
+				Bullet.formFactor = Enum.FormFactor.Custom
+				Bullet.Size = Vector3.new(0.2, 0.2, Amount[i].Distance)
+				Bullet.CFrame = Amount[i].Cframe
+				game.Debris:AddItem(Bullet, 0.05)
+				Instance.new("BlockMesh", Bullet).Scale = Vector3.new(0.5, 0.5, 1)
+				if Value then
+					Bullet.BrickColor = BrickColor.new("Cyan")
+					local Light = Instance.new("SurfaceLight", Bullet)
+					Light.Color = Color3.new(0, 0.9176470588235294, 1)
+					Light.Range = 5
+					Light.Face = "Bottom"
+					Light.Brightness = 10
+					Light.Angle = 180
+					task.spawn(function()
+						for v7 = 1, 10 do
+							Bullet.Transparency = Bullet.Transparency + 0.1
+							Light.Brightness = Light.Brightness - 1
+							wait()
+						end
+					end)
+				else
+					Bullet.BrickColor = BrickColor.Yellow()
+				end
+			end
+			wait(.01)
+			BulletCoolDown = false
+		end
+	end)
+	local CoolDown = false
+	Temp.SoundHandler = game:GetService("ReplicatedStorage"):WaitForChild("SoundEvent").OnClientEvent:connect(function(Sound1, p4)
+		if not States.anticrash then
+			return
+		end
+		if CoolDown then
+			CoolDown = true
+			local Sound = Sound1:Clone()
+			Sound.Parent = Sound1.Parent
+			Sound:Play()
+			Sound.Played:Connect(function()
+				wait()
+				game:GetService("Debris"):AddItem(Sound,0.001)
+			end)
+			wait(.1)
+			CoolDown = false
+		end
+	end)
+	Temp.WarnHandler = game:GetService("ReplicatedStorage"):WaitForChild("WarnEvent").OnClientEvent:connect(function(Text)
+		if not States.anticrash then
+			return
+		end
+		local WarnGui = game:GetService("ReplicatedStorage").gooeys.WarnGui:Clone()
+		WarnGui.Parent = plr.PlayerGui
+		if Text == 1 then
+			WarnGui.Frame.desc.Text = "This is your last warning. You will become a prisoner if you kill an innocent player 1 more time."
+		else
+			WarnGui.Frame.desc.Text = "Do not kill innocent people! You will be arrested and jailed if you kill " .. Text .. " more times."
+		end
+		WarnGui.Frame.LocalScript.Disabled = false
+	end)
+end)
 API:Notif("Loads", 'Press F9 or chat /console to show commands list', Color3.fromRGB(255, 0, 0), 10)
 API:Refresh()
 Cooldown = false
