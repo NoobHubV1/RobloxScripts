@@ -95,9 +95,8 @@ function Create(class,parent,props)
   return new
 end
 Folder = Create("Folder",game,{Name = "Septex_Admin"})
-ScreenGui = Create("ScreenGui",plr.PlayerGui,{Name = "ScreenGui", ResetOnSpawn = false})
-TextBox = Create("TextBox",ScreenGui,{Name = "TextBox", BackgroundColor3 = Color3.fromRGB(172, 172, 172), BackgroundTransparency = 0.400, Position = UDim2.new(0.0255349874, 0, 0.800595582, 0), Size = UDim2.new(0, 278, 0, 33), Font = "SourceSans", PlaceholderText = "Press "..Prefix.." To Enter", Text = "", TextColor3 = Color3.fromRGB(255, 255, 255), TextSize = 23.000, Draggable = true, ClearTextOnFocus = false})
-TextButton = Create("TextButton",TextBox,{Name = "TextButton", BackgroundColor3 = Color3.fromRGB(0, 172, 172), BackgroundTransparency = 1.000, Size = UDim2.new(0, 30, 0, 30), Font = Enum.Font.SourceSans, Text = "Not cooldown", TextColor3 = Color3.fromRGB(255, 255, 255), TextSize = 23.000, Visible = false})
+ScreenGui = Create("ScreenGui",plr.PlayerGui,{Name = 'ScreenGui', ResetOnSpawn = false})
+TextBox = Create("TextBox",ScreenGui,{Name = "TextBox", BackgroundColor3 = Color3.fromRGB(172, 172, 172), BackgroundTransparency = 0.300, Position = UDim2.new(0.0255349874, 0, 0.800595582, 0), Size = UDim2.new(0, 278, 0, 33), Font = "SourceSans", PlaceholderText = "Press "..Prefix.." To Enter", Text = "", TextColor3 = Color3.fromRGB(255, 255, 255), TextSize = 23.000, Draggable = true, ClearTextOnFocus = false})
 function API:Notif(name, content, color, time)
   Notification:MakeNotification({
       Name = name,
@@ -177,7 +176,6 @@ function API:Loop(Times, calling)
 	end
 end
 function API:MoveTo(Cframe)
-	Cframe = API:ConvertPosition(Cframe)
 	local Amount = 5
 	for i = 1, Amount do
 		API:UnSit()
@@ -1267,15 +1265,6 @@ coroutine.wrap(function()
 		if not plr.Character:FindFirstChild("ForceField") and States.ff then
 			wait(.1)
 			API:Refresh()
-		end
-		if not Cooldown then
-			if TextButton.Visible then
-				TextButton.Visible = false
-			end
-		else
-			if not TextButton.Visible then
-				TextButton.Visible = true
-			end
 		end
 	end
 end)()
