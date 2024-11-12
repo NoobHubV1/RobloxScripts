@@ -57,6 +57,10 @@ print([[
 	 anticrash [on/off] | Tries to stop simple crashes (DOESNT WORK WITH SEPTEX ADMIN CRASH)
 	 lagspike | Freezes everyones screen for some seconds
 	 pp | sus
+	 tase [player,all,team] | Tased the player(s)
+	 arrest [plr,all] | Arrests the targeted player
+	 clickkill [ON/OFF] | click on someone to kill them
+	 clickarrest [on/off] | click on someone to arrest then
 \\
 ]])
 local States = {}
@@ -83,6 +87,8 @@ local States = {}
       States.DoorsDestroy = false
       States.OneShot = false
       States.anticrash = false
+      States.ClickKill = false
+      States.ClickArrest = false
 local API = {}
       API.Whitelisted = {}
       API.LoopCrim = {}
@@ -205,10 +211,9 @@ function API:WaitForRespawn(Cframe,NoForce)
 					end)
 				end)()
 				NewCharacter:WaitForChild("HumanoidRootPart")
-				Cframe = API:ConvertPosition(Cframe)
-				local Amount = 10
+				local Amount = 8
 				if Player.PlayerGui['Home']['hud']['Topbar']['titleBar'].Title.Text:lower() == "lights out" or Player.PlayerGui.Home.hud.Topbar.titleBar.Title.Text:lower() == "lightsout" then
-					Amount = 13
+					Amount = 11
 				end
 				for i = 1, Amount do
 					API:UnSit()
@@ -743,7 +748,7 @@ function PlayerChatted(Message)
       while wait() do
         if States.KillAura then
           for i,v in pairs(game.Players:GetPlayers()) do
-            if v ~= plr and not table.find(API.Whitelisted, v) then
+            if v ~= plr and not table.find(API.Whitelisted,v) then
               if v.Character.Humanoid.Health > 0 or not v.Character:FindFirstChild("ForceField") then
                 game.ReplicatedStorage.meleeEvent:FireServer(v)
               end
@@ -1261,7 +1266,138 @@ function PlayerChatted(Message)
 	Player.Backpack["AK-47"].Parent = Player.Character
 	Player.Backpack["Remington 870"].Parent = Player.Character
   end
-  if NotCommand("unload") and NotCommand("prefix") and NotCommand('re') and NotCommand("refresh") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("inmate") and NotCommand("in") and NotCommand("guard") and NotCommand("gu") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("autoremoveff") and NotCommand("autorff") and NotCommand("killaura") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("damage") and NotCommand("dmg") and NotCommand("autodumpcars") and NotCommand("autoremovecars") and NotCommand('autonocars') and NotCommand("crim") and NotCommand("criminal") and NotCommand("makecrim") and NotCommand("antisit") and NotCommand("infjump") and NotCommand("bring") and NotCommand("void") and NotCommand("view") and NotCommand("unview") and NotCommand("copychat") and NotCommand("antifling") and NotCommand("goto") and NotCommand("to") and NotCommand("shotgun") and NotCommand("remington") and NotCommand("rem") and NotCommand("ak-47") and NotCommand('ak') and NotCommand("m9") and NotCommand("pistol") and NotCommand("m4a1") and NotCommand('m4') and NotCommand("hammer") and NotCommand("ham") and NotCommand("knife") and NotCommand("knive") and NotCommand("guns") and NotCommand("items") and NotCommand("autoguns") and NotCommand("aguns") and NotCommand("autoitems") and NotCommand("aitems") and NotCommand('loopcrim') and NotCommand("unloopcrim") and NotCommand("respawn") and NotCommand("opengate") and NotCommand("car") and NotCommand("forcefield") and NotCommand("ff") and NotCommand("speed") and NotCommand("ws") and NotCommand("tp") and NotCommand("givekey") and NotCommand("keycard") and NotCommand("key") and NotCommand("antitase") and NotCommand("antishield") and NotCommand("autoguard") and NotCommand("aguard") and NotCommand("silentaim") and NotCommand("saim") and NotCommand("noclip") and NotCommand("shootback") and NotCommand("antishoot") and NotCommand("doors") and NotCommand("oneshot") and NotCommand("anticrash") and NotCommand("lagspike") and NotCommand("pp") then
+  if Command("tase") then
+	local Team = IsTeamCommandCheck(args[2])
+	if args[2] == "all" or args[2] == "everyone" or args[2] == "others" then
+		local Oldt = Player.Team
+		if Oldt ~= game.Teams.Guards then
+			API:ChangeTeam(game.Teams.Guards)
+		end
+		repeat wait() until Player.Backpack:FindFirstChild("Taser")
+		local ohTable1 = {}
+		for i,v in pairs(game:GetService("Players"):GetPlayers()) do
+			if v and v~= Player and not table.find(API.Whitelisted,v) and v.Team ~= game.Teams.Guards then
+				table.insert(ohTable1, {
+					["RayObject"] = Ray.new(Vector3.new(), Vector3.new()),
+					["Cframe"] = CFrame.new(),
+					["Hit"] = v.Character.Head
+				})
+			end
+		end
+		local ohInstance2 = game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("Taser") or game:GetService("Players").LocalPlayer.Character:FindFirstChild("Taser")
+		game:GetService("ReplicatedStorage").ShootEvent:FireServer(ohTable1, ohInstance2)
+		task.spawn(function()
+			game:GetService("ReplicatedStorage").ReloadEvent:FireServer(game:GetService("Players").LocalPlayer.Backpack.Taser)
+		end)
+		API:ChangeTeam(Oldt)
+		API:Notif("OK", 'Tased '..args[2], Color3.fromRGB(0, 255, 0), 3)
+	elseif Team == game.Teams.Inmates then
+		local Oldt = Player.Team
+		if Oldt ~= game.Teams.Guards then
+			API:ChangeTeam(game.Teams.Guards)
+		end
+		repeat wait() until Player.Backpack:FindFirstChild("Taser")
+		local ohTable1 = {}
+		for i,v in pairs(game:GetService("Players"):GetPlayers()) do
+			if v and v~= Player and not table.find(API.Whitelisted,v) and v.Team == game.Teams.Inmates then
+				table.insert(ohTable1, {
+					["RayObject"] = Ray.new(Vector3.new(), Vector3.new()),
+					["Cframe"] = CFrame.new(),
+					["Hit"] = v.Character.Head
+				})
+			end
+		end
+		local ohInstance2 = game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("Taser") or game:GetService("Players").LocalPlayer.Character:FindFirstChild("Taser")
+		game:GetService("ReplicatedStorage").ShootEvent:FireServer(ohTable1, ohInstance2)
+		task.spawn(function()
+			game:GetService("ReplicatedStorage").ReloadEvent:FireServer(game:GetService("Players").LocalPlayer.Backpack.Taser)
+		end)
+		API:ChangeTeam(Oldt)
+		API:Notif("OK", 'Tased inmates', Color3.fromRGB(0, 255, 0), 3)
+	elseif Team == game.Teams.Crimimals then
+		local Oldt = Player.Team
+		if Oldt ~= game.Teams.Guards then
+			API:ChangeTeam(game.Teams.Guards)
+		end
+		repeat wait() until Player.Backpack:FindFirstChild("Taser")
+		local ohTable1 = {}
+		for i,v in pairs(game:GetService("Players"):GetPlayers()) do
+			if v and v~= Player and not table.find(API.Whitelisted,v) and v.Team == game.Teams.Criminals then
+				table.insert(ohTable1, {
+					["RayObject"] = Ray.new(Vector3.new(), Vector3.new()),
+					["Cframe"] = CFrame.new(),
+					["Hit"] = v.Character.Head
+				})
+			end
+		end
+		local ohInstance2 = game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("Taser") or game:GetService("Players").LocalPlayer.Character:FindFirstChild("Taser")
+		game:GetService("ReplicatedStorage").ShootEvent:FireServer(ohTable1, ohInstance2)
+		task.spawn(function()
+			game:GetService("ReplicatedStorage").ReloadEvent:FireServer(game:GetService("Players").LocalPlayer.Backpack.Taser)
+		end)
+		API:ChangeTeam(Oldt)
+		API:Notif("OK", 'Tased criminals', Color3.fromRGB(0, 255, 0), 3)
+	else
+		local Oldt = Player.Team
+		local Target = API:FindPlayer(args[2])
+		if Oldt ~= game.Teams.Guards then
+			API:ChangeTeam(game.Teams.Guards)
+		end
+		repeat wait() until Player.Backpack:FindFirstChild("Taser")
+		local ohTable1 = API:CreateBulletTable(1, Target.Character.Head)
+		local ohInstance2 = game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("Taser") or game:GetService("Players").LocalPlayer.Character:FindFirstChild("Taser")
+		game:GetService("ReplicatedStorage").ShootEvent:FireServer(ohTable1, ohInstance2)
+		task.spawn(function()
+			game:GetService("ReplicatedStorage").ReloadEvent:FireServer(game:GetService("Players").LocalPlayer.Backpack.Taser)
+		end)
+		API:ChangeTeam(Oldt)
+		API:Notif("OK", 'Tased '..Target.DisplayName, Color3.fromRGB(0, 255, 0), 3)
+	end
+  end
+  if Command("arrest") or Command("ar") then
+	if args[2] == "all" then
+		local LastPosition = API:GetPosition()
+		for i,v in pairs(game:GetService("Players"):GetPlayers()) do
+			if v and v ~= game:GetService("Players").LocalPlayer and not table.find(API.Whitelisted,v) and v.Team == game.Teams.Criminals or (API:BadArea(v) and v.Team == game.Teams.Inmates) and v.Character.PrimaryPart and v.Character:FindFirstChildOfClass("Humanoid").Health>0 then
+				repeat task.wait()
+					API:UnSit()
+					plr.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame * CFrame.new(0,0,-1)
+					task.spawn(function()
+						workspace.Remote.arrest:InvokeServer(v.Character.PrimaryPart)
+					end)
+				until v.Character["Head"]:FindFirstChildOfClass("BillboardGui")
+				API:MoveTo(LastPosition)
+			end
+		end
+		API:MoveTo(LastPosition)
+		API:Notif("OK", 'Arrested all', Color3.fromRGB(0, 255, 0), 3)
+	elseif args ~= "all" then
+		local LastPosition = API:GetPosition()
+		local Target = API:FindPlayer(args[2])
+		if Target then
+			if Target.Team == game.Teams.Guards or not API:BadArea(Target) then
+				return API:Notif("Error", 'Cant arrest this player!', Color3.fromRGB(255, 0, 0), 3)
+			else
+				repeat task.wait()
+					API:UnSit()
+					plr.Character.HumanoidRootPart.CFrame = Target.Character.HumanoidRootPart.CFrame * CFrame.new(0,0,-1)
+						task.spawn(function()
+							workspace.Remote.arrest:InvokeServer(Target.Character.PrimaryPart)
+						end)
+				until Target.Character["Head"]:FindFirstChildOfClass("BillboardGui")
+				API:Notif("OK", 'Arrested '..Target.DisplayName, Color3.fromRGB(0, 255, 0), 3)
+			end
+		end
+		API:MoveTo(LastPosition)
+	end
+  end
+  if Command('clickkill') then
+	ChangeState(args[2],'ClickKill')
+  end
+  if Command("clickarrest") then
+	ChangeState(args[2],"ClickArrest")
+  end
+  if NotCommand("unload") and NotCommand("prefix") and NotCommand('re') and NotCommand("refresh") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("inmate") and NotCommand("in") and NotCommand("guard") and NotCommand("gu") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("autoremoveff") and NotCommand("autorff") and NotCommand("killaura") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("damage") and NotCommand("dmg") and NotCommand("autodumpcars") and NotCommand("autoremovecars") and NotCommand('autonocars') and NotCommand("crim") and NotCommand("criminal") and NotCommand("makecrim") and NotCommand("antisit") and NotCommand("infjump") and NotCommand("bring") and NotCommand("void") and NotCommand("view") and NotCommand("unview") and NotCommand("copychat") and NotCommand("antifling") and NotCommand("goto") and NotCommand("to") and NotCommand("shotgun") and NotCommand("remington") and NotCommand("rem") and NotCommand("ak-47") and NotCommand('ak') and NotCommand("m9") and NotCommand("pistol") and NotCommand("m4a1") and NotCommand('m4') and NotCommand("hammer") and NotCommand("ham") and NotCommand("knife") and NotCommand("knive") and NotCommand("guns") and NotCommand("items") and NotCommand("autoguns") and NotCommand("aguns") and NotCommand("autoitems") and NotCommand("aitems") and NotCommand('loopcrim') and NotCommand("unloopcrim") and NotCommand("respawn") and NotCommand("opengate") and NotCommand("car") and NotCommand("forcefield") and NotCommand("ff") and NotCommand("speed") and NotCommand("ws") and NotCommand("tp") and NotCommand("givekey") and NotCommand("keycard") and NotCommand("key") and NotCommand("antitase") and NotCommand("antishield") and NotCommand("autoguard") and NotCommand("aguard") and NotCommand("silentaim") and NotCommand("saim") and NotCommand("noclip") and NotCommand("shootback") and NotCommand("antishoot") and NotCommand("doors") and NotCommand("oneshot") and NotCommand("anticrash") and NotCommand("lagspike") and NotCommand("pp") and NotCommand("tase") and NotCommand("arrest") and NotCommand("ar") and NotCommand("clickkill") and NotCommand("clickarrest") then
     API:Notif("Error", 'Not a valid command.', Color3.fromRGB(255, 0, 0), 3)
   end
 end
@@ -1674,9 +1810,33 @@ pcall(function()
 		WarnGui.Frame.LocalScript.Disabled = false
 	end)
 end)
+local Killcool1 = false
+plr:GetMouse().Button1Up:Connect(function()
+	local Target = plr:GetMouse().Target
+	if Killcool1 then return end
+	if States.ClickArrest or States.ClickKill then
+		if Target and Target.Parent and Target.Parent:FindFirstChildOfClass("Humanoid") and game:GetService("Players"):FindFirstChild(Target.Parent.Name) or game:GetService("Players"):FindFirstChild(Target.Parent.Parent.Name) then
+			local TargetModelPlr = game:GetService("Players"):FindFirstChild(Target.Parent.Name) or game:GetService("Players"):FindFirstChild(Target.Parent.Parent.Name)
+			if States.ClickArrest then
+				if TargetModelPlr.Team ~= game.Teams.Guards then
+					for i = 1,5 do
+						workspace.Remote.arrest:InvokeServer(Target)
+					end
+				end
+			end
+			if States.ClickKill then
+				API:KillPlayer(TargetModelPlr,15)
+				Killcool1 = true
+				wait(.4)
+				Killcool1 = false
+			end
+		end
+	end
+end)
 API:Notif("Loads", 'Press F9 or chat /console to show commands list', Color3.fromRGB(255, 0, 0), 10)
 API:Refresh()
 Cooldown = false
 else
 	game:GetService("StarterGui"):SetCore("SendNotification",{Title = "Septex Admin",Text = "Septex admin is already executed or game not support",Duration = 7})
 end
+ 
