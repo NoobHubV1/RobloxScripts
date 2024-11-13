@@ -19,10 +19,7 @@ end
 local function GetAllRings()
         for i,v in pairs(game:GetService("Workspace").Rings:GetDescendants()) do
                 if v:IsA('Part') then
-                        local LastP = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-                        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame
-                        task.wait(.1)
-                        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = LastP
+                        firetouchinterest(game.Players.LocalPlayer.Character.Head, v, 0)
                 end
         end
 end
