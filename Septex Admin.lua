@@ -1057,13 +1057,17 @@ function PlayerChatted(Message)
   end
   if Command("opengate") then
 	local OldPos = game:GetService("Players").LocalPlayer.Character:GetPrimaryPartCFrame()
-	repeat task.wait()
-                plr.Character.HumanoidRootPart.CFrame = game.Workspace.Prison_ITEMS.buttons["Prison Gate"]["Prison Gate"].CFrame
+	repeat API:swait()
+		API:MoveTo(game.Workspace.Prison_ITEMS.buttons["Prison Gate"]["Prison Gate"].CFrame)
                 pcall(function()
-	                workspace.Remote.ItemHandler:InvokeServer(workspace.Prison_ITEMS.buttons["Prison Gate"]["Prison Gate"])
+			for i = 1, 5 do
+				workspace.Remote.ItemHandler:InvokeServer(workspace.Prison_ITEMS.buttons["Prison Gate"]["Prison Gate"])
+			end
                 end)
 	until workspace.Prison_ITEMS.buttons["Prison Gate"]["Prison Gate"]
+	wait()
 	API:MoveTo(OldPos)
+	API:Notif("OK", 'Opened the gate', Color3.fromRGB(0, 255, 0), 3)
   end
   if Command("car") then
 	pcall(function()
