@@ -62,6 +62,8 @@ print([[
 	 clickkill [ON/OFF] | click on someone to kill them
 	 clickarrest [on/off] | click on someone to arrest then
 	 godmode / god [ON/OFF] | Turn on Godmode
+	 arrestaura [on/off] | Activate arrestaura
+	 antitouch [ON/OFF] | Kills anyone who touches you
 \\
 ]])
 local States = {}
@@ -91,6 +93,8 @@ local States = {}
       States.ClickKill = false
       States.ClickArrest = false
       States.Godmode = false
+      States.ArrestAura = false
+      States.AntiTouch = false
 local API = {}
       API.Whitelisted = {}
       API.LoopCrim = {}
@@ -683,14 +687,15 @@ function API:BadArea(player)
 	end
 	return true
 end
-function API:MKILL(PLR)
+function API:MKILL(Target)
 	local OldPos = API:GetPosition()
-	repeat task.wait()
-		plr.Character.HumanoidRootPart.CFrame = PLR.Character.HumanoidRootPart.CFrame
-		pcall(function()
-			game.ReplicatedStorage.meleeEvent:FireServer(PLR)
-		end)
-	until PLR.Character.Humanoid.Health > 0 or PLR.Character:FindFirstChild("ForceField")
+	repeat wait()
+		API:UnSit()
+		plr.Character.HumanoidRootPart.CFrame = Target.Character.HumanoidRootPart.CFrame * CFrame.new(0,0,1)
+			task.spawn(function()
+				game.ReplicatedStorage.meleeEvent:FireServer(Target)
+			end)
+	until Target.Character.Humanoid.Health <= 1
 	API:MoveTo(OldPos)
 end
 function PlayerChatted(Message)
@@ -1406,7 +1411,13 @@ function PlayerChatted(Message)
   if Command("god") or Command("godmode") then
 	ChangeState(args[2],"Godmode")
   end
-  if NotCommand("unload") and NotCommand("prefix") and NotCommand('re') and NotCommand("refresh") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("inmate") and NotCommand("in") and NotCommand("guard") and NotCommand("gu") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("autoremoveff") and NotCommand("autorff") and NotCommand("killaura") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("damage") and NotCommand("dmg") and NotCommand("autodumpcars") and NotCommand("autoremovecars") and NotCommand('autonocars') and NotCommand("crim") and NotCommand("criminal") and NotCommand("makecrim") and NotCommand("antisit") and NotCommand("infjump") and NotCommand("bring") and NotCommand("void") and NotCommand("view") and NotCommand("unview") and NotCommand("copychat") and NotCommand("antifling") and NotCommand("goto") and NotCommand("to") and NotCommand("shotgun") and NotCommand("remington") and NotCommand("rem") and NotCommand("ak-47") and NotCommand('ak') and NotCommand("m9") and NotCommand("pistol") and NotCommand("m4a1") and NotCommand('m4') and NotCommand("hammer") and NotCommand("ham") and NotCommand("knife") and NotCommand("knive") and NotCommand("guns") and NotCommand("items") and NotCommand("autoguns") and NotCommand("aguns") and NotCommand("autoitems") and NotCommand("aitems") and NotCommand('loopcrim') and NotCommand("unloopcrim") and NotCommand("respawn") and NotCommand("opengate") and NotCommand("car") and NotCommand("forcefield") and NotCommand("ff") and NotCommand("speed") and NotCommand("ws") and NotCommand("tp") and NotCommand("givekey") and NotCommand("keycard") and NotCommand("key") and NotCommand("antitase") and NotCommand("antishield") and NotCommand("autoguard") and NotCommand("aguard") and NotCommand("silentaim") and NotCommand("saim") and NotCommand("noclip") and NotCommand("shootback") and NotCommand("antishoot") and NotCommand("doors") and NotCommand("oneshot") and NotCommand("anticrash") and NotCommand("lagspike") and NotCommand("pp") and NotCommand("tase") and NotCommand("arrest") and NotCommand("ar") and NotCommand("clickkill") and NotCommand("clickarrest") and NotCommand("godmode") and NotCommand("god") then
+  if Command("arrestaura") then
+	ChangeState(args[2],"ArrestAura")
+  end
+  if Command("antitouch") then
+	ChangeState(args[2],"AntiTouch")
+  end
+  if NotCommand("unload") and NotCommand("prefix") and NotCommand('re') and NotCommand("refresh") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("inmate") and NotCommand("in") and NotCommand("guard") and NotCommand("gu") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("autoremoveff") and NotCommand("autorff") and NotCommand("killaura") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("damage") and NotCommand("dmg") and NotCommand("autodumpcars") and NotCommand("autoremovecars") and NotCommand('autonocars') and NotCommand("crim") and NotCommand("criminal") and NotCommand("makecrim") and NotCommand("antisit") and NotCommand("infjump") and NotCommand("bring") and NotCommand("void") and NotCommand("view") and NotCommand("unview") and NotCommand("copychat") and NotCommand("antifling") and NotCommand("goto") and NotCommand("to") and NotCommand("shotgun") and NotCommand("remington") and NotCommand("rem") and NotCommand("ak-47") and NotCommand('ak') and NotCommand("m9") and NotCommand("pistol") and NotCommand("m4a1") and NotCommand('m4') and NotCommand("hammer") and NotCommand("ham") and NotCommand("knife") and NotCommand("knive") and NotCommand("guns") and NotCommand("items") and NotCommand("autoguns") and NotCommand("aguns") and NotCommand("autoitems") and NotCommand("aitems") and NotCommand('loopcrim') and NotCommand("unloopcrim") and NotCommand("respawn") and NotCommand("opengate") and NotCommand("car") and NotCommand("forcefield") and NotCommand("ff") and NotCommand("speed") and NotCommand("ws") and NotCommand("tp") and NotCommand("givekey") and NotCommand("keycard") and NotCommand("key") and NotCommand("antitase") and NotCommand("antishield") and NotCommand("autoguard") and NotCommand("aguard") and NotCommand("silentaim") and NotCommand("saim") and NotCommand("noclip") and NotCommand("shootback") and NotCommand("antishoot") and NotCommand("doors") and NotCommand("oneshot") and NotCommand("anticrash") and NotCommand("lagspike") and NotCommand("pp") and NotCommand("tase") and NotCommand("arrest") and NotCommand("ar") and NotCommand("clickkill") and NotCommand("clickarrest") and NotCommand("godmode") and NotCommand("god") and NotCommand('arrestaura') and NotCommand("antitouch") then
     API:Notif("Error", 'Not a valid command.', Color3.fromRGB(255, 0, 0), 3)
   end
 end
@@ -1483,19 +1494,24 @@ coroutine.wrap(function()
 		if plr.Character.Humanoid.Sit and States.AntiSit then
 			plr.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
 		end
-		if States.ArrestAura then
-			for i,v in pairs(game.Players:GetPlayers()) do
-				if v ~= plr and not table.find(API.Whitelisted,v) then
-					if v.Team == game.Teams.Criminals or (API:BadArea(v) and v.Team == game.Teams.Inmates) then
-						if (v.Character.HumanoidRootPart.Position-plr.Character.HumanoidRootPart.Position).magnitude > 30 and not v.Character.Humanoid.Health > 0 then
-							for i = 1,2 do
-								workspace.Remote.arrest:InvokeServer(v.Character.PrimaryPart)
+		pcall(function()
+			if States.ArrestAura == true and Unloaded == false then
+				for i,v in pairs(game.Players:GetPlayers()) do
+					if v ~= Player and v.Team ~= game.Teams.Guards then
+						if (v.Character.HumanoidRootPart.Position - plr.Character.HumanoidRootPart.Position).magnitude <30 and v.Character.Humanoid.Health >0 and not table.find(API.Whitelisted,v) then
+							local args = {
+								[1] = v.Character:FindFirstChild("Head") or v.Character:FindFirstChildOfClass("Part")
+							}
+							if v.Team == game.Teams.Criminals or (v.Team == game.Teams.Inmates and API:BadArea(v)) then
+								for i = 1,4 do
+									workspace.Remote.arrest:InvokeServer(unpack(args))
+								end
 							end
 						end
 					end
 				end
 			end
-		end
+		end)
 		if not plr.Character:FindFirstChild("ForceField") and States.ff then
 			wait(.1)
 			API:Refresh()
@@ -1507,6 +1523,21 @@ coroutine.wrap(function()
 			wait(2.1)
 			API:Refresh()
 		end
+		pcall(function()
+			if States.AntiTouch == true and Unloaded == false then
+				for i,v in pairs(game.Players:GetPlayers()) do
+					if v ~= Player then
+						if (v.Character.HumanoidRootPart.Position - plr.Character.HumanoidRootPart.Position).magnitude <2.3 and v.Character.Humanoid.Health >0 and not table.find(API.Whitelisted,v) then
+							for i =1,10 do
+								task.spawn(function()
+									game:GetService("ReplicatedStorage").meleeEvent:FireServer(v)
+								end)
+							end
+						end
+					end
+				end
+			end
+		end)
 	end
 end)()
 spawn(function()
