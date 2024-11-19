@@ -64,6 +64,7 @@ print([[
 	 godmode / god [ON/OFF] | Turn on Godmode
 	 arrestaura [on/off] | Activate arrestaura
 	 antitouch [ON/OFF] | Kills anyone who touches you
+	 notify [on/off] | tells you who is leaving and joining and Pick Up
 \\
 ]])
 local States = {}
@@ -95,6 +96,7 @@ local States = {}
       States.Godmode = false
       States.ArrestAura = false
       States.AntiTouch = false
+      States.Notify = false
 local API = {}
       API.Whitelisted = {}
       API.LoopCrim = {}
@@ -1459,7 +1461,10 @@ function PlayerChatted(Message)
   if Command("antitouch") then
 	ChangeState(args[2],"AntiTouch")
   end
-  if NotCommand("unload") and NotCommand("prefix") and NotCommand('re') and NotCommand("refresh") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("inmate") and NotCommand("in") and NotCommand("guard") and NotCommand("gu") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("autoremoveff") and NotCommand("autorff") and NotCommand("killaura") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("damage") and NotCommand("dmg") and NotCommand("autodumpcars") and NotCommand("autoremovecars") and NotCommand('autonocars') and NotCommand("crim") and NotCommand("criminal") and NotCommand("makecrim") and NotCommand("antisit") and NotCommand("infjump") and NotCommand("bring") and NotCommand("void") and NotCommand("view") and NotCommand("unview") and NotCommand("copychat") and NotCommand("antifling") and NotCommand("goto") and NotCommand("to") and NotCommand("shotgun") and NotCommand("remington") and NotCommand("rem") and NotCommand("ak-47") and NotCommand('ak') and NotCommand("m9") and NotCommand("pistol") and NotCommand("m4a1") and NotCommand('m4') and NotCommand("hammer") and NotCommand("ham") and NotCommand("knife") and NotCommand("knive") and NotCommand("guns") and NotCommand("items") and NotCommand("autoguns") and NotCommand("aguns") and NotCommand("autoitems") and NotCommand("aitems") and NotCommand('loopcrim') and NotCommand("unloopcrim") and NotCommand("respawn") and NotCommand("opengate") and NotCommand("car") and NotCommand("forcefield") and NotCommand("ff") and NotCommand("speed") and NotCommand("ws") and NotCommand("tp") and NotCommand("givekey") and NotCommand("keycard") and NotCommand("key") and NotCommand("antitase") and NotCommand("antishield") and NotCommand("autoguard") and NotCommand("aguard") and NotCommand("silentaim") and NotCommand("saim") and NotCommand("noclip") and NotCommand("shootback") and NotCommand("antishoot") and NotCommand("doors") and NotCommand("oneshot") and NotCommand("anticrash") and NotCommand("lagspike") and NotCommand("pp") and NotCommand("tase") and NotCommand("arrest") and NotCommand("ar") and NotCommand("clickkill") and NotCommand("clickarrest") and NotCommand("godmode") and NotCommand("god") and NotCommand('arrestaura') and NotCommand("antitouch") then
+  if Command("notify") then
+	ChangeState(args[2],"Notify")
+  end
+  if NotCommand("unload") and NotCommand("prefix") and NotCommand('re') and NotCommand("refresh") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("inmate") and NotCommand("in") and NotCommand("guard") and NotCommand("gu") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("autoremoveff") and NotCommand("autorff") and NotCommand("killaura") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("damage") and NotCommand("dmg") and NotCommand("autodumpcars") and NotCommand("autoremovecars") and NotCommand('autonocars') and NotCommand("crim") and NotCommand("criminal") and NotCommand("makecrim") and NotCommand("antisit") and NotCommand("infjump") and NotCommand("bring") and NotCommand("void") and NotCommand("view") and NotCommand("unview") and NotCommand("copychat") and NotCommand("antifling") and NotCommand("goto") and NotCommand("to") and NotCommand("shotgun") and NotCommand("remington") and NotCommand("rem") and NotCommand("ak-47") and NotCommand('ak') and NotCommand("m9") and NotCommand("pistol") and NotCommand("m4a1") and NotCommand('m4') and NotCommand("hammer") and NotCommand("ham") and NotCommand("knife") and NotCommand("knive") and NotCommand("guns") and NotCommand("items") and NotCommand("autoguns") and NotCommand("aguns") and NotCommand("autoitems") and NotCommand("aitems") and NotCommand('loopcrim') and NotCommand("unloopcrim") and NotCommand("respawn") and NotCommand("opengate") and NotCommand("car") and NotCommand("forcefield") and NotCommand("ff") and NotCommand("speed") and NotCommand("ws") and NotCommand("tp") and NotCommand("givekey") and NotCommand("keycard") and NotCommand("key") and NotCommand("antitase") and NotCommand("antishield") and NotCommand("autoguard") and NotCommand("aguard") and NotCommand("silentaim") and NotCommand("saim") and NotCommand("noclip") and NotCommand("shootback") and NotCommand("antishoot") and NotCommand("doors") and NotCommand("oneshot") and NotCommand("anticrash") and NotCommand("lagspike") and NotCommand("pp") and NotCommand("tase") and NotCommand("arrest") and NotCommand("ar") and NotCommand("clickkill") and NotCommand("clickarrest") and NotCommand("godmode") and NotCommand("god") and NotCommand('arrestaura') and NotCommand("antitouch") and NotCommand("notify") then
     API:Notif("Error", 'Not a valid command.', Color3.fromRGB(255, 0, 0), 3)
   end
 end
@@ -1634,12 +1639,20 @@ function NoCollide(PLR)
 		 end
 	 end
  end
+function PickUp(PLAYER)
+	PLAYER.Backpack.ChildAdded:Connect(function(Item)
+		if States.Notify and not Unloaded then
+			game.StarterGui:SetCore("ChatMakeSystemMessage",  { Text = "[PlayerPickUp]: "..PLAYER.Name.." Pick Up "..Item.Name, Color = Color3.fromRGB(255, 255, 0), Font = Enum.Font.SourceSansBold, FontSize = Enum.FontSize.Size24 } )
+		end
+	end)
+end
 for i,v in pairs(game.Players:GetPlayers()) do
 	if v ~= plr then
 		CopyChat(v)
 		game:FindService("RunService").Stepped:Connect(function()
 			NoCollide(v)
 		end)
+		PickUp(v)
 	end
 end
 game.Players.PlayerAdded:Connect(function(Add)
@@ -1647,12 +1660,20 @@ game.Players.PlayerAdded:Connect(function(Add)
 	game:FindService("RunService").Stepped:Connect(function()
 		NoCollide(Add)
 	end)
+	if States.Notify and not Unloaded then
+		game.StarterGui:SetCore("ChatMakeSystemMessage",  { Text = "[PlayerAdded]: "..Add.Name.." has joined the game!", Color = Color3.fromRGB(255, 255, 0), Font = Enum.Font.SourceSansBold, FontSize = Enum.FontSize.Size24 } )
+	end
+	PickUp(Add)
 end)
 game.Players.PlayerRemoving:Connect(function(Remove)
 	CopyChat(Remove)
 	game:FindService("RunService").Stepped:Connect(function()
 		NoCollide(Remove)
 	end)
+	if States.Notify and not Unloaded then
+                game.StarterGui:SetCore("ChatMakeSystemMessage",  { Text = "[PlayerRemoving]: "..Remove.Name.." has left the game!", Color = Color3.fromRGB(255, 255, 0), Font = Enum.Font.SourceSansBold, FontSize = Enum.FontSize.Size24 } )
+	end
+	PickUp(Remove)
 end)
 local Players = game.Players
 local LocalPlayer = Players.LocalPlayer
