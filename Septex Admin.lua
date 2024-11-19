@@ -114,7 +114,9 @@ function Create(class,parent,props)
 end
 Folder = Create("Folder",game,{Name = "Septex_Admin"})
 ScreenGui = Create("ScreenGui",plr.PlayerGui,{Name = 'ScreenGui', ResetOnSpawn = false})
-TextBox = Create("TextBox",ScreenGui,{Name = "TextBox", BackgroundColor3 = Color3.fromRGB(172, 172, 172), BackgroundTransparency = 0.200, Position = UDim2.new(0.0255349874, 0, 0.800595582, 0), Size = UDim2.new(0, 278, 0, 33), Font = "SourceSans", PlaceholderText = "Press "..Prefix.." To Enter", Text = "", TextColor3 = Color3.fromRGB(255, 255, 255), TextSize = 23.000, Draggable = true, ClearTextOnFocus = false})
+Frame = Create("Frame",ScreenGui,{Name = "Frame", BackgroundColor3 = Color3.fromRGB(47, 46, 25), BackgroundTransparency = 0.3, BorderColor3 = Color3.fromRGB(29, 29, 29), BorderSizePixel = 6, Position = UDim2.new(0.662217021, 0, 0.189768493, 0), Size = UDim2.new(0, 250, 0, 80), ZIndex = 0})
+TextLabel = Create("TextLabel",Frame,{Name = "TextLabel", BackgroundColor3 = Color3.new(255, 255, 255), BackgroundTransparency = 1, Position = UDim2.new(0, 0, 0, 0), Size = UDim2.new(0, 250, 0, 25), ZIndex = 5, Font = "SourceSansBold", Text = "Execute bar", TextColor3 = Color3.new(255, 255, 255), TextSize = 24, TextWrapped = true})
+TextBox = Create("TextBox",Frame,{Name = "TextBox", BackgroundColor3 = Color3.new(172, 172, 172), BackgroundTransparency = 0.4, Position = UDim2.new(0.097, 0, 0.436, 0), Size = UDim2.new(0, 200, 0, 30), Font = "Roboto", PlaceholderColor3 = Color3.new(145, 145, 145), PlaceholderText = "Press "..Prefix.." To Enter", Text = "", TextColor3 = Color3.fromRGB(255, 255, 255), TextSize = 16, ClearTextOnFocus = false})
 function API:Notif(name, content, color, time)
   Notification:MakeNotification({
       Name = name,
@@ -123,6 +125,46 @@ function API:Notif(name, content, color, time)
       Time = time
   })
 end
+function DragifyGui(Frame,Is)
+	coroutine.wrap(function()
+		local dragToggle = nil
+		local dragSpeed = 5
+		local dragInput = nil
+		local dragStart = nil
+		local dragPos = nil
+		local startPos = nil
+		local function updateInput(input)
+			local Delta = input.Position - dragStart
+			local Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + Delta.X, startPos.Y.Scale, startPos.Y.Offset + Delta.Y)
+			game:GetService("TweenService"):Create(Frame, TweenInfo.new(0.30), {Position = Position}):Play()
+		end
+		Frame.InputBegan:Connect(function(input)
+			if not Is then
+				if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) and game:GetService("UserInputService"):GetFocusedTextBox() == nil then
+					dragToggle = true
+					dragStart = input.Position
+					startPos = Frame.Position
+					input.Changed:Connect(function()
+						if input.UserInputState == Enum.UserInputState.End then
+							dragToggle = false
+						end
+					end)
+				end
+			end
+		end)
+		Frame.InputChanged:Connect(function(input)
+			if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+				dragInput = input
+			end
+		end)
+		game:GetService("UserInputService").InputChanged:Connect(function(input)
+			if input == dragInput and dragToggle then
+				updateInput(input)
+			end
+		end)
+	end)()
+end
+DragifyGui(Frame)
 function API:swait()
 	game:GetService("RunService").Stepped:Wait()
 end
