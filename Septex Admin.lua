@@ -66,6 +66,7 @@ print([[
 	 antitouch [ON/OFF] | Kills anyone who touches you
 	 notify [on/off] | tells you who is leaving and joining and Pick Up
 	 antipunch [ON/OFF] | prevents anyone from punching you
+	 spawnguns [on/off] | Loop kills you to spawn guns
 \\
 ]])
 local States = {}
@@ -99,6 +100,7 @@ local States = {}
       States.AntiTouch = false
       States.Notify = false
       States.antipunch = false
+      States.spawnguns = false
 local API = {}
       API.Whitelisted = {}
       API.LoopCrim = {}
@@ -872,6 +874,7 @@ function PlayerChatted(Message)
 	local Target = API:FindPlayer(args[2])
 	if Target then
 		API:KillPlayer(Target,10)
+		API:Notif("OK", 'Killed '..Target.DisplayName, Color3.fromRGB(0, 255, 0), 3)
 	end
     end
   end
@@ -1494,7 +1497,10 @@ function PlayerChatted(Message)
   if Command("antipunch") then
 	ChangeState(args[2],"antipunch")
   end
-  if NotCommand("unload") and NotCommand("prefix") and NotCommand('re') and NotCommand("refresh") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("inmate") and NotCommand("in") and NotCommand("guard") and NotCommand("gu") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("autoremoveff") and NotCommand("autorff") and NotCommand("killaura") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("damage") and NotCommand("dmg") and NotCommand("autodumpcars") and NotCommand("autoremovecars") and NotCommand('autonocars') and NotCommand("crim") and NotCommand("criminal") and NotCommand("makecrim") and NotCommand("antisit") and NotCommand("infjump") and NotCommand("bring") and NotCommand("void") and NotCommand("view") and NotCommand("unview") and NotCommand("copychat") and NotCommand("antifling") and NotCommand("goto") and NotCommand("to") and NotCommand("shotgun") and NotCommand("remington") and NotCommand("rem") and NotCommand("ak-47") and NotCommand('ak') and NotCommand("m9") and NotCommand("pistol") and NotCommand("m4a1") and NotCommand('m4') and NotCommand("hammer") and NotCommand("ham") and NotCommand("knife") and NotCommand("knive") and NotCommand("guns") and NotCommand("items") and NotCommand("autoguns") and NotCommand("aguns") and NotCommand("autoitems") and NotCommand("aitems") and NotCommand('loopcrim') and NotCommand("unloopcrim") and NotCommand("respawn") and NotCommand("opengate") and NotCommand("car") and NotCommand("forcefield") and NotCommand("ff") and NotCommand("speed") and NotCommand("ws") and NotCommand("tp") and NotCommand("givekey") and NotCommand("keycard") and NotCommand("key") and NotCommand("antitase") and NotCommand("antishield") and NotCommand("autoguard") and NotCommand("aguard") and NotCommand("silentaim") and NotCommand("saim") and NotCommand("noclip") and NotCommand("shootback") and NotCommand("antishoot") and NotCommand("doors") and NotCommand("oneshot") and NotCommand("anticrash") and NotCommand("lagspike") and NotCommand("pp") and NotCommand("tase") and NotCommand("arrest") and NotCommand("ar") and NotCommand("clickkill") and NotCommand("clickarrest") and NotCommand("godmode") and NotCommand("god") and NotCommand('arrestaura') and NotCommand("antitouch") and NotCommand("notify") and NotCommand("antipunch") then
+  if Command("spawnguns") then
+	ChangeState(args[2],"spawnguns")
+  end
+  if NotCommand("unload") and NotCommand("prefix") and NotCommand('re') and NotCommand("refresh") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("inmate") and NotCommand("in") and NotCommand("guard") and NotCommand("gu") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("autoremoveff") and NotCommand("autorff") and NotCommand("killaura") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("damage") and NotCommand("dmg") and NotCommand("autodumpcars") and NotCommand("autoremovecars") and NotCommand('autonocars') and NotCommand("crim") and NotCommand("criminal") and NotCommand("makecrim") and NotCommand("antisit") and NotCommand("infjump") and NotCommand("bring") and NotCommand("void") and NotCommand("view") and NotCommand("unview") and NotCommand("copychat") and NotCommand("antifling") and NotCommand("goto") and NotCommand("to") and NotCommand("shotgun") and NotCommand("remington") and NotCommand("rem") and NotCommand("ak-47") and NotCommand('ak') and NotCommand("m9") and NotCommand("pistol") and NotCommand("m4a1") and NotCommand('m4') and NotCommand("hammer") and NotCommand("ham") and NotCommand("knife") and NotCommand("knive") and NotCommand("guns") and NotCommand("items") and NotCommand("autoguns") and NotCommand("aguns") and NotCommand("autoitems") and NotCommand("aitems") and NotCommand('loopcrim') and NotCommand("unloopcrim") and NotCommand("respawn") and NotCommand("opengate") and NotCommand("car") and NotCommand("forcefield") and NotCommand("ff") and NotCommand("speed") and NotCommand("ws") and NotCommand("tp") and NotCommand("givekey") and NotCommand("keycard") and NotCommand("key") and NotCommand("antitase") and NotCommand("antishield") and NotCommand("autoguard") and NotCommand("aguard") and NotCommand("silentaim") and NotCommand("saim") and NotCommand("noclip") and NotCommand("shootback") and NotCommand("antishoot") and NotCommand("doors") and NotCommand("oneshot") and NotCommand("anticrash") and NotCommand("lagspike") and NotCommand("pp") and NotCommand("tase") and NotCommand("arrest") and NotCommand("ar") and NotCommand("clickkill") and NotCommand("clickarrest") and NotCommand("godmode") and NotCommand("god") and NotCommand('arrestaura') and NotCommand("antitouch") and NotCommand("notify") and NotCommand("antipunch") and NotCommand("spawnguns") then
     API:Notif("Error", 'Not a valid command.', Color3.fromRGB(255, 0, 0), 3)
   end
 end
@@ -1624,6 +1630,17 @@ spawn(function()
 				if x:IsA("BasePart") and States.noclip then
 					x.CanCollide = false
 				end
+			end
+		end
+		if States.spawnguns and not Unloaded then
+			if plr.Team ~= game.Teams.Guards then
+				API:ChangeTeam(game.Teams.Guards)
+				wait(.15)
+			end
+			if States.spawnguns then
+				plr.Character:FindFirstChildOfClass("Humanoid"):ChangeState(15)
+				wait(.05)
+				workspace.Remote.TeamEvent:FireServer("Bright blue")
 			end
 		end
 	end
