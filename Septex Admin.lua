@@ -739,17 +739,6 @@ function API:BadArea(player)
 	end
 	return true
 end
-function API:MKILL(Target)
-	local OldPos = API:GetPosition()
-	repeat wait()
-		API:UnSit()
-		plr.Character.HumanoidRootPart.CFrame = Target.Character.HumanoidRootPart.CFrame * CFrame.new(0,0,1)
-			task.spawn(function()
-				game.ReplicatedStorage.meleeEvent:FireServer(Target)
-			end)
-	until Target.Character.Humanoid.Health <= 1
-	API:MoveTo(OldPos)
-end
 function AntiPunchC(v2)
 	if States.antipunch == false then
 		return
