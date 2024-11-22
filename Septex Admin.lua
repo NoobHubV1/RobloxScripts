@@ -67,6 +67,10 @@ print([[
 	 notify [on/off] | tells you who is leaving and joining and Pick Up
 	 antipunch [ON/OFF] | prevents anyone from punching you
 	 spawnguns [on/off] | Loop kills you to spawn guns
+	 fly [speed] | Enter plane mode but dont hit towers
+	 unfly | Disables fly
+	 carfly | Car go flying
+	 uncarfly | stop the car fly
 \\
 ]])
 local States = {}
@@ -770,6 +774,52 @@ function AntiPunchC(v2)
 			end)
 		end)
 	end)
+end
+local Flying = false
+function API:Fly(speed)
+	Flying = true
+	local Controler = require(game:GetService("Players").LocalPlayer.PlayerScripts:WaitForChild('PlayerModule'):WaitForChild("ControlModule"))
+	local BodyA,BodyB = Instance.new("BodyVelocity"),Instance.new("BodyGyro")
+	BodyA.Parent = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart
+	BodyA.MaxForce = Vector3.new(0,0,0)
+	BodyA.Velocity = Vector3.new(0,0,0)
+	BodyB.Parent = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart
+	BodyB.MaxTorque = Vector3.new(4^234,4^234,4^234)
+	BodyB.P = 10000
+	BodyB.D = 50
+	API.FlyA = BodyA
+	API.FlyB = BodyB
+	local camera = game.Workspace.CurrentCamera
+	API.FlyConnection = game:GetService"RunService".RenderStepped:Connect(function()
+		if game:GetService("Players").LocalPlayer.Character and game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid").Health >0 and BodyA and BodyB then
+			local direction = Controler:GetMoveVector()
+			BodyA.MaxForce = Vector3.new(4^234,4^234,4^234)
+			BodyB.MaxTorque = Vector3.new(4^234,4^234,4^234)
+			BodyB.CFrame = camera.CoordinateFrame
+			BodyA.Velocity = Vector3.new()
+			if direction.X > 0 then
+				BodyA.Velocity = BodyA.Velocity + camera.CFrame.RightVector*(direction.X*(speed*10))
+			end
+			if direction.X < 0 then
+				BodyA.Velocity = BodyA.Velocity + camera.CFrame.RightVector*(direction.X*(speed*10))
+			end
+			if direction.Z > 0 then
+				BodyA.Velocity = BodyA.Velocity - camera.CFrame.LookVector*(direction.Z*(speed*10))
+			end
+			if direction.Z < 0 then
+				BodyA.Velocity = BodyA.Velocity - camera.CFrame.LookVector*(direction.Z*(speed*10))
+			end
+		end
+	end)
+end
+function API:Unfly()
+	if Flying then
+		Flying = false
+		API:Destroy(API.FlyA)
+		API:Destroy(API.FlyB)
+		API.FlyConnection:Disconnect()
+		API:Refresh(true)
+	end
 end
 function PlayerChatted(Message)
   if Unloaded then return end
@@ -1500,7 +1550,31 @@ function PlayerChatted(Message)
   if Command("spawnguns") then
 	ChangeState(args[2],"spawnguns")
   end
-  if NotCommand("unload") and NotCommand("prefix") and NotCommand('re') and NotCommand("refresh") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("inmate") and NotCommand("in") and NotCommand("guard") and NotCommand("gu") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("autoremoveff") and NotCommand("autorff") and NotCommand("killaura") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("damage") and NotCommand("dmg") and NotCommand("autodumpcars") and NotCommand("autoremovecars") and NotCommand('autonocars') and NotCommand("crim") and NotCommand("criminal") and NotCommand("makecrim") and NotCommand("antisit") and NotCommand("infjump") and NotCommand("bring") and NotCommand("void") and NotCommand("view") and NotCommand("unview") and NotCommand("copychat") and NotCommand("antifling") and NotCommand("goto") and NotCommand("to") and NotCommand("shotgun") and NotCommand("remington") and NotCommand("rem") and NotCommand("ak-47") and NotCommand('ak') and NotCommand("m9") and NotCommand("pistol") and NotCommand("m4a1") and NotCommand('m4') and NotCommand("hammer") and NotCommand("ham") and NotCommand("knife") and NotCommand("knive") and NotCommand("guns") and NotCommand("items") and NotCommand("autoguns") and NotCommand("aguns") and NotCommand("autoitems") and NotCommand("aitems") and NotCommand('loopcrim') and NotCommand("unloopcrim") and NotCommand("respawn") and NotCommand("opengate") and NotCommand("car") and NotCommand("forcefield") and NotCommand("ff") and NotCommand("speed") and NotCommand("ws") and NotCommand("tp") and NotCommand("givekey") and NotCommand("keycard") and NotCommand("key") and NotCommand("antitase") and NotCommand("antishield") and NotCommand("autoguard") and NotCommand("aguard") and NotCommand("silentaim") and NotCommand("saim") and NotCommand("noclip") and NotCommand("shootback") and NotCommand("antishoot") and NotCommand("doors") and NotCommand("oneshot") and NotCommand("anticrash") and NotCommand("lagspike") and NotCommand("pp") and NotCommand("tase") and NotCommand("arrest") and NotCommand("ar") and NotCommand("clickkill") and NotCommand("clickarrest") and NotCommand("godmode") and NotCommand("god") and NotCommand('arrestaura') and NotCommand("antitouch") and NotCommand("notify") and NotCommand("antipunch") and NotCommand("spawnguns") then
+  if Command('fly') then
+	if Flying then
+		API:Unfly()
+	end
+	wait(.2)
+	API:Fly(tonumber(args[2]) or 7)
+  end
+  if Command('unfly') then
+	if Flying then
+		API:Unfly()
+	end
+  end
+  if Command("carfly") then
+	if Flying then
+		API:Unfly()
+	end
+	wait()
+	API:Fly(10)
+  end
+  if Command("uncarfly") then
+	if Flying then
+		API:Unfly()
+	end
+  end
+  if NotCommand("unload") and NotCommand("prefix") and NotCommand('re') and NotCommand("refresh") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("inmate") and NotCommand("in") and NotCommand("guard") and NotCommand("gu") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("autoremoveff") and NotCommand("autorff") and NotCommand("killaura") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("damage") and NotCommand("dmg") and NotCommand("autodumpcars") and NotCommand("autoremovecars") and NotCommand('autonocars') and NotCommand("crim") and NotCommand("criminal") and NotCommand("makecrim") and NotCommand("antisit") and NotCommand("infjump") and NotCommand("bring") and NotCommand("void") and NotCommand("view") and NotCommand("unview") and NotCommand("copychat") and NotCommand("antifling") and NotCommand("goto") and NotCommand("to") and NotCommand("shotgun") and NotCommand("remington") and NotCommand("rem") and NotCommand("ak-47") and NotCommand('ak') and NotCommand("m9") and NotCommand("pistol") and NotCommand("m4a1") and NotCommand('m4') and NotCommand("hammer") and NotCommand("ham") and NotCommand("knife") and NotCommand("knive") and NotCommand("guns") and NotCommand("items") and NotCommand("autoguns") and NotCommand("aguns") and NotCommand("autoitems") and NotCommand("aitems") and NotCommand('loopcrim') and NotCommand("unloopcrim") and NotCommand("respawn") and NotCommand("opengate") and NotCommand("car") and NotCommand("forcefield") and NotCommand("ff") and NotCommand("speed") and NotCommand("ws") and NotCommand("tp") and NotCommand("givekey") and NotCommand("keycard") and NotCommand("key") and NotCommand("antitase") and NotCommand("antishield") and NotCommand("autoguard") and NotCommand("aguard") and NotCommand("silentaim") and NotCommand("saim") and NotCommand("noclip") and NotCommand("shootback") and NotCommand("antishoot") and NotCommand("doors") and NotCommand("oneshot") and NotCommand("anticrash") and NotCommand("lagspike") and NotCommand("pp") and NotCommand("tase") and NotCommand("arrest") and NotCommand("ar") and NotCommand("clickkill") and NotCommand("clickarrest") and NotCommand("godmode") and NotCommand("god") and NotCommand('arrestaura') and NotCommand("antitouch") and NotCommand("notify") and NotCommand("antipunch") and NotCommand("spawnguns") and NotCommand('fly') and NotCommand("unfly") and NotCommand('carfly') and NotCommand('uncarfly') then
     API:Notif("Error", 'Not a valid command.', Color3.fromRGB(255, 0, 0), 3)
   end
 end
