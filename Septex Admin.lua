@@ -2083,14 +2083,14 @@ TextButton.MouseButton1Click:Connect(function()
 		Unloaded = true
 		Cooldown = true
 		TextButton.Visible = false
-		wait(.6)
+		wait(.8)
 		TextButton.Visible = true
 	else
 		Frame.Visible = true
 		Unloaded = false
 		Cooldown = false
 		TextButton.Visible = false
-		wait(.6)
+		wait(.8)
 		TextButton.Visible = true
 	end
 end)
