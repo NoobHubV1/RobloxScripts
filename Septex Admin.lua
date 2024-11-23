@@ -127,7 +127,7 @@ ScreenGui = Create("ScreenGui",plr.PlayerGui,{Name = 'ScreenGui', ResetOnSpawn =
 Frame = Create("Frame",ScreenGui,{Name = "Frame", BackgroundColor3 = Color3.fromRGB(47, 46, 25), BackgroundTransparency = 0.3, BorderColor3 = Color3.fromRGB(29, 29, 29), BorderSizePixel = 6, Position = UDim2.new(0.662217021, 0, 0.189768493, 0), Size = UDim2.new(0, 250, 0, 80), ZIndex = 0})
 TextLabel = Create("TextLabel",Frame,{Name = "TextLabel", BackgroundColor3 = Color3.new(255, 255, 255), BackgroundTransparency = 1, Position = UDim2.new(0, 0, 0, 0), Size = UDim2.new(0, 250, 0, 25), ZIndex = 5, Font = "SourceSansBold", Text = "Execute bar", TextColor3 = Color3.new(255, 255, 255), TextSize = 24, TextWrapped = true})
 TextBox = Create("TextBox",Frame,{Name = "TextBox", BackgroundColor3 = Color3.new(172, 172, 172), BackgroundTransparency = 0.4, Position = UDim2.new(0.097, 0, 0.436, 0), Size = UDim2.new(0, 200, 0, 30), Font = "Roboto", PlaceholderColor3 = Color3.new(145, 145, 145), PlaceholderText = "Press "..Prefix.." To Enter", Text = "", TextColor3 = Color3.fromRGB(255, 255, 255), TextSize = 16, ClearTextOnFocus = false})
-TextButton = Create('TextButton',ScreenGui,{Name = "TextButton", BackgroundColor3 = Color3.fromRGB(0, 0, 0), BackgroundTransparency = 0.5, Size = UDim2.new(0, 200, 0, 50), Font = "SourceSans", Text = "RightShift", TextSize = 20, TextColor3 = Color3.new(255, 255, 255)})
+TextButton = Create('TextButton',ScreenGui,{Name = "TextButton", BackgroundColor3 = Color3.fromRGB(0, 0, 0), BackgroundTransparency = 0.5, Size = UDim2.new(0, 200, 0, 50), Font = "SourceSans", Text = "-", TextSize = 20, TextColor3 = Color3.new(255, 255, 255)})
 function API:Notif(name, content, color, time)
   Notification:MakeNotification({
       Name = name,
@@ -2078,20 +2078,16 @@ plr:GetMouse().Button1Up:Connect(function()
 	end
 end)
 TextButton.MouseButton1Click:Connect(function()
-	if Frame.Visible then
-		Frame.Visible = false
-		Unloaded = true
-		Cooldown = true
-		TextButton.Visible = false
-		wait(.8)
-		TextButton.Visible = true
-	else
-		Frame.Visible = true
-		Unloaded = false
-		Cooldown = false
-		TextButton.Visible = false
-		wait(.8)
-		TextButton.Visible = true
+	if Frame.Size == UDim2.new(0, 250, 0, 80) then
+		Frame.Size = UDim2.new(0, 250, 0, 40)
+		TextLabel.Visible = false
+		TextBox.Visible = false
+		TextButton.Text = "+"
+	elseif Frame.Size == UDim2.new(0, 250, 0, 40) then
+		Frame.Size = UDim2.new(0, 250, 0, 80)
+		TextLabel.Visible = true
+		TextBox.Visible = true
+		TextButton.Text = "-"
 	end
 end)
 API:Notif("Loads", 'Press F9 or chat /console to show commands list', Color3.fromRGB(255, 0, 0), 10)
