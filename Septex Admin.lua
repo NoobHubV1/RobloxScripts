@@ -3,7 +3,6 @@ print([[
   // Commands List:
          unload | Unload the script
          prefix [STRING] | Changed new prefix
-         allcmds | tells you the ammount of commands tiger admin has
          refresh / re | Respawn Character and save position
          cmds / cmd | Show commands list
          inmate / in | Change team inmates
@@ -131,6 +130,10 @@ TextBox = Create("TextBox",Frame,{Name = "TextBox", BackgroundColor3 = Color3.ne
 TextButton = Create('TextButton',Frame,{Name = "TextButton", BackgroundColor3 = Color3.fromRGB(0, 0, 0), BackgroundTransparency = 0.5, Position = UDim2.new(0.74, 0, 0, 0), Size = UDim2.new(0, 30, 0, 30), Font = "SourceSans", Text = "-", TextSize = 20, TextColor3 = Color3.new(255, 255, 255)})
 TextButton_2 = Create('TextButton',Frame,{Name = "TextButton", BackgroundColor3 = Color3.fromRGB(0, 0, 0), BackgroundTransparency = 0.5, Position = UDim2.new(0.86, 0, 0, 0), Size = UDim2.new(0, 30, 0, 30), Font = "SourceSans", Text = "X", TextSize = 20, TextColor3 = Color3.new(255, 255, 255)})
 TextButton_3 = Create('TextButton',ScreenGui,{Name = "TextButton", BackgroundColor3 = Color3.fromRGB(0, 0, 0), BackgroundTransparency = 0.5, Position = UDim2.new(0.00658436213, 0, 0.329768493, 0), Size = UDim2.new(0, 100, 0, 50), Font = "SourceSans", Text = "OPEN", TextSize = 20, TextColor3 = Color3.new(255, 255, 255), Visible = false})
+Frame_2 = Create("Frame",ScreenGui,{Name = "Frame", Active = true, BackgroundColor3 = Color3.new(0.223529, 0.231373, 0.309804), BorderSizePixel = 0, Position = UDim2.new(0, 315, 0, 100), Size = UDim2.new(0, 275, 0, 275), Visible = false})
+ScrollingFrame = Create("ScrollingFrame",Frame_2,{Name = "ScrollingFrame", BackgroundColor3 = Color3.new(0.160784, 0.160784, 0.203922), BorderSizePixel = 0, Position = UDim2.new(0, 0, 0.0729999989, 0), Size = UDim2.new(1.04999995, 0, 0.92900002, 0), CanvasSize = UDim2.new(0, 0, 10, 0)})
+TextLabel_2 = Create("TextLabel",ScrollingFrame,{Name = "ScrollingFrame", BackgroundColor3 = Color3.fromRGB(1, 1, 1), BackgroundTransparency = 1, Size = UDim2.new(0.930000007, 0, 1, 0), Font = "Roboto", FontSize = "Size18", Text = "Versions 1.5\nScript make by NoobHubV1\n[1] unload | Unload the script\n[2] prefix [STRING] | Changed new prefix\n[3] refresh / re | Respawn character and save position\n[4] cmds / cmd | Show commands list\n[5] inmate / in | Changed to inmates\n[6] guard / gu | Changed to guards\n[7] autorespawn / autore [boolean] | Auto Respawn Character (if died) and auto save position\n[8] autoremoveff / autorff [boolean] | Auto Remove forcefield (if respawn)\n[9] killaura [boolean] | Activate killaura\n[10] whitelist / wl [PLAYER] | Whitelisted player\n[11] unwhitelist / unwl [player] | Blacklisted player\n[12] kill / oof / die [player,all,team] | Kill a player(s)\n[13] olditemmethod / oldimethod [boolean] | Teleports to grab item\n[14] damage / dmg [player,all,team] [bullet] | Damage a player(s)\n[15] autodumpcars / autoremovecars / autonocars [boolean] | Auto Remove Cars if Command ;bring\n[16] criminal / crim / makecrim [PLAYER] | Make criminal player\n[17] antisit [boolean] | Activate antisit\n[18] infjump [boolean] | Infinite Jumps\n[19] bring [player] | Bringing player\n[20] void [PLAYER] | Teleports player to void\n[21] view [player] | Viewing player\n[22] unview | Stopped viewing player\n[23] copychat [boolean] | Copying chat everyone\n[24] antifling [boolean] | Activate antifling\n[25] goto / to [player] | Teleports to player\n[26] shotgun / remington / rem | Get remington 870\n[27] ak-47 / ak | Get ak-47\n[28] m9 / pistol | Get m9\n[29] m4a1 / m4 | Get m4a1\n[30] hammer / ham | Get hammer\n[31] knife / knive | Get knife\n[32] guns | Get all guns\n[33] items | Get all items\n[34] autoguns / aguns [boolean] | Auto get all guns\n[35] autoitems / aitems [boolean] | Auto get all items\n[36] loopcrim [player] | Auto criminal player\n[37] unloopcrim [PLAYER] | Stopped criminal player", TextColor3 = Color3.new(1, 1, 1), TextSize = 15, TextWrapped = true, TextXAlignment = "Left", TextYAlignment = "Top"})
+TextButton_4 = Create("TextButton",Frame_2,{Name = "TextButton", BackgroundColor3 = Color3.new(0.890196, 0.223529, 0.0588235), Position = UDim2.new(0.995000005, 0, 0, 0), BorderSizePixel = 0, Size = UDim2.new(0.0545952693, 0, 0.0728644878, 0), Font = "SourceSans", FontSize = "Size24", Text = "X", TextColor3 = Color3.fromRGB(1, 1, 1), TextSize = 20})
 function API:Notif(name, content, color, time)
   Notification:MakeNotification({
       Name = name,
@@ -179,6 +182,7 @@ function DragifyGui(Frame,Is)
 	end)()
 end
 DragifyGui(Frame)
+DragifyGui(Frame_2)
 function API:swait()
 	game:GetService("RunService").Stepped:Wait()
 end
@@ -837,8 +841,8 @@ function PlayerChatted(Message)
     if New and tostring(New) then
       local NewPrefix = tostring(New)
       Prefix = NewPrefix
-      TextBox.PlaceholderText = "Press "..NewPrefix.." To Enter"
-      API:Notif("OK", 'prefix set to '..NewPrefix, Color3.fromRGB(0, 255, 0), 3)
+      TextBox.PlaceholderText = "Press "..Prefix.." To Enter"
+      API:Notif("OK", 'prefix set to '..Prefix, Color3.fromRGB(0, 255, 0), 3)
     end
   end
   if Command("re") or Command("refresh") then
@@ -846,7 +850,11 @@ function PlayerChatted(Message)
     API:Notif("OK", "Respawn Character and save position", Color3.fromRGB(0, 255, 0), 3)
   end
   if Command("cmds") or Command("cmd") then
-    API:Notif("Cmds", "The commands are listed in the console! \n Press F9 to view or chat /console", Color3.fromRGB(0, 0, 205), 3)
+    if Frame_2.Visible then
+	Frame_2.Visible = false
+    else
+	Frame_2.Visible = true
+    end
   end
   if Command("inmate") or Command("in") then
     API:ChangeTeam(game.Teams.Inmates)
@@ -2103,10 +2111,12 @@ TextButton_3.MouseButton1Click:Connect(function()
 	TextButton_2.Visible = true
 	TextButton_3.Visible = false
 end)
+TextButton_4.MouseButton1Click:Connect(function()
+	Frame_2.Visible = false
+end)
 API:Notif("Loads", 'Press F9 or chat /console to show commands list', Color3.fromRGB(255, 0, 0), 10)
 API:Refresh()
 Cooldown = false
 else
 	game:GetService("StarterGui"):SetCore("SendNotification",{Title = "Septex Admin",Text = "Septex admin is already executed or game not support",Duration = 7})
 end
- 
