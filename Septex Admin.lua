@@ -73,6 +73,7 @@ print([[
 	 uncarfly | stop the car fly
 \\
 ]])
+		
 local States = {}
       States.AutoRespawn = true
       States.AutoRemoveff = false
@@ -127,7 +128,9 @@ ScreenGui = Create("ScreenGui",plr.PlayerGui,{Name = 'ScreenGui', ResetOnSpawn =
 Frame = Create("Frame",ScreenGui,{Name = "Frame", BackgroundColor3 = Color3.fromRGB(47, 46, 25), BackgroundTransparency = 0.3, BorderColor3 = Color3.fromRGB(29, 29, 29), BorderSizePixel = 6, Position = UDim2.new(0.662217021, 0, 0.189768493, 0), Size = UDim2.new(0, 250, 0, 80), ZIndex = 0})
 TextLabel = Create("TextLabel",Frame,{Name = "TextLabel", BackgroundColor3 = Color3.new(255, 255, 255), BackgroundTransparency = 1, Position = UDim2.new(0, 0, 0, 0), Size = UDim2.new(0, 250, 0, 25), ZIndex = 5, Font = "SourceSansBold", Text = "Execute bar", TextColor3 = Color3.new(255, 255, 255), TextSize = 24, TextWrapped = true})
 TextBox = Create("TextBox",Frame,{Name = "TextBox", BackgroundColor3 = Color3.new(172, 172, 172), BackgroundTransparency = 0.4, Position = UDim2.new(0.097, 0, 0.436, 0), Size = UDim2.new(0, 200, 0, 30), Font = "Roboto", PlaceholderColor3 = Color3.new(145, 145, 145), PlaceholderText = "Press "..Prefix.." To Enter", Text = "", TextColor3 = Color3.fromRGB(255, 255, 255), TextSize = 16, ClearTextOnFocus = false})
-TextButton = Create('TextButton',ScreenGui,{Name = "TextButton", BackgroundColor3 = Color3.fromRGB(0, 0, 0), BackgroundTransparency = 0.5, Size = UDim2.new(0, 200, 0, 50), Font = "SourceSans", Text = "-", TextSize = 20, TextColor3 = Color3.new(255, 255, 255)})
+TextButton = Create('TextButton',Frame,{Name = "TextButton", BackgroundColor3 = Color3.fromRGB(0, 0, 0), BackgroundTransparency = 0.5, Position = UDim2.new(0.74, 0, 0, 0), Size = UDim2.new(0, 30, 0, 30), Font = "SourceSans", Text = "-", TextSize = 20, TextColor3 = Color3.new(255, 255, 255)})
+TextButton_2 = Create('TextButton',Frame,{Name = "TextButton", BackgroundColor3 = Color3.fromRGB(0, 0, 0), BackgroundTransparency = 0.5, Position = UDim2.new(0.86, 0, 0, 0), Size = UDim2.new(0, 30, 0, 30), Font = "SourceSans", Text = "X", TextSize = 20, TextColor3 = Color3.new(255, 255, 255)})
+TextButton_3 = Create('TextButton',ScreenGui,{Name = "TextButton", BackgroundColor3 = Color3.fromRGB(0, 0, 0), BackgroundTransparency = 0.5, Position = UDim2.new(0.00658436213, 0, 0.329768493, 0), Size = UDim2.new(0, 100, 0, 50), Font = "SourceSans", Text = "OPEN", TextSize = 20, TextColor3 = Color3.new(255, 255, 255), Visible = false})
 function API:Notif(name, content, color, time)
   Notification:MakeNotification({
       Name = name,
@@ -2079,16 +2082,26 @@ plr:GetMouse().Button1Up:Connect(function()
 end)
 TextButton.MouseButton1Click:Connect(function()
 	if Frame.Size == UDim2.new(0, 250, 0, 80) then
-		Frame.Size = UDim2.new(0, 250, 0, 40)
+		Frame.Size = UDim2.new(0, 250, 0, 28)
 		TextLabel.Visible = false
 		TextBox.Visible = false
 		TextButton.Text = "+"
-	elseif Frame.Size == UDim2.new(0, 250, 0, 40) then
+	elseif Frame.Size == UDim2.new(0, 250, 0, 28) then
 		Frame.Size = UDim2.new(0, 250, 0, 80)
 		TextLabel.Visible = true
 		TextBox.Visible = true
 		TextButton.Text = "-"
 	end
+end)
+TextButton_2.MouseButton1Click:Connect(function()
+	Frame.Visible = false
+	TextButton_2.Visible = false
+	TextButton_3.Visible = true
+end)
+TextButton_3.MouseButton1Click:Connect(function()
+	Frame.Visible = true
+	TextButton_2.Visible = true
+	TextButton_3.Visible = false
 end)
 API:Notif("Loads", 'Press F9 or chat /console to show commands list', Color3.fromRGB(255, 0, 0), 10)
 API:Refresh()
@@ -2096,3 +2109,4 @@ Cooldown = false
 else
 	game:GetService("StarterGui"):SetCore("SendNotification",{Title = "Septex Admin",Text = "Septex admin is already executed or game not support",Duration = 7})
 end
+ 
