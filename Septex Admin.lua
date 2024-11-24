@@ -1,78 +1,4 @@
 if game.PlaceId == 155615604 and not game:FindFirstChild("Septex_Admin") then
-print([[
-  // Commands List:
-         unload | Unload the script
-         prefix [STRING] | Changed new prefix
-         refresh / re | Respawn Character and save position
-         cmds / cmd | Show commands list
-         inmate / in | Change team inmates
-         guard / gu | Change team guards
-         autore / autorespawn [on/off] | Auto Respawn Character (if died) and auto save Position
-         autoremoveff / autorff [ON/OFF] | Auto Remove forcefield (if respawn)
-         killaura [on/off] | Activate killaura
-         whitelist / wl [PLAYER] | Whitelisted Player
-         unwhitelist / unwl [PLAYER] | Blacklisted Player
-         kill / oof / die [PLAYER,ALL,TEAM] | Kill a player(s)
-	 olditemmethod / oldimethod [ON/OFF] | Teleport to grab item
-	 damage / dmg [plr,all,team] [number] | damages a player(s)
-	 autodumpcars / autoremovecars / autonocars [on/off] | Auto Dump Cars if command ";bring"
-	 criminal / crim / makecrim [plr] | Make crim player
-	 antisit [on/off] | Activate antisit
-	 infjump [ON/OFF] | Infinite Jumps
-	 bring [PLAYER] | Bringing player
-	 void [plr] | Teleports player to void
-	 view [player] | Viewing player
-	 unview | Stopped viewing player
-	 copychat [on/off] | Copying chat everyone
-	 antifling [ON/OFF] | Activate antifling
-	 goto / to [PLAYER] | Teleports to player
-	 shotgun / remington / rem | Get remington 870
-	 ak-47 / ak | Get ak-47
-	 m9 / pistol | Get m9
-	 m4a1 / m4 | Get m4a1
-	 hammer / ham | Get hammer
-	 knife / knive | Get crude knife
-	 guns | Get all guns
-	 items | Get all items
-	 autoguns / aguns [on/off] | Auto get all guns
-	 autoitems / aitems [ON/OFF] | Auto get all items
-	 loopcrim [plr] | Auto make criminal player
-	 unloopcrim [player] | Stopped make criminal player
-	 respawn | Respawn Character and not save position
-	 opengate | Opened the gate
-	 car | Brings a car to you
-	 forcefield / ff [on/off] | Activate forcefield
-	 speed / ws [number] | changed speed to (number)
-	 tp [player1] [player2] | Teleports (player1) To (player2)
-	 givekey / key / keycard | Gets a keycard
-	 antitase [ON/OFF] | Prevents you from getting tased
-	 antishield [on/off] | Deletes other peoples shields
-	 autoguard / aguard [ON/OFF] | Auto Team Guard!
-	 silentaim / saim [on/off] | Fire and dont miss
-	 noclip [ON/OFF] | Go throught walls
-	 shootback / antishoot [on/off] | Kills anyone who shoots you
-	 doors [on/off] | Deletes doors
-	 oneshot [ON/OFF] | Makes a gun oneshot
-	 anticrash [on/off] | Tries to stop simple crashes (DOESNT WORK WITH SEPTEX ADMIN CRASH)
-	 lagspike | Freezes everyones screen for some seconds
-	 pp | sus
-	 tase [player,all,team] | Tased the player(s)
-	 arrest [plr,all] | Arrests the targeted player
-	 clickkill [ON/OFF] | click on someone to kill them
-	 clickarrest [on/off] | click on someone to arrest them
-	 godmode / god [ON/OFF] | Turn on Godmode
-	 arrestaura [on/off] | Activate arrestaura
-	 antitouch [ON/OFF] | Kills anyone who touches you
-	 notify [on/off] | tells you who is leaving and joining and Pick Up
-	 antipunch [ON/OFF] | prevents anyone from punching you
-	 spawnguns [on/off] | Loop kills you to spawn guns
-	 fly [speed] | Enter plane mode but dont hit towers
-	 unfly | Disables fly
-	 carfly | Car go flying
-	 uncarfly | stop the car fly
-\\
-]])
-		
 local States = {}
       States.AutoRespawn = true
       States.AutoRemoveff = false
@@ -124,17 +50,17 @@ function Create(class,parent,props)
 end
 Folder = Create("Folder",game,{Name = "Septex_Admin"})
 ScreenGui = Create("ScreenGui",plr.PlayerGui,{Name = 'ScreenGui', ResetOnSpawn = false})
-Frame = Create("Frame",ScreenGui,{Name = "Frame", BackgroundColor3 = Color3.fromRGB(47, 46, 25), BackgroundTransparency = 0.3, BorderColor3 = Color3.fromRGB(29, 29, 29), BorderSizePixel = 6, Position = UDim2.new(0.662217021, 0, 0.189768493, 0), Size = UDim2.new(0, 250, 0, 80), ZIndex = 0})
+Frame = Create("Frame",ScreenGui,{Name = "Frame", BackgroundColor3 = Color3.fromRGB(47, 46, 25), BackgroundTransparency = 0.3, BorderColor3 = Color3.fromRGB(29, 29, 29), BorderSizePixel = 6, Position = UDim2.new(0.012, 0, 0.807, 0), Size = UDim2.new(0, 250, 0, 80), ZIndex = 0})
 TextLabel = Create("TextLabel",Frame,{Name = "TextLabel", BackgroundColor3 = Color3.new(255, 255, 255), BackgroundTransparency = 1, Position = UDim2.new(0, 0, 0, 0), Size = UDim2.new(0, 250, 0, 25), ZIndex = 5, Font = "SourceSansBold", Text = "Execute bar", TextColor3 = Color3.new(255, 255, 255), TextSize = 24, TextWrapped = true})
 TextBox = Create("TextBox",Frame,{Name = "TextBox", BackgroundColor3 = Color3.new(172, 172, 172), BackgroundTransparency = 0.4, Position = UDim2.new(0.097, 0, 0.436, 0), Size = UDim2.new(0, 200, 0, 30), Font = "Roboto", PlaceholderColor3 = Color3.new(145, 145, 145), PlaceholderText = "Press "..Prefix.." To Enter", Text = "", TextColor3 = Color3.fromRGB(255, 255, 255), TextSize = 16, ClearTextOnFocus = false})
 TextButton = Create('TextButton',Frame,{Name = "TextButton", BackgroundColor3 = Color3.fromRGB(0, 0, 0), BackgroundTransparency = 0.5, Position = UDim2.new(0.74, 0, 0, 0), Size = UDim2.new(0, 30, 0, 30), Font = "SourceSans", Text = "-", TextSize = 20, TextColor3 = Color3.new(255, 255, 255)})
 TextButton_2 = Create('TextButton',Frame,{Name = "TextButton", BackgroundColor3 = Color3.fromRGB(0, 0, 0), BackgroundTransparency = 0.5, Position = UDim2.new(0.86, 0, 0, 0), Size = UDim2.new(0, 30, 0, 30), Font = "SourceSans", Text = "X", TextSize = 20, TextColor3 = Color3.new(255, 255, 255)})
 TextButton_3 = Create('TextButton',ScreenGui,{Name = "TextButton", BackgroundColor3 = Color3.fromRGB(0, 0, 0), BackgroundTransparency = 0.5, Position = UDim2.new(0.00658436213, 0, 0.329768493, 0), Size = UDim2.new(0, 100, 0, 50), Font = "SourceSans", Text = "OPEN", TextSize = 20, TextColor3 = Color3.new(255, 255, 255), Visible = false})
 TextButton_4 = Create('ImageButton',Frame,{Name = "ImageButton", BackgroundColor3 = Color3.fromRGB(0, 0, 0), BackgroundTransparency = 0.5, Size = UDim2.new(0, 30, 0, 30), Image = "rbxassetid://11570802781", ImageTransparency = 0.43})
-Frame_2 = Create("Frame",ScreenGui,{Name = "Frame", Active = true, BackgroundColor3 = Color3.new(0.223529, 0.231373, 0.309804), BorderSizePixel = 0, Position = UDim2.new(0, 315, 0, 100), Size = UDim2.new(0, 275, 0, 275)})
+Frame_2 = Create("Frame",ScreenGui,{Name = "Frame", Active = true, BackgroundColor3 = Color3.new(0.223529, 0.231373, 0.309804), BorderSizePixel = 0, Position = UDim2.new(0.368556708, 0, 0.11490047, 0), Size = UDim2.new(0, 275, 0, 275)})
 TextLabel_2 = Create("TextLabel",Frame_2,{Name = "TextLabel", BackgroundColor3 = Color3.new(255, 255, 255), BackgroundTransparency = 1, Size = UDim2.new(0, 250, 0, 25), ZIndex = 5, Font = "SourceSansBold", Text = "Commands List", TextColor3 = Color3.new(255, 255, 255), TextSize = 20, TextWrapped = true})
 ScrollingFrame = Create("ScrollingFrame",Frame_2,{Name = "ScrollingFrame", BackgroundColor3 = Color3.new(0.160784, 0.160784, 0.203922), BorderSizePixel = 0, Position = UDim2.new(0, 0, 0.0729999989, 0), Size = UDim2.new(1.04999995, 0, 0.92900002, 0), CanvasSize = UDim2.new(0, 0, 10, 0)})
-TextLabel_3 = Create("TextLabel",ScrollingFrame,{Name = "ScrollingFrame", BackgroundColor3 = Color3.fromRGB(1, 1, 1), BackgroundTransparency = 1, Size = UDim2.new(0.930000007, 0, 1, 0), Font = "Roboto", FontSize = "Size18", Text = "Versions 1.5\nScript make by NoobHubV1\n[1] unload | Unload the script\n[2] prefix [STRING] | Changed new prefix\n[3] refresh / re | Respawn character and save position\n[4] cmds / cmd | Show commands list\n[5] inmate / in | Changed to inmates\n[6] guard / gu | Changed to guards\n[7] autorespawn / autore [boolean] | Auto Respawn Character (if died) and auto save position\n[8] autoremoveff / autorff [boolean] | Auto Remove forcefield (if respawn)\n[9] killaura [boolean] | Activate killaura\n[10] whitelist / wl [PLAYER] | Whitelisted player\n[11] unwhitelist / unwl [player] | Blacklisted player\n[12] kill / oof / die [player,all,team] | Kill a player(s)\n[13] olditemmethod / oldimethod [boolean] | Teleports to grab item\n[14] damage / dmg [player,all,team] [bullet] | Damage a player(s)\n[15] autodumpcars / autoremovecars / autonocars [boolean] | Auto Remove Cars if Command ;bring\n[16] criminal / crim / makecrim [PLAYER] | Make criminal player\n[17] antisit [boolean] | Activate antisit\n[18] infjump [boolean] | Infinite Jumps\n[19] bring [player] | Bringing player\n[20] void [PLAYER] | Teleports player to void\n[21] view [player] | Viewing player\n[22] unview | Stopped viewing player\n[23] copychat [boolean] | Copying chat everyone\n[24] antifling [boolean] | Activate antifling\n[25] goto / to [player] | Teleports to player\n[26] shotgun / remington / rem | Get remington 870\n[27] ak-47 / ak | Get ak-47\n[28] m9 / pistol | Get m9\n[29] m4a1 / m4 | Get m4a1\n[30] hammer / ham | Get hammer\n[31] knife / knive | Get knife\n[32] guns | Get all guns\n[33] items | Get all items\n[34] autoguns / aguns [boolean] | Auto get all guns\n[35] autoitems / aitems [boolean] | Auto get all items\n[36] loopcrim [player] | Auto criminal player\n[37] unloopcrim [PLAYER] | Stopped criminal player\n[38] respawn / res | Respawn Character and not save position\n[39] opengate | Opened the gate\n[40] car | Brings car to you\n[41] forcefield / ff [boolean] | Activate forcefield\n[42] speed / ws [number] | Changed speed to number\n[43] tp [plr1] [plr2] | Teleports plr1 to plr2\n[44] givekey / key / keycard | Gets a keycard\n[45] antitase [boolean] | Activate antitase\n[46] antishield [boolean] | Deletes other peoples shields\n[47] autoguard / aguard [boolean] | Auto Team guard\n[48] silentaim / saim [boolean] | Fire and dont miss\n[49] noclip [boolean] | Go throught walls\n[50] shootback / antishoot [boolean] | Kills anyone who shoots you\n[51] doors [boolean] | Deletes doors\n[52] oneshot [boolean] | Makes a gun oneshot\n[53] anticrash [boolean] | Tries to stop simple crashes (DOESNT WORK WITH SEPTEX ADMIN CRASH)\n[54] lagspike | Freezes everyones screen for some seconds\n[55] pp | sus\n[56] tase [plr,all,team] | Tase the player(s)\n[57] arrest [plr,all] | Arrests the player\n[58] clickkill [boolean] | click on someone to kill them\n[59] clickarrest [boolean] | click on someone to arrest them\n[60] godmode / god [boolean] | Turn on godmode", TextColor3 = Color3.new(1, 1, 1), TextSize = 15, TextWrapped = true, TextXAlignment = "Left", TextYAlignment = "Top"})
+TextLabel_3 = Create("TextLabel",ScrollingFrame,{Name = "ScrollingFrame", BackgroundColor3 = Color3.fromRGB(1, 1, 1), BackgroundTransparency = 1, Size = UDim2.new(0.930000007, 0, 1, 0), Font = "Roboto", FontSize = "Size18", Text = "Versions 1.5\nScript make by NoobHubV1\n[1] unload | Unload the script\n[2] prefix [STRING] | Changed new prefix\n[3] refresh / re | Respawn character and save position\n[4] cmds / cmd | Show commands list\n[5] inmate / in | Changed to inmates\n[6] guard / gu | Changed to guards\n[7] autorespawn / autore [boolean] | Auto Respawn Character (if died) and auto save position\n[8] autoremoveff / autorff [boolean] | Auto Remove forcefield (if respawn)\n[9] killaura [boolean] | Activate killaura\n[10] whitelist / wl [PLAYER] | Whitelisted player\n[11] unwhitelist / unwl [player] | Blacklisted player\n[12] kill / oof / die [player,all,team] | Kill a player(s)\n[13] olditemmethod / oldimethod [boolean] | Teleports to grab item\n[14] damage / dmg [player,all,team] [bullet] | Damage a player(s)\n[15] autodumpcars / autoremovecars / autonocars [boolean] | Auto Remove Cars if Command ;bring\n[16] criminal / crim / makecrim [PLAYER] | Make criminal player\n[17] antisit [boolean] | Activate antisit\n[18] infjump [boolean] | Infinite Jumps\n[19] bring [player] | Bringing player\n[20] void [PLAYER] | Teleports player to void\n[21] view [player] | Viewing player\n[22] unview | Stopped viewing player\n[23] copychat [boolean] | Copying chat everyone\n[24] antifling [boolean] | Activate antifling\n[25] goto / to [player] | Teleports to player\n[26] shotgun / remington / rem | Get remington 870\n[27] ak-47 / ak | Get ak-47\n[28] m9 / pistol | Get m9\n[29] m4a1 / m4 | Get m4a1\n[30] hammer / ham | Get hammer\n[31] knife / knive | Get knife\n[32] guns | Get all guns\n[33] items | Get all items\n[34] autoguns / aguns [boolean] | Auto get all guns\n[35] autoitems / aitems [boolean] | Auto get all items\n[36] loopcrim [player] | Auto criminal player\n[37] unloopcrim [PLAYER] | Stopped criminal player\n[38] respawn / res | Respawn Character and not save position\n[39] opengate | Opened the gate\n[40] car | Brings car to you\n[41] forcefield / ff [boolean] | Activate forcefield\n[42] speed / ws [number] | Changed speed to number\n[43] tp [plr1] [plr2] | Teleports plr1 to plr2\n[44] givekey / key / keycard | Gets a keycard\n[45] antitase [boolean] | Activate antitase\n[46] antishield [boolean] | Deletes other peoples shields\n[47] autoguard / aguard [boolean] | Auto Team guard\n[48] silentaim / saim [boolean] | Fire and dont miss\n[49] noclip [boolean] | Go throught walls\n[50] shootback / antishoot [boolean] | Kills anyone who shoots you\n[51] doors [boolean] | Deletes doors\n[52] oneshot [boolean] | Makes a gun oneshot\n[53] anticrash [boolean] | Tries to stop simple crashes (DOESNT WORK WITH SEPTEX ADMIN CRASH)\n[54] lagspike | Freezes everyones screen for some seconds\n[55] pp | sus\n[56] tase [plr,all,team] | Tase the player(s)\n[57] arrest [plr,all] | Arrests the player\n[58] clickkill [boolean] | click on someone to kill them\n[59] clickarrest [boolean] | click on someone to arrest them\n[60] godmode / god [boolean] | Turn on godmode\n[61] arrestaura [boolean] | Activate arrestaura\n[62] antitouch [boolean] | Kills anyone who touches you\n[63] notify [boolean] | tells you who is leaving and joining and Pick Up\n[64] antipunch [boolean] | prevents anyone from punching you\n[65] spawnguns [boolean] | Loop kills you to spawn guns\n[66] fly [speed] | Enter plane mode but dont hit towers\n[67] unfly | Disables fly\n[68] carfly | Car go flying\n[69] uncarfly | stop the car fly", TextColor3 = Color3.new(1, 1, 1), TextSize = 15, TextWrapped = true, TextXAlignment = "Left", TextYAlignment = "Top"})
 TextButton_5 = Create("TextButton",Frame_2,{Name = "TextButton", BackgroundColor3 = Color3.new(0.890196, 0.223529, 0.0588235), Position = UDim2.new(0.995000005, 0, 0, 0), BorderSizePixel = 0, Size = UDim2.new(0.0545952693, 0, 0.0728644878, 0), Font = "SourceSans", FontSize = "Size24", Text = "X", TextColor3 = Color3.fromRGB(1, 1, 1), TextSize = 20})
 function API:Notif(name, content, color, time)
   Notification:MakeNotification({
