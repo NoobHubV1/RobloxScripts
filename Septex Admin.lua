@@ -31,6 +31,7 @@ local States = {}
       States.Notify = false
       States.antipunch = false
       States.spawnguns = false
+      States.MobileGui = true
 local API = {}
       API.Whitelisted = {}
       API.LoopCrim = {}
@@ -60,8 +61,10 @@ TextButton_4 = Create('ImageButton',Frame,{Name = "ImageButton", BackgroundColor
 Frame_2 = Create("Frame",ScreenGui,{Name = "Frame", Active = true, BackgroundColor3 = Color3.new(0.223529, 0.231373, 0.309804), BorderSizePixel = 0, Position = UDim2.new(0.368556708, 0, 0.11490047, 0), Size = UDim2.new(0, 275, 0, 275)})
 TextLabel_2 = Create("TextLabel",Frame_2,{Name = "TextLabel", BackgroundColor3 = Color3.new(255, 255, 255), BackgroundTransparency = 1, Size = UDim2.new(0, 250, 0, 25), ZIndex = 5, Font = "SourceSansBold", Text = "Commands List", TextColor3 = Color3.new(255, 255, 255), TextSize = 20, TextWrapped = true})
 ScrollingFrame = Create("ScrollingFrame",Frame_2,{Name = "ScrollingFrame", BackgroundColor3 = Color3.new(0.160784, 0.160784, 0.203922), BorderSizePixel = 0, Position = UDim2.new(0, 0, 0.0729999989, 0), Size = UDim2.new(1.04999995, 0, 0.92900002, 0), CanvasSize = UDim2.new(0, 0, 10, 0)})
-TextLabel_3 = Create("TextLabel",ScrollingFrame,{Name = "ScrollingFrame", BackgroundColor3 = Color3.fromRGB(1, 1, 1), BackgroundTransparency = 1, Size = UDim2.new(0.930000007, 0, 1, 0), Font = "Roboto", FontSize = "Size18", Text = "Versions 1.5\nScript make by NoobHubV1\n[1] unload | Unload the script\n[2] prefix [STRING] | Changed new prefix\n[3] refresh / re | Respawn character and save position\n[4] cmds / cmd | Show commands list\n[5] inmate / in | Changed to inmates\n[6] guard / gu | Changed to guards\n[7] autorespawn / autore [boolean] | Auto Respawn Character (if died) and auto save position\n[8] autoremoveff / autorff [boolean] | Auto Remove forcefield (if respawn)\n[9] killaura [boolean] | Activate killaura\n[10] whitelist / wl [PLAYER] | Whitelisted player\n[11] unwhitelist / unwl [player] | Blacklisted player\n[12] kill / oof / die [player,all,team] | Kill a player(s)\n[13] olditemmethod / oldimethod [boolean] | Teleports to grab item\n[14] damage / dmg [player,all,team] [bullet] | Damage a player(s)\n[15] autodumpcars / autoremovecars / autonocars [boolean] | Auto Remove Cars if Command ;bring\n[16] criminal / crim / makecrim [PLAYER] | Make criminal player\n[17] antisit [boolean] | Activate antisit\n[18] infjump [boolean] | Infinite Jumps\n[19] bring [player] | Bringing player\n[20] void [PLAYER] | Teleports player to void\n[21] view [player] | Viewing player\n[22] unview | Stopped viewing player\n[23] copychat [boolean] | Copying chat everyone\n[24] antifling [boolean] | Activate antifling\n[25] goto / to [player] | Teleports to player\n[26] shotgun / remington / rem | Get remington 870\n[27] ak-47 / ak | Get ak-47\n[28] m9 / pistol | Get m9\n[29] m4a1 / m4 | Get m4a1\n[30] hammer / ham | Get hammer\n[31] knife / knive | Get knife\n[32] guns | Get all guns\n[33] items | Get all items\n[34] autoguns / aguns [boolean] | Auto get all guns\n[35] autoitems / aitems [boolean] | Auto get all items\n[36] loopcrim [player] | Auto criminal player\n[37] unloopcrim [PLAYER] | Stopped criminal player\n[38] respawn / res | Respawn Character and not save position\n[39] opengate | Opened the gate\n[40] car | Brings car to you\n[41] forcefield / ff [boolean] | Activate forcefield\n[42] speed / ws [number] | Changed speed to number\n[43] tp [plr1] [plr2] | Teleports plr1 to plr2\n[44] givekey / key / keycard | Gets a keycard\n[45] antitase [boolean] | Activate antitase\n[46] antishield [boolean] | Deletes other peoples shields\n[47] autoguard / aguard [boolean] | Auto Team guard\n[48] silentaim / saim [boolean] | Fire and dont miss\n[49] noclip [boolean] | Go throught walls\n[50] shootback / antishoot [boolean] | Kills anyone who shoots you\n[51] doors [boolean] | Deletes doors\n[52] oneshot [boolean] | Makes a gun oneshot\n[53] anticrash [boolean] | Tries to stop simple crashes (DOESNT WORK WITH SEPTEX ADMIN CRASH)\n[54] lagspike | Freezes everyones screen for some seconds\n[55] pp | sus\n[56] tase [plr,all,team] | Tase the player(s)\n[57] arrest [plr,all] | Arrests the player\n[58] clickkill [boolean] | click on someone to kill them\n[59] clickarrest [boolean] | click on someone to arrest them\n[60] godmode / god [boolean] | Turn on godmode\n[61] arrestaura [boolean] | Activate arrestaura\n[62] antitouch [boolean] | Kills anyone who touches you\n[63] notify [boolean] | tells you who is leaving and joining and Pick Up\n[64] antipunch [boolean] | prevents anyone from punching you\n[65] spawnguns [boolean] | Loop kills you to spawn guns\n[66] fly [speed] | Enter plane mode but dont hit towers\n[67] unfly | Disables fly\n[68] carfly | Car go flying\n[69] uncarfly | stop the car fly", TextColor3 = Color3.new(1, 1, 1), TextSize = 15, TextWrapped = true, TextXAlignment = "Left", TextYAlignment = "Top"})
+TextLabel_3 = Create("TextLabel",ScrollingFrame,{Name = "ScrollingFrame", BackgroundColor3 = Color3.fromRGB(1, 1, 1), BackgroundTransparency = 1, Size = UDim2.new(0.930000007, 0, 1, 0), Font = "Roboto", FontSize = "Size18", Text = "Versions 1.5\nScript make by NoobHubV1\n[1] unload | Unload the script\n[2] prefix [STRING] | Changed new prefix\n[3] refresh / re | Respawn character and save position\n[4] cmds / cmd | Show commands list\n[5] inmate / in | Changed to inmates\n[6] guard / gu | Changed to guards\n[7] autorespawn / autore [boolean] | Auto Respawn Character (if died) and auto save position\n[8] autoremoveff / autorff [boolean] | Auto Remove forcefield (if respawn)\n[9] killaura [boolean] | Activate killaura\n[10] whitelist / wl [PLAYER] | Whitelisted player\n[11] unwhitelist / unwl [player] | Blacklisted player\n[12] kill / oof / die [player,all,team] | Kill a player(s)\n[13] olditemmethod / oldimethod [boolean] | Teleports to grab item\n[14] damage / dmg [player,all,team] [bullet] | Damage a player(s)\n[15] autodumpcars / autoremovecars / autonocars [boolean] | Auto Remove Cars if Command ;bring\n[16] criminal / crim / makecrim [PLAYER] | Make criminal player\n[17] antisit [boolean] | Activate antisit\n[18] infjump [boolean] | Infinite Jumps\n[19] bring [player] | Bringing player\n[20] void [PLAYER] | Teleports player to void\n[21] view [player] | Viewing player\n[22] unview | Stopped viewing player\n[23] copychat [boolean] | Copying chat everyone\n[24] antifling [boolean] | Activate antifling\n[25] goto / to [player] | Teleports to player\n[26] shotgun / remington / rem | Get remington 870\n[27] ak-47 / ak | Get ak-47\n[28] m9 / pistol | Get m9\n[29] m4a1 / m4 | Get m4a1\n[30] hammer / ham | Get hammer\n[31] knife / knive | Get knife\n[32] guns | Get all guns\n[33] items | Get all items\n[34] autoguns / aguns [boolean] | Auto get all guns\n[35] autoitems / aitems [boolean] | Auto get all items\n[36] loopcrim [player] | Auto criminal player\n[37] unloopcrim [PLAYER] | Stopped criminal player\n[38] respawn / res | Respawn Character and not save position\n[39] opengate | Opened the gate\n[40] car | Brings car to you\n[41] forcefield / ff [boolean] | Activate forcefield\n[42] speed / ws [number] | Changed speed to number\n[43] tp [plr1] [plr2] | Teleports plr1 to plr2\n[44] givekey / key / keycard | Gets a keycard\n[45] antitase [boolean] | Activate antitase\n[46] antishield [boolean] | Deletes other peoples shields\n[47] autoguard / aguard [boolean] | Auto Team guard\n[48] silentaim / saim [boolean] | Fire and dont miss\n[49] noclip [boolean] | Go throught walls\n[50] shootback / antishoot [boolean] | Kills anyone who shoots you\n[51] doors [boolean] | Deletes doors\n[52] oneshot [boolean] | Makes a gun oneshot\n[53] anticrash [boolean] | Tries to stop simple crashes (DOESNT WORK WITH SEPTEX ADMIN CRASH)\n[54] lagspike | Freezes everyones screen for some seconds\n[55] pp | sus\n[56] tase [plr,all,team] | Tase the player(s)\n[57] arrest [plr,all] | Arrests the player\n[58] clickkill [boolean] | click on someone to kill them\n[59] clickarrest [boolean] | click on someone to arrest them\n[60] godmode / god [boolean] | Turn on godmode\n[61] arrestaura [boolean] | Activate arrestaura\n[62] antitouch [boolean] | Kills anyone who touches you\n[63] notify [boolean] | tells you who is leaving and joining and Pick Up\n[64] antipunch [boolean] | prevents anyone from punching you\n[65] spawnguns [boolean] | Loop kills you to spawn guns\n[66] fly [speed] | Enter plane mode but dont hit towers\n[67] unfly | Disables fly\n[68] carfly | Car go flying\n[69] uncarfly | stop the car fly\n[70] mobilegui / mgui [boolean] | Toggle mobile action gui (Punch/Crawl buttons)", TextColor3 = Color3.new(1, 1, 1), TextSize = 15, TextWrapped = true, TextXAlignment = "Left", TextYAlignment = "Top"})
 TextButton_5 = Create("TextButton",Frame_2,{Name = "TextButton", BackgroundColor3 = Color3.new(0.890196, 0.223529, 0.0588235), Position = UDim2.new(0.995000005, 0, 0, 0), BorderSizePixel = 0, Size = UDim2.new(0.0545952693, 0, 0.0728644878, 0), Font = "SourceSans", FontSize = "Size24", Text = "X", TextColor3 = Color3.fromRGB(1, 1, 1), TextSize = 20})
+TextButton_6 = Create('TextButton',ScreenGui,{Name = "TextButton", BackgroundColor3 = Color3.fromRGB(0, 0, 0), BackgroundTransparency = 0.5, Position = UDim2.new(0.8658436213, 0, 0.329768493, 0), Size = UDim2.new(0, 100, 0, 50), Font = "SourceSans", Text = "F", TextSize = 20, TextColor3 = Color3.new(255, 255, 255)})
+TextButton_7 = Create('TextButton',ScreenGui,{Name = "TextButton", BackgroundColor3 = Color3.fromRGB(0, 0, 0), BackgroundTransparency = 0.5, Position = UDim2.new(0.8658436213, 0, 0.489768493, 0), Size = UDim2.new(0, 100, 0, 50), Font = "SourceSans", Text = "RightShift", TextSize = 20, TextColor3 = Color3.new(255, 255, 255)})
 function API:Notif(name, content, color, time)
   Notification:MakeNotification({
       Name = name,
@@ -1504,7 +1507,17 @@ function PlayerChatted(Message)
 		API:Unfly()
 	end
   end
-  if NotCommand("unload") and NotCommand("prefix") and NotCommand('re') and NotCommand("refresh") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("inmate") and NotCommand("in") and NotCommand("guard") and NotCommand("gu") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("autoremoveff") and NotCommand("autorff") and NotCommand("killaura") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("damage") and NotCommand("dmg") and NotCommand("autodumpcars") and NotCommand("autoremovecars") and NotCommand('autonocars') and NotCommand("crim") and NotCommand("criminal") and NotCommand("makecrim") and NotCommand("antisit") and NotCommand("infjump") and NotCommand("bring") and NotCommand("void") and NotCommand("view") and NotCommand("unview") and NotCommand("copychat") and NotCommand("antifling") and NotCommand("goto") and NotCommand("to") and NotCommand("shotgun") and NotCommand("remington") and NotCommand("rem") and NotCommand("ak-47") and NotCommand('ak') and NotCommand("m9") and NotCommand("pistol") and NotCommand("m4a1") and NotCommand('m4') and NotCommand("hammer") and NotCommand("ham") and NotCommand("knife") and NotCommand("knive") and NotCommand("guns") and NotCommand("items") and NotCommand("autoguns") and NotCommand("aguns") and NotCommand("autoitems") and NotCommand("aitems") and NotCommand('loopcrim') and NotCommand("unloopcrim") and NotCommand("respawn") and NotCommand("res") and NotCommand("opengate") and NotCommand("car") and NotCommand("forcefield") and NotCommand("ff") and NotCommand("speed") and NotCommand("ws") and NotCommand("tp") and NotCommand("givekey") and NotCommand("keycard") and NotCommand("key") and NotCommand("antitase") and NotCommand("antishield") and NotCommand("autoguard") and NotCommand("aguard") and NotCommand("silentaim") and NotCommand("saim") and NotCommand("noclip") and NotCommand("shootback") and NotCommand("antishoot") and NotCommand("doors") and NotCommand("oneshot") and NotCommand("anticrash") and NotCommand("lagspike") and NotCommand("pp") and NotCommand("tase") and NotCommand("arrest") and NotCommand("ar") and NotCommand("clickkill") and NotCommand("clickarrest") and NotCommand("godmode") and NotCommand("god") and NotCommand('arrestaura') and NotCommand("antitouch") and NotCommand("notify") and NotCommand("antipunch") and NotCommand("spawnguns") and NotCommand('fly') and NotCommand("unfly") and NotCommand('carfly') and NotCommand('uncarfly') then
+  if Command("mobilegui") or Command("mgui") then
+	local value = ChangeState(args[2],'MobileGui')
+	if value then
+		TextButton_6.Visible = true
+		TextButton_7.Visible = true
+	elseif not value then
+		TextButton_6.Visible = false
+		TextButton_7.Visible = false
+	end
+  end
+  if NotCommand("unload") and NotCommand("prefix") and NotCommand('re') and NotCommand("refresh") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("inmate") and NotCommand("in") and NotCommand("guard") and NotCommand("gu") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("autoremoveff") and NotCommand("autorff") and NotCommand("killaura") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("damage") and NotCommand("dmg") and NotCommand("autodumpcars") and NotCommand("autoremovecars") and NotCommand('autonocars') and NotCommand("crim") and NotCommand("criminal") and NotCommand("makecrim") and NotCommand("antisit") and NotCommand("infjump") and NotCommand("bring") and NotCommand("void") and NotCommand("view") and NotCommand("unview") and NotCommand("copychat") and NotCommand("antifling") and NotCommand("goto") and NotCommand("to") and NotCommand("shotgun") and NotCommand("remington") and NotCommand("rem") and NotCommand("ak-47") and NotCommand('ak') and NotCommand("m9") and NotCommand("pistol") and NotCommand("m4a1") and NotCommand('m4') and NotCommand("hammer") and NotCommand("ham") and NotCommand("knife") and NotCommand("knive") and NotCommand("guns") and NotCommand("items") and NotCommand("autoguns") and NotCommand("aguns") and NotCommand("autoitems") and NotCommand("aitems") and NotCommand('loopcrim') and NotCommand("unloopcrim") and NotCommand("respawn") and NotCommand("res") and NotCommand("opengate") and NotCommand("car") and NotCommand("forcefield") and NotCommand("ff") and NotCommand("speed") and NotCommand("ws") and NotCommand("tp") and NotCommand("givekey") and NotCommand("keycard") and NotCommand("key") and NotCommand("antitase") and NotCommand("antishield") and NotCommand("autoguard") and NotCommand("aguard") and NotCommand("silentaim") and NotCommand("saim") and NotCommand("noclip") and NotCommand("shootback") and NotCommand("antishoot") and NotCommand("doors") and NotCommand("oneshot") and NotCommand("anticrash") and NotCommand("lagspike") and NotCommand("pp") and NotCommand("tase") and NotCommand("arrest") and NotCommand("ar") and NotCommand("clickkill") and NotCommand("clickarrest") and NotCommand("godmode") and NotCommand("god") and NotCommand('arrestaura') and NotCommand("antitouch") and NotCommand("notify") and NotCommand("antipunch") and NotCommand("spawnguns") and NotCommand('fly') and NotCommand("unfly") and NotCommand('carfly') and NotCommand('uncarfly') and NotCommand("mobilegui") and NotCommand("mgui") then
     API:Notif("Error", 'Not a valid command.', Color3.fromRGB(255, 0, 0), 3)
   end
 end
@@ -2048,6 +2061,57 @@ TextButton_4.MouseButton1Click:Connect(function()
 end)
 TextButton_5.MouseButton1Click:Connect(function()
 	Frame_2.Visible = false
+end)
+TextButton_6.MouseButton1Click:Connect(function()
+	local animation = Instance.new("Animation")
+	animation.AnimationId = "rbxassetid://484200742"
+	local Track = plr.Character.Humanoid:LoadAnimation(animation)
+	Track:Play()
+	for i,v in pairs(game.Players:GetPlayers()) do
+		if v ~= plr and not table.find(API.Whitelisted,v) then
+			if (v.Character.HumanoidRootPart.Position - plr.Character.HumanoidRootPart.Position).Magnitude < 2.5 then
+				for i = 1,1 do
+					game.ReplicatedStorage.meleeEvent:FireServer(v)
+				end
+			end
+		end
+	end
+end)
+TextButton_6.MouseEnter:Connect(function()
+	getgenv().auto = true
+	while getgenv().auto and wait() do
+		local animation = Instance.new("Animation")
+		animation.AnimationId = "rbxassetid://484200742"
+		local Track = plr.Character.Humanoid:LoadAnimation(animation)
+		Track:Play()
+		for i,v in pairs(game.Players:GetPlayers()) do
+			if v ~= plr and not table.find(API.Whitelisted,v) then
+				if (v.Character.HumanoidRootPart.Position - plr.Character.HumanoidRootPart.Position).Magnitude < 2.5 then
+					for i = 1,1 do
+						game.ReplicatedStorage.meleeEvent:FireServer(v)
+					end
+				end
+			end
+		end
+	end
+end)
+TextButton_6.MouseLeave:Connect(function()
+	getgenv().auto = false
+end)
+TextButton_7.MouseButton1Click:Connect(function()
+	game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 30
+	task.wait(.1)
+	game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 16
+end)
+TextButton_7.MouseEnter:Connect(function()
+	getgenv().loop = true
+	while wait() and loop do
+		game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 30
+	end
+end)
+TextButton_7.MouseLeave:Connect(function()
+	getgenv().loop = false
+	game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 16
 end)
 API:Notif("Loads", 'Loaded Admin Commands', Color3.fromRGB(255, 0, 0), 10)
 API:Refresh()
