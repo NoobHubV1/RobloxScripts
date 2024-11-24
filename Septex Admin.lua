@@ -750,7 +750,6 @@ function API:Unfly()
 	end
 end
 function PlayerChatted(Message)
-  if Unloaded then return end
   local args = Message:split(" ")
   function Command(Cmd)
     return args[1] == Prefix..Cmd
@@ -761,10 +760,10 @@ function PlayerChatted(Message)
   if Command("unload") then
     API:Destroy(ScreenGui)
     API:Destroy(game:FindFirstChild("Septex_Admin"))
-    API.ViewingPlayer = nil
-    workspace.CurrentCamera.CameraSubject = plr.Character
     Unloaded = true
     Cooldown = true
+    API.ViewingPlayer = nil
+    workspace.CurrentCamera.CameraSubject = plr.Character
     API:Notif("Unload", 'Script is unloaded', Color3.fromRGB(55, 155, 255), 5)
   end
   if Command("prefix") then
@@ -1523,8 +1522,8 @@ function PlayerChatted(Message)
 end
 local Cooldown = true
 game.Players.LocalPlayer.Chatted:Connect(function(chat)
-	if chat:sub(1,#Prefix) == Prefix then
-		if not Cooldown then
+	if chat:sub(1,#Prefix) == Prefix and not Cooldown then
+		if not Unloaded then
 			Cooldown = true
 			PlayerChatted(chat)
 			wait(.4)
@@ -2117,5 +2116,5 @@ API:Notif("Loads", 'Loaded Admin Commands', Color3.fromRGB(255, 0, 0), 10)
 API:Refresh()
 Cooldown = false
 else
-	game:GetService("StarterGui"):SetCore("SendNotification",{Title = "Septex Admin",Text = "Septex admin is already executed or game not support",Duration = 7})
+	game.Players.LocalPlayer:Kick("Game not support or Septex admin has already executed!")
 end
