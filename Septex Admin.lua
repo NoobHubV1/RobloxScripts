@@ -52,11 +52,11 @@ end
 Folder = Create("Folder",game,{Name = "Septex_Admin"})
 ScreenGui = Create("ScreenGui",plr.PlayerGui,{Name = 'ScreenGui', ResetOnSpawn = false})
 Frame = Create("Frame",ScreenGui,{Name = "Frame", BackgroundColor3 = Color3.fromRGB(47, 46, 25), BackgroundTransparency = 0.3, BorderColor3 = Color3.fromRGB(29, 29, 29), BorderSizePixel = 6, Position = UDim2.new(0.012, 0, 0.807, 0), Size = UDim2.new(0, 250, 0, 80), ZIndex = 0})
-TextLabel = Create("TextLabel",Frame,{Name = "TextLabel", BackgroundColor3 = Color3.new(255, 255, 255), BackgroundTransparency = 1, Position = UDim2.new(0, 0, 0, 0), Size = UDim2.new(0, 250, 0, 25), ZIndex = 5, Font = "SourceSansBold", Text = "Execute bar", TextColor3 = Color3.new(255, 255, 255), TextSize = 24, TextWrapped = true})
+TextLabel = Create("TextLabel",Frame,{Name = "TextLabel", BackgroundColor3 = Color3.new(255, 255, 255), BackgroundTransparency = 1, Position = UDim2.new(0, 0, 0, 0), Size = UDim2.new(0, 250, 0, 25), ZIndex = 5, Font = "SourceSansBold", Text = "Septex Admin v1", TextColor3 = Color3.new(255, 255, 255), TextSize = 24, TextWrapped = true})
 TextBox = Create("TextBox",Frame,{Name = "TextBox", BackgroundColor3 = Color3.new(172, 172, 172), BackgroundTransparency = 0.4, Position = UDim2.new(0.097, 0, 0.436, 0), Size = UDim2.new(0, 200, 0, 30), Font = "Roboto", PlaceholderColor3 = Color3.new(145, 145, 145), PlaceholderText = "Press "..Prefix.." To Enter", Text = "", TextColor3 = Color3.fromRGB(255, 255, 255), TextSize = 16, ClearTextOnFocus = false})
 TextButton = Create('TextButton',Frame,{Name = "TextButton", BackgroundColor3 = Color3.fromRGB(0, 0, 0), BackgroundTransparency = 0.5, Position = UDim2.new(0.74, 0, 0, 0), Size = UDim2.new(0, 30, 0, 30), Font = "SourceSans", Text = "-", TextSize = 20, TextColor3 = Color3.new(255, 255, 255)})
 TextButton_2 = Create('TextButton',Frame,{Name = "TextButton", BackgroundColor3 = Color3.fromRGB(0, 0, 0), BackgroundTransparency = 0.5, Position = UDim2.new(0.86, 0, 0, 0), Size = UDim2.new(0, 30, 0, 30), Font = "SourceSans", Text = "X", TextSize = 20, TextColor3 = Color3.new(255, 255, 255)})
-TextButton_3 = Create('TextButton',ScreenGui,{Name = "TextButton", BackgroundColor3 = Color3.fromRGB(0, 0, 0), BackgroundTransparency = 0.5, Position = UDim2.new(0.00658436213, 0, 0.329768493, 0), Size = UDim2.new(0, 100, 0, 50), Font = "SourceSans", Text = "OPEN", TextSize = 20, TextColor3 = Color3.new(255, 255, 255), Visible = false})
+TextButton_3 = Create('TextButton',ScreenGui,{Name = "TextButton", BackgroundColor3 = Color3.fromRGB(0, 0, 0), BackgroundTransparency = 0.5, Position = UDim2.new(0.00658436213, 0, 0.365768493, 0), Size = UDim2.new(0, 100, 0, 25), Font = "SourceSans", Text = "OPEN", TextSize = 20, TextColor3 = Color3.new(255, 255, 255), Visible = false})
 TextButton_4 = Create('ImageButton',Frame,{Name = "ImageButton", BackgroundColor3 = Color3.fromRGB(0, 0, 0), BackgroundTransparency = 0.5, Size = UDim2.new(0, 30, 0, 30), Image = "rbxassetid://11570802781", ImageTransparency = 0.43})
 Frame_2 = Create("Frame",ScreenGui,{Name = "Frame", Active = true, BackgroundColor3 = Color3.new(0.223529, 0.231373, 0.309804), BorderSizePixel = 0, Position = UDim2.new(0.368556708, 0, 0.11490047, 0), Size = UDim2.new(0, 275, 0, 275)})
 TextLabel_2 = Create("TextLabel",Frame_2,{Name = "TextLabel", BackgroundColor3 = Color3.new(255, 255, 255), BackgroundTransparency = 1, Size = UDim2.new(0, 250, 0, 25), ZIndex = 5, Font = "SourceSansBold", Text = "Commands List", TextColor3 = Color3.new(255, 255, 255), TextSize = 20, TextWrapped = true})
@@ -65,6 +65,7 @@ TextLabel_3 = Create("TextLabel",ScrollingFrame,{Name = "ScrollingFrame", Backgr
 TextButton_5 = Create("TextButton",Frame_2,{Name = "TextButton", BackgroundColor3 = Color3.new(0.890196, 0.223529, 0.0588235), Position = UDim2.new(0.995000005, 0, 0, 0), BorderSizePixel = 0, Size = UDim2.new(0.0545952693, 0, 0.0728644878, 0), Font = "SourceSans", FontSize = "Size24", Text = "X", TextColor3 = Color3.fromRGB(1, 1, 1), TextSize = 20})
 TextButton_6 = Create('TextButton',ScreenGui,{Name = "TextButton", BackgroundColor3 = Color3.fromRGB(0, 0, 0), BackgroundTransparency = 0.5, Position = UDim2.new(0.8658436213, 0, 0.329768493, 0), Size = UDim2.new(0, 100, 0, 50), Font = "SourceSans", Text = "F", TextSize = 20, TextColor3 = Color3.new(255, 255, 255)})
 TextButton_7 = Create('TextButton',ScreenGui,{Name = "TextButton", BackgroundColor3 = Color3.fromRGB(0, 0, 0), BackgroundTransparency = 0.5, Position = UDim2.new(0.8658436213, 0, 0.489768493, 0), Size = UDim2.new(0, 100, 0, 50), Font = "SourceSans", Text = "RightShift", TextSize = 20, TextColor3 = Color3.new(255, 255, 255)})
+TextButton_8 = Create('TextButton',ScreenGui,{Name = "TextButton", BackgroundColor3 = Color3.fromRGB(0, 0, 0), BackgroundTransparency = 0.5, Position = UDim2.new(0.8658436213, 0, 0.169768493, 0), Size = UDim2.new(0, 100, 0, 50), Font = "SourceSans", Text = "C", TextSize = 20, TextColor3 = Color3.new(255, 255, 255)})
 function API:Notif(name, content, color, time)
   Notification:MakeNotification({
       Name = name,
@@ -2031,12 +2032,10 @@ end)
 TextButton.MouseButton1Click:Connect(function()
 	if Frame.Size == UDim2.new(0, 250, 0, 80) then
 		Frame.Size = UDim2.new(0, 250, 0, 28)
-		TextLabel.Visible = false
 		TextBox.Visible = false
 		TextButton.Text = "+"
 	elseif Frame.Size == UDim2.new(0, 250, 0, 28) then
 		Frame.Size = UDim2.new(0, 250, 0, 80)
-		TextLabel.Visible = true
 		TextBox.Visible = true
 		TextButton.Text = "-"
 	end
@@ -2077,6 +2076,7 @@ TextButton_6.MouseButton1Click:Connect(function()
 	end
 end)
 TextButton_6.MouseEnter:Connect(function()
+	wait(.25)
 	getgenv().auto = true
 	while getgenv().auto and wait() do
 		local animation = Instance.new("Animation")
@@ -2111,6 +2111,9 @@ end)
 TextButton_7.MouseLeave:Connect(function()
 	getgenv().loop = false
 	game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 16
+end)
+TextButton_8.MouseButton1Click:Connect(function()
+	game:GetService("VirtualInputManager"):SendKeyEvent(true,"C",false,game)
 end)
 API:Notif("Loads", 'Loaded Admin Commands', Color3.fromRGB(255, 0, 0), 10)
 API:Refresh()
