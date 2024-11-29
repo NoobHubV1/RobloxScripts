@@ -544,6 +544,8 @@ function lib:SetIcon(img)
 end
 
 function lib:Destroy()
+    Main:TweenPosition(UDim2.new(2, 0, 0.5),'Out',"Quart",1)
+    wait(.1)
     Arceus:Destroy()
 end
 
