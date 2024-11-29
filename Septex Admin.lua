@@ -1512,9 +1512,11 @@ function PlayerChatted(Message)
 	if value then
 		TextButton_6.Visible = true
 		TextButton_7.Visible = true
+		TextButton_8.Visible = true
 	elseif not value then
 		TextButton_6.Visible = false
 		TextButton_7.Visible = false
+		TextButton_8.Visible = false
 	end
   end
   if NotCommand("unload") and NotCommand("prefix") and NotCommand('re') and NotCommand("refresh") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("inmate") and NotCommand("in") and NotCommand("guard") and NotCommand("gu") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("autoremoveff") and NotCommand("autorff") and NotCommand("killaura") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("damage") and NotCommand("dmg") and NotCommand("autodumpcars") and NotCommand("autoremovecars") and NotCommand('autonocars') and NotCommand("crim") and NotCommand("criminal") and NotCommand("makecrim") and NotCommand("antisit") and NotCommand("infjump") and NotCommand("bring") and NotCommand("void") and NotCommand("view") and NotCommand("unview") and NotCommand("copychat") and NotCommand("antifling") and NotCommand("goto") and NotCommand("to") and NotCommand("shotgun") and NotCommand("remington") and NotCommand("rem") and NotCommand("ak-47") and NotCommand('ak') and NotCommand("m9") and NotCommand("pistol") and NotCommand("m4a1") and NotCommand('m4') and NotCommand("hammer") and NotCommand("ham") and NotCommand("knife") and NotCommand("knive") and NotCommand("guns") and NotCommand("items") and NotCommand("autoguns") and NotCommand("aguns") and NotCommand("autoitems") and NotCommand("aitems") and NotCommand('loopcrim') and NotCommand("unloopcrim") and NotCommand("respawn") and NotCommand("res") and NotCommand("opengate") and NotCommand("car") and NotCommand("forcefield") and NotCommand("ff") and NotCommand("speed") and NotCommand("ws") and NotCommand("tp") and NotCommand("givekey") and NotCommand("keycard") and NotCommand("key") and NotCommand("antitase") and NotCommand("antishield") and NotCommand("autoguard") and NotCommand("aguard") and NotCommand("silentaim") and NotCommand("saim") and NotCommand("noclip") and NotCommand("shootback") and NotCommand("antishoot") and NotCommand("doors") and NotCommand("oneshot") and NotCommand("anticrash") and NotCommand("lagspike") and NotCommand("pp") and NotCommand("tase") and NotCommand("arrest") and NotCommand("ar") and NotCommand("clickkill") and NotCommand("clickarrest") and NotCommand("godmode") and NotCommand("god") and NotCommand('arrestaura') and NotCommand("antitouch") and NotCommand("notify") and NotCommand("antipunch") and NotCommand("spawnguns") and NotCommand('fly') and NotCommand("unfly") and NotCommand('carfly') and NotCommand('uncarfly') and NotCommand("mobilegui") and NotCommand("mgui") then
@@ -1538,7 +1540,6 @@ plr.CharacterAdded:Connect(function(NewChar)
     repeat API:swait() until NewChar
     NewChar:WaitForChild('Head')
     NewChar:WaitForChild("HumanoidRootPart")
-    NewChar:WaitForChild("Humanoid").BreakJointsOnDeath = not States.AutoRespawn
     NewChar:WaitForChild("Humanoid").Died:Connect(function()
         if States.AutoRespawn and not Unloaded then
           API:Refresh()
@@ -2061,46 +2062,7 @@ TextButton_5.MouseButton1Click:Connect(function()
 	Frame_2.Visible = false
 end)
 TextButton_6.MouseButton1Click:Connect(function()
-	local animation = Instance.new("Animation")
-	animation.AnimationId = "rbxassetid://484200742"
-	local Track = plr.Character.Humanoid:LoadAnimation(animation)
-	Track:Play()
-	for i,v in pairs(game.Players:GetPlayers()) do
-		if v ~= plr and not table.find(API.Whitelisted,v) then
-			if (v.Character.HumanoidRootPart.Position - plr.Character.HumanoidRootPart.Position).Magnitude < 2.5 then
-				for i = 1,1 do
-					game.ReplicatedStorage.meleeEvent:FireServer(v)
-				end
-			end
-		end
-	end
-end)
-TextButton_6.MouseEnter:Connect(function()
-	wait(.25)
-	getgenv().auto = true
-	while getgenv().auto and wait() do
-		local animation = Instance.new("Animation")
-		animation.AnimationId = "rbxassetid://484200742"
-		local Track = plr.Character.Humanoid:LoadAnimation(animation)
-		Track:Play()
-		for i,v in pairs(game.Players:GetPlayers()) do
-			if v ~= plr and not table.find(API.Whitelisted,v) then
-				if (v.Character.HumanoidRootPart.Position - plr.Character.HumanoidRootPart.Position).Magnitude < 2.5 then
-					for i = 1,1 do
-						game.ReplicatedStorage.meleeEvent:FireServer(v)
-					end
-				end
-			end
-		end
-	end
-end)
-TextButton_6.MouseLeave:Connect(function()
-	getgenv().auto = false
-end)
-TextButton_7.MouseButton1Click:Connect(function()
-	game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 30
-	task.wait(.1)
-	game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 16
+	game:GetService("VirtualInputManager"):SendKeyEvent(true,"F",false,game)
 end)
 TextButton_7.MouseEnter:Connect(function()
 	getgenv().loop = true
