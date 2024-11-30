@@ -2,7 +2,6 @@ local lib = {}
 
 local Script_Title = "Arceus X <font color=\"rgb(255, 0, 0)\">|</font> Ui Lib"
 
-
 -- Instances:
 local Arceus = Instance.new("ScreenGui")
 local Main = Instance.new("Frame")
@@ -45,7 +44,7 @@ local UIAspectRatioConstraint_5 = Instance.new("UIAspectRatioConstraint")
 
 --Properties:
 
-Arceus.Name = "Arceus"
+Arceus.Name = math.random()
 Arceus.Enabled = true
 Arceus.ResetOnSpawn = true
 Arceus.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
@@ -54,7 +53,6 @@ Arceus.DisplayOrder = 999999999
 Main.Name = "Main"
 Main.Parent = Arceus
 Main.Active = true
-Main.Draggable = true
 Main.AnchorPoint = Vector2.new(0.5, 0.5)
 Main.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 Main.BorderSizePixel = 0
@@ -122,12 +120,12 @@ Menu.ScrollBarImageColor3 = Color3.fromRGB(255, 255, 255)
 Menu.ScrollBarThickness = Menu.AbsoluteSize.X/25
 
 UIListLayout.Parent = Menu
---UIListLayout.Padding = UDim.new(0.025, 0)
+UIListLayout.Padding = UDim.new(0.025, 0)
 UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 
 Toggle.Name = "Toggle"
 Toggle.Visible = false
---Toggle.Parent = Arceus
+Toggle.Parent = Arceus
 Toggle.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
 Toggle.Size = UDim2.new(0.95, 0, 0, 50)
 
@@ -208,7 +206,7 @@ UIGradient_2.Parent = Button
 
 tab.Name = "Tab"
 tab.Visible = false
---tab.Parent = Arceus
+tab.Parent = Arceus
 tab.BackgroundTransparency = 1
 tab.Size = UDim2.new(0.95, 0, 0.025, 0)
 
@@ -321,6 +319,7 @@ UIAspectRatioConstraint_5.Parent = Img_2
 -- SCRIPT
 
 local TweenService = game:GetService("TweenService")
+local Notification = loadstring(Game:HttpGet("https://raw.githubusercontent.com/NoobHubV1/NoobHubV1/main/Notification%20Lib.lua"))()
 Close.MouseButton1Click:Connect(function()
 	Logo.Active = true
 	TweenService:Create(Intro, TweenInfo.new(0.25, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {BackgroundTransparency = 0}):Play()
@@ -465,7 +464,7 @@ function lib:AddButton(name, funct, ...)
 	return newBut
 end
 
-function lib:AddComboBox(text, options, funct, ...) -- ADD CUSTOM ELEMENT INSTEAD
+function lib:AddDropdown(text, options, funct, ...) -- ADD CUSTOM ELEMENT INSTEAD
 	local newCombo = ComboBox:Clone()
 	local enabled = false
 	local elems = {}
@@ -520,12 +519,34 @@ function lib:AddComboBox(text, options, funct, ...) -- ADD CUSTOM ELEMENT INSTEA
 	return newCombo
 end
 
+function lib:MakeNotification(NotifConfig)
+	task.spawn(function()
+		NotifConfig.Name = NotifConfig.Name or "Title not found!"
+		NotifConfig.Content = NotifConfig.Content or "Text not found!"
+		NotifConfig.Color = NotifConfig.Color or Color3.fromRGB(255, 255, 255)
+		NotifConfig.Time = NotifConfig.Time or 5
+
+		Notification:MakeNotification({
+			Name = NotifConfig.Name,
+			Content = NotifConfig.Content,
+			Color = NotifConfig.Color,
+			Time = NotifConfig.Time
+		})
+	end)
+end
+
 function lib:SetTitle(txt)
     Title.Text = txt
 end
 
 function lib:SetIcon(img)
     Logo.Image = img
+end
+
+function lib:Destroy()
+    Main:TweenPosition(UDim2.new(2, 0, 0.5),'Out',"Quart",1)
+    wait(.1)
+    Arceus:Destroy()
 end
 
 function lib:SetBackgroundColor(r, g ,b)
@@ -573,6 +594,45 @@ function lib:SetTheme(theme)
 		error("Theme not found.")
 	end
 end
+
+function DragifyGui(Frame)
+	coroutine.wrap(function()
+		local dragToggle = nil
+		local dragSpeed = 5
+		local dragInput = nil
+		local dragStart = nil
+		local dragPos = nil
+		local startPos = nil
+		local function updateInput(input)
+			local Delta = input.Position - dragStart
+			local Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + Delta.X, startPos.Y.Scale, startPos.Y.Offset + Delta.Y)
+			game:GetService("TweenService"):Create(Frame, TweenInfo.new(0.30), {Position = Position}):Play()
+		end
+		Frame.InputBegan:Connect(function(input)
+			if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) and game:GetService("UserInputService"):GetFocusedTextBox() == nil then
+				dragToggle = true
+				dragStart = input.Position
+				startPos = Frame.Position
+				input.Changed:Connect(function()
+					if input.UserInputState == Enum.UserInputState.End then
+						dragToggle = false
+					end
+				end)
+			end
+		end)
+		Frame.InputChanged:Connect(function(input)
+			if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+				dragInput = input
+			end
+		end)
+		game:GetService("UserInputService").InputChanged:Connect(function(input)
+			if input == dragInput and dragToggle then
+				updateInput(input)
+			end
+		end)
+	end)()
+end
+DragifyGui(Main)
 -- INIT
 
 Main:TweenPosition(

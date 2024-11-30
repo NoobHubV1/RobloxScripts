@@ -1,8 +1,3 @@
-game:GetService("StarterGui"):SetCore("SendNotification",{
-                Title = "NoobHubV1 Hub";
-                Text = "Loaded";
-                Duration = 3.5;
-            })
 getupvalues = getupvalues or debug.getupvalues
 setupvalue = setupvalue or debug.setupvalue
 if not (getrawmetatable and getupvalues and setupvalue and (getreg or debug.getregistry)) then
@@ -12,8 +7,9 @@ if not (getrawmetatable and getupvalues and setupvalue and (getreg or debug.getr
 	h:Destroy()
 	return
 end
-local settings = {refill_at=0, refill_end=60, deliver_at=24, stay_in_kitchen=true}
-local doCashier,doBoxer,doCook,doSupplier,doDelivery = true,true,true,true,true
+local settings = {refill_at=0, refill_end=60, deliver_at=1, stay_in_kitchen=true}
+local doCashier,doBoxer,doCook,doSupplier,doDelivery = false,false,false,false,false
+local OrionLib = loadstring(game:HttpGet("https://raw.github.com/NoobHubV1/RobloxScripts/main/OrionLib.lua"))()
 if readfile then
 	pcall(function()
 		local new = game:GetService("HttpService"):JSONDecode(readfile("PizzaFarm.txt"))
@@ -93,11 +89,15 @@ Create = function(class,parent,props)
 	return new
 end
 gui=Create("ScreenGui",game.CoreGui,{Name="Farm", ZIndexBehavior="Sibling"})
-main=Create("Frame",gui,{Name="main", Draggable=true, Active=true, Size=UDim2.new(0,350,0,100), Position=UDim2.new(.335,0,0.02,0), BackgroundColor3=Color3.new(0.098,0.098,0.098)})
+main=Create("Frame",gui,{Name="main", Active=true, Size=UDim2.new(0,350,0,100), Position=UDim2.new(.335,0,0.02,0), BackgroundColor3=Color3.new(0.098,0.098,0.098)})
 topbar=Create("Frame",main,{Name="topbar", Size=UDim2.new(1,0,0.15,0), BackgroundColor3=Color3.new(0.255,0.255,0.255)})
 closeBtn=Create("TextButton",topbar,{Name="closeBtn", TextWrapped=true, Size=UDim2.new(0.03,0,1,0), TextColor3=Color3.new(1,1,1), Text="X", BackgroundTransparency=1, 
 	Font="GothamSemibold", Position=UDim2.new(0.96,0,0,0), TextSize=14, TextScaled=true, BackgroundColor3=Color3.new(1,1,1)})
-titleLbl=Create("TextLabel",topbar,{Name="titleLbl", TextWrapped=true, Size=UDim2.new(0.5,0,1,0), Text="Pizza Factory", TextSize=14, Font="GothamSemibold", 
+minimumBtn=Create("TextButton",topbar,{Name="minimumBtn", TextWrapped=true, Size=UDim2.new(0.03,0,1,0), TextColor3=Color3.new(1,1,1), Text="=", BackgroundTransparency=1, 
+	Font="GothamSemibold", Position=UDim2.new(0.91,0,0,0), TextSize=14, TextScaled=true, BackgroundColor3=Color3.new(1,1,1)})
+draggableBtn=Create("TextButton",topbar,{Name="draggableBtn", TextWrapped=true, Size=UDim2.new(0.03,0,1,0), TextColor3=Color3.new(1,1,1), Text="drag", BackgroundTransparency=1, 
+	Font="GothamSemibold", Position=UDim2.new(0.86,0,0,0), TextSize=14, TextScaled=true, BackgroundColor3=Color3.new(1,1,1)})
+titleLbl=Create("TextLabel",topbar,{Name="titleLbl", TextWrapped=true, Size=UDim2.new(0.5,0,1,0), Text="work at a pizza place", TextSize=14, Font="GothamSemibold", 
 	BackgroundTransparency=1, Position=UDim2.new(0.25,0,0,0), TextColor3=Color3.new(1,1,1), BackgroundColor3=Color3.new(1,1,1)})
 saveBtn=Create("ImageButton",topbar,{Name="saveBtn", Image="rbxassetid://55687833", Size=UDim2.new(0.05,0,1,0), Position=UDim2.new(0.01,0,0,0), BackgroundTransparency=1, BackgroundColor3=Color3.new(), Visible=writefile~=nil})
 settings_1=Create("Frame",main,{Name="settings", BackgroundTransparency=1, Size=UDim2.new(0.97,0,0.75,0), Position=UDim2.new(0.025,0,0.2,0), BackgroundColor3=Color3.new(1,1,1)})
@@ -154,48 +154,118 @@ rightCamBtn=Create("ImageButton",camframe,{Name="rightCamBtn", Image="rbxassetid
 	BackgroundColor3=Color3.new(1,1,1)})
 leftCamBtn=Create("ImageButton",camframe,{Name="leftCamBtn", Image="rbxassetid://144168163", Size=UDim2.new(0.333,0,1,0), BackgroundTransparency=1, BackgroundColor3=Color3.new(1,1,1)})
 centerCamBtn=Create("ImageButton",camframe,{Name="centerCamBtn", Image="rbxassetid://58282192", Size=UDim2.new(0.333,0,1,0), Position=UDim2.new(0.333,0,0,0), BackgroundTransparency=1, BackgroundColor3=Color3.new(1,1,1)})
-creditLbl=Create("TextLabel",main,{Position=UDim2.new(0,0,1,5),Size=UDim2.new(0,100,0,15),BackgroundTransparency=1,TextColor3=Color3.new(1,1,1),Text="by sirelKilla",TextScaled=true,TextStrokeTransparency=.8})
+creditLbl=Create("TextLabel",main,{Position=UDim2.new(0,0,1,5),Size=UDim2.new(0,100,0,15),BackgroundTransparency=1,TextColor3=Color3.new(1,1,1),Text="by NoobHubV1",TextScaled=true,TextStrokeTransparency=.8})
 
+local function Notify(Title, Text, Time)
+	OrionLib:MakeNotification({
+		Name = Title,
+		Content = Text,
+		Image = "rbxassetid://4483345998",
+		Time = Time,
+	})
+end
 local function toggleCashier(bool)
 	if bool~=nil then
 		doCashier=bool
+		Notify("[FEATURE]", "Cashier has been changed to "..tostring(doCashier), 3)
 	else
 		doCashier = not doCashier
+		Notify("[FEATURE]", "Cashier has been changed to "..tostring(doCashier), 3)
 	end
 	cashierSlider:TweenPosition(UDim2.new(doCashier and 0.5 or 0,2,0,2),nil,"Sine",0.1,true)
 end
 local function toggleCook(bool)
 	if bool~=nil then
 		doCook=bool
+		Notify("[FEATURE]", "Cook has been changed to "..tostring(doCook), 3)
 	else
 		doCook = not doCook
+		Notify("[FEATURE]", "Cook has been changed to "..tostring(doCook), 3)
 	end
 	cookSlider:TweenPosition(UDim2.new(doCook and 0.5 or 0,2,0,2),nil,"Sine",0.1,true)
 end
 local function toggleBoxer(bool)
 	if bool~=nil then
 		doBoxer=bool
+		Notify("[FEATURE]", "Boxer has been changed to "..tostring(doBoxer), 3)
 	else
 		doBoxer = not doBoxer
+		Notify("[FEATURE]", "Boxer has been changed to "..tostring(doBoxer), 3)
 	end
 	boxerSlider:TweenPosition(UDim2.new(doBoxer and 0.5 or 0,2,0,2),nil,"Sine",0.1,true)
 end
 local function toggleDelivery(bool)
 	if bool~=nil then
 		doDelivery=bool
+		Notify("[FEATURE]", "Delivery has been changed to "..tostring(doDelivery), 3)
 	else
 		doDelivery = not doDelivery
+		Notify("[FEATURE]", "Delivery has been changed to "..tostring(doDelivery), 3)
 	end
 	deliverySlider:TweenPosition(UDim2.new(doDelivery and 0.5 or 0,2,0,2),nil,"Sine",0.1,true)
 end
 local function toggleSupplier(bool)
 	if bool~=nil then
 		doSupplier=bool
+		Notify("[FEATURE]", "Supplier has been changed to "..tostring(doSupplier), 3)
 	else
 		doSupplier = not doSupplier
+		Notify("[FEATURE]", "Supplier has been changed to "..tostring(doSupplier), 3)
 	end
 	supplierSlider:TweenPosition(UDim2.new(doSupplier and 0.5 or 0,2,0,2),nil,"Sine",0.1,true)
 end
+local function DragifyGui(Frame,Is)
+	coroutine.wrap(function()
+		local dragToggle = nil
+		local dragSpeed = 5
+		local dragInput = nil
+		local dragStart = nil
+		local dragPos = nil
+		local startPos = nil
+		local function updateInput(input)
+			if not Is then
+				if not DraggableGuis then
+					return
+				end
+			end
+			local Delta = input.Position - dragStart
+			local Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + Delta.X, startPos.Y.Scale, startPos.Y.Offset + Delta.Y)
+			game:GetService("TweenService"):Create(Frame, TweenInfo.new(0.30), {Position = Position}):Play()
+		end
+		Frame.InputBegan:Connect(function(input)
+			if not Is then
+				if DraggableGuis then
+					if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) and game:GetService("UserInputService"):GetFocusedTextBox() == nil then
+						dragToggle = true
+						dragStart = input.Position
+						startPos = Frame.Position
+						input.Changed:Connect(function()
+							if input.UserInputState == Enum.UserInputState.End then
+								dragToggle = false
+							end
+						end)
+					end
+				end
+			end
+		end)
+		Frame.InputChanged:Connect(function(input)
+			if DraggableGuis then
+				if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+					dragInput = input
+				end
+			end
+		end)
+		game:GetService("UserInputService").InputChanged:Connect(function(input)
+			if DraggableGuis then
+				if input == dragInput and dragToggle then
+					updateInput(input)
+				end
+			end
+		end)
+	end)()
+end
+DragifyGui(main)
+
 cashierBtn.MouseButton1Click:Connect(toggleCashier)
 cookBtn.MouseButton1Click:Connect(toggleCook)
 boxerBtn.MouseButton1Click:Connect(toggleBoxer)
@@ -203,29 +273,57 @@ deliveryBtn.MouseButton1Click:Connect(toggleDelivery)
 supplierBtn.MouseButton1Click:Connect(toggleSupplier)
 allOffBtn.InputBegan:Connect(function()
 	if game:GetService("UserInputService"):IsMouseButtonPressed(Enum.UserInputType.MouseButton1) then
-		toggleCashier(false)
-		toggleCook(false)
-		toggleBoxer(false)
-		toggleDelivery(false)
-		toggleSupplier(false)
-		toggleAllSlider:TweenPosition(UDim2.new(0,0,0,-2),nil,"Sine",0.1,true)
-		wait(1)
-		if toggleAllSlider.Position.X.Scale<.01 then
-			toggleAllSlider:TweenPosition(UDim2.new(0.45,0,0,-2),nil,"Sine",0.1,true)
+		if doCashier or doCook or doBoxer or doDelivery or doSupplier then
+			toggleAllSlider:TweenPosition(UDim2.new(0,0,0,-2),nil,"Sine",0.1,true)
+		end
+		if doCashier then
+			toggleCashier(false)
+		end
+		if doCook then
+		        toggleCook(false)
+		end
+		if doBoxer then
+		        toggleBoxer(false)
+		end
+		if doDelivery then
+		        toggleDelivery(false)
+		end
+		if doSupplier then
+		        toggleSupplier(false)
+		end
+		if not doCashier or not doCook or not doBoxer or not doDelivery or not doSupplier then
+			wait(1)
+		        if toggleAllSlider.Position.X.Scale<.01 then
+			        toggleAllSlider:TweenPosition(UDim2.new(0.45,0,0,-2),nil,"Sine",0.1,true)
+			end
 		end
 	end
 end)
 allOnBtn.InputBegan:Connect(function()
 	if game:GetService("UserInputService"):IsMouseButtonPressed(Enum.UserInputType.MouseButton1) then
-		toggleCashier(true)
-		toggleCook(true)
-		toggleBoxer(true)
-		toggleDelivery(true)
-		toggleSupplier(true)
-		toggleAllSlider:TweenPosition(UDim2.new(0.9,0,0,-2),nil,"Sine",0.1,true)
-		wait(1)
-		if toggleAllSlider.Position.X.Scale>.88 then
-			toggleAllSlider:TweenPosition(UDim2.new(0.45,0,0,-2),nil,"Sine",0.1,true)
+		if not doCashier or not doCook or not doBoxer or not doDelivery or not doSupplier then
+			toggleAllSlider:TweenPosition(UDim2.new(0.9,0,0,-2),nil,"Sine",0.1,true)
+		end
+		if not doCashier then
+			toggleCashier(true)
+		end
+		if not doCook then
+		        toggleCook(true)
+		end
+		if not doBoxer then
+		        toggleBoxer(true)
+		end
+		if not doDelivery then
+		        toggleDelivery(true)
+		end
+		if not doSupplier then
+		        toggleSupplier(true)
+		end
+		if doCashier or doCook or doBoxer or doDelivery or doSupplier then
+			wait(1)
+		        if toggleAllSlider.Position.X.Scale>.88 then
+				toggleAllSlider:TweenPosition(UDim2.new(0.45,0,0,-2),nil,"Sine",0.1,true)
+		        end
 		end
 	end
 end)
@@ -271,9 +369,136 @@ end)
 closeBtn.MouseButton1Click:Connect(function()
     gui:Destroy()
     doCashier,doBoxer,doCook,doSupplier,doDelivery = false,false,false,false,false
+    Notify("[FEATURE]", "Script is Unloaded, see you soon!", 4)
 end)
 closeBtn.MouseEnter:Connect(function() closeBtn.TextColor3=Color3.new(.9,0,0) end)
 closeBtn.MouseLeave:Connect(function() closeBtn.TextColor3=Color3.new(1,1,1) end)
+minimumBtn.MouseButton1Click:Connect(function()
+	if main.BackgroundTransparency == 0 then
+		main.BackgroundTransparency = 1
+		main.Size = UDim2.new(0, 350, 0, 100)
+		cashier.Visible = false
+		Label.Visible = false
+		cashierBtn.Visible = false
+		cashierSlider.Visible = false
+		kitchen.Visible = false
+		Label_2.Visible = false
+		deliverAtBox.Visible = false
+		refillEnd.Visible = false
+		refillEndBox.Visible = false
+		Label_3.Visible = false
+		refillAt.Visible = false
+		Label_4.Visible = false
+		refillAtBox.Visible = false
+		supplier.Visible = false
+		Label_5.Visible = false
+		supplierBtn.Visible = false
+		delivery.Visible = false
+		Label_6.Visible = false
+		deliveryBtn.Visible = false
+		deliverySlider.Visible = false
+		boxer.Visible = false
+		boxerLbl.Visible = false
+		boxerBtn.Visible = false
+		boxerSlider.Visible = false
+		cook.Visible = false
+		cookLbl.Visible = false
+		cookBtn.Visible = false
+		cookSlider.Visible = false
+		toggleAll.Visible = false
+		switch.Visible = false
+		allOffBtn.Visible = false
+		allOnBtn.Visible = false
+		toggleAllSlider.Visible = false
+		creditLbl.Visible = false
+		kitchen.Visible = false
+		cashierSlider.Visible = false
+		settings_1.Visible = false
+		cashier.Visible = false
+		refillEnd.Visible = false
+		refillAt.Visible = false
+		supplier.Visible = false
+		supplierSlider.Visible = false
+		delivery.Visible = false
+		deliverySlider.Visible = false
+		boxer.Visible = false
+		boxerSlider.Visible = false
+		cook.Visible = false
+		cookSlider.Visible = false
+		toggleAll.Visible = false
+		switch.Visible = false
+		toggleAllSlider.Visible = false
+		minimumBtn.Text = "+"
+	elseif main.BackgroundTransparency == 1 then
+		main.BackgroundTransparency = 0
+		main.Size = UDim2.new(0, 350, 0, 100)
+		cashier.Visible = true
+		Label.Visible = true
+		cashierBtn.Visible = true
+		cashierSlider.Visible = true
+		kitchen.Visible = true
+		Label_2.Visible = true
+		deliverAtBox.Visible = true
+		refillEnd.Visible = true
+		refillEndBox.Visible = true
+		Label_3.Visible = true
+		refillAt.Visible = true
+		Label_4.Visible = true
+		refillAtBox.Visible = true
+		supplier.Visible = true
+		Label_5.Visible = true
+		supplierBtn.Visible = true
+		delivery.Visible = true
+		Label_6.Visible = true
+		deliveryBtn.Visible = true
+		deliverySlider.Visible = true
+		boxer.Visible = true
+		boxerLbl.Visible = true
+		boxerBtn.Visible = true
+		boxerSlider.Visible = true
+		cook.Visible = true
+		cookLbl.Visible = true
+		cookBtn.Visible = true
+		cookSlider.Visible = true
+		toggleAll.Visible = true
+		switch.Visible = true
+		allOffBtn.Visible = true
+		allOnBtn.Visible = true
+		toggleAllSlider.Visible = true
+		creditLbl.Visible = true
+		kitchen.Visible = true
+		cashierSlider.Visible = true
+		settings_1.Visible = true
+		cashier.Visible = true
+		refillEnd.Visible = true
+		refillAt.Visible = true
+		supplier.Visible = true
+		supplierSlider.Visible = true
+		delivery.Visible = true
+		deliverySlider.Visible = true
+		boxer.Visible = true
+		boxerSlider.Visible = true
+		cook.Visible = true
+		cookSlider.Visible = true
+		toggleAll.Visible = true
+		switch.Visible = true
+		toggleAllSlider.Visible = true
+		minimumBtn.Text = "="
+	end
+end)
+minimumBtn.MouseEnter:Connect(function() minimumBtn.TextColor3=Color3.new(.9,0,0) end)
+minimumBtn.MouseLeave:Connect(function() minimumBtn.TextColor3=Color3.new(1,1,1) end)
+draggableBtn.MouseButton1Click:Connect(function()
+	if not DraggableGuis then
+		DraggableGuis = true
+		draggableBtn.Text = "off"
+	else
+		DraggableGuis = false
+		draggableBtn.Text = "drag"
+	end
+end)
+draggableBtn.MouseEnter:Connect(function() draggableBtn.TextColor3=Color3.new(.9,0,0) end)
+draggableBtn.MouseLeave:Connect(function() draggableBtn.TextColor3=Color3.new(1,1,1) end)
 saveBtn.MouseButton1Click:Connect(function()
 	if writefile and messageLbl.Visible==false then
 		writefile("PizzaFarm.txt",game:GetService("HttpService"):JSONEncode(settings))
@@ -532,28 +757,39 @@ local function smoothTP2(cf)
 	workspace.Gravity = oldg
 end
 local function smoothTP(cf)
-    if (cf.p-root.Position).Magnitude > 95 then
-        local btns = workspace.JobButtons:GetChildren()
-        if player:FindFirstChild("House") and player.House.Value then
-            btns[#btns+1] = player.House.Value:FindFirstChild("Marker") 
-        end
-        table.sort(btns,function(a,b) return (a.Position-cf.p).Magnitude < (b.Position-cf.p).Magnitude end)
-        if (btns[1].Position-cf.p).Magnitude < (cf.p-root.Position).Magnitude then
-            game:GetService("ReplicatedStorage").PlayerChannel:FireServer("TeleportToJob", ((btns[1].Name == "Marker") and "House" or btns[1].Name))
-            wait(0.7)
-            if (cf.p-root.Position).Magnitude < 8 then
-                return
-            end
-        end
-    end
-    smoothTP2(cf)
+	local cf0 = (cf-cf.p) + root.Position + Vector3.new(0,4,0)
+	local diff = cf.p - root.Position
+	for i=0,diff.Magnitude,1.5 do
+		humanoid.Sit=false
+		root.CFrame = cf0 + diff.Unit * i
+		root.Velocity,root.RotVelocity=Vector3.new(),Vector3.new()
+		task.wait()
+	end
+	root.CFrame = cf
 end
 for _,o in ipairs(workspace.Ovens:GetChildren()) do
 	if ffc(o,"Bottom") then
 		o.Bottom.CanTouch = false
 	end
 end
-local function tryCook()
+--//main loop
+while wait(.4) do
+	for zz=1,3 do
+		local c,order = FindFirstCustomer()
+		if doCashier and c and order then
+			local reg = 3
+			if c.Head.Position.X < 50 then
+			    reg = 2
+			elseif c.Head.Position.X < 70 then
+			    reg = 1
+			end
+			if (root.Position-Vector3.new(50.30, 3.80, 83.24)).magnitude>9 then smoothTP(CFrame.new(50.30, 3.80, 83.24)) wait(.1) end
+			network:FireServer("OrderComplete", c, order, workspace["Register"..reg])
+			wait(0.3)
+		else
+			break
+		end
+	end
 	for zz=1,18 do
 		local order = getOrders()[1]
 		local topping
@@ -679,34 +915,6 @@ local function tryCook()
 			break
 		end
 	end
-end
-wait(1)
---//main loop
-while gui.Parent do
-	wait(0.9)
-	humanoid.Sit=false
-	if RNG:NextInteger(1,20)==1 then
-        game:GetService("VirtualInputManager"):SendKeyEvent(true,"Z",false,game)
-        wait()
-        game:GetService("VirtualInputManager"):SendKeyEvent(false,"Z",false,game)
-	end
-	for zz=1,3 do
-		local c,order = FindFirstCustomer()
-		if doCashier and c and order then
-			local reg = 3
-			if c.Head.Position.X < 50 then
-			    reg = 2
-			elseif c.Head.Position.X < 70 then
-			    reg = 1
-			end
-			if (root.Position-Vector3.new(50.30, 3.80, 83.24)).magnitude>9 then smoothTP(CFrame.new(50.30, 3.80, 83.24)) wait(.1) end
-			network:FireServer("OrderComplete", c, order, workspace["Register"..reg])
-			wait(0.3)
-		else
-			break
-		end
-	end
-	tryCook()
 	for zz=1,7 do
 		if doBoxer then
 			local didsomething = false
@@ -825,7 +1033,6 @@ while gui.Parent do
 			delTick = tick()
 		end
 	end
-	tryCook()
 	if doSupplier then
 		local refill=false
 		for s,c in pairs(supplyCounts) do
@@ -835,7 +1042,6 @@ while gui.Parent do
 			end
 		end
 		if refill then
-			local oldcf = root.CFrame
 			local waiting = false
 			local waitingTick = 0
 			local lastBox
@@ -865,7 +1071,7 @@ while gui.Parent do
 								wait(0.1)
 							end
 							if not doSupplier then break end
-							root.CFrame = btn.CFrame + Vector3.new(0,3,0)
+							smoothTP(btn.CFrame + Vector3.new(0,3,0))
 							wait(0.1)
 							realc=realc+1
 						end
@@ -923,7 +1129,6 @@ while gui.Parent do
 					end
 				end
 			end
-			--smoothTP(oldcf)
 		end
 	end
 end

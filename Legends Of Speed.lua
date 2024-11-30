@@ -1,7 +1,7 @@
 -- Place Check
 if game.PlaceId ~= 1119466531 then
 
-	local OrionLib = loadstring(Game:HttpGet('https://raw.githubusercontent.com/NoobHubV1/NoobHubV1/main/OrionLib.lua'))()
+	local OrionLib = loadstring(Game:HttpGet('https://raw.githubusercontent.com/NoobHubV1/RobloxScripts/main/OrionLib.lua'))()
         local function Notify(name, content, image, time)
 		OrionLib:MakeNotification({
 			Name = name,

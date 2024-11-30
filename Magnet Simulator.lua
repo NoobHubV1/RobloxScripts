@@ -1,5 +1,5 @@
 local Library = loadstring(Game:HttpGet("https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/wizard"))()
-local OrionLib = loadstring(game:HttpGet(('https://github.com/NoobHubV1/NoobHubV1/raw/main/OrionLib.lua')))()
+local OrionLib = loadstring(game:HttpGet(('https://github.com/NoobHubV1/RobloxScripts/raw/main/OrionLib.lua')))()
 local ScriptLoaded = false
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local MagnetEvents = ReplicatedStorage:WaitForChild("Events"):WaitForChild("MagnetEvents")

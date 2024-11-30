@@ -204,7 +204,7 @@ end
 
 local function AddDraggingFunctionality(DragPoint, Main)
 	pcall(function()
-		local Dragging, DragInput, MousePos, FramePos = false
+		local Dragging, DragInput, MousePos, FramePos = true, true, true, true
 		DragPoint.InputBegan:Connect(function(Input)
 			if Input.UserInputType == Enum.UserInputType.MouseButton1 then
 				Dragging = true
@@ -213,7 +213,7 @@ local function AddDraggingFunctionality(DragPoint, Main)
 
 				Input.Changed:Connect(function()
 					if Input.UserInputState == Enum.UserInputState.End then
-						Dragging = false
+						Dragging = true
 					end
 				end)
 			end
@@ -2480,6 +2480,10 @@ function RayfieldLibrary:LoadConfiguration()
 			end
 		end)
 	end
+end
+
+function RayfieldLibrary:Destroy()
+	Rayfield:Destroy()
 end
 
 task.delay(3.5, RayfieldLibrary.LoadConfiguration, RayfieldLibrary)
