@@ -1,4 +1,4 @@
-if game.PlaceId == 155615604 and not game:FindFirstChild("Septex_Admin") then
+if not game:FindFirstChild("Septex_Admin") then
 local States = {}
       States.AutoRespawn = true
       States.AutoRemoveff = false
@@ -751,12 +751,10 @@ function API:Unfly()
 	end
 end
 function PlayerChatted(Message)
+  if Unloaded then return end
   local args = Message:split(" ")
   function Command(Cmd)
-    return args[1] == Prefix..Cmd
-  end
-  function NotCommand(Cmd)
-    return args[1] ~= Prefix..Cmd
+    return args[1] == Prefix..Cmd or args[1] == Cmd
   end
   if Command("unload") then
     API:Destroy(ScreenGui)
@@ -1542,20 +1540,15 @@ function PlayerChatted(Message)
 	end
 	API:MoveTo(Old)
   end
-  if NotCommand("unload") and NotCommand("prefix") and NotCommand('re') and NotCommand("refresh") and NotCommand("cmds") and NotCommand("cmd") and NotCommand("inmate") and NotCommand("in") and NotCommand("guard") and NotCommand("gu") and NotCommand("autore") and NotCommand("autorespawn") and NotCommand("autoremoveff") and NotCommand("autorff") and NotCommand("killaura") and NotCommand("whitelist") and NotCommand("wl") and NotCommand("unwhitelist") and NotCommand("unwl") and NotCommand("kill") and NotCommand("oof") and NotCommand("die") and NotCommand("olditemmethod") and NotCommand("oldimethod") and NotCommand("damage") and NotCommand("dmg") and NotCommand("autodumpcars") and NotCommand("autoremovecars") and NotCommand('autonocars') and NotCommand("crim") and NotCommand("criminal") and NotCommand("makecrim") and NotCommand("antisit") and NotCommand("infjump") and NotCommand("bring") and NotCommand("void") and NotCommand("view") and NotCommand("unview") and NotCommand("copychat") and NotCommand("antifling") and NotCommand("goto") and NotCommand("to") and NotCommand("shotgun") and NotCommand("remington") and NotCommand("rem") and NotCommand("ak-47") and NotCommand('ak') and NotCommand("m9") and NotCommand("pistol") and NotCommand("m4a1") and NotCommand('m4') and NotCommand("hammer") and NotCommand("ham") and NotCommand("knife") and NotCommand("knive") and NotCommand("guns") and NotCommand("items") and NotCommand("autoguns") and NotCommand("aguns") and NotCommand("autoitems") and NotCommand("aitems") and NotCommand('loopcrim') and NotCommand("unloopcrim") and NotCommand("respawn") and NotCommand("res") and NotCommand("opengate") and NotCommand("car") and NotCommand("forcefield") and NotCommand("ff") and NotCommand("speed") and NotCommand("ws") and NotCommand("tp") and NotCommand("givekey") and NotCommand("keycard") and NotCommand("key") and NotCommand("antitase") and NotCommand("antishield") and NotCommand("autoguard") and NotCommand("aguard") and NotCommand("silentaim") and NotCommand("saim") and NotCommand("noclip") and NotCommand("shootback") and NotCommand("antishoot") and NotCommand("doors") and NotCommand("oneshot") and NotCommand("anticrash") and NotCommand("lagspike") and NotCommand("pp") and NotCommand("tase") and NotCommand("arrest") and NotCommand("ar") and NotCommand("clickkill") and NotCommand("clickarrest") and NotCommand("godmode") and NotCommand("god") and NotCommand('arrestaura') and NotCommand("antitouch") and NotCommand("notify") and NotCommand("antipunch") and NotCommand("spawnguns") and NotCommand('fly') and NotCommand("unfly") and NotCommand('carfly') and NotCommand('uncarfly') and NotCommand("mobilegui") and NotCommand("mgui") and NotCommand('removecars') and NotCommand('nocars') and NotCommand('dumpcars') then
-    API:Notif("Error", 'Not a valid command.', Color3.fromRGB(255, 0, 0), 3)
-  end
 end
 local Cooldown = true
 game.Players.LocalPlayer.Chatted:Connect(function(chat)
 	if chat:sub(1,#Prefix) == Prefix and not Cooldown then
-		if not Unloaded then
-			Cooldown = true
-			PlayerChatted(chat)
-			wait(.4)
-			for i = 1,5 do task.wait()
-				Cooldown = false
-			end
+		Cooldown = true
+		PlayerChatted(chat)
+		wait(.4)
+		for i = 1,5 do task.wait()
+			Cooldown = false
 		end
 	end
 end)
@@ -1596,14 +1589,9 @@ plr.CharacterAdded:Connect(function(NewChar)
     end
 end)
 TextBox.FocusLost:Connect(function(EnterKey)
-    if EnterKey and not Unloaded then
-      if TextBox.Text:sub(1,#Prefix) ~= Prefix then
-        PlayerChatted(Prefix..TextBox.Text)
-        TextBox.Text = ''
-      else
-        PlayerChatted(TextBox.Text)
-        TextBox.Text = ""
-      end
+    if EnterKey then
+      PlayerChatted(TextBox.Text)
+      TextBox.Text = ""
     end
 end)
 coroutine.wrap(function()
@@ -2104,5 +2092,5 @@ API:Notif("Loads", 'Loaded Admin Commands', Color3.fromRGB(255, 0, 0), 10)
 API:Refresh()
 Cooldown = false
 else
-	game.Players.LocalPlayer:Kick("Game not support or Septex admin has already executed!")
+	game.Players.LocalPlayer:Kick("Septex admin has already executed!")
 end
