@@ -764,8 +764,7 @@ function PlayerChatted(Message)
     API.ViewingPlayer = nil
     workspace.CurrentCamera.CameraSubject = plr.Character
     API:Notif("Unload", 'Script is unloaded', Color3.fromRGB(55, 155, 255), 5)
-  end
-  if Command("prefix") then
+  elseif Command("prefix") then
     local New = args[2]
     if New and tostring(New) then
       local NewPrefix = tostring(New)
@@ -773,37 +772,30 @@ function PlayerChatted(Message)
       TextBox.PlaceholderText = "Press "..Prefix.." To Enter"
       API:Notif("OK", 'prefix set to '..Prefix, Color3.fromRGB(0, 255, 0), 3)
     end
-  end
-  if Command("re") or Command("refresh") then
+  elseif Command("re") or Command("refresh") then
     API:Refresh()
     API:Notif("OK", "Respawn Character and save position", Color3.fromRGB(0, 255, 0), 3)
-  end
-  if Command("cmds") or Command("cmd") then
+  elseif Command("cmds") or Command("cmd") then
     if Frame_2.Visible then
 	Frame_2.Visible = false
     else
 	Frame_2.Visible = true
     end
-  end
-  if Command("inmate") or Command("in") then
+  elseif Command("inmate") or Command("in") then
     API:ChangeTeam(game.Teams.Inmates)
     API:Notif("OK", 'Change Team Inmates', Color3.fromRGB(0, 255, 0), 3)
-  end
-  if Command("guard") or Command("gu") then
+  elseif Command("guard") or Command("gu") then
     if not API:GuardsFull("c") then
       API:ChangeTeam(game.Teams.Guards)
       API:Notif("OK", 'Change Team Guards', Color3.fromRGB(0, 255, 0), 3)
     else
       API:Notif("Error", 'Guards Full!', Color3.fromRGB(255, 0, 0), 3)
     end
-  end
-  if Command("autore") or Command("autorespawn") then
+  elseif Command("autore") or Command("autorespawn") then
     ChangeState(args[2],"AutoRespawn")
-  end
-  if Command("autoremoveff") or Command("autorff") then
+  elseif Command("autoremoveff") or Command("autorff") then
     ChangeState(args[2],"AutoRemoveff")
-  end
-  if Command("killaura") then
+  elseif Command("killaura") then
     local value = ChangeState(args[2],"KillAura")
     if value then
       while wait() do
@@ -818,8 +810,7 @@ function PlayerChatted(Message)
         end
       end
     end
-  end
-  if Command("whitelist") or Command("wl") then
+  elseif Command("whitelist") or Command("wl") then
     local Player = API:FindPlayer(args[2])
     if not table.find(API.Whitelisted, Player.Name) then
       table.insert(API.Whitelisted, Player.Name)
@@ -827,8 +818,7 @@ function PlayerChatted(Message)
     else
       API:Notif("Error", 'Player is already whitelist!', Color3.fromRGB(255, 0, 0), 3)
     end
-  end
-  if Command("unwhitelist") or Command("unwl") then
+  elseif Command("unwhitelist") or Command("unwl") then
     local Player = API:FindPlayer(args[2])
     if table.find(API.Whitelisted, Player.Name) then
       table.remove(API.Whitelisted,table.find(API.Whitelisted, Player.Name))
@@ -836,8 +826,7 @@ function PlayerChatted(Message)
     else
       API:Notif("Error", 'Player is not already whitelist!', Color3.fromRGB(255, 0, 0), 3)
     end
-  end
-  if Command("kill") or Command("oof") or Command("die") then
+  elseif Command("kill") or Command("oof") or Command("die") then
     local Team = IsTeamCommandCheck(args[2])
     if args[2] == "all" or args[2] == 'others' or args[2] == "everyone" then
 	API:killall(game.Teams.Neutral,10)
@@ -858,11 +847,9 @@ function PlayerChatted(Message)
 		API:Notif("OK", 'Killed '..Target.DisplayName, Color3.fromRGB(0, 255, 0), 3)
 	end
     end
-  end
-  if Command("olditemmethod") or Command("oldimethod") then
+  elseif Command("olditemmethod") or Command("oldimethod") then
     ChangeState(args[2],"OldItemMethod")
-  end
-  if Command("damage") or Command("dmg") then
+  elseif Command("damage") or Command("dmg") then
 	local Team = IsTeamCommandCheck(args[2])
 	local bullet = tonumber(args[3])
     if args[2] == "all" or args[2] == 'others' or args[2] == "everyone" then
@@ -904,11 +891,9 @@ function PlayerChatted(Message)
 		end
 	end
     end
-  end
-  if Command("autodumpcars") or Command('autoremovecars') or Command("autonocars") then
+  elseif Command("autodumpcars") or Command('autoremovecars') or Command("autonocars") then
     ChangeState(args[2],"AutoDumpCars")
-  end
-  if Command("criminal") or Command("crim") or Command("makecrim") then
+  elseif Command("criminal") or Command("crim") or Command("makecrim") then
 	if args[2] then
 		local Target = API:FindPlayer(args[2])
 		if Target then
@@ -927,28 +912,23 @@ function PlayerChatted(Message)
 			API:Notif("Error", Player.DisplayName..' is criminal.', Color3.fromRGB(255, 0, 0), 3)
 		end
 	end
-  end
-  if Command("antisit") then
+  elseif Command("antisit") then
 	ChangeState(args[2],"AntiSit")
-  end
-  if Command("infjump") then
+  elseif Command("infjump") then
 	ChangeState(args[2],"InfJump")
-  end
-  if Command("bring") then
+  elseif Command("bring") then
 	local Target = API:FindPlayer(args[2])
 	if Target then
 		API:bring(Target)
 		API:Notif("OK", 'Brought '..Target.DisplayName..' To You', Color3.fromRGB(0, 255, 0), 3)
 	end
-  end
-  if Command("void") then
+  elseif Command("void") then
 	local Target = API:FindPlayer(args[2])
 	if Target then
 		API:bring(Target, CFrame.new(7^7, 7^7, 7^7))
 		API:Notif("OK", 'Brought '..Target.DisplayName..' To Void', Color3.fromRGB(0, 255, 0), 3)
 	end
-  end
-  if Command("view") then
+  elseif Command("view") then
 	local Player = API:FindPlayer(args[2])
 	if Player then
 		if API.ViewingPlayer  then
@@ -969,69 +949,54 @@ function PlayerChatted(Message)
 			end
 		end)
 	end
-  end
-  if Command("unview") then
+  elseif Command("unview") then
 	API.ViewingPlayer = nil
 	wait()
 	workspace.CurrentCamera.CameraSubject = plr.Character
 	API:Notif("OK", 'Stopped viewing player', Color3.fromRGB(0, 255, 0), 3)
-  end
-  if Command("copychat") then
+  elseif Command("copychat") then
 	ChangeState(args[2],"CopyChat")
-  end
-  if Command("antifling") then
+  elseif Command("antifling") then
 	ChangeState(args[2],"AntiFling")
-  end
-  if Command("goto") or Command("to") then
+  elseif Command("goto") or Command("to") then
 	local PLR = API:FindPlayer(args[2])
 	local Position = API:GetPosition(PLR)
 	if PLR and Position then
 		API:MoveTo(Position)
 	end
-  end
-  if Command("shotgun") or Command("remington") or Command('rem') then
+  elseif Command("shotgun") or Command("remington") or Command('rem') then
 	API:GetGun("Remington 870")
 	API:Notif("OK", 'Obtain remington 870', Color3.fromRGB(0, 255, 0), 3)
-  end
-  if Command("ak-47") or Command('ak') then
+  elseif Command("ak-47") or Command('ak') then
 	API:GetGun("AK-47")
 	API:Notif("OK", 'Obtain ak-47', Color3.fromRGB(0, 255, 0), 3)
-  end
-  if Command("m9") or Command("pistol") then
+  elseif Command("m9") or Command("pistol") then
 	API:GetGun("M9")
 	API:Notif("OK", 'Obtain m9', Color3.fromRGB(0, 255, 0), 3)
-  end
-  if Command("m4a1") or Command("m4") then
+  elseif Command("m4a1") or Command("m4") then
 	if not bgp then
 		API:Notif("Error", 'Not Gamepass!', Color3.fromRGB(255, 0, 0), 3)
 	else
 		API:GetGun("M4A1")
 		API:Notif("OK", 'Obtain m4a1', Color3.fromRGB(0, 255, 0), 3)
 	end
-  end
-  if Command("hammer") or Command("ham") then
+  elseif Command("hammer") or Command("ham") then
 	API:GetSingle("Hammer")
 	API:Notif("OK", 'Obtain hammer', Color3.fromRGB(0, 255, 0), 3)
-  end
-  if Command("knife") or Command("knive") then
+  elseif Command("knife") or Command("knive") then
 	API:GetGun("Crude Knife")
 	API:Notif("OK", 'Obtain crude knife', Color3.fromRGB(0, 255, 0), 3)
-  end
-  if Command("guns") then
+  elseif Command("guns") then
 	API:AllGuns()
 	API:Notif("OK", 'Obtain all guns', Color3.fromRGB(0, 255, 0), 3)
-  end
-  if Command("items") then
+  elseif Command("items") then
 	API:AllItems()
 	API:Notif("OK", 'Obtain all items', Color3.fromRGB(0, 255, 0), 3)
-  end
-  if Command("autoguns") or Command("aguns") then
+  elseif Command("autoguns") or Command("aguns") then
 	ChangeState(args[2],"AutoGuns")
-  end
-  if Command("autoitems") or Command("aitems") then
+  elseif Command("autoitems") or Command("aitems") then
 	ChangeState(args[2],'AutoItems')
-  end
-  if Command("loopcrim") then
+  elseif Command("loopcrim") then
 	if args[2] and args[2] ~= plr then
 		local Player = API:FindPlayer(args[2])
 		if not table.find(API.LoopCrim, Player.Name) then
@@ -1067,8 +1032,7 @@ function PlayerChatted(Message)
 			end
 		end)
 	end
-  end
-  if Command("unloopcrim") then
+  elseif Command("unloopcrim") then
 	if args[2] and args[2] ~= plr then
 		local Player = API:FindPlayer(args[2])
 		if table.find(API.LoopCrim, Player.Name) then
@@ -1081,8 +1045,7 @@ function PlayerChatted(Message)
 		States.LoopCrim = false
 		API:Notif("OK", 'Stopped auto make '..Player.DisplayName..' criminal.', Color3.fromRGB(0, 255, 0), 3)
 	end
-  end
-  if Command("respawn") or Command("res") then
+  elseif Command("respawn") or Command("res") then
 	if Player.Team == game.Teams.Guards then
 			if API:GuardsFull("b") then
 				workspace.Remote.TeamEvent:FireServer("Bright orange")
@@ -1114,8 +1077,7 @@ function PlayerChatted(Message)
 				workspace["Criminals Spawn"].SpawnLocation.CFrame = saved
 			end
 		end
-  end
-  if Command("opengate") then
+  elseif Command("opengate") then
 	local OldPos = game:GetService("Players").LocalPlayer.Character:GetPrimaryPartCFrame()
 	repeat API:swait()
 		API:MoveTo(game.Workspace.Prison_ITEMS.buttons["Prison Gate"]["Prison Gate"].CFrame)
@@ -1128,8 +1090,7 @@ function PlayerChatted(Message)
 	wait()
 	API:MoveTo(OldPos)
 	API:Notif("OK", 'Opened the gate', Color3.fromRGB(0, 255, 0), 3)
-  end
-  if Command("car") then
+  elseif Command("car") then
 	pcall(function()
 		local OldPos = game:GetService("Players").LocalPlayer.Character:GetPrimaryPartCFrame()
 		game:GetService("Players").LocalPlayer.Character:SetPrimaryPartCFrame(CFrame.new(-910, 95, 2157))
@@ -1158,11 +1119,9 @@ function PlayerChatted(Message)
 			end
 		until Done
 	end)
-  end
-  if Command("forcefield") or Command("ff") then
+  elseif Command("forcefield") or Command("ff") then
 	ChangeState(args[2],"ff")
-  end
-  if Command("speed") or Command("ws") then
+  elseif Command("speed") or Command("ws") then
 	local number = tonumber(args[2])
 	if number ~= nil then
 		plr.Character.Humanoid.WalkSpeed = number
@@ -1170,16 +1129,14 @@ function PlayerChatted(Message)
 	else
 		API:Notif("Error", 'Not Speed', Color3.fromRGB(255, 0, 0), 3)
 	end
-  end
-  if Command("tp") then
+  elseif Command("tp") then
 	local player1 = API:FindPlayer(args[2])
 	local player2 = API:FindPlayer(args[3])
 	if player1 and player2 then
 		API:bring(player1, player2.Character.HumanoidRootPart.CFrame)
 		API:Notif("OK", 'Teleports '..player1.DisplayName..' to '..player2.DisplayName, Color3.fromRGB(0, 255, 0), 3)
 	end
-  end
-  if Command('givekey') or Command("keycard") or Command("key") then
+  elseif Command('givekey') or Command("keycard") or Command("key") then
 	local OldT = Player.Team
 	if plr.Character:FindFirstChild("Key card") or plr.Backpack:FindFirstChild("Key card") then
 		return API:Notif("Error", "You already have a keycard!", Color3.fromRGB(255, 0, 0), 3)
@@ -1228,14 +1185,11 @@ function PlayerChatted(Message)
 			API:Notif("OK", 'Obtain keycard', Color3.fromRGB(0, 255, 0), 3)
 		end
 	end
-  end
-  if Command('antitase') then
+  elseif Command('antitase') then
 	ChangeState(args[2],"AntiTase")
-  end
-  if Command("antishield") then
+  elseif Command("antishield") then
 	ChangeState(args[2],"AntiShield")
-  end
-  if Command("autoguard") or Command("aguard") then
+  elseif Command("autoguard") or Command("aguard") then
 	if not API:GuardsFull("c") then
 		ChangeState(args[2],"AutoGuard")
 		if Player.Team ~= game.Teams.Guards then
@@ -1244,28 +1198,22 @@ function PlayerChatted(Message)
 	else
 		API:Notif("Error", 'Guards Full!', Color3.fromRGB(255, 0, 0), 3)
 	end
-  end
-  if Command("silentaim") or Command("saim") then
+  elseif Command("silentaim") or Command("saim") then
 	ChangeState(args[2],"SilentAim")
-  end
-  if Command('noclip') then
+  elseif Command('noclip') then
 	ChangeState(args[2],"noclip")
-  end
-  if Command("shootback") or Command("antishoot") then
+  elseif Command("shootback") or Command("antishoot") then
 	ChangeState(args[2],"ShootBack")
-  end
-  if Command("doors") then
+  elseif Command("doors") then
 	local value = ChangeState(args[2],"DoorsDestroy")
 	if value then
 		workspace.Doors.Parent = game.Lighting
 	else
 		game.Lighting.Doors.Parent = workspace
 	end
-  end
-  if Command("oneshot") then
+  elseif Command("oneshot") then
 	ChangeState(args[2],"OneShot")
-  end
-  if Command("anticrash") then
+  elseif Command("anticrash") then
 	local value = ChangeState(args[2],"anticrash")
 	if value then
 		pcall(function()
@@ -1276,8 +1224,7 @@ function PlayerChatted(Message)
 			game:GetService("Players").LocalPlayer.PlayerScripts.ClientGunReplicator.Disabled = true
 		end)
 	end
-  end
-  if Command("lagspike") then
+  elseif Command("lagspike") then
 	local a = game:GetService("RunService").Stepped:Connect(function()
 		pcall(function()
 			plr.Character:Destroy()
@@ -1305,8 +1252,7 @@ function PlayerChatted(Message)
 	end)
 	wait(.1)
 	API:Notif("OK", 'Freezes everyone', Color3.fromRGB(0, 255, 0), 3)
-  end
-  if Command("pp") then
+  elseif Command("pp") then
 	API:AllGuns()
 	for i,v in pairs(Player.Character:GetChildren()) do
 		if v:IsA("Tool") then
@@ -1330,8 +1276,7 @@ function PlayerChatted(Message)
 	Player.Backpack.M9.Parent = Player.Character
 	Player.Backpack["AK-47"].Parent = Player.Character
 	Player.Backpack["Remington 870"].Parent = Player.Character
-  end
-  if Command("tase") then
+  elseif Command("tase") then
 	local Team = IsTeamCommandCheck(args[2])
 	if args[2] == "all" or args[2] == "everyone" or args[2] == "others" then
 		local Oldt = Player.Team
@@ -1418,8 +1363,7 @@ function PlayerChatted(Message)
 		API:ChangeTeam(Oldt)
 		API:Notif("OK", 'Tased '..Target.DisplayName, Color3.fromRGB(0, 255, 0), 3)
 	end
-  end
-  if Command("arrest") or Command("ar") then
+  elseif Command("arrest") or Command("ar") then
 	if args[2] == "all" then
 		local LastPosition = API:GetPosition()
 		for i,v in pairs(game:GetService("Players"):GetPlayers()) do
@@ -1455,56 +1399,43 @@ function PlayerChatted(Message)
 		end
 		API:MoveTo(LastPosition)
 	end
-  end
-  if Command('clickkill') then
+  elseif Command('clickkill') then
 	ChangeState(args[2],'ClickKill')
-  end
-  if Command("clickarrest") then
+  elseif Command("clickarrest") then
 	ChangeState(args[2],"ClickArrest")
-  end
-  if Command("god") or Command("godmode") then
+  elseif Command("god") or Command("godmode") then
 	ChangeState(args[2],"Godmode")
-  end
-  if Command("arrestaura") then
+  elseif Command("arrestaura") then
 	ChangeState(args[2],"ArrestAura")
-  end
-  if Command("antitouch") then
+  elseif Command("antitouch") then
 	ChangeState(args[2],"AntiTouch")
-  end
-  if Command("notify") then
+  elseif Command("notify") then
 	ChangeState(args[2],"Notify")
-  end
-  if Command("antipunch") then
+  elseif Command("antipunch") then
 	ChangeState(args[2],"antipunch")
-  end
-  if Command("spawnguns") then
+  elseif Command("spawnguns") then
 	ChangeState(args[2],"spawnguns")
-  end
-  if Command('fly') then
+  elseif Command('fly') then
 	if Flying then
 		API:Unfly()
 	end
 	wait(.2)
 	API:Fly(tonumber(args[2]) or 7)
-  end
-  if Command('unfly') then
+  elseif Command('unfly') then
 	if Flying then
 		API:Unfly()
 	end
-  end
-  if Command("carfly") then
+  elseif Command("carfly") then
 	if Flying then
 		API:Unfly()
 	end
 	wait()
 	API:Fly(10)
-  end
-  if Command("uncarfly") then
+  elseif Command("uncarfly") then
 	if Flying then
 		API:Unfly()
 	end
-  end
-  if Command("mobilegui") or Command("mgui") then
+  elseif Command("mobilegui") or Command("mgui") then
 	local value = ChangeState(args[2],'MobileGui')
 	if value then
 		TextButton_6.Visible = true
@@ -1515,8 +1446,7 @@ function PlayerChatted(Message)
 		TextButton_7.Visible = false
 		TextButton_8.Visible = false
 	end
-  end
-  if Command('removecars') or Command('nocars') or Command('dumpcars') then
+  elseif Command('removecars') or Command('nocars') or Command('dumpcars') then
 	local Old = API:GetPosition()
 	for i,v in pairs(game:GetService("Workspace").CarContainer:GetChildren()) do
 		if v then
@@ -1539,6 +1469,8 @@ function PlayerChatted(Message)
 		end
 	end
 	API:MoveTo(Old)
+  else
+	API:Notif("Error", "Not a valid command.", Color3.fromRGB(255, 0, 0), 3)
   end
 end
 local Cooldown = true
