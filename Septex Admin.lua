@@ -139,9 +139,7 @@ function API:CreateBulletTable(Bullet, Hit)
   return Args
 end
 function API:FindPlayer(String,IgnoreError)
-	if not String or String == plr or String == "me" then
-		return plr
-	elseif String == "random" then
+	if String == "random" then
 		return game.Players:GetPlayers()[math.random(#game.Players:GetPlayers())]
 	else
 		String = String:gsub("%s+", "")
@@ -1767,7 +1765,6 @@ function PlayerChatted(Message)
 		API:killall(game.Teams.Neutral,10)
 		API:Notif("OK", "Nuke from "..Target.DisplayName.." has been removed.", Color3.fromRGB(0, 255, 0), 3)
 	else
-		local Target = Player
 		game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer("!!!A NUKE HAS BEEN PLACED ON "..Target.Name.." KILLING HIM WILL GET EVERYONE DEAD!!!", "ALL")
 		repeat task.wait()
 			if Target.Character.Humanoid.Health <1 then
